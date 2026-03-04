@@ -113,6 +113,7 @@ public:
     
     void addDependency(std::shared_ptr<InterdepNode> dep);
     bool resolve();
+    bool hasCircularDependency();
     bool isResolved() const { return state_ == NODE_RESOLVED; }
     
     uint8_t getId() const { return id_; }
