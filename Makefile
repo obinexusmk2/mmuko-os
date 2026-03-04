@@ -100,6 +100,7 @@ verify: $(IMG_PATH)
 
 # VirtualBox test
 vbox: $(IMG_PATH)
+	bash ringboot.sh
 	$(BASH) ./ringboot.sh
 
 # Help
