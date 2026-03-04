@@ -80,6 +80,12 @@ bool InterdepNode::hasCircularDep(bool* visited, bool* visiting) {
     return false;
 }
 
+bool InterdepNode::hasCircularDependency() {
+    bool visited[256] = {false};
+    bool visiting[256] = {false};
+    return hasCircularDep(visited, visiting);
+}
+
 bool InterdepNode::resolve() {
     if (state_ == NODE_RESOLVED) return true;
     if (state_ == NODE_RESOLVING) return false; // Circular
@@ -126,10 +132,7 @@ int InterdepTree::resolve() {
     if (!root_) return -1;
     
     // Check for circular dependencies
-    bool visited[256] = {false};
-    bool visiting[256] = {false};
-    
-    if (root_->hasCircularDep(visited, visiting)) {
+    if (root_->hasCircularDependency()) {
         return -1;
     }
     
