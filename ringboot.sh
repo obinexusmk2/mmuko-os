@@ -20,23 +20,59 @@ echo -e "${BLUE}=== MMUKO-OS Ring Boot Test ===${NC}"
 echo -e "${BLUE}Interdependency Tree Hierarchy Verification${NC}"
 echo ""
 
+echo -e "${BLUE}=== Preflight Checks ===${NC}"
+
 # Check if VirtualBox is installed
-if ! command -v VBoxManage &> /dev/null; then
-    echo -e "${RED}Error: VirtualBox not found.${NC}"
-    echo "Please install VirtualBox first: https://www.virtualbox.org/"
+if ! command -v VBoxManage >/dev/null 2>&1; then
+    echo -e "${RED}Error: VBoxManage is not available in PATH.${NC}"
+    echo "Install VirtualBox and ensure VBoxManage is accessible from your shell."
     exit 1
 fi
 
 # Check if boot image exists
-if [ ! -f "$IMG_PATH" ]; then
-    echo -e "${RED}Error: Boot image not found at $IMG_PATH${NC}"
-    echo "Please run ./build.sh first"
+if [ ! -e "$IMG_PATH" ]; then
+    echo -e "${RED}Error: Boot image does not exist: $IMG_PATH${NC}"
+    echo "Build the image first (for example: make img)."
     exit 1
+fi
+
+if [ ! -f "$IMG_PATH" ]; then
+    echo -e "${RED}Error: Boot image path is not a regular file: $IMG_PATH${NC}"
+    exit 1
+fi
+
+if [ ! -r "$IMG_PATH" ]; then
+    echo -e "${RED}Error: Boot image is not readable by current user: $IMG_PATH${NC}"
+    echo "Adjust permissions (for example: chmod +r img/mmuko-os.img)."
+    exit 1
+fi
+
+IS_WSL=false
+if grep -qi microsoft /proc/version 2>/dev/null; then
+    IS_WSL=true
+fi
+
+VBOX_IMG_PATH="$IMG_PATH"
+if [ "$IS_WSL" = true ]; then
+    if ! command -v wslpath >/dev/null 2>&1; then
+        echo -e "${RED}Error: Running in WSL but wslpath is unavailable.${NC}"
+        echo "Install/enable wslpath so the image path can be converted for Windows VirtualBox."
+        exit 1
+    fi
+
+    if ! VBOX_IMG_PATH="$(wslpath -w "$IMG_PATH")"; then
+        echo -e "${RED}Error: Failed to convert image path for Windows VirtualBox.${NC}"
+        echo "Path conversion failed for: $IMG_PATH"
+        exit 1
+    fi
 fi
 
 # Verify image
 IMG_SIZE=$(stat -f%z "$IMG_PATH" 2>/dev/null || stat -c%s "$IMG_PATH" 2>/dev/null)
-echo "Boot image: $IMG_PATH ($IMG_SIZE bytes)"
+echo "Boot image (POSIX): $IMG_PATH ($IMG_SIZE bytes)"
+if [ "$IS_WSL" = true ]; then
+    echo "Boot image (VirtualBox): $VBOX_IMG_PATH"
+fi
 
 # Delete existing VM if it exists
 if VBoxManage list vms | grep -q "$VM_NAME"; then
@@ -76,7 +112,7 @@ VBoxManage storageattach "$VM_NAME" \
     --port 0 \
     --device 0 \
     --type fdd \
-    --medium "$IMG_PATH" 2>/dev/null
+    --medium "$VBOX_IMG_PATH" 2>/dev/null
 
 echo "[5/6] Configuring serial port for NSIGII output..."
 VBoxManage modifyvm "$VM_NAME" \
@@ -118,7 +154,7 @@ echo ""
 for i in {1..10}; do
     sleep 1
     VM_STATE=$(VBoxManage showvminfo "$VM_NAME" --machinereadable 2>/dev/null | grep "VMState=" | cut -d'"' -f2 || echo "unknown")
-    
+
     if [ "$VM_STATE" == "powered off" ]; then
         echo -e "${GREEN}✓ VM has halted (boot sequence complete)${NC}"
         echo ""
@@ -131,7 +167,7 @@ for i in {1..10}; do
         echo ""
         break
     fi
-    
+
     echo "  [$i/10] VM state: $VM_STATE"
 done
 
