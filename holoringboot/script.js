@@ -1,341 +1,443 @@
-/**
- * NSIGII/MMUKO-OS Interactive Illustration
- * Implements the Trident Signal Path and Metaphysical Login logic.
- * Uses PixelBuffer.js for aura generation and Vector.js for geometry.
- */
-
 const canvas = document.getElementById('mmukoCanvas');
-const ctx = canvas.getContext('2d');
-const protocolStatus = document.getElementById('protocol-status');
-const nodeStatus = document.getElementById('node-status');
-const resetBtn = document.getElementById('reset-btn');
+const ctx = canvas.getContext('2d', { alpha: false });
+const video = document.getElementById('gestureVideo');
 
-// State
-let width, height;
-let center;
-let pixelBuffer = null;
-let bgImageData = null;
+const MODE = {
+    ENROLL: 'ENROLL',
+    VERIFY: 'VERIFY',
+    SUCCESS: 'SUCCESS',
+    LOCKED: 'LOCKED'
+};
 
-// Trident State (Identity, Device, Time)
-const PRONGS = [
-    { id: 'identity', targetAngle: 0, currentAngle: Math.random() * Math.PI * 2, color: '#FFB8D1' }, // Pink
-    { id: 'device', targetAngle: (2 * Math.PI) / 3, currentAngle: Math.random() * Math.PI * 2, color: '#84DCCF' }, // Cyan
-    { id: 'time', targetAngle: (4 * Math.PI) / 3, currentAngle: Math.random() * Math.PI * 2, color: '#F09D51' }  // Orange
-];
+const THRESHOLD = 0.78;
+const MAX_ATTEMPTS = 5;
+const STORAGE_KEY = 'mmukoGestureTemplateV1';
+const CREDENTIAL_KEY = 'mmukoFallbackCredentialV1';
 
-let isDragging = false;
-let draggedProngIndex = -1;
-let lastTime = 0;
-let time = 0;
+const ui = {
+    mode: document.getElementById('mode-val'),
+    state: document.getElementById('state-val'),
+    coherence: document.getElementById('coherence-val'),
+    match: document.getElementById('match-val'),
+    attempts: document.getElementById('attempts-val'),
+    tracking: document.getElementById('tracking-val'),
+    p1: document.getElementById('p1-status'),
+    p2: document.getElementById('p2-status'),
+    p3: document.getElementById('p3-status'),
+    logs: document.getElementById('logs'),
+    enrollBtn: document.getElementById('enroll-btn'),
+    verifyBtn: document.getElementById('verify-btn'),
+    fallbackBtn: document.getElementById('fallback-btn'),
+    credentialInput: document.getElementById('credential-input'),
+    setCredentialBtn: document.getElementById('set-credential-btn'),
+    unlockBtn: document.getElementById('unlock-btn')
+};
 
-// Aura/Static Configuration
-const AURA_COHERENCE = 0.954; // 95.4% coherence
-const NOISE_INTENSITY = 20;
+const state = {
+    width: 0,
+    height: 0,
+    centerX: 0,
+    centerY: 0,
+    ringRadius: 0,
+    entropy: 9.99,
+    coherence: 0,
+    mode: MODE.ENROLL,
+    attempts: 0,
+    trackingReady: false,
+    lastLandmarks: null,
+    draggingNode: null,
+    matchedScore: null,
+    template: null,
+    nodes: [
+        { id: 'P1', target: 0, angle: Math.PI / 2, color: '#D48C45', active: false },
+        { id: 'P2', target: (5 * Math.PI) / 4, angle: Math.PI, color: '#A68B5B', active: false },
+        { id: 'P3', target: (7 * Math.PI) / 4, angle: (3 * Math.PI) / 2, color: '#B8860B', active: false }
+    ]
+};
 
-/**
- * Initialization
- */
-function init() {
-    resize();
-    window.addEventListener('resize', resize);
-    
-    // Init Background Buffer
-    bgImageData = ctx.createImageData(width, height);
-    pixelBuffer = new PixelBuffer(bgImageData);
-    
-    // Start Loop
-    requestAnimationFrame(loop);
-    
-    // Input Handling
-    canvas.addEventListener('mousedown', handlePointerDown);
-    canvas.addEventListener('mousemove', handlePointerMove);
-    canvas.addEventListener('mouseup', handlePointerUp);
-    canvas.addEventListener('touchstart', (e) => handlePointerDown(e.touches[0]));
-    canvas.addEventListener('touchmove', (e) => handlePointerMove(e.touches[0]));
-    canvas.addEventListener('touchend', handlePointerUp);
+function log(message, type = '') {
+    const entry = document.createElement('div');
+    entry.className = `log-entry ${type}`;
+    entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+    ui.logs.appendChild(entry);
+    ui.logs.scrollTop = ui.logs.scrollHeight;
+}
 
-    resetBtn.addEventListener('click', resetProngs);
+function setMode(nextMode) {
+    state.mode = nextMode;
+    ui.mode.textContent = nextMode;
+    ui.mode.className = 'value';
+    if (nextMode === MODE.SUCCESS) ui.mode.classList.add('verified');
+    if (nextMode === MODE.LOCKED) ui.mode.classList.add('locked');
+    ui.state.textContent = nextMode === MODE.SUCCESS ? 'VERIFIED' : nextMode;
+    ui.state.className = `value ${nextMode === MODE.SUCCESS ? 'verified' : nextMode === MODE.LOCKED ? 'locked' : ''}`;
 }
 
 function resize() {
-    width = window.innerWidth;
-    height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
-    center = new Vector.Vec2(width / 2, height / 2);
-    
-    // Re-init buffer on resize
-    bgImageData = ctx.createImageData(width, height);
-    pixelBuffer = new PixelBuffer(bgImageData);
+    state.width = canvas.width = window.innerWidth;
+    state.height = canvas.height = window.innerHeight;
+    state.centerX = state.width / 2;
+    state.centerY = state.height / 2;
+    state.ringRadius = Math.min(state.width, state.height) * 0.3;
 }
 
-function resetProngs() {
-    PRONGS.forEach(p => {
-        p.currentAngle = Math.random() * Math.PI * 2;
-        p.locked = false;
+function normalizeAngle(angle) {
+    let a = angle % (Math.PI * 2);
+    if (a < 0) a += Math.PI * 2;
+    return a;
+}
+
+function updateCoherence() {
+    let totalDelta = 0;
+    state.nodes.forEach((node, idx) => {
+        let delta = Math.abs(normalizeAngle(node.angle) - normalizeAngle(node.target));
+        if (delta > Math.PI) delta = (Math.PI * 2) - delta;
+        const nodeCoherence = Math.max(0, 1 - delta / 0.4);
+        node.active = nodeCoherence > 0.96;
+        totalDelta += delta;
+
+        const pStatus = [ui.p1, ui.p2, ui.p3][idx];
+        pStatus.textContent = node.active ? 'ALIGNED' : 'PENDING';
+        pStatus.className = `value ${node.active ? 'verified' : ''}`;
     });
+
+    const avgCoherence = 1 - totalDelta / (Math.PI * 1.2);
+    state.coherence = Math.max(0, Math.min(100, avgCoherence * 100));
+    state.entropy = Math.max(0, 9.99 * (1 - avgCoherence));
+
+    ui.coherence.textContent = `${state.coherence.toFixed(1)}%`;
 }
 
-/**
- * Core Loop
- */
-function loop(timestamp) {
-    const dt = (timestamp - lastTime) / 1000;
-    lastTime = timestamp;
-    time += dt;
+function drawNoise() {
+    const intensity = state.mode === MODE.SUCCESS ? 4 : Math.floor(state.entropy * 20);
+    ctx.fillStyle = '#2C2A28';
+    ctx.fillRect(0, 0, state.width, state.height);
+    const particles = state.mode === MODE.SUCCESS ? 400 : 1600;
 
-    // 1. Draw Metaphysical Static (PixelBuffer)
-    generateAura(time);
-    ctx.putImageData(bgImageData, 0, 0);
-
-    // 2. Draw Protocol Layer (Vector Graphics)
-    drawProtocolLayer(ctx, center);
-
-    // 3. Draw Trident & Signal Path
-    drawTrident(ctx, center);
-    
-    // 4. Draw Signal Trace (The "Squiggle")
-    drawSignalTrace(ctx, center, time);
-
-    // 5. Check Logic
-    checkCoherence();
-
-    requestAnimationFrame(loop);
-}
-
-/**
- * Generates the "Metaphysical Static" using PixelBuffer.js
- * Represents the 95.4% Aura-Seal Coherence.
- */
-function generateAura(t) {
-    // We only update a subset of pixels to simulate "sparkle" or static
-    // without killing CPU performance.
-    
-    const len = pixelBuffer.buffer.length;
-    // Fill slightly dark background
-    // 0xFF050505 (ABGR Little Endian usually) -> Black/Dark Grey
-    
-    // Optimization: Don't clear every frame, just fade or noise overlay.
-    // Let's create a dynamic noise field.
-    
-    for (let i = 0; i < 2000; i++) { // Update 2000 random pixels per frame
-        const idx = Math.floor(Math.random() * len);
-        const noise = Math.random();
-        
-        // If coherence is high, noise is low.
-        // We want faint stars/particles.
-        
-        let color = 0xFF000000; // Alpha=255, Blue=0, Green=0, Red=0
-        
-        if (noise > AURA_COHERENCE) {
-            // Glitch pixel (White/Grey)
-            color = 0xFF202020;
-        } else if (noise < 0.001) {
-            // Spark (Gold)
-            color = 0xFF00D7FF; // Gold-ish in ABGR (A=FF, B=00, G=D7, R=FF)
-        } else {
-             // Dark Void
-             color = 0xFF050505;
-        }
-        
-        pixelBuffer.buffer[idx] = color;
+    for (let i = 0; i < particles; i++) {
+        const x = Math.random() * state.width;
+        const y = Math.random() * state.height;
+        const n = Math.random() * intensity;
+        const c = Math.floor(44 + n);
+        ctx.fillStyle = `rgba(${c},${c - 2},${c - 4},0.28)`;
+        ctx.fillRect(x, y, 1, 1);
     }
 }
 
-/**
- * Draws the MMUKO-OS concentric circles and axes.
- */
-function drawProtocolLayer(ctx, center) {
-    ctx.strokeStyle = 'rgba(50, 50, 50, 0.5)';
+function drawRing() {
+    ctx.beginPath();
+    ctx.arc(state.centerX, state.centerY, state.ringRadius, 0, Math.PI * 2);
+    ctx.strokeStyle = state.mode === MODE.SUCCESS ? 'rgba(0,255,65,0.45)' : 'rgba(166, 139, 91, 0.25)';
     ctx.lineWidth = 1;
-    
-    const radius = Math.min(width, height) * 0.35;
-
-    // Main Circle
-    ctx.beginPath();
-    ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
+    ctx.setLineDash([10, 5]);
     ctx.stroke();
+    ctx.setLineDash([]);
 
-    // Inner Circle (The Void)
-    ctx.beginPath();
-    ctx.arc(center.x, center.y, radius * 0.3, 0, Math.PI * 2);
-    ctx.stroke();
+    state.nodes.forEach(node => {
+        const x = state.centerX + Math.cos(node.angle) * state.ringRadius;
+        const y = state.centerY + Math.sin(node.angle) * state.ringRadius;
 
-    // Axes
-    ctx.beginPath();
-    ctx.moveTo(center.x, center.y - radius * 1.2);
-    ctx.lineTo(center.x, center.y + radius * 1.2);
-    ctx.moveTo(center.x - radius * 1.2, center.y);
-    ctx.lineTo(center.x + radius * 1.2, center.y);
-    ctx.stroke();
-}
-
-/**
- * Draws the interactive Trident prongs.
- */
-function drawTrident(ctx, center) {
-    const radius = Math.min(width, height) * 0.35;
-    const nodeRadius = 15;
-
-    PRONGS.forEach((p, index) => {
-        const x = center.x + Math.cos(p.currentAngle) * radius;
-        const y = center.y + Math.sin(p.currentAngle) * radius;
-
-        // Draw Connector Line
         ctx.beginPath();
-        ctx.moveTo(center.x, center.y);
+        ctx.moveTo(state.centerX, state.centerY);
         ctx.lineTo(x, y);
-        ctx.strokeStyle = p.locked ? p.color : 'rgba(100,100,100,0.5)';
-        ctx.lineWidth = 2;
+        ctx.strokeStyle = node.active ? 'rgba(0, 255, 65, 0.7)' : node.color;
+        ctx.lineWidth = node.active ? 2 : 1;
         ctx.stroke();
 
-        // Draw Node
         ctx.beginPath();
-        ctx.arc(x, y, nodeRadius, 0, Math.PI * 2);
-        ctx.fillStyle = p.locked ? p.color : '#333';
+        ctx.arc(x, y, 12, 0, Math.PI * 2);
+        ctx.fillStyle = node.active ? '#00ff41' : node.color;
         ctx.fill();
-        ctx.strokeStyle = p.color;
-        ctx.stroke();
 
-        // Label
-        ctx.fillStyle = p.color;
-        ctx.font = '12px Courier New';
-        ctx.fillText(p.id.toUpperCase(), x + 20, y);
+        ctx.fillStyle = '#EAE6E1';
+        ctx.font = 'bold 11px Courier New';
+        ctx.textAlign = 'center';
+        ctx.fillText(node.id, x, y + 26);
     });
-}
-
-/**
- * Draws the "Signal Path" described in the text.
- * South -> East -> West -> West (Anchor) -> Loop -> North...
- */
-function drawSignalTrace(ctx, center, t) {
-    const scale = Math.min(width, height) * 0.1;
-    ctx.save();
-    ctx.translate(center.x, center.y);
-    
-    // The visual representation of the "Nnamdi Signal"
-    // Using vector points based on the text description
-    
-    const points = [
-        new Vector.Vec2(0, scale * 2),    // South
-        new Vector.Vec2(scale * 2, 0),    // East
-        new Vector.Vec2(-scale * 2, 0),   // West
-        new Vector.Vec2(-scale * 1.5, -scale * 0.5), // Anchor/Loop
-        new Vector.Vec2(0, -scale * 2),   // North
-        new Vector.Vec2(0, -scale * 2.5), // Double Rise
-        new Vector.Vec2(scale * 0.5, -scale * 2.2) // Squiggle
-    ];
 
     ctx.beginPath();
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-    
-    // Only draw if logged in or coherent
-    const allLocked = PRONGS.every(p => p.locked);
-    if (allLocked) {
-        ctx.strokeStyle = '#00ff41'; // Terminal Green
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = '#00ff41';
-    }
-
-    ctx.lineWidth = 3;
-    
-    // Animate drawing the path
-    ctx.moveTo(points[0].x, points[0].y);
-    for(let i=1; i<points.length; i++) {
-        ctx.lineTo(points[i].x, points[i].y);
-    }
-    
-    ctx.stroke();
-    ctx.restore();
+    ctx.arc(state.centerX, state.centerY, 6, 0, Math.PI * 2);
+    ctx.fillStyle = state.mode === MODE.SUCCESS ? '#00ff41' : '#D48C45';
+    ctx.fill();
 }
 
-/**
- * Check if prongs are aligned with their targets.
- */
-function checkCoherence() {
-    let alignedCount = 0;
-    const tolerance = 0.15; // Radians (~8 degrees)
+function frame() {
+    drawNoise();
+    drawRing();
+    updateCoherence();
+    requestAnimationFrame(frame);
+}
 
-    PRONGS.forEach(p => {
-        // Normalize angles to 0-2PI
-        let current = p.currentAngle % (Math.PI * 2);
-        if (current < 0) current += Math.PI * 2;
-        
-        let target = p.targetAngle;
-        
-        let diff = Math.abs(current - target);
-        // Handle wrap around (0 vs 2PI)
-        if (diff > Math.PI) diff = (Math.PI * 2) - diff;
+function mapLandmarksToNodes(landmarks) {
+    if (!landmarks || landmarks.length < 21) return;
+    const wrist = landmarks[0];
+    const points = [landmarks[8], landmarks[12], landmarks[16]]; // index, middle, ring
 
-        if (diff < tolerance) {
-            p.locked = true;
-            // Snap visual
-            // p.currentAngle = p.targetAngle; 
-            alignedCount++;
-        } else {
-            p.locked = false;
-        }
+    state.nodes.forEach((node, idx) => {
+        const p = points[idx];
+        node.angle = Math.atan2(p.y - wrist.y, p.x - wrist.x);
     });
+}
 
-    nodeStatus.innerText = `${alignedCount}/3 ALIGNED`;
-    
-    if (alignedCount === 3) {
-        protocolStatus.innerText = "ACCESS GRANTED";
-        protocolStatus.style.color = "#00ff41";
+function buildSignatureFromLandmarks(landmarks) {
+    const wrist = landmarks[0];
+    const tips = [landmarks[4], landmarks[8], landmarks[12], landmarks[16], landmarks[20]];
+    const base = [landmarks[1], landmarks[5], landmarks[9], landmarks[13], landmarks[17]];
+
+    const features = [];
+    for (let i = 0; i < tips.length; i++) {
+        const dx = tips[i].x - wrist.x;
+        const dy = tips[i].y - wrist.y;
+        const bx = base[i].x - wrist.x;
+        const by = base[i].y - wrist.y;
+        const tipDist = Math.sqrt(dx * dx + dy * dy);
+        const baseDist = Math.sqrt(bx * bx + by * by) || 1e-6;
+        features.push(Math.min(2, Math.max(0, tipDist / baseDist)));
+        features.push((Math.atan2(dy, dx) + Math.PI) / (2 * Math.PI));
+    }
+
+    const quantized = features.map(v => Math.round(v * 1023));
+    return quantized;
+}
+
+function hammingSimilarity(a, b) {
+    const len = Math.min(a.length, b.length);
+    if (!len) return 0;
+    let same = 0;
+    for (let i = 0; i < len; i++) {
+        const diff = Math.abs(a[i] - b[i]);
+        if (diff <= 40) same++;
+    }
+    return same / len;
+}
+
+function randomSalt() {
+    const bytes = new Uint8Array(16);
+    crypto.getRandomValues(bytes);
+    return Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function sha256Hex(text) {
+    const data = new TextEncoder().encode(text);
+    const digest = await crypto.subtle.digest('SHA-256', data);
+    return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function pbkdf2Hex(secret, salt) {
+    const keyMaterial = await crypto.subtle.importKey('raw', new TextEncoder().encode(secret), 'PBKDF2', false, ['deriveBits']);
+    const bits = await crypto.subtle.deriveBits({ name: 'PBKDF2', salt: new TextEncoder().encode(salt), iterations: 120000, hash: 'SHA-256' }, keyMaterial, 256);
+    return Array.from(new Uint8Array(bits)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function enrollGesture() {
+    if (!state.lastLandmarks) {
+        log('Enrollment failed: no hand landmarks detected.', 'error');
+        return;
+    }
+
+    const signature = buildSignatureFromLandmarks(state.lastLandmarks);
+    const salt = randomSalt();
+    const hash = await sha256Hex(`${salt}:${signature.join(',')}`);
+
+    state.template = { signature, salt, hash, createdAt: Date.now(), threshold: THRESHOLD };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state.template));
+
+    setMode(MODE.VERIFY);
+    log('Gesture template enrolled (derived + hashed, raw landmarks discarded).', 'success');
+}
+
+async function verifyGesture() {
+    if (state.mode === MODE.LOCKED) {
+        log('Verification blocked: protocol is LOCKED.', 'error');
+        return;
+    }
+    if (!state.template) {
+        log('No gesture template found. Enroll first.', 'warn');
+        setMode(MODE.ENROLL);
+        return;
+    }
+    if (!state.lastLandmarks) {
+        log('No live hand detected. Use fallback credential flow.', 'warn');
+        return;
+    }
+
+    const integrity = await sha256Hex(`${state.template.salt}:${state.template.signature.join(',')}`);
+    if (integrity !== state.template.hash) {
+        log('Stored template integrity check failed. Re-enroll required.', 'error');
+        setMode(MODE.ENROLL);
+        localStorage.removeItem(STORAGE_KEY);
+        state.template = null;
+        return;
+    }
+
+    const liveSignature = buildSignatureFromLandmarks(state.lastLandmarks);
+    const similarity = hammingSimilarity(liveSignature, state.template.signature);
+    state.matchedScore = similarity;
+    ui.match.textContent = `${(similarity * 100).toFixed(1)}%`;
+
+    if (similarity >= state.template.threshold && state.coherence >= 95.4) {
+        setMode(MODE.SUCCESS);
+        log(`Gesture verified: ${(similarity * 100).toFixed(1)}% match, coherence ${state.coherence.toFixed(1)}%.`, 'success');
+        return;
+    }
+
+    state.attempts += 1;
+    ui.attempts.textContent = `${state.attempts}/${MAX_ATTEMPTS}`;
+    log(`Verify failed (${(similarity * 100).toFixed(1)}% match). Attempt ${state.attempts}/${MAX_ATTEMPTS}.`, 'warn');
+    if (state.attempts >= MAX_ATTEMPTS) {
+        setMode(MODE.LOCKED);
+        log('Too many failed attempts. Protocol LOCKED. Use fallback credential.', 'error');
     } else {
-        protocolStatus.innerText = "AWAITING TRIDENT";
-        protocolStatus.style.color = "#e0e0e0";
+        setMode(MODE.VERIFY);
     }
 }
 
-/**
- * Interaction Handlers
- */
-function handlePointerDown(e) {
-    const mousePos = getMousePos(e);
-    const radius = Math.min(width, height) * 0.35;
-    
-    // Check collision with nodes
-    PRONGS.forEach((p, index) => {
-        const px = center.x + Math.cos(p.currentAngle) * radius;
-        const py = center.y + Math.sin(p.currentAngle) * radius;
-        
-        const dist = Math.sqrt(Math.pow(mousePos.x - px, 2) + Math.pow(mousePos.y - py, 2));
-        if (dist < 30) {
-            isDragging = true;
-            draggedProngIndex = index;
-        }
+async function setFallbackCredential() {
+    const secret = ui.credentialInput.value.trim();
+    if (secret.length < 8) {
+        log('Credential must be at least 8 characters.', 'warn');
+        return;
+    }
+    const salt = randomSalt();
+    const hash = await pbkdf2Hex(secret, salt);
+    localStorage.setItem(CREDENTIAL_KEY, JSON.stringify({ salt, hash, updatedAt: Date.now() }));
+    ui.credentialInput.value = '';
+    log('Fallback credential stored via PBKDF2-derived hash.', 'success');
+}
+
+async function unlockWithCredential() {
+    const payload = localStorage.getItem(CREDENTIAL_KEY);
+    if (!payload) {
+        log('No fallback credential configured.', 'warn');
+        return;
+    }
+    const secret = ui.credentialInput.value.trim();
+    if (!secret) {
+        log('Enter fallback credential first.', 'warn');
+        return;
+    }
+    const record = JSON.parse(payload);
+    const hash = await pbkdf2Hex(secret, record.salt);
+    if (hash === record.hash) {
+        state.attempts = 0;
+        ui.attempts.textContent = `${state.attempts}/${MAX_ATTEMPTS}`;
+        ui.match.textContent = 'CREDENTIAL';
+        setMode(MODE.SUCCESS);
+        log('Fallback credential accepted. ACCESS GRANTED.', 'success');
+    } else {
+        log('Fallback credential rejected.', 'error');
+    }
+    ui.credentialInput.value = '';
+}
+
+function enableFallbackMode() {
+    if (state.mode !== MODE.SUCCESS) {
+        log('Switched to fallback credential flow.', 'phase');
+        setMode(MODE.VERIFY);
+    }
+}
+
+function onHandsResults(results) {
+    const landmarks = results.multiHandLandmarks && results.multiHandLandmarks[0];
+    if (landmarks) {
+        state.lastLandmarks = landmarks;
+        mapLandmarksToNodes(landmarks);
+        ui.tracking.textContent = 'HAND LOCK';
+        ui.tracking.className = 'value verified';
+    } else {
+        state.lastLandmarks = null;
+        ui.tracking.textContent = 'NO HAND';
+        ui.tracking.className = 'value warn';
+    }
+}
+
+async function initHandTracking() {
+    if (!window.Hands || !window.Camera) {
+        ui.tracking.textContent = 'UNAVAILABLE';
+        ui.tracking.className = 'value locked';
+        log('Hand-tracking provider unavailable. Fallback-only mode.', 'warn');
+        return;
+    }
+
+    try {
+        const hands = new Hands({
+            locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+        });
+        hands.setOptions({
+            maxNumHands: 1,
+            modelComplexity: 1,
+            minDetectionConfidence: 0.65,
+            minTrackingConfidence: 0.6
+        });
+        hands.onResults(onHandsResults);
+
+        const camera = new Camera(video, {
+            onFrame: async () => {
+                await hands.send({ image: video });
+            },
+            width: 640,
+            height: 480
+        });
+        await camera.start();
+        state.trackingReady = true;
+        ui.tracking.textContent = 'READY';
+        ui.tracking.className = 'value verified';
+        log('MediaPipe Hands initialized. Landmarks now drive trident angles.', 'phase');
+    } catch (err) {
+        ui.tracking.textContent = 'ERROR';
+        ui.tracking.className = 'value locked';
+        log(`Tracking init failed: ${err.message}.`, 'error');
+    }
+}
+
+function wireInteractions() {
+    ui.enrollBtn.addEventListener('click', enrollGesture);
+    ui.verifyBtn.addEventListener('click', verifyGesture);
+    ui.fallbackBtn.addEventListener('click', enableFallbackMode);
+    ui.setCredentialBtn.addEventListener('click', setFallbackCredential);
+    ui.unlockBtn.addEventListener('click', unlockWithCredential);
+
+    window.addEventListener('mousedown', (e) => {
+        const mouse = { x: e.clientX, y: e.clientY };
+        state.nodes.forEach(node => {
+            const nx = state.centerX + Math.cos(node.angle) * state.ringRadius;
+            const ny = state.centerY + Math.sin(node.angle) * state.ringRadius;
+            const d = Math.hypot(mouse.x - nx, mouse.y - ny);
+            if (d < 25) state.draggingNode = node;
+        });
     });
+
+    window.addEventListener('mousemove', (e) => {
+        if (!state.draggingNode || state.lastLandmarks) return;
+        state.draggingNode.angle = Math.atan2(e.clientY - state.centerY, e.clientX - state.centerX);
+    });
+    window.addEventListener('mouseup', () => { state.draggingNode = null; });
+    window.addEventListener('resize', resize);
 }
 
-function handlePointerMove(e) {
-    if (!isDragging || draggedProngIndex === -1) return;
-    
-    const mousePos = getMousePos(e);
-    const dx = mousePos.x - center.x;
-    const dy = mousePos.y - center.y;
-    
-    // Calculate new angle
-    const angle = Math.atan2(dy, dx);
-    PRONGS[draggedProngIndex].currentAngle = angle;
+function restoreState() {
+    const templateRaw = localStorage.getItem(STORAGE_KEY);
+    if (templateRaw) {
+        try {
+            state.template = JSON.parse(templateRaw);
+            setMode(MODE.VERIFY);
+            log('Loaded stored gesture template.', 'phase');
+        } catch {
+            localStorage.removeItem(STORAGE_KEY);
+            log('Corrupt template removed; re-enroll required.', 'warn');
+        }
+    } else {
+        setMode(MODE.ENROLL);
+    }
 }
 
-function handlePointerUp() {
-    isDragging = false;
-    draggedProngIndex = -1;
+function boot() {
+    resize();
+    wireInteractions();
+    restoreState();
+    frame();
+    initHandTracking();
+    log('Gesture-auth protocol online. States: ENROLL, VERIFY, SUCCESS, LOCKED.', 'phase');
 }
 
-function getMousePos(evt) {
-    const rect = canvas.getBoundingClientRect();
-    // Handle Touch vs Mouse
-    const clientX = evt.clientX || evt.pageX;
-    const clientY = evt.clientY || evt.pageY;
-    
-    return {
-        x: clientX - rect.left,
-        y: clientY - rect.top
-    };
-}
-
-// Boot
-init();
+boot();
