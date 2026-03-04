@@ -1,5 +1,5 @@
 # Makefile - MMUKO-OS Build System
-# Supports: Linux, macOS, WSL
+# Supports: Linux, macOS, WSL, Windows
 
 # Compilers
 CC = gcc
@@ -19,6 +19,19 @@ CSHARP_DIR = csharp
 BUILD_DIR = build
 IMG_DIR = img
 
+# Platform-specific commands
+ifeq ($(OS),Windows_NT)
+MKDIR_P = powershell -NoProfile -Command "New-Item -ItemType Directory -Path '$1' -Force | Out-Null"
+RM_RF = powershell -NoProfile -Command "if (Test-Path '$1') { Remove-Item -Recurse -Force '$1' }"
+PYTHON = python
+else
+MKDIR_P = mkdir -p $1
+RM_RF = rm -rf $1
+PYTHON = python3
+endif
+
+BASH = bash
+
 # Targets
 IMG_NAME = mmuko-os.img
 IMG_PATH = $(IMG_DIR)/$(IMG_NAME)
@@ -31,13 +44,13 @@ CPP_SRCS = $(CPP_DIR)/riftbridge.cpp
 C_OBJS = $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(C_SRCS))
 
 # Default target
-.PHONY: all clean test img cpp csharp
+.PHONY: all clean test image cpp csharp verify vbox help
 
-all: img test
+all: image test
 
 # Create directories
 $(BUILD_DIR) $(IMG_DIR):
-	mkdir -p $@
+	$(call MKDIR_P,$@)
 
 # Compile C sources
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
@@ -48,10 +61,10 @@ $(BUILD_DIR)/mmuko_test: $(C_OBJS) | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -o $@ $^
 
 # Generate boot image
-img: $(IMG_PATH)
+image: $(IMG_PATH)
 
 $(IMG_PATH): build_img.py | $(IMG_DIR)
-	python3 build_img.py $@
+	$(PYTHON) build_img.py $@
 
 # Test boot sequence
 test: $(BUILD_DIR)/mmuko_test
@@ -74,8 +87,9 @@ csharp:
 
 # Clean build artifacts
 clean:
-	rm -rf $(BUILD_DIR) $(IMG_DIR)
-	@cd $(CSHARP_DIR) && dotnet clean 2>/dev/null || true
+	$(call RM_RF,$(BUILD_DIR))
+	$(call RM_RF,$(IMG_DIR))
+	@$(BASH) -lc 'cd "$(CSHARP_DIR)" && dotnet clean >/dev/null 2>&1 || true'
 
 # Verify boot image
 verify: $(IMG_PATH)
@@ -86,7 +100,7 @@ verify: $(IMG_PATH)
 
 # VirtualBox test
 vbox: $(IMG_PATH)
-	./ringboot.sh
+	$(BASH) ./ringboot.sh
 
 # Help
 help:
@@ -94,7 +108,7 @@ help:
 	@echo ""
 	@echo "Targets:"
 	@echo "  all     - Build everything (default)"
-	@echo "  img     - Create bootable image"
+	@echo "  image   - Create bootable image"
 	@echo "  test    - Run NSIGII verification test"
 	@echo "  cpp     - Build C++ RiftBridge"
 	@echo "  csharp  - Build C# implementation"
