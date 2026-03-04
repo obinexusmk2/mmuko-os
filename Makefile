@@ -43,10 +43,14 @@ CPP_SRCS = $(CPP_DIR)/riftbridge.cpp
 # Object files
 C_OBJS = $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(C_SRCS))
 
-# Default target
-.PHONY: all clean test image cpp csharp verify vbox help
+# ISO targets
+ISO_NAME = mmuko-os-bootable.iso
+ISO_PATH = $(IMG_DIR)/$(ISO_NAME)
 
-all: image test
+# Default target
+.PHONY: all clean test image iso iso-boot cpp csharp verify vbox help
+
+all: image test iso
 
 # Create directories
 $(BUILD_DIR) $(IMG_DIR):
@@ -98,22 +102,43 @@ verify: $(IMG_PATH)
 	@echo "RIFT Magic: $$(xxd -p -s 0 -l 4 '$(IMG_PATH)')"
 	@echo "Boot Sig: $$(xxd -p -s 510 -l 2 '$(IMG_PATH)')"
 
-# VirtualBox test
+# Create bootable ISO
+iso: $(ISO_PATH)
+
+$(ISO_PATH): $(IMG_PATH) iso-creator.py | $(IMG_DIR)
+	@echo "=== Creating Bootable ISO ==="
+	$(PYTHON) iso-creator.py --boot-img $(IMG_PATH) --output $(ISO_PATH) --verbose
+
+# VirtualBox test with floppy image
 vbox: $(IMG_PATH)
-	bash ringboot.sh
+	@echo "=== Booting from Floppy Image ==="
 	$(BASH) ./ringboot.sh
+
+# VirtualBox test with ISO image
+iso-boot: $(ISO_PATH)
+	@echo "=== Booting from ISO Image ==="
+	$(BASH) ./iso-boot.sh
 
 # Help
 help:
 	@echo "MMUKO-OS Build System"
 	@echo ""
 	@echo "Targets:"
-	@echo "  all     - Build everything (default)"
-	@echo "  image   - Create bootable image"
-	@echo "  test    - Run NSIGII verification test"
-	@echo "  cpp     - Build C++ RiftBridge"
-	@echo "  csharp  - Build C# implementation"
-	@echo "  verify  - Verify boot image integrity"
-	@echo "  vbox    - Test in VirtualBox"
-	@echo "  clean   - Remove build artifacts"
-	@echo "  help    - Show this help"
+	@echo "  all       - Build everything (default): image, test, iso"
+	@echo "  image     - Create bootable image (512-byte floppy)"
+	@echo "  iso       - Create bootable x86-64 ISO (El Torito)"
+	@echo "  test      - Run NSIGII verification test"
+	@echo "  cpp       - Build C++ RiftBridge"
+	@echo "  csharp    - Build C# implementation"
+	@echo "  verify    - Verify boot image integrity"
+	@echo "  vbox      - Test floppy image in VirtualBox"
+	@echo "  iso-boot  - Test ISO image in VirtualBox"
+	@echo "  clean     - Remove build artifacts"
+	@echo "  help      - Show this help"
+	@echo ""
+	@echo "Quick Start:"
+	@echo "  make              # Build everything"
+	@echo "  make iso-boot     # Boot ISO in VirtualBox"
+	@echo "  make vbox         # Boot floppy in VirtualBox"
+	@echo ""
+	@echo "See README.md and ISO-BOOT.md for details."
