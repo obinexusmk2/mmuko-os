@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mmuko-os/spec/export-manifest.schema.json",
+  "title": "MMUKO-OS Export Manifest",
+  "type": "object",
+  "required": [
+    "name",
+    "schema_version",
+    "release",
+    "version",
+    "generated_at",
+    "platforms",
+    "metadata"
+  ],
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "schema_version": {
+      "type": "string"
+    },
+    "release": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "platforms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["platform", "artifacts"],
+        "properties": {
+          "platform": {
+            "type": "string",
+            "enum": ["windows", "linux", "macos"]
+          },
+          "artifacts": {
+            "type": "array",
+            "minItems": 3,
+            "items": {
+              "type": "object",
+              "required": ["category", "file", "sha256", "size"],
+              "properties": {
+                "category": {
+                  "type": "string",
+                  "enum": ["boot_image", "native_binary", "ui_bundle"]
+                },
+                "file": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                },
+                "size": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "note": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["checksums", "checksums_sha256"],
+      "properties": {
+        "checksums": {
+          "type": "string"
+        },
+        "checksums_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    }
+  }
+}

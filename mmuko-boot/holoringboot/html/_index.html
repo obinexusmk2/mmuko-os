@@ -1,0 +1,478 @@
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NSIGII / MMUKO-OS TRIDENT PROTOCOL</title>
+    <style>
+        :root {
+            /* Palette from mmuko_os_visual_design.md */
+            --bg-color: #2C2A28;
+            --primary-copper: #D48C45;
+            --secondary-bronze: #A68B5B;
+            --accent-gold: #B8860B;
+            --text-dark: #3D3B39;
+            --text-light: #EAE6E1;
+            
+            /* Status Colors */
+            --status-yes: #00FF41; /* NSIGII_YES (0x55) */
+            --status-no: #FF2A2A;  /* NSIGII_NO (0xAA) */
+            --status-maybe: #FFD700; /* NSIGII_MAYBE (0x00) */
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: var(--bg-color);
+            font-family: 'Courier New', Courier, monospace;
+            color: var(--text-light);
+            user-select: none;
+        }
+
+        #ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        header {
+            border-left: 4px solid var(--primary-copper);
+            padding-left: 15px;
+            background: rgba(44, 42, 40, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        h1 {
+            font-size: 24px;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--primary-copper);
+        }
+
+        .subtitle {
+            font-size: 12px;
+            color: var(--secondary-bronze);
+            margin-top: 5px;
+        }
+
+        #status-panel {
+            align-self: flex-end;
+            text-align: right;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 15px;
+            border: 1px solid var(--secondary-bronze);
+            border-radius: 4px;
+        }
+
+        .metric {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .value {
+            font-weight: bold;
+            font-family: monospace;
+        }
+
+        #coherence-value { color: var(--status-maybe); }
+        
+        #controls-hint {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            opacity: 0.7;
+            font-size: 12px;
+            pointer-events: none;
+        }
+
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<div id="ui-layer">
+    <header>
+        <h1>NSIGII Protocol</h1>
+        <div class="subtitle">HERE AND NOW FOREVER // MMUKO-OS</div>
+        <div class="subtitle">"No perfect schematic without 95.4% coherence."</div>
+    </header>
+
+    <div id="status-panel">
+        <div class="metric">PROTOCOL: <span id="protocol-state" class="value">SPARSE</span></div>
+        <div class="metric">COHERENCE: <span id="coherence-value" class="value">0.0%</span></div>
+        <div class="metric">AURA SEAL: <span id="aura-status" class="value">UNSTABLE</span></div>
+        <div class="metric">TRIDENT: <span id="trident-status" class="value">MISALIGNED</span></div>
+    </div>
+
+    <div id="controls-hint">
+        DRAG NODES TO ALIGN: <br>
+        [P1: EAST] [P2: SOUTHWEST] [P3: NORTHWEST]
+    </div>
+</div>
+
+<canvas id="mainCanvas"></canvas>
+
+<script>
+/**
+ * LIBRARIES: Inlined for Single-File Execution
+ */
+
+// --- VECTOR.JS (Simplified for 2D Canvas usage) ---
+var Vector; 
+(function (Vector) { 
+    "use strict"; 
+    var Vec2 = function (x, y) { this.x = x; this.y = y; }; 
+    Vec2.prototype.add = function (v) { this.x += v.x; this.y += v.y; return this; }; 
+    Vec2.prototype.sub = function (v) { this.x -= v.x; this.y -= v.y; return this; }; 
+    Vec2.prototype.mul = function (s) { this.x *= s; this.y *= s; return this; }; 
+    Vec2.prototype.dist = function (v) { var dx = this.x - v.x; var dy = this.y - v.y; return Math.sqrt(dx*dx + dy*dy); };
+    Vec2.prototype.angle = function() { return Math.atan2(this.y, this.x); };
+    Vec2.prototype.clone = function() { return new Vec2(this.x, this.y); };
+    Vector.Vec2 = Vec2; 
+})(Vector || (Vector = {}));
+
+// --- PIXELBUFFER.JS ---
+(function (global) {
+    function PixelBuffer(imageData) {
+        this.data = imageData.data;
+        this.width = imageData.width;
+        this.height = imageData.height;
+        this.buffer = new Uint32Array(this.data.buffer);
+    }
+    PixelBuffer.prototype.getIndex = function (x, y) { return (y * this.width + x); };
+    PixelBuffer.prototype.setPixel = function (x, y, color) {
+        if (x < 0 || x >= this.width || y < 0 || y >= this.height) return;
+        this.buffer[y * this.width + x] = color;
+    };
+    global.PixelBuffer = PixelBuffer;
+})(window);
+
+/**
+ * APPLICATION LOGIC
+ */
+
+const canvas = document.getElementById('mainCanvas');
+const ctx = canvas.getContext('2d', { willReadFrequently: true });
+let width, height, center;
+let pixelBuffer, imageData;
+
+// NSIGII Protocol Constants
+const TARGET_COHERENCE = 95.4;
+const TOLERANCE = 0.25; // Radians (~15 degrees)
+
+// Visual Assets
+const COLOR_BG = 0xFF282A2C; // #2C2A28 (ABGR: 28 2A 2C FF) -> Little Endian Opaque
+const COLOR_NOISE_A = 0xFF458CD4; // Primary Copper
+const COLOR_NOISE_B = 0xFF0B86B8; // Accent Gold
+
+// State
+let time = 0;
+let protocolState = "SPARSE"; // SPARSE -> REMEMBER -> ACTIVE -> VERIFY
+let currentCoherence = 0;
+let isVerified = false;
+
+// Nodes (The 3 prongs of the trident)
+// P1: Identity (East/0 rad), P2: Device (Southwest/2.35 rad), P3: Time (Northwest/3.92 rad) 
+// Using rough MMUKO compass directions
+const nodes = [
+    { id: 'P1', label: 'IDENTITY', color: '#D48C45', angle: Math.random() * 6.28, target: 0, radius: 20, dragging: false }, // East
+    { id: 'P2', label: 'DEVICE', color: '#A68B5B', angle: Math.random() * 6.28, target: (5 * Math.PI) / 4, radius: 20, dragging: false }, // Southwest
+    { id: 'P3', label: 'TIME', color: '#B8860B', angle: Math.random() * 6.28, target: (7 * Math.PI) / 4, radius: 20, dragging: false }  // Northwest/Time
+];
+
+// Initialize
+function init() {
+    resize();
+    window.addEventListener('resize', resize);
+    canvas.addEventListener('mousedown', onDown);
+    canvas.addEventListener('mousemove', onMove);
+    canvas.addEventListener('mouseup', onUp);
+    canvas.addEventListener('touchstart', (e) => onDown(e.touches[0]));
+    canvas.addEventListener('touchmove', (e) => onMove(e.touches[0]));
+    canvas.addEventListener('touchend', onUp);
+    
+    loop();
+}
+
+function resize() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+    center = new Vector.Vec2(width/2, height/2);
+    
+    imageData = ctx.createImageData(width, height);
+    pixelBuffer = new PixelBuffer(imageData);
+}
+
+// Input Handling
+function onDown(e) {
+    const mouse = new Vector.Vec2(e.clientX, e.clientY);
+    const ringRadius = Math.min(width, height) * 0.35;
+    
+    nodes.forEach(n => {
+        const nodePos = new Vector.Vec2(
+            center.x + Math.cos(n.angle) * ringRadius,
+            center.y + Math.sin(n.angle) * ringRadius
+        );
+        if (mouse.dist(nodePos) < n.radius * 2) {
+            n.dragging = true;
+        }
+    });
+}
+
+function onMove(e) {
+    const mouse = new Vector.Vec2(e.clientX, e.clientY);
+    nodes.forEach(n => {
+        if (n.dragging) {
+            const dx = mouse.x - center.x;
+            const dy = mouse.y - center.y;
+            n.angle = Math.atan2(dy, dx);
+        }
+    });
+}
+
+function onUp() {
+    nodes.forEach(n => n.dragging = false);
+}
+
+// Rendering & Logic
+function loop() {
+    requestAnimationFrame(loop);
+    time += 0.05;
+
+    // 1. Generate Aura Seal (Background Noise via PixelBuffer)
+    // We clear with a solid color then add stochastic noise based on coherence
+    fillBackground();
+    if (!isVerified) {
+        addStaticNoise();
+    } else {
+        addHarmonicPattern();
+    }
+    ctx.putImageData(imageData, 0, 0);
+
+    // 2. Draw Protocol Rings (Canvas API)
+    drawRings();
+
+    // 3. Logic & Coherence Check
+    checkAlignment();
+
+    // 4. Draw Trident Signal Path (If coherence is high)
+    drawSignalPath();
+
+    // 5. Draw Nodes
+    drawNodes();
+    
+    // 6. Update UI
+    updateUI();
+}
+
+function fillBackground() {
+    // 0xFF282A2C is Little Endian for #2C2A28 with full alpha
+    // ABGR format: FF 2C 2A 28 (Actually it depends on endianness, typically ABGR)
+    // Let's assume standard Uint32: 0xFF000000 | (B << 16) | (G << 8) | R
+    // Color: #2C2A28 -> R=44, G=42, B=40
+    const color = 0xFF000000 | (40 << 16) | (42 << 8) | 44;
+    pixelBuffer.buffer.fill(color);
+}
+
+function addStaticNoise() {
+    // Sparse noise injection (Step 5 of Boot: Noise x Signal)
+    const density = (100 - currentCoherence) * 20; // More noise when misaligned
+    for(let i=0; i<density; i++) {
+        const x = Math.floor(Math.random() * width);
+        const y = Math.floor(Math.random() * height);
+        // Random copper or gold spark
+        const color = Math.random() > 0.5 ? 0xFF458CD4 : 0xFF0B86B8;
+        pixelBuffer.setPixel(x, y, color);
+    }
+}
+
+function addHarmonicPattern() {
+    // Verified state: Ordered waves
+    for (let x = 0; x < width; x+=4) {
+        const y = Math.floor(height/2 + Math.sin(x * 0.01 + time) * 100);
+        if (y > 0 && y < height) {
+             pixelBuffer.setPixel(x, y, 0xFF00FF41); // Green line
+             pixelBuffer.setPixel(x, y+1, 0xFF00FF41);
+        }
+    }
+}
+
+function drawRings() {
+    const r = Math.min(width, height) * 0.35;
+    
+    ctx.strokeStyle = 'rgba(166, 139, 91, 0.2)'; // Secondary Bronze
+    ctx.lineWidth = 1;
+    
+    // Outer Ring (Ring-Zone)
+    ctx.beginPath();
+    ctx.arc(center.x, center.y, r, 0, Math.PI * 2);
+    ctx.stroke();
+    
+    // Inner Ring (Void)
+    ctx.beginPath();
+    ctx.arc(center.x, center.y, r * 0.3, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Axes (X/Y/Z projection)
+    ctx.beginPath();
+    ctx.moveTo(center.x - r, center.y);
+    ctx.lineTo(center.x + r, center.y);
+    ctx.moveTo(center.x, center.y - r);
+    ctx.lineTo(center.x, center.y + r);
+    ctx.stroke();
+}
+
+function drawNodes() {
+    const r = Math.min(width, height) * 0.35;
+
+    nodes.forEach(n => {
+        const x = center.x + Math.cos(n.angle) * r;
+        const y = center.y + Math.sin(n.angle) * r;
+
+        // Connector line
+        ctx.beginPath();
+        ctx.moveTo(center.x, center.y);
+        ctx.lineTo(x, y);
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+        ctx.stroke();
+
+        // Node Body
+        ctx.beginPath();
+        ctx.arc(x, y, n.radius, 0, Math.PI * 2);
+        ctx.fillStyle = '#1a1a1a';
+        ctx.fill();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = n.color;
+        ctx.stroke();
+
+        // Label
+        ctx.fillStyle = n.color;
+        ctx.font = '12px Courier New';
+        ctx.fillText(n.id, x - 8, y + 4);
+        
+        // Target Ghost (Hint)
+        if (!isVerified) {
+            const tx = center.x + Math.cos(n.target) * r;
+            const ty = center.y + Math.sin(n.target) * r;
+            ctx.beginPath();
+            ctx.arc(tx, ty, 5, 0, Math.PI*2);
+            ctx.fillStyle = 'rgba(255,255,255,0.1)';
+            ctx.fill();
+        }
+    });
+}
+
+function checkAlignment() {
+    let totalError = 0;
+    
+    nodes.forEach(n => {
+        // Normalize angle 0 to 2PI
+        let a = n.angle % (Math.PI * 2);
+        if (a < 0) a += Math.PI * 2;
+        
+        let t = n.target;
+        let diff = Math.abs(a - t);
+        if (diff > Math.PI) diff = (Math.PI * 2) - diff;
+        
+        totalError += diff;
+    });
+
+    // Calculate Coherence %
+    // Max error approx PI * 3. We want 100% at 0 error.
+    const maxError = Math.PI * 1.5; 
+    let coherence = 100 - (totalError / maxError) * 100;
+    if (coherence < 0) coherence = 0;
+    
+    // Smooth transition
+    currentCoherence += (coherence - currentCoherence) * 0.1;
+
+    // Check State
+    if (currentCoherence >= TARGET_COHERENCE) {
+        protocolState = "VERIFIED";
+        isVerified = true;
+    } else if (currentCoherence > 60) {
+        protocolState = "ACTIVE";
+        isVerified = false;
+    } else {
+        protocolState = "SPARSE";
+        isVerified = false;
+    }
+}
+
+function drawSignalPath() {
+    // The Trident Squiggle: South -> East -> West -> North
+    // Drawn only as coherence increases
+    
+    const alpha = (currentCoherence - 50) / 50;
+    if (alpha <= 0) return;
+
+    const scale = Math.min(width, height) * 0.15;
+    ctx.save();
+    ctx.translate(center.x, center.y);
+    
+    ctx.beginPath();
+    // South
+    ctx.moveTo(0, scale);
+    // East
+    ctx.lineTo(scale, 0);
+    // West
+    ctx.lineTo(-scale, 0);
+    // North (Double Rise)
+    ctx.lineTo(0, -scale);
+    ctx.lineTo(0, -scale * 1.5);
+    
+    ctx.strokeStyle = isVerified ? '#00FF41' : `rgba(212, 140, 69, ${alpha})`;
+    ctx.lineWidth = 3;
+    ctx.shadowBlur = isVerified ? 20 : 0;
+    ctx.shadowColor = '#00FF41';
+    
+    ctx.stroke();
+    ctx.restore();
+}
+
+function updateUI() {
+    document.getElementById('coherence-value').innerText = currentCoherence.toFixed(1) + "%";
+    document.getElementById('protocol-state').innerText = protocolState;
+    
+    const stateElem = document.getElementById('protocol-state');
+    const auraElem = document.getElementById('aura-status');
+    const triElem = document.getElementById('trident-status');
+
+    if (isVerified) {
+        stateElem.style.color = "var(--status-yes)";
+        auraElem.innerText = "SEALED (95.4%)";
+        auraElem.style.color = "var(--status-yes)";
+        triElem.innerText = "ALIGNED";
+        triElem.style.color = "var(--status-yes)";
+    } else {
+        stateElem.style.color = "var(--primary-copper)";
+        auraElem.innerText = "NOISE INJECTION";
+        auraElem.style.color = "var(--secondary-bronze)";
+        triElem.innerText = "RESOLVING...";
+        triElem.style.color = "var(--status-maybe)";
+    }
+}
+
+// Boot
+init();
+
+</script>
+</body>
+</html>

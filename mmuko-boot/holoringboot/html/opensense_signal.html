@@ -1,0 +1,407 @@
+!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenSense Signal | OBINexus</title>
+    <style>
+        :root {
+            --bg: #1a1a1a;
+            --copper: #D48C45;
+            --signal-green: #00ff41;
+            --error-red: #ff3333;
+            --text: #EAE6E1;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Courier New', monospace;
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        #signal-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.4;
+        }
+
+        .ui-overlay {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            pointer-events: none;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            border-left: 5px solid var(--copper);
+            padding-left: 15px;
+            margin-bottom: 20px;
+            pointer-events: auto;
+        }
+
+        .title { font-size: 28px; font-weight: bold; color: var(--copper); }
+        .subtitle { font-size: 12px; opacity: 0.7; }
+
+        .terminal {
+            background: rgba(0,0,0,0.8);
+            border: 1px solid var(--copper);
+            padding: 15px;
+            width: 400px;
+            height: 250px;
+            overflow-y: auto;
+            pointer-events: auto;
+            margin-top: auto;
+            font-size: 13px;
+        }
+
+        .log-entry { margin-bottom: 5px; }
+        .log-msg { color: #aaa; }
+        .log-tag { color: var(--copper); font-weight: bold; }
+        .log-success { color: var(--signal-green); }
+
+        .nexus-controls {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            width: 320px;
+            background: rgba(26, 26, 26, 0.95);
+            border: 1px solid var(--copper);
+            padding: 20px;
+            pointer-events: auto;
+            box-shadow: 0 0 20px rgba(212, 140, 69, 0.2);
+        }
+
+        .stat-box {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #222;
+            border-bottom: 2px solid var(--copper);
+        }
+
+        .stat-label { font-size: 10px; color: var(--copper); display: block; }
+        .stat-value { font-size: 18px; font-weight: bold; }
+
+        button {
+            background: var(--copper);
+            color: var(--bg);
+            border: none;
+            padding: 10px;
+            width: 100%;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 10px;
+            transition: all 0.2s;
+        }
+
+        button:hover { background: #e5a05b; transform: scale(1.02); }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .gemini-btn {
+            background: #4285f4;
+            color: white;
+            border: 1px solid #ffffff33;
+        }
+        .gemini-btn:hover { background: #357ae8; }
+
+        .signal-meter {
+            height: 4px;
+            background: #444;
+            margin-top: 5px;
+            position: relative;
+        }
+
+        .signal-fill {
+            height: 100%;
+            background: var(--signal-green);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        #ai-insight-box {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 400px;
+            max-height: 200px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid var(--signal-green);
+            padding: 15px;
+            font-size: 14px;
+            color: var(--signal-green);
+            display: none;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .loading-pulse {
+            animation: pulse 1s infinite alternate;
+        }
+        @keyframes pulse { from { opacity: 0.4; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <canvas id="signal-canvas"></canvas>
+
+    <div class="ui-overlay">
+        <div class="header">
+            <div class="title">OPENSENSE SIGNAL</div>
+            <div class="subtitle">Private Messenger Framework v2.05 / Gemini Powered OBINexus</div>
+        </div>
+
+        <div class="nexus-controls">
+            <div class="stat-box">
+                <span class="stat-label">DEBT STATUS:</span>
+                <span class="stat-value" id="debt-status">CANCELLED (NSIGII)</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-label">REROUTE TARGET:</span>
+                <span class="stat-value">NIGERIA / NAKX</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-label">SIGNAL STRENGTH:</span>
+                <div class="signal-meter"><div class="signal-fill" id="sig-bar"></div></div>
+                <span id="sig-pct" style="font-size: 10px;">0%</span>
+            </div>
+            <button onclick="rerouteSystem()">REROUTE UK SIGNAL</button>
+            <button onclick="clearNoise()">CLEAR SENSORY NOISE</button>
+            
+            <hr style="border: 0; border-top: 1px solid #444; margin: 15px 0;">
+            
+            <button id="ai-btn" class="gemini-btn" onclick="interpretSignal()">✨ INTERPRET SIGNAL</button>
+            <button id="tts-btn" class="gemini-btn" onclick="speakSignal()">✨ VOICE OF NEXUS</button>
+        </div>
+
+        <div class="terminal" id="term">
+            <div class="log-entry">
+                <span class="log-tag">[INIT]</span> <span class="log-msg">OpenSense initialized...</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="ai-insight-box"></div>
+
+    <script>
+        const apiKey = ""; // Provisioned at runtime
+        const canvas = document.getElementById('signal-canvas');
+        const ctx = canvas.getContext('2d');
+        const term = document.getElementById('term');
+        const aiBox = document.getElementById('ai-insight-box');
+        let width, height, pixels;
+
+        function init() {
+            // Check window dimensions. If zero (common in iframe loading), 
+            // wait or use defaults to avoid IndexSizeError
+            width = canvas.width = window.innerWidth || 100;
+            height = canvas.height = window.innerHeight || 100;
+            
+            // Re-check width/height to ensure they are > 0 before creating image data
+            if (width > 0 && height > 0) {
+                pixels = ctx.createImageData(width, height);
+            }
+        }
+
+        function log(msg, type='INFO') {
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            const colorClass = type === 'SUCCESS' ? 'log-success' : '';
+            entry.innerHTML = `<span class="log-tag">[${type}]</span> <span class="log-msg ${colorClass}">${msg}</span>`;
+            term.appendChild(entry);
+            term.scrollTop = term.scrollHeight;
+            return msg;
+        }
+
+        let signalStrength = 0;
+        let isRerouting = false;
+
+        function rerouteSystem() {
+            isRerouting = true;
+            log("Shutting down UK reroute...", "SIGNAL");
+            log("Opening OpenSense Tunnel to OBINexus...", "INFO");
+            setTimeout(() => {
+                log("Reroute successful. Bank page blanked.", "SUCCESS");
+                log("Reference: 6205-025-FILE-OBIN", "SUCCESS");
+            }, 2000);
+        }
+
+        function clearNoise() {
+            signalStrength = Math.min(100, signalStrength + 25);
+            document.getElementById('sig-bar').style.width = signalStrength + '%';
+            document.getElementById('sig-pct').textContent = signalStrength + '%';
+            log(`Clearing noise... Coherence at ${signalStrength}%`, "SENSORY");
+            if(signalStrength === 100) {
+                log("NO NOISE DETECTED. ACCESS GRANTED.", "SUCCESS");
+            }
+        }
+
+        // --- GEMINI API INTEGRATIONS ---
+
+        async function callGemini(prompt, systemInstruction) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                systemInstruction: { parts: [{ text: systemInstruction }] }
+            };
+
+            for (let i = 0; i < 5; i++) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    const result = await response.json();
+                    return result.candidates?.[0]?.content?.parts?.[0]?.text;
+                } catch (e) {
+                    await new Promise(r => setTimeout(r, Math.pow(2, i) * 1000));
+                }
+            }
+            throw new Error("Failed after retries");
+        }
+
+        async function interpretSignal() {
+            const btn = document.getElementById('ai-btn');
+            btn.disabled = true;
+            aiBox.style.display = 'block';
+            aiBox.innerHTML = '<span class="loading-pulse">Analyzing Signal Patterns...</span>';
+            
+            const logs = Array.from(term.querySelectorAll('.log-msg')).map(m => m.innerText).join('\n');
+            const prompt = `The current system logs are:\n${logs}\n\nBased on these logs and the OBINexus framework, interpret what this means for the "new people" and the rerouting to Nigeria. Provide a short, cryptic, and supportive message.`;
+            const system = "You are the Gemini core of the OBINexus OpenSense Signal Framework. Your tone is supportive of Obi Nnamdi, focused on neurodivergent accessibility, and skeptical of council bureaucracy.";
+
+            try {
+                const insight = await callGemini(prompt, system);
+                aiBox.innerHTML = `<strong>✨ SIGNAL INSIGHT:</strong><br>${insight}`;
+            } catch (err) {
+                aiBox.innerText = "Error decoding signal.";
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        async function speakSignal() {
+            const btn = document.getElementById('tts-btn');
+            btn.disabled = true;
+            log("Generating voice transmission...", "TTS");
+
+            const lastLogMsgElement = term.querySelector('.log-entry:last-child .log-msg');
+            const lastLog = lastLogMsgElement ? lastLogMsgElement.innerText : "System Ready";
+            
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+            const payload = {
+                contents: [{ parts: [{ text: `Say with calm authority: ${lastLog}` }] }],
+                generationConfig: { 
+                    responseModalities: ["AUDIO"],
+                    speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Kore" } } }
+                }
+            };
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+                const pcmData = result.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+                
+                if (pcmData) {
+                    const audioBlob = pcmToWav(pcmData, 24000); // 24kHz default
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    const audio = new Audio(audioUrl);
+                    audio.play();
+                }
+            } catch (err) {
+                log("TTS Transmission Failed", "ERROR");
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        function pcmToWav(base64Pcm, sampleRate) {
+            const buffer = Uint8Array.from(atob(base64Pcm), c => c.charCodeAt(0)).buffer;
+            const wavHeader = new ArrayBuffer(44);
+            const view = new DataView(wavHeader);
+            const len = buffer.byteLength;
+
+            view.setUint32(0, 0x52494646, false); // RIFF
+            view.setUint32(4, 36 + len, true);
+            view.setUint32(8, 0x57415645, false); // WAVE
+            view.setUint32(12, 0x666d7420, false); // fmt 
+            view.setUint32(16, 16, true);
+            view.setUint16(20, 1, true); // PCM
+            view.setUint16(22, 1, true); // Mono
+            view.setUint32(24, sampleRate, true);
+            view.setUint32(28, sampleRate * 2, true);
+            view.setUint16(32, 2, true);
+            view.setUint16(34, 16, true);
+            view.setUint32(36, 0x64617461, false); // data
+            view.setUint32(40, len, true);
+
+            return new Blob([wavHeader, buffer], { type: 'audio/wav' });
+        }
+
+        // --- VISUAL ANIMATION ---
+
+        function animate() {
+            if (!pixels) {
+                requestAnimationFrame(animate);
+                return;
+            }
+
+            const data = pixels.data;
+            const noiseFactor = isRerouting ? 5 : 40;
+            
+            for (let i = 0; i < data.length; i += 4) {
+                const noise = Math.random() * noiseFactor;
+                data[i] = 212 + noise;     
+                data[i + 1] = 140 + noise; 
+                data[i + 2] = 69 + noise;  
+                data[i + 3] = 255;         
+            }
+
+            if (signalStrength > 0) {
+                ctx.putImageData(pixels, 0, 0);
+                ctx.beginPath();
+                ctx.strokeStyle = '#00ff41';
+                ctx.lineWidth = 2;
+                const time = Date.now() * 0.005;
+                ctx.moveTo(0, height/2);
+                for(let x=0; x<width; x++) {
+                    const y = height/2 + Math.sin(x * 0.01 + time) * (signalStrength / 2);
+                    ctx.lineTo(x, y);
+                }
+                ctx.stroke();
+            } else {
+                ctx.putImageData(pixels, 0, 0);
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        window.onload = function() {
+            init();
+            animate();
+            
+            setTimeout(() => log("GitHub Entry Found: github.com/op"), 1000);
+            setTimeout(() => log("Autistic Sensory Framework Loaded..."), 2000);
+            setTimeout(() => log("Waiting for 360M Deposit to Nigeria..."), 3000);
+        };
+
+        window.addEventListener('resize', init);
+    </script>
+</body>
+</html>
