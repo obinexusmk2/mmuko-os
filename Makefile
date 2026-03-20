@@ -13,7 +13,7 @@
 #   make image             write boot sector into mmuko-os.img
 #   make compositor        dotnet build (needs .NET 8 SDK)
 #   make run               boot with QEMU
-#   make run-compositor    C# compositor simulate-pass mode
+#   make run-compositor    C# compositor dev boot-gate bypass (PASS path)
 #   make verify            NSIGII verification checks
 #   make clean             remove build/ directory
 
@@ -66,7 +66,7 @@ all: dirs firmware boot image
 	@echo "  Image    : $(DISK_IMG)"
 	@echo ""
 	@echo "  make run            - boot in QEMU"
-	@echo "  make run-compositor - run C# compositor"
+	@echo "  make run-compositor - run C# compositor (dev PASS bypass)"
 
 # ============================================================
 # Create build directories using Python (cross-platform)
@@ -168,18 +168,18 @@ compositor: firmware
 
 .PHONY: run-compositor
 run-compositor:
-	@echo "[COMPOSITOR] simulate-pass mode..."
-	$(DOTNET) run --project mmuko-compositor.csproj -- --simulate-pass
+	@echo "[COMPOSITOR] dev boot-gate bypass with explicit PASS inputs..."
+	$(DOTNET) run --project mmuko-compositor.csproj -- --simulate-pass --tier1 yes --tier2 yes --w-actor yes
 
 .PHONY: run-compositor-pass
 run-compositor-pass:
-	@echo "[COMPOSITOR] T1=yes T2=yes (PASS)..."
-	$(DOTNET) run --project mmuko-compositor.csproj -- --boot-passed true --tier1 yes --tier2 yes
+	@echo "[COMPOSITOR] explicit PASS path (boot-passed + T1/T2/W = yes)..."
+	$(DOTNET) run --project mmuko-compositor.csproj -- --boot-passed true --tier1 yes --tier2 yes --w-actor yes
 
 .PHONY: run-compositor-maybe
 run-compositor-maybe:
-	@echo "[COMPOSITOR] T1=maybe T2=maybe (HOLD)..."
-	$(DOTNET) run --project mmuko-compositor.csproj -- --boot-passed true --tier1 maybe --tier2 maybe
+	@echo "[COMPOSITOR] diagnostic HOLD path (boot-passed + unresolved inputs)..."
+	$(DOTNET) run --project mmuko-compositor.csproj -- --boot-passed true --tier1 maybe --tier2 maybe --w-actor maybe
 
 # ============================================================
 # NSIGII verification checks (python3 -c one-liners, no heredoc)
@@ -227,7 +227,7 @@ help:
 	@echo "  make image              <- uses pre-built boot.bin"
 	@echo "  make compositor         <- dotnet build"
 	@echo "  make run                <- QEMU boot"
-	@echo "  make run-compositor     <- C# compositor"
+	@echo "  make run-compositor     <- C# compositor dev PASS bypass"
 	@echo "  boot: run from WSL (nasm not in conda path)"
 	@echo ""
 	@echo "ALL TARGETS:"
@@ -239,9 +239,9 @@ help:
 	@echo "  make image                boot sector -> mmuko-os.img"
 	@echo "  make compositor           dotnet build"
 	@echo "  make run                  QEMU boot"
-	@echo "  make run-compositor       compositor --simulate-pass"
-	@echo "  make run-compositor-pass  T1=yes T2=yes"
-	@echo "  make run-compositor-maybe T1=maybe (HOLD)"
+	@echo "  make run-compositor       compositor dev PASS bypass (--simulate-pass + yes/yes/yes)"
+	@echo "  make run-compositor-pass  compositor PASS path (--boot-passed true + yes/yes/yes)"
+	@echo "  make run-compositor-maybe compositor diagnostic HOLD path (--boot-passed true + maybe/maybe/maybe)"
 	@echo "  make verify               NSIGII checks"
 	@echo "  make clean                remove build/"
 	@echo ""
