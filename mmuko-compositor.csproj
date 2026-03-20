@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <AssemblyName>mmuko-compositor</AssemblyName>
+    <RootNamespace>OBINexus.MMUKO</RootNamespace>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Version>0.1.0-DRAFT</Version>
+    <Authors>Nnamdi Michael Okpala</Authors>
+    <Company>OBINexus Computing</Company>
+    <Description>NSIGII Heartfull Firmware Compositor - MMUKO-OS</Description>
+  </PropertyGroup>
+
+  <!--
+    NOTE: Do NOT add <Compile Include="*.cs" /> here.
+    The .NET 8 SDK (Microsoft.NET.Sdk) automatically picks up every *.cs
+    file in the project directory. Adding explicit <Compile> items on top
+    of that causes error NETSDK1022 (duplicate items).
+    The SDK finds Main.cs, NSIGII_HeartfullFirmware.cs, and
+    NSIGII_HeartFeltFirmware.cs automatically.
+  -->
+
+  <!-- Native firmware library - copied to output if built -->
+  <ItemGroup>
+    <None Update="build/lib/libnsigii_firmware.so"
+          CopyToOutputDirectory="PreserveNewest"
+          Condition="Exists('build/lib/libnsigii_firmware.so')" />
+    <None Update="build/lib/nsigii_firmware.dll"
+          CopyToOutputDirectory="PreserveNewest"
+          Condition="Exists('build/lib/nsigii_firmware.dll')" />
+  </ItemGroup>
+
+</Project>
