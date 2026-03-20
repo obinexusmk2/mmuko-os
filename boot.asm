@@ -2,8 +2,8 @@
 ; FAT12, 16-bit x86, 512 bytes exactly
 ; OBINexus Computing | Nnamdi Michael Okpala | 20 March 2026
 ; Build: nasm -f bin boot.asm -o boot.bin
-; Image: dd if=boot.bin of=img/mmuko-os.img bs=512 count=1
-; QEMU:  qemu-system-x86_64 -drive format=raw,file=img/mmuko-os.img
+; Image: dd if=boot.bin of=mmuko-os.img bs=512 count=1
+; QEMU:  qemu-system-x86_64 -drive format=raw,file=mmuko-os.img
 ; NSIGII Phases: N(Need) S(Safety) I(Ident) G(Gov) I(Probe) I(Integrity)
 ; Trinary: YES=01h NO=00h MAYBE=FFh MAYBE_NOT=FEh
 ; Membrane: PASS=AAh HOLD=BBh ALERT=CCh
