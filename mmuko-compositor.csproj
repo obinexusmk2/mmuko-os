@@ -5,6 +5,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <AssemblyName>mmuko-compositor</AssemblyName>
     <RootNamespace>OBINexus.MMUKO</RootNamespace>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <Nullable>enable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -15,13 +16,15 @@
   </PropertyGroup>
 
   <!--
-    NOTE: Do NOT add <Compile Include="*.cs" /> here.
-    The .NET 8 SDK (Microsoft.NET.Sdk) automatically picks up every *.cs
-    file in the project directory. Adding explicit <Compile> items on top
-    of that causes error NETSDK1022 (duplicate items).
-    The SDK finds Main.cs, NSIGII_HeartfullFirmware.cs, and
-    NSIGII_HeartFeltFirmware.cs automatically.
+    Keep the compositor source list explicit so generated files under obj/,
+    build outputs, and experimental sibling apps do not get compiled into this
+    project.
   -->
+  <ItemGroup>
+    <Compile Include="Main.cs" />
+    <Compile Include="NSIGII_HeartfullFirmware.cs" />
+    <Compile Include="NSIGII_HeartFeltFirmware.cs" />
+  </ItemGroup>
 
   <!-- Native firmware library - copied to output if built -->
   <ItemGroup>
