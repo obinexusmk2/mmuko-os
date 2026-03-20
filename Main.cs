@@ -12,8 +12,12 @@
 //   → PASS → OS kernel → C firmware library → dotnet run (this file)
 //
 // Usage:
-//   dotnet run -- --boot-passed true --tier1 maybe --tier2 maybe
-//   dotnet run -- --simulate-pass   (for development testing)
+//   dotnet run -- --boot-passed true --tier1 yes --tier2 yes --w-actor yes
+//     -> explicit PASS path
+//   dotnet run -- --simulate-pass --tier1 yes --tier2 yes --w-actor yes
+//     -> development-only boot-gate bypass that should PASS
+//   dotnet run -- --boot-passed true --tier1 maybe --tier2 maybe --w-actor maybe
+//     -> diagnostic HOLD path
 
 using System;
 using System.Collections.Generic;
@@ -48,7 +52,8 @@ namespace OBINexus.MMUKO
             if (simulatePass)
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("\n[DEV MODE] --simulate-pass: bypassing hardware boot gate.");
+                Console.WriteLine("\n[DEV MODE] --simulate-pass: bypassing hardware boot gate only.");
+                Console.WriteLine("[DEV MODE] PASS still requires explicit tier1/tier2/w-actor success inputs.");
                 Console.ResetColor();
             }
 
