@@ -62,7 +62,7 @@ namespace OBINexus.MMUKO
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.Error.WriteLine("\n[COMPOSITOR] BLOCKED — boot gate not passed.");
-                Console.Error.WriteLine("  Run: qemu-system-x86_64 -drive format=raw,file=img/mmuko-os.img");
+                Console.Error.WriteLine("  Run: qemu-system-x86_64 -drive format=raw,file=mmuko-os.img");
                 Console.Error.WriteLine("  Then re-launch compositor with: --boot-passed true");
                 Console.ResetColor();
                 return 1;
