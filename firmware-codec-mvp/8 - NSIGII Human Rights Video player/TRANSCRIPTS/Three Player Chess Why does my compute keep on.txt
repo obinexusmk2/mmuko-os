@@ -1,0 +1,751 @@
+
+Okay. Um, welcome back to my video channel. So, this video is on three
+0:06
+player chess. Three player chess. Again, that is three player chess. So, I'm
+0:12
+going to give you the the the down the the the brief overview. So, you got
+0:17
+dimensional game theory. Uh, games that work in dimensions. Um, sound volume can
+0:23
+have a treble, a bass, a low bass, a high bass, you know, but you know, a
+0:28
+treble, you know. instrument in the sound of music theory uh uh treble um
+0:35
+bass rhythm uh beats that um have rigid definition music theory uh but you know
+0:42
+they don't have um it's not music but you know if you got a master volume uh
+0:48
+you know the sound is playing or the noise that is there it poses those properties uh and you have to pull
+0:54
+signal from noise uh pulling signal from noise what does that mean uh making sense of things. Signal means sense you
+1:01
+can make sense of things. Um you observe it, you just read it. Uh things you know uh that has meaning in your framework of
+1:08
+things. So uh you got a signal which is signal mean something can do something uh a command and control system. Uh so
+1:15
+three players chess logic is basically uh dimensional game theory um which are
+1:21
+over games over isomorphic games uh like chess as to other games such as chess
+1:30
+checkers is to go checkers and go isomeorphic games chess is a bit
+1:35
+different game but it's a board game nonetheless uh but chess is to something else as um chess is to um I don't know
+1:43
+what game it is uh Uh but you know they share similar or the same roles by definition uh the same the same kind of
+1:50
+play style but you know uh the goal is to have them dimensions of attack defense and offense for the games. Uh I
+1:57
+don't use chess for example I only use checkers and go because that would make sense to me but you know you got the
+2:02
+chess tactics there. For example, you got um uh okay
+2:08
+the pawn uh you got like the the swap you get you look at the knight six knight you know the formations which is
+2:16
+the chess formations so the chess formations are like what I'm going to focus on today uh but they are um uh you
+2:23
+know you go to like um the when you so what you call the pawn the pawn forward and then you have a pawn and you have
+2:29
+the card guard of pawn that's a chess formation because you have a knight and a chest and and then you put a put put a
+2:36
+pawn forward and you got a knight um after the pawn. So you then that's the formation of a knight to pawn or knight
+2:42
+to bishop us to defend the pawn you know or get something from the pawn you know
+2:48
+um that's the formation I'm talking about you get other formations just like um uh the the the double knight
+2:53
+formation basically you got a knight a knight but you know a knight knight is a
+2:59
+good formation but you know that have to protect a sector an area an area of
+3:04
+interest um that's offensive defense you got an attack formation you got defense formation was the one I remember the uh the mighty
+3:12
+one. So you got the attack defense attack defense you got offense defense of the space there and get offense which
+3:19
+is like uh you know for more so you get advantage. So if there's an offense just not an attack uh
+3:27
+an attack. An attack would be uh um u um something that tries to position
+3:33
+yourself for an attack for for for trap. You know, this is kind of like a bishop
+3:39
+position a bishop position for uh for for an attack. But you know, you have to
+3:45
+lose the knight. So you use knight on the pawn, but you have the bishop protect the system of the system. Um so
+3:52
+you miss attack something to grab some kind of other bush you know if you give some
+3:58
+space the next turn in the next turn not the current turn the next turn you
+4:04
+attack something you have to have a turn and a turn but you know turn this game model so today uh the brief overview is
+4:11
+on dimensional game theory and three player chess uh because three players is basically the chess of real life I call
+4:17
+it I to you know you got three players and someone's not to play two play chess they smash the board ah they get angry
+4:24
+you know because it is real word anger I'm telling you guys you know if you've been if you've been with me you know
+4:30
+you'll know that even checking the go
+4:35
+the toilet you know they flush the chest piece in no I was playing that when I was 14
+4:41
+15 16 years old I'm saying to you because I was playing that it was like literally um annoying it was like you
+4:47
+know people taking went to his house. The guy was even nice. He was useless
+4:56
+because he cared for the people that people care for didn't care for it. He carefully put toilet
+5:02
+play, you know, have some fun. So we having fun with that probably one. So I'm saying to you kind of
+5:10
+like that. So if you have chess to me because of the war scenario and this happened in my um children that going to
+5:16
+play chess. Oh hey we're playing a game here because you know this another
+5:22
+player don't know how to get involved in the game and they adversar or good or bad you know you say you know you can
+5:28
+give you a hint like you know go I I move forward let me just let me help you move about entropy so what you knew was
+5:36
+kindally entropy dynamics so this why you play chess matters for this kind of
+5:41
+system but today I'm trying to formalize kind of a system of x operation
+5:47
+over uh over little and big Indian notation. Uh so let me show you my work
+5:52
+there. So this so as you can see here you got Alice with encoding. Uh so this is a left ending encoding one 0 01 and
+6:01
+the bottom one is one 011. This is Alice encoding. Let me get some water.
+6:10
+Before
+6:20
+I continue, uh, okay, so in the in the in the open, you get a laptop, a phone
+6:26
+and journal. So you can power your laptop from your phone. Oh,
+6:33
+so you get Alice one. So I put zero coding is 1 0 0 1 and then this is a
+6:40
+four binary encoding and get 0 0 1 which so we can start to command and control
+6:47
+this these are all instruction sets you know but they're not dynamic so the goal is to first make them dynamic and to
+6:54
+extend them uh as program so you can get this combination of this whole space so
+6:59
+so you have to um you're trying to get instruction sets um to dynamic
+7:05
+programming. So you can make this dynamic dynamic system. So it doesn't have to have linear sequence. So this
+7:11
+could be mapped structure explicitly without
+7:18
+detain explicitly declared state.
+7:24
+So Alice this is what Alice computer this equator by this instruction this is
+7:29
+what. So again 1 0 0 1 0 1 0 0 1 1 1 0
+7:36
+which is right in the notation uh you know most significant bits at least a little bit you know based on uh the loss
+7:41
+of polarity you know it from the but you know this is doable go to
+7:48
+github.com/obsis for oscar b for bravo I for echo etc for
+7:56
+etc/ r for romeore o for P for pop E for N R
+8:02
+open you see this kind of repository there
+8:09
+so you see that so this is basically a system of binary but you get Bob's
+8:14
+computer so this is a peer-to-peer network so Bob so Alice is speaking to Bob they are friends they're enemies
+8:19
+doesn't matter who it is it's just they are talking to they're connected they're connected
+8:25
+uh on the network so Bob's one is uh left Engine 1 0 0 1 and this is left and
+8:31
+is one 0 0 1. So backward and forward B one is isomeorphic uh but isomeorphic
+8:37
+reduction. So B doesn't need to be reduced again just need to be the power.
+8:42
+So my one or one E for echo Z for Z for echo is one1
+8:48
+uh and one zero one one 0 0. So basically the first
+8:53
+quadruplet of 1011 is a binary for my computer and 1 one is
+9:00
+my basically you can computer on from your computer by matching them with
+9:06
+exogate um and dynamic. So the good so I'm to use a dynamic program which
+9:11
+dynamic programming to allocate space
+9:16
+uh uh uh ahead of time uh via some kind of a sequences that hold something in
+9:22
+memory for me. Uh so enemy so when I need it I have it. So it's not like a you know so basically it's three
+9:28
+computers three computer at any time I can control one you know whether it's good or bad you know I can take over my
+9:33
+system I can al turn my computer on you know that's the goal. So uh it's a nonquid nonlinear sequence of
+9:40
+instruction set over time time where time is a priority uh not space the time
+9:45
+but the time for the processing is the dimension of a time but there's a tried
+9:50
+sequence of yes no and maybe uh they can use to resolve this within secret protocol. The goal of this to have um
+9:57
+first of all the first principle um a little big engine position over over um
+10:02
+x oper operand you know so basically you got an oper operator uh which is just
+10:07
+operating in and the operand which oper so the operator operator operand
+10:13
+operators are x exclusive or for each sequence of the maps Alice to Bob and
+10:20
+Bob to Alice uh but the key problem here so you know when you put this on already you can't uh have to uh switch to medium
+10:27
+you're on. So basically this is like a uh you have to identif identify uh what is what is this a gen IP that's being
+10:34
+rerouted or a static IP uh or still state a steel protocol a steless system
+10:41
+because you know it doesn't matter what it is you just tell it's on and off what so if it's on it's a circle it's a
+10:48
+circle it's running in dynamic mode in dynamic mode so dynamic mode supervis like system is running and s is static
+10:55
+mode is just doing boring It's not on the fly. It's not it's not doing something actively. It's not an
+11:01
+active active protocol. It's not actively doing it's not an active state machine. It's just it's just doing um if
+11:07
+it's active will be static. It's a x not and crosses. Not means it's static. Uh
+11:13
+cross um so not means it's dynamic. Cross means it's static or static IP
+11:18
+static MAC address. Uh static stuff. Um doesn't matter what it says is static. Uh so you need a probing system to
+11:25
+either detect it if if you miss on the fly verification which basically allows you to um um uh interject something. So
+11:32
+this is just a first model. So Alice can speak to Bob. Al can speak to Bob here.
+11:38
+Al can speak to Bob and Bob can speak to Alice by direct the people. The problem
+11:43
+here I'm saying is that I I can take the I can jump but you know I need to take
+11:49
+Alice and Bob's computer for my own you know uh but you know this is not a bad thing to do it's just my computer so I'm
+11:56
+doing it so it works my computer my devices but you know legally it works this basically a decentralized model of
+12:02
+interception system but it's goes for good use if you use for good for bad uh
+12:09
+because you already own something you really got to find so you can use for tracking you can easy for uh finding
+12:14
+tracking the stuff, turning your data off, turning easy for tracking this um
+12:21
+so this is this soft pointer. So via hard and soft pointer. If you have two hard pointer, if you have a hard
+12:26
+pointer, a soft pointer, you have to just shift the frame of view. So you can uh uh so if you have a hard two hard
+12:33
+points too hard and Bob and static or not, you know, you know where the device is. You point to the device harder. But
+12:41
+hard point all you have to do is continue switch. So switch point. So I'll do this for you
+12:48
+guys. This is kind of new. So I will have the so if my if the computer is
+12:54
+Alice I'm looking for Bulb I will give it a soft pointer which is and give it a
+13:00
+soft pointer and which is which is a which is a note uh I mean a hard pointer
+13:05
+I will give I'll use a soft pointer which is a note which is let it move so
+13:10
+it will be a note. So this will be a note X I'm give my computer another soft pointer I'll give Ali's computer if
+13:16
+Ali's computer is not missing a hard pointer X. Um, no. Wrong.
+13:23
+I'll give myself a hard pointer. Uh, hard pointer because I already know where I am. I'm stuck. I'm in that frame
+13:29
+of reference. But, you know, I'll give um I'll prioritize um the Bob soft pointer which is IP address. And then
+13:36
+I'll give him an X. So, he will be when I find it will be an X X. So, the X will match. And then you I'll give Alice
+13:43
+Alice an X because I already know where Alice X is. uh you know and given also the
+13:50
+polarity of the sequence will be uh the order of operations I have to run the x operand is uh north x for alice which is
+14:00
+means uh static and then and then an o so this will be the order of the vectors
+14:05
+so x so static static dam static then dynamic static dynamic so I have to run
+14:10
+a static position then in sequence series in series and then I
+14:16
+have to run Uh, I did have to run on my computer. Uh, two static XXO XO XO
+14:24
+uh XO Alice and then X uh uh uh X uh X X
+14:32
+and which is me NI and um and then uh if I start from my one uh um um O
+14:40
+X uh Bob. So um so uh so so basically
+14:46
+this is the protocol here. So uh the goal is to have this um system of X operation display but I am trying to
+14:52
+find Bob's computer uh because I'm trying to trace Bob my computer which is Bob computer. So what I need to do is
+14:58
+look at this index here and just put this up up. So it doesn't matter how I do it and I can use I can put Bob's
+15:04
+computer up. So this will be uh X I have to do um dynamics to static dynamics then static then uh and then I do uh
+15:12
+this one X then I do my log B mark. I don't even know where my computer is verify for just my computer at the end
+15:17
+of the day. So this one is used to verify this verify but you know the last one but you know on defraction so
+15:26
+bouncing you can check you can check yourself by so
+15:31
+um the verifier and the triple. You get um Alice. Alice does a so. So note then
+15:40
+cross and then uh and then is Alice is X then O and is SF. So this
+15:50
+three. So X n to cross n then note to cross um
+15:59
+cross to node and cross to cross. So that's say it works. cross because you
+16:05
+know those are polarity polarity of the XO operator. So for me the extra so the
+16:11
+next step for this so listen um I just forget to mention so you get the the uh
+16:17
+pro you have double the time and half the space double the time and half the space so double the time would mean that
+16:24
+you have the time double uh the time and half the space uh if the price is three
+16:29
+trident so uh for example uh you have um uh if the space is uh 1,00 1,00 1,000
+16:38
+megabytes or 1 kilobyte or 1 kilobyte you have uh and then uh half the time
+16:43
+half the time will be uh uh uh uh uh uh so you have double the time have double
+16:49
+time the full time will be uh uh 12 12,000
+16:54
+uh 1200 0 uh uh uh nano nanoconds which is two seconds or two seconds of time.
+17:02
+So basically this is time duality. So uh in a in for the four way to process this is um double the time and have the space
+17:09
+but double the time. So if you're pres if you're present in space you have to think about what is time equivalent. So
+17:14
+you you have to have the space. So you have to double the space be 2000 0 of uh
+17:19
+type type one autog type one type one type type one uh type A 2,000 of double
+17:27
+space double the space double space um um double space on how the time which
+17:33
+will be and how the time will be uh 60,000 seconds. So if you have a two
+17:38
+seconds to turn the computer on one two seconds when I press the button one two that'll be 60 seconds,000
+17:45
+which is 1 second. So that'll be um two um 2,00 megab 2,000 megabytes um or or 2
+17:52
+kilobyt over um calcul 2,00 divided by
+17:58
+uh 2,000 divided by 60,000 which would be 0.3 seconds. But this is for the
+18:04
+space space first the time you know. So you know I then have to calculate um the worst case of this. So this is the watch
+18:10
+case. So the watch will be in so this will be 60,000 uh the minimum space I
+18:15
+need is 60,000 space uh 60,000 uh uh so if I do um half the space half the space
+18:22
+will be uh half the space this is the best this will be the best case best case will be 0.3 recurring or 0.3 33
+18:32
+4 uh and then we get that and then we get half the space half the space would be
+18:39
+2,00 divided by uh uh uh uh 2,000 divided by
+18:44
+uh half the space will be half the space will be uh
+18:50
+500 uh uh uh first and then double the time. Half the space and double the time
+18:56
+will be uh uh four uh 12 to the four 500
+19:04
+/ 4 which will be uh 500 developed by
+19:10
+400 which will be um 0 500 megaby of
+19:17
+2400 2400 will be 0.028 028
+19:23
+to to uh space uh space to time then
+19:28
+time then time um because you know you get space and time and then this is this is the worst case I need the worst case of the space I need the worst space I
+19:34
+need uh or the minimum we call the minimum space um this would be the space that hold so this space is basically uh
+19:42
+what's allocated to um a negative one that's what's needed to do the processing at any given time so um so
+19:48
+this one will be you get the time first so the time will be half the time and double the space and double the space
+19:54
+and half the time. So half the time will be um uh 60,000. So half one of time
+20:00
+will be 12 will be 60 60,000. So I have two machines. I have two process two
+20:05
+60,000 uh uh no 60,000 no 60,000 60,000 divided
+20:12
+by uh double the space uh half the space and double the time will be divided by
+20:17
+24,000 second 400 megabytes or 2.4.4
+20:25
+kiloby so 24,000 megaby 2.4 Kob so
+20:30
+divided by is one pole axis. So what I call this will be
+20:38
+or and and uh and the other one which should be uh
+20:45
+this should be a half time and half time and uh double time and half the space.
+20:50
+So the this double the time will be uh this will be half the time half time double the double the time uh double the
+20:58
+time first. So double the time will be uh uh 24.
+21:06
+So no this is wrong double the time half half. So this is the mean time the
+21:12
+minimum minimum time I need would be uh 60 60 60 uh 60 uh2
+21:20
+uh 60,000 seconds uh two 60,000 seconds uh uh to uh 24,000
+21:28
+uh so the maximum time I need is double is double is double 12 so double 12 12
+21:37
+12 double double the time double the time will be
+21:45
+double the time will be so 60,000
+21:50
+60,000 * 12 60,2 is like um
+21:58
+6,000 600 0 um 12 0 0.
+22:09
+So 12 0 0 0 uh is double time will be uh uh double time 1200 0 * 2 which will be
+22:20
+1200 12 0 * 10 which will be 2400
+22:27
+0. Uh so this be the ratio. So you get the you should get a minimum space the
+22:32
+minimum the minimum time and the maximum time of uh the minimum maximum on xy
+22:38
+coordinate on you get the the you know the and you get the you get a mis of the
+22:43
+maximum the minimum space you need is 500 uh and then that be two m 500 500 um
+22:52
+megaby and then 2,00 the maximum space will be 2,00
+22:58
+megaby of space. So meab of space which is 2 k. So this is a two matrix of time first time time only first uh which
+23:06
+should be uh operating on time as a dimension of space uh time only space
+23:12
+only first you know if you need space if you need more memory so so the mission will be 60,000 to min so the goal of
+23:20
+this have this x operator uh you show that one more matrix what's the last
+23:25
+matrix of um of time first of time first uh these two matrix of time so of time
+23:31
+only first. Um so only time first um will resolve in space out of space.
+23:40
+So this is my math here. So my m here so as you can see
+23:48
+so this means so uh this is basically O this is Bob's one O then X X then O
+23:54
+which is Alice one and X this is my one. uh Bob Alice uh and then uh Ez
+24:08
+and Bob. So the D mode of Bob will be um in ter of this uh thing. Yeah. So it's
+24:15
+meant to resolve whilst processing while he's doing something. So you know because we already got the the units we
+24:22
+need to do calculation which will hold memory for that.
+24:27
+So, so how does this actually work in practice? So, how we put this thing here? How does this how does this bike
+24:34
+work here? So, I'm going to do the model again and the model will be so for me for me
+24:42
+uh so for me um I am trying to map Alice to Bob.
+24:50
+Alice to Bob. So, Alice has a one. Uh Bob has a Alice has a one. Bob that has
+24:57
+a a one you know one uh that means I need to get an operator called an X
+25:03
+operator to map Alice to Bob as Bob instruction say so Alice Bob will be
+25:08
+Alice Bob will be all so Alice or Bob first Alice or Bob one left Indian first
+25:16
+Alice or Bob one is O1 one is one uh and then uh and then S1 exclusive or one uh
+25:24
+exclusive exclusively Alice Alice Alice in respect to Bob because Bob is the
+25:31
+input. No, Bob is the input. No, no, Bob is the input. So you get the order. So the order. So I'm starting from the
+25:39
+order of the order of um Bob. So Bob is dynamic. So Bob is start.
+25:47
+So Bob is Bob is um so Bob is a dynamic. Bob changes. So we have to put Bob uh uh
+25:54
+in the uh It's not as second. So this is correct. So this isn't matter. So this is Bob
+26:04
+is we don't know the time. So if Alice says yes before Bob
+26:10
+say if we don't know we can be Alice and Bob. So if Alice Bob is really on
+26:19
+no Bob the super position of on. So maybe it's on. So we've calculate Alice and Bob. Uh
+26:26
+we've got two. So Alice and Bob and Bob and Bob. So do Alice and Bob. So you see
+26:31
+how the machine matches Alice and Bob. So this Alice computer being off uh after Bob's on. So this value. So one
+26:39
+one O is one and then we got uh O and then we got X X X. So Alice one will be
+26:48
+uh is off. So when you on or off? So Alice one zero or zero.
+26:55
+So if Alice is one uh and has a one is one and Alice is one. Bubba is a zero.
+27:01
+Alice has a zero and then uh and then the or alo zero and then the or is zero.
+27:06
+You get a one zero and then you get uh uh and then you get an exclusive or
+27:12
+exclusive uh O make a zero a zero uh and then a one or one zero zero and a
+27:18
+zero and a one a one a one. So you get a resulting matrix of a zero result vector
+27:25
+of uh Bob uh to Alice having a one and a
+27:30
+zero in this room and you sorry
+27:36
+and I have a one I have a one so you know so basically this bally this is
+27:42
+basically how it works so I'll the first one here so this first four device so
+27:47
+let's do the first one so this the first dynamic silicon so we have to go to silicon sequence already done. So, so this x
+27:55
+also done. So, we know the table of lookup table is one zero which is just
+28:00
+like for the vector but you know can be the opposite one you need to flip it in case of pop. So, uh so this is one zero.
+28:08
+Let me do the other ones now. One second guys. Let me just do it first. I'm going to show you guys. So, you get this one
+28:13
+here. So, you get uh Bob is a zero. Bob is a zero. Bob is a zero.
+28:23
+Uh Bob is a zero. Alice is a zero. Uh Bob is a zero again.
+28:29
+And uh oh zero uh zero or zero is zero.
+28:37
+X 0 is one. If Bob is static is static. So
+28:43
+we get if zero. No this is X. This is one Z. So if zero is one
+28:52
+zero is zero. So 0 0 we get 0 one uh one
+28:58
+and then we get to one zero and then one get 0 0
+29:04
+0 one and we get that's just the above mapping
+29:11
+I do my mapping too. Get to zero. Then we'll get to four. Four 43. I'll get to
+29:16
+zero zero. Get to zero. Uh 1 2 3. Uh get
+29:22
+to zero. Zoo
+29:27
+zoo zoo
+29:42
+zero zero.
+30:01
+0 0 uh 0 one one zero
+30:08
+zero
+30:13
+uh Get the last one. Uh, so the last first stripper to be one
+30:22
+one
+30:28
+zero one one
+30:36
+zero 0 one and this one is one. So basically the resultant is different
+30:42
+from the input. So you have to hold the resultant. So what you hold. So my
+30:47
+matrix is so I see you can complet one. So this is this is uh the data the
+30:52
+output is one zero uh uh one 0 one 0 one
+30:58
+and then this one is one one but that's a sequence. So you can get um the kind of dynamic resolution for the system. So
+31:04
+for this the first set of of quadruplets which is um Alice to Bob Y is one 01 and
+31:11
+Bob is 1 01 and the left endiness you get this model of one zero which is a
+31:17
+vector vector you can use to um get the message whe
+31:23
+to the computer to Bob and vice versa and one zero is a vector 01 is a vector
+31:28
+one is another vector and one one is a vector so these are the four vectors you get uh 5:00 four vectors you get when
+31:36
+you pop and you get one more more thing which is um so this is the is vector
+31:43
+vector. So this is the vector you get. So you get one more thing which is the change. So I have to now get my mapping
+31:48
+to the system. So I have to now uh now verify that um this new vector is done.
+31:54
+But this vector is already done. So now I have to do this kind of system here of
+31:59
+so if I get uh uh uh uh uh al
+32:08
+xo so I'm trying to get operator that will work and that's the x operator that will flow. So that's operator I need so
+32:14
+that's can do so the exo operator remembers the state the stale state. So this what this is the proto this the
+32:20
+medium this has medium shapes uh that I can talk to. So I'm trying to change um
+32:27
+Alice Alice uh Bob's one uh uh via Alice. So I can change I can just try to
+32:33
+find so I need to find so will be if Alice is dynamic. If Alice is static and
+32:39
+Bob is dynamic I have to now get Alice. So I'm get I'm change Alice one. So I can change because I already know where
+32:45
+Alice computer is. So that'll be static to dynamic or static or static. So I'll just pick static. So if I turn this one
+32:54
+be static is static. I really know it is already static. So it's xx. So I do one
+32:59
+x get 2x. So uh so
+33:04
+to do so for my one to be one I need right now. So my to be um my
+33:16
+one to be let me just try and write my result. My result is my resulting vector
+33:21
+is uh 1 0 uh 0 1 uh 0 1 one
+33:29
+and then you get the other one which will be this is right side. Um the the other one will be
+33:36
+uh uh uh my one will be uh Bob which will be static. So we static
+33:43
+on uh so on. I can so my one will be uh my will be will be uh uh one.
+33:53
+So my one which is one which would be uh one which would be 01 10 one and there
+33:58
+will be one 10 one 10 one 10 one 10 one 10 one 10 one 10 one 10 one 10 one 10 one 0 one will be zero or zero is zero
+34:04
+and zero or one x 0 one zero you know because my one is
+34:10
+static and this one is static and my one is dynamic so because my one is dynamic
+34:15
+so uh uh so to arm arms
+34:22
+you Alice is my computer. So, so let me start again. So, if Alice one is one uh
+34:28
+zero one zero uh one I mean if at least one is one and
+34:35
+my one then my one will be on and off. So be my one will be one and a zero uh and zero. So my is I want to keep on. If
+34:43
+at least one is one, one uh or one is one. One or zero is one. One. And then
+34:51
+that will be the state for O. And then XO zero one or one. XO XO one or XO one
+35:01
+and one you know exclusive O. And then we get Alice's um so this is the first
+35:07
+set of down. So the so I'll get one. So get um get alis zero to my zero then a
+35:15
+one. So it's internal one I mean so this is a dynamic
+35:21
+this is a static x uh so so zero or zero is zero zero or
+35:27
+one is one be zero one this will be
+35:35
+this be 0 one this will be uh one
+35:45
+One zero zero. Um zero uh zero zero
+35:52
+zero one is 0 one 0 one is one
+36:00
+0 one is one zero or one is one.
+36:08
+So 0 or one is one but 0 0 is zero. And
+36:13
+that be 0 is one.
+36:19
+So then 0 1 1 0 is one. So that one here. Yes. Come
+36:29
+in. I'm busy. What you Okay. Oh, thank you. Uh Charles, I'm
+36:36
+coming. Thank you. One 0 one is one is one one
+36:43
+this is one and my one is one that will be uh uh uh uh as one is one. So it's 1
+36:50
+one one zero that would be uh one uh one
+36:56
+one one. So uh as you can see the time now is uh 37. So uh so
+37:04
+this is uh Alice and Bob Bob X.
+37:11
+And this is my one. My one will be uh uh uh one zero.
+37:17
+Uh no, this is one one one
+37:24
+uh one zero one one.
+37:31
+So basically this is Alice and Bob. Alice Alice
+37:37
+Alice so this so you can see Alice. So I
+37:43
+have this Alice here. So my So you see so I need the So I'm going to connect to
+37:49
+the computer of Bob now. So I've already done Alice and Bob. Alice connect to Bob because Bob has computer. So I can use
+37:55
+Alice computer. I can use my computer to connect to to Alice. Uh but you know I can now use my so I have to use my
+38:01
+computer to connect to Bob and that's the last thing I need to do. So I so this so for the matrix I got 1 0 1 1 0
+38:10
+uh 0 1 0 0 1 and 1 one one which is uh Alice to Alice connected to Bob's
+38:16
+computer and for for me to connect to my computer for connect to for me uh for Alice connect to my computer uh and me
+38:23
+to have the power on uh you know the power on uh for both
+38:29
+at least Bob B power on and then at least to Bob at least to essay uh and uh
+38:36
+uh am I my computer to be power? So I'm the one I keep my computer on which is a
+38:43
+I'm to keep my computer on. So you know I have to turn on all the computers that keep my computer on. So this one 0 1 0 1
+38:50
+0 1 1 uh 0 one. Okay. Okay. So one one so I guess one one not one zero one one
+38:58
+0 one one and one one. And this is a computer of Alice Bob. Alice Bob. This
+39:03
+Alice to this exit to Alice or computer on. So the one last to do is before I go
+39:09
+to lunch is the other one which is um I'm watching anymore guys. So last I
+39:17
+have to do is uh uh what is it? So oh no
+39:24
+I lost it. I lost it. Hopefully not.
+39:29
+Uh so so so the last to do is uh uh the
+39:35
+computer system of pop to uh
+39:41
+of pop two.
+39:47
+Uh so I can't find it. So uh that's what to do. So I can't
+39:53
+I just lost what I work. I just lost it. I just lost it. So I think to lunch now
+40:02
+I haven't found. So yes I found it. Um yes.
+40:09
+So I haven't found no I won't find it. So you know I have to go to lunch today. Now I'm in the war so I cannot miss this
+40:15
+launch. So uh uh so you know if the resulted force is um uh so again the the
+40:21
+goal of this I have your computer kept on my computer kept on uh so you know I am trying to if I find when I go to
+40:27
+lunch now I'm going to find the the thing I need and that thing I need is um
+40:33
+the food I say so the food comes first then I can then continue
+40:40
+the goal of this to have your computer kept on the power on so you have to have two states on and off and keep your one
+40:47
+on. Uh doesn't matter your one on. So the on the on will basically if I want to keep my computer on that mean one one
+40:55
+one if I'm if I'm if it's connected to and this is just a this is a vector. So
+41:00
+uh the vector my one will be one one uh uh one one which would be two matrix.
+41:08
+So this will be one for uh exit to Alice and uh for for uh for for Alice to Bob
+41:15
+if there's a need for Alice to Bob to keep on you know because dynamic if I really got some encoding in Alice
+41:21
+computer and I really control Alice computer to switch on that will be 01 01
+41:27
+which is a vector which is a vector and one one which I keep to the system one. So these three mics are what I did to uh
+41:33
+keep my system on and keep keep a command and control system via uh
+41:38
+control via via uh three player chess. Thank you guys.
+

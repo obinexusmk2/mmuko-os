@@ -1,0 +1,121 @@
+[1m[36m
+╔═══════════════════════════════════════════════════════════╗
+║  MARCO/POLO GPS TRACKING — Drift Theorem Test Framework   ║
+║  OBINexus Computing | Nnamdi M. Okpala                    ║
+║  Based on: Drift Theorem for Self-Referential Vision      ║
+╚═══════════════════════════════════════════════════════════╝
+[0m
+  Theorem:  D(t) = dV(t)/dt  where  V(t) = P(t) − C(t)
+  Dr = d/dt |V|     (radial)   ω = dθ/dt  (angular)
+  W(t) = ⅔P(t) + ⅓P(t−Δt)   (weighted smoother)
+
+[1m[36m─────────────────────────────────────────
+ T1 — Relative Observation Vector  V(t) = P(t) − C(t)
+─────────────────────────────────────────
+[0m  V = (100.08 m N, 0.00 m E)   |V| = 100.08 m
+  [32m✓[0m  North component ≈ 100 m  (got=100.075434  want=100.000000  tol=5.000000)
+  [32m✓[0m  East component  ≈ 0 m  (got=0.000000  want=0.000000  tol=5.000000)
+  [32m✓[0m  |V| ≈ 100 m  (got=100.075434  want=100.000000  tol=5.000000)
+
+[1m[36m─────────────────────────────────────────
+ T2 — Radial Drift  Dr = d/dt ‖V(t)‖
+─────────────────────────────────────────
+[0m  Separation  Dr = 100.08 m/s   state = SEPARATE
+  [32m✓[0m  Dr > 0 when target moves away
+  [32m✓[0m  State = SEPARATE
+  Approach    Dr = -100.08 m/s   state = APPROACH
+  [32m✓[0m  Dr < 0 when target approaches
+  [32m✓[0m  State = APPROACH
+  Stable      Dr = 0.0000 m/s  state = STABLE
+  [32m✓[0m  Dr ≈ 0 when target stationary
+  [32m✓[0m  State = STABLE
+
+[1m[36m─────────────────────────────────────────
+ T3 — Angular Drift  ω = dθ/dt
+─────────────────────────────────────────
+[0m  ω = 0.556810 rad/s  (31.9029 °/s)  state = ANGULAR
+  [32m✓[0m  ω > 0 when target moves laterally
+  [32m✓[0m  State = ANGULAR
+  ω (no lateral) = 0.00000000 rad/s
+  [32m✓[0m  ω ≈ 0 for pure radial motion
+
+[1m[36m─────────────────────────────────────────
+ T4 — Weighted Observation  W(t) = ⅔P(t) + ⅓P(t−Δt)
+─────────────────────────────────────────
+[0m  P(t) north   = 144.55 m
+  P(t-Δt) north= 88.96 m
+  W(t) north   = 126.02 m   (expected ≈ 126.02 m)
+  [32m✓[0m  W(t) north = ⅔·P(t) + ⅓·P(t-Δt)  (got=126.020917  want=126.020917  tol=1.000000)
+  [32m✓[0m  W(t) < P(t) north — smoother pulls toward history
+  [32m✓[0m  W(t) > P(t-Δt) north — smoother biases toward current
+
+[1m[36m─────────────────────────────────────────
+ T5 — Haversine Distance  ↔  Vector Magnitude Consistency
+─────────────────────────────────────────
+[0m  ~1 km N         hav=1000.75 m  |V|=1000.75 m  err=0.000 m
+  [32m✓[0m  Haversine and |V| agree to <5 m — ~1 km N
+  ~800 m E        hav=872.18 m  |V|=872.18 m  err=0.000 m
+  [32m✓[0m  Haversine and |V| agree to <5 m — ~800 m E
+  NE diagonal     hav=726.02 m  |V|=726.04 m  err=0.019 m
+  [32m✓[0m  Haversine and |V| agree to <5 m — NE diagonal
+
+[1m[36m─────────────────────────────────────────
+ T6 — MAYBE State Escalation Thresholds
+─────────────────────────────────────────
+[0m  Level 0  frac=½  M=2.0×  F'=1.00
+  [32m✓[0m  Level 0: M = 1/fraction = 2.0
+  [32m✓[0m  Level 0: Adjusted force = base × M
+  Level 1  frac=¼  M=4.0×  F'=2.00
+  [32m✓[0m  Level 1: M = 1/fraction = 4.0
+  [32m✓[0m  Level 1: Adjusted force = base × M
+  Level 2  frac=⅙  M=6.0×  F'=3.00
+  [32m✓[0m  Level 2: M = 1/fraction = 6.0
+  [32m✓[0m  Level 2: Adjusted force = base × M
+  Level 3  frac=⅛  M=8.0×  F'=4.00
+  [32m✓[0m  Level 3: M = 1/fraction = 8.0
+  [32m✓[0m  Level 3: Adjusted force = base × M
+  [32m✓[0m  Escalation multipliers are strictly increasing
+
+[1m[36m─────────────────────────────────────────
+ T7 — Full Marco/Polo Round-Trip  (3-frame drift simulation)
+─────────────────────────────────────────
+[0m  MARCO at (51.5000, -0.1276) alt=50 m
+  POLO approaching over 3 frames (dt=1.0 s):
+
+  Frame 1:
+    |V(t)| = 471.53 m    Dr = -121.569 m/s    ω = 0.00991 rad/s
+    |W(t)| = 512.05 m    State = [32mAPPROACH[0m
+    Haversine d = 471.52 m   |V| err = 0.005 m
+
+  Frame 2:
+    |V(t)| = 339.83 m    Dr = -131.701 m/s    ω = 0.06922 rad/s
+    |W(t)| = 383.51 m    State = [32mAPPROACH[0m
+    Haversine d = 339.83 m   |V| err = 0.002 m
+
+  Frame 3:
+    |V(t)| = 214.14 m    Dr = -125.683 m/s    ω = 0.12407 rad/s
+    |W(t)| = 255.55 m    State = [32mAPPROACH[0m
+    Haversine d = 214.14 m   |V| err = 0.001 m
+
+  [32m✓[0m  POLO approaches MARCO across all frames
+  [32m✓[0m  Final distance < Initial distance (positive closure)
+  Distance closed: 593.09 m → 214.14 m  (Δ = 378.94 m)
+  W(t) magnitude = 255.55 m  (between 339.83 m and 214.14 m)
+  [32m✓[0m  W(t) lies between P(t-Δt) and P(t) distances
+
+  [1mMARCO/POLO handshake:[0m
+    MARCO → "Marco!"  (position broadcast)
+    POLO  → "Polo!"   (position acknowledgement)
+    SYSTEM → Drift classified, W(t) smoothed, closure confirmed
+
+[1m╔═══════════════════════════════════════════════════════════╗
+║          MARCO/POLO GPS TRACKING — TEST SUMMARY          ║
+╠═══════════════════════════════════════════════════════════╣
+[0m[1m║[0m  Tests run:    30                                         [1m║
+[0m[1m║[0m  [32mPassed:     30   [0m                                      [1m║
+[0m[1m║[0m  [32mFailed:     0    [0m  ALL GREEN                            [1m║
+[0m[1m╠═══════════════════════════════════════════════════════════╣
+[0m[1m║[0m[32m  ✓  Drift Theorem verified end-to-end                     [0m[1m║
+[0m[1m║[0m[32m  ✓  Marco/Polo GPS tracking works end-to-end               [0m[1m║
+[0m[1m╚═══════════════════════════════════════════════════════════╝
+[0m

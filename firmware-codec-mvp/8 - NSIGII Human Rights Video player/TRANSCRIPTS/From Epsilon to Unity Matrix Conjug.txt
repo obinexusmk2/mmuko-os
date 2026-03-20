@@ -1,0 +1,473 @@
+From Epsilon to Unity: Matrix Conjugates and Growth Factors ($e^{-1})
+
+
+GB
+
+Skip navigation
+Search
+
+
+
+Create
+
+Avatar image
+From Epsilon to Unity: Matrix Conjugates and Growth Factors ($e^{-1})
+
+OBINexus
+44 subscribers
+Analytics
+Edit video
+
+Share
+Promote
+
+Download
+
+Save
+
+4 views  2 Feb 2026
+ No description has been added to this video.
+Transcript
+Follow along using the transcript.
+
+
+Show transcript
+
+OBINexus
+44 subscribers
+Videos
+About
+
+Tiktok
+
+Tiktok OBINexus
+0 Comments
+OBINexus
+Add a comment…
+Transcript
+
+
+0:12
+So, okay. The date now is the the date now is
+0:21
+um 2nd of February. So, the time now  is 11:46 uh a.m. Okay. So N you're  
+0:28
+thinking yourself right now. So what's  the video about? So this video is about
+0:38
+how to the Bluetooth is so hard to rub out  guys. small. So we just get in the city
+1:00
+interpreter. Cisco Cisco Cisco model Cisco. So again
+1:16
+um um is a humorous ini
+1:23
+humorous protocol. So um um so basically  it's basically allocated for need problem.  
+1:31
+So you get uh OBI and you get OBI's vector
+1:40
+OB and it's basically same stuff we're talking  about execution order now execution goes about  
+1:53
+execution um uh basically it's called uh 1 / 2 -  minus one over uh two dimensions or two points uh  
+2:08
+of value. So I'm going to give another formula.  So one of uh so you have the um system of one. Do  
+2:18
+you have who'sly address who's hold the lock? Who  holds the lock? Um OB can hold a lock can hold a  
+2:27
+lock which can hold a lock. But you don't want a  lock. You want a time capsule. You don't even want  
+2:35
+to waste time to say. So you get uh the standard  um s 2 um + y 2 = t ^2 where t is the time. Y get  
+2:49
+you get y = xative plus or minus square root of  b ^ 2 - 4 a c over 2 a. So you know there's a  
+3:03
+formula here for say but the goal of this video  is to have a system that preserves a dimension  
+3:09
+you know without locking it. So you get one over  one dimension. So uh example you have the formula  
+3:17
+we get minus one. So you have consistenc of 0 0  0 and if you have zero 0 - one so you have zero  
+3:29
+or epsilon so you get three three b three three  three par numbers three numbers 0 0 0 Oi has 0 0  
+3:38
+0 or epsilon epsilon epsilon has epsilon epsilon  0 or 0 0 and which has 0 0 0 there's three numbers  
+3:46
+in total so I'm going to give formula. So if I  have a minus one, I'm talking about consensus. So  
+3:54
+uh so minus one. So if I have a one, I'm actually  operating. If I have a minus one, I have a pointer  
+4:00
+to one to an operation that's holding. So the  minus one symbolizes a holding operation. So if  
+4:06
+I have a one, if I have a one, I give you a minus  one. A minus one. And you hold that space for me.  
+4:15
+You a holding operation. If you have if you have  a hold you have a hold you have a pause. So the  
+4:22
+answer you have a hold something hold memory  indefinitely minus one. If you have a zero you  
+4:31
+have a zero that needs to be state of minus one.  01 can have a minus one. So 01 can minus one or  
+4:46
+excellent. So I give you a state of 10. So you  know what? So you get two one here for 0 or one  
+4:54
+you know. So basically um you get you can't have  so you have you have two I'm instruction you I  
+5:05
+give you so you I have I have a zero or a one.  I give you then you have to hold space for me to  
+5:11
+speak. Basically, it's the inverse computation  of the standard press lock giving someone
+5:20
+uh softball and asking them to speak. You know  what about if I everybody softball soft ball  
+5:26
+and I'm the only one not to speak. If I have  a soft ball, I'm I'm if I have a hard ball,  
+5:32
+so a hard ball, I I shouldn't be speaking. So you  get a soft ball duality softball which is I have  
+5:38
+to speak and I get a hard ball you know but I  cannot give you a hard so a hard ball will be  
+5:44
+like a like a like a baseball like a tennis ball  tennis ball so if I have a tennis ball and I give  
+5:50
+you tennis ball you allow to hold that space  for me to speak but it's interesting program  
+5:56
+but it works on opposite also it works on space  law so it's a space lock which locks out space   and time we are X square + Y square = T square  where T is space and S² is a time s is a time  
+6:09
+so space and time duality this space times first  what's the go out of know so it's called a time  
+6:18
+capsule so even the equation but this time to  calculate the integral of the time it takes so
+6:31
+um uh repos. So, so I have uh a one. I have a one.  Uh I have a one. I give you I you hold you. I have  
+6:42
+a one. So I I'm about to speak. I'm speaking. So  he's speaking speaking. That mean I give um okay  
+6:48
+let's say is speaking as speaking. E want to say  something. He has to give two orders. to give um  
+6:54
+say the instruction is um um wants to output um  um wants to um send a message a control a command  
+7:04
+say here I am here and now here um here now now  so let's just say now so let me say here h e r
+7:19
+so here underscore
+7:25
+Now on the school.
+8:07
+Now now here space now. So as you  said here space now now here space  
+8:17
+now. So as he's saying here and now you  know but he's saying in the term so the  
+8:23
+term here is Cisco bottom up. So Cisco is a  execution order. So what is um here um you  
+8:30
+know let's do this here now let's use operation  operator. So let's take away here now and say  
+8:37
+uh let's say um let's use our system  here xyz. So I'm going to say uh latitude
+8:48
+lot. So let's see let's say um uh let's say  um the um 2 y 2 y + 5 2 y 2 um something
+9:06
+a 2 + 8 x² + 2 y u 2 y uh + three. So  a so you know the trial resolver is  
+9:24
+basically so is trying to find this  position on the back where it is.  
+9:30
+So, you know, I'm going to try to  solve it, you know, but a is 6 7 x
+9:40
+7 x². So, 7 x 2 + 2 y + 3  7 x 2 + 2 y + 3, you know,  
+9:48
+but x is one command and controlling it.  So, x is so x is 7 xy um 7 x 2 + 2 y + 3.  
+9:59
+But you know this so I'm trying  to form I'm trying to find uh gy
+10:08
+as you can see this is solvable. So let me  try to sit down and solve on paper you know so  
+10:14
+uh so says SA is basically a polar system so  you can plot the y and x² to find the space  
+10:22
+and time is system you know the space for  the area. So you can work with the area. So  
+10:28
+the area basically area is something where  but this is all referential referential vr  
+10:36
+uh uh uh dimensions half. So half the  dimension should be dimension half your  
+10:42
+dimension half to two and scale. So you you  dimension yourself. You get a half of space  
+10:50
+half of F and scale two of half of F to the  ratio half to two and the two will be having  
+10:58
+your dimension of space having your dimension  of space and grow of your grow to grow your um
+11:08
+grow yourself. So, so example if I'm again  if I if I'm if I'm in a if I'm in a 3D world  
+11:18
+3DI 2 by two is 1.5 1.5 dimension. So now I  now existing now I have one I now half half  
+11:26
+dimension space operate I'm not computing  1.5 dimension but if I now 1.5 to two if I  
+11:32
+scale two if I scale five times by two I  get three again now I'm now operating in  
+11:39
+the the 3D space again of XYZ so that's how that  works so you are transcending the dimension if  
+11:46
+you so if you if you start so computation  so you can take another dimension and X1  
+11:53
+G system of the power. That's for every pathway  shape or form you every part shape of form you can  
+12:00
+have half measure half the properties half comput  in half um um full scale to your system of non so  
+12:09
+um so everything the board sorted out but the main  problem I was saying to you guys let me show you  
+12:14
+the board here you know is you have let me think  about you guys you have to understand the problem  
+12:21
+really before I concern to the paperwork so you  have OBI 0000 S is 00 0 you know but these zeros  
+12:30
+represent having uh zero bytes 00 0 nothing and  which it has 00002 you know oh which it has 0 02
+12:45
+yes which it has 0 0 so they also have zero  but this zero they hold it not speak so the  
+12:52
+order has to be Uh so which is this thing trying  to say he's here uh referring to you. know you  
+13:01
+know you know so basically um if they they have  a they have they don't have a they have two type  
+13:08
+of cooling system they have um a problem of these  are just channels channels these are just channel  
+13:14
+zero channel one but it's not actually the full  person it's like a chat relay system so you know  
+13:21
+they have x x^2 + y square uh= t² which is time  and or or space or space which is the space and  
+13:30
+y^2 = - b plus or minus roo of b ^ 2 - 4 a  c / 2 a which is the parabola equation for the  
+13:39
+time curve you know and now you have the half a  space or half of time in dimension to compute over  
+13:47
+uh to or you know depend on the project you're  working on to the two space two space so you  
+13:52
+can use them both ways you have to prioritize um  the dimensions um and the time you know you know  
+13:59
+half the space represent half the time the half  the time for that operation you're performing   over the space um you're in and this is how the  time work works. So you know you're trying to do  
+14:09
+this half to block people out of system and then  you have this equation uh 7 x^2 + 2 y + 3 equals  
+14:17
+um equals um equals uh equals uh a location for  uh sa. So this will be a location. So this is  
+14:27
+the physical but you know he can always get  a signal he can always get come here so he   cannot be locked out because so the next steps  of the kind of holding so if this so AJ is who's  
+14:38
+location and a has zero and the other problem is  that the wants to when other problem is this so  
+14:44
+has 00 so has to give give up space or time to oi  so he has to hold he has to hold so when is when  
+14:52
+speaks he has to hold the space and by holding  the That means he has to give um uh his zero he  
+15:01
+has to give a one a one in time he has to give  the equivalent of the time he's going to speak  
+15:06
+um you know you know by holding the by by  the amount of holding he's going to do of   the radio signal to give a message on to hold the  channel you have to hold the channel to speak so  
+15:17
+by holding radio signal holding signal you have  to give some time to speak but that time cannot   be run out it must not run out the more you hold  it the more time you get you know so that's the  
+15:27
+goal of this so the the the integration of that  to be minus one so that be minus one so as you  
+15:32
+can see a minus one here so he's going to give  OB a one he's speak to OB and it a one is a one  
+15:40
+said if but you hold a matrix of a matrix of so  you have a conjugate matrix but it's also m so  
+15:50
+my matrix works like this so you have a vector  minus one yeah you get number one and one but  
+15:56
+this number has so this one on one has a conjugate  so you have to have to the power of -1 and that's  
+16:02
+operating so the power of one will give you the  inverse matrix over 1 that will give you uh one  
+16:09
+so if you have one to the power one to the power  of 1 you get 1 to the power of 1 will give you
+16:20
+1 to the power of 1 will give you oh 1 to the  power of -1 1 to the power of -1 is zero zero  
+16:35
+so you has so will get another zero so since get  zero I mean OB since OBI get zero uh he has an  
+16:44
+extra zero to hold that space until you can send  that by back so zero represent OBI for Oscar B for  
+16:51
+Bravo I for India so as a E for echo Z for Zebra  gave OBI a zero a Z you know but he gave him two  
+16:59
+zeros in form of a vector so this is a conjugate  pair model um because you can have conjugate pairs  
+17:05
+in this model too so it's inclusive it's not it  doesn't exclusive system of conjugate pairs so you  
+17:10
+have two zeros so it gives um hold so to speak  when when when you start holding on the radio  
+17:16
+signal by holding I mean literally you're holding  down uh the the the kind of response relay system  
+17:22
+for the radio so as it gives zero as speaker he  has some space ahead of time. So he he only gives  
+17:28
+two z he gives um um he gives two zeros which  are two uh consent zero. So he gives a consent  
+17:35
+two zeros not consensus two zeros which represent  permission consent and consensus which is a need.  
+17:43
+So x gives two zeros which are becomes -1 0 squ  has - one to the power g oi holds one zero and  
+17:54
+uch you for you see for Charlie for hamburger  you echo on channel 3 has another zero. So the  
+18:02
+goal I have to define this formally guys. So the  whole thing the whole the whole system are saying
+18:11
+works because it's um it's oh it's unilateral
+18:18
+lateral lateral it wasn't for structure  this the so let me get my bag guys here
+18:32
+I don't know where came
+18:38
+So it's basically a system of consensus  because needed and you can never cons.
+18:50
+So,
+18:59
+so I was saying to you guys find
+19:05
+mom.
+19:11
+So, you know, so you have consensus
+19:25
+So you have so you have my so my one  my one is not your zero we share have  
+19:34
+consensus already so I give you for to  do operation so the the so I get one  
+19:41
+to the power of the power of one to the  power of is uh zero. Well, negative one  
+19:50
+is zero zero. But the the signature negative  represents um u you holding something for me,  
+19:58
+you know. So if I have a negative zero,  I have if I I can have if I have negative
+20:06
+one. So I have to hold the space and that space  is two uh two zeros or two um uh negative one you  
+20:16
+gave to me. So I you cannot give me uh your one  because your one is my negative one. You have to  
+20:21
+give me your one. So so that give so you have 0 0.  So the goal is to resolve the tri. So for example  
+20:28
+you have x1 for example and and x. Oh, so you have  you have so I so I give you so you give me uh so  
+20:39
+as a gives me uh gives OB I uh uh uh X post O will  be I so uh exclusive operator so has a one has a  
+20:51
+negative has a has a zero has a zero has zero but  he gives us wants to give OB OBI two uh ones one  
+21:04
+so and then that OBI is going to minus one so he g  he ends up giving OBI1 21 so that beative1 squared  
+21:13
+1 um1 which OBI is at1 which OBI should one as one  one but to the power of to the power of one uh one  
+21:31
+was power of one positive and negative one. So  the positive and negative one is the arbitrary  
+21:37
+rule and the guilty rule that he used to tell  the interpretation just operation of both. So  
+21:43
+this this can be the end of the system. Uh but  it's a bipolar resolution system for example.  
+21:50
+So OBI we have to use matrix of one and positive 1  and of1 squ of zero. So OB1 will be 0 Z because 1  
+22:06
+to the power of uh I mean one to the power of one  is zero. He gets two more zero he gets two more  
+22:13
+uh zeros and these zeros is basically we change  uh one one. So he has to hold this space in  
+22:20
+time this time in space and space in time. So  before they start communicating before they  
+22:28
+um start communicating or or if you have if you  have if you have um oh so you know so you know  
+22:38
+which you can give um this negative one we  can give a negative one too. So you can give   one you can give consent you can give um consent  to OBI and Uch so Uch is on channel three OBI is  
+22:49
+on channel one channel one so you can give um  one to OBI to you know but the goal is to have  
+22:56
+system resolve itself one so which say OBI is  one now uh one one so what they do that how the  
+23:04
+computer do they have time and space and space  and time so they have to compute the time and  
+23:09
+space then he needs before he starts computing  you know because you know the time the amount of   time you're holding the signal for before it set  so it's a sense of how much time have I recorded  
+23:21
+we're talking about and how much space do I need  for that so if OBI holds radio signal for like  
+23:26
+um hold channel here for the time of um uh  uh 50 uh 30 second 15 seconds uh uh and um 50  
+23:35
+seconds uh for every uh four bytes allocated  uh four bytes which will be uh uh uh 4 * 8
+23:48
+8 * 4 8 8 * 4 is 32 that will be 15 seconds per  15 by 32 15 32 the bit rate will be um 0.46875 46  
+24:03
+875. Um but this is not a good way. So you have to  have half the time. So there's a ratio between the  
+24:08
+space and the time the share as dimension. So the  time is in the space. Um so if you have 15 seconds  
+24:15
+you have the time max time you have the space time  in space. So and space you have the space in the   time and the space is basically um half the time.  So that's basically um half. So half time. So half  
+24:25
+the time would be uh half dimension of time in  space how space in time would be uh 15 seconds  
+24:31
+which is basically 0.4 u uh 86 um 7 bit rate. I  take the third derivative of this constant. So  
+24:41
+basically I start you know because you know I'm  doing it wrong because it's launch time. But the   goal is to use the quad equation to first of all  first step basically I have to continue after the  
+24:53
+lunch but you know um so I have to use first step  is to use x² + y^2 = t² you get a parabola and you  
+25:03
+have y= - the first step y = - b^ 2 um square  root plus or minus square root of b square - 4  
+25:13
+a c over 2 a first determine Y and X in space  and time and then you have the uh where where  
+25:20
+the where they are in the physical where they are  because basically it's meant to send you can't you  
+25:25
+can't send you can't you can't you can't send a  message before you know where you are. So that's  
+25:31
+go you can't send the message can be hijacked so  or jammed. So you have to send the message before   you know. So you get 7 uh you get uh 7 7 uh um 7  x^2 no 7 y^ 2 uh + 2x + 3 equals t t is the space  
+25:50
+and time um that you use in space and time. That's  the formula and you get half half of that space in  
+25:57
+time and and so if you have half half of something  and then you then double it you then scale if if  
+26:02
+you if you if you if you enlarge if you enlarge  something by half enlargement by half um enlarge  
+26:08
+something by half and then you scale something  by double the half you scale it up technically   you get the same structure you have and that's how  that works. First step again um take the take the  
+26:19
+uh the what the parabola equation of x^2 + y^2= t  ^2 in space and time. Then determine the find the  
+26:27
+where you are in space. For example u which s is  um 7 y^2 + 2x + 3 uh = t in space and time and you  
+26:38
+have half of the dimension then you can have the  computation of the system of holding. So the goal  
+26:43
+is to have the system holding space holding space  in time and time and space for the communication  
+26:48
+matter before it's execution. So um the execution  is the goal of it but the execution is executing  
+26:55
+running in the system because you know I can say  something and then do nothing. So you know once   you finish doing the system does it it's a radio  system that does it um uh and basic model of 0000  
+27:07
+um and trying way of holding. So you know you can  have another matrix like - 5 you can get five two  
+27:14
+5 - 2 5 - 2 but that means two let's try this  one you have five five to the power of one uh  
+27:23
+5 to the^ 0 is uh one five if it consist of power  five to the power of orgative one uh five to the  
+27:32
+power negative 1 is wait five to the power of uh  five to the 5 to the power of 5 to the power of  
+27:43
+um square brackets -1 is 0.2 is 0.2 you know  and you get five to the power of one oh which  
+27:54
+is a half you get a half you get five to the power  of half so you you have the lower of half so you  
+27:59
+can get five divided by two you get 2.5 you get  0.2 two because it's a half no which is negative  
+28:04
+1 just inverse dimension. So you have a quantity  that's quantifiable by ratio, you know. So you can  
+28:11
+have 5 to the^ of a half. Let's try that. 5 to the  power of one one divided by two. Close bracket.  
+28:22
+And that's 0.5. But 0.5 tell the full story. You  can have 5 to the power of 2 / 1. I have two five.  
+28:34
+Uh but you know the goal is to have system resolve  dynamically you know so the the consistent to the  
+28:41
+power of zero minus one and one uh and then you  have access so if you get five to the power of  
+28:47
+uh minus one you have no five to the power  of uh uh five to the power of of 5 to the  
+29:00
+power of of - one - one of - one you get 0.2.  If you have five to the power of zero you get  
+29:14
+one and five to the power of one is five. So  you have um three uh three axis that hold the  
+29:22
+half dimension one divided by two and you can  have stop processing and you get five to the   power of two. So two is scal two is inverse of  scaling. Five to the^ one based on order. Also,  
+29:34
+if you get the matrix five, you  have to get five. You can do five
+29:45
+to the power of uh of -1 which is 0.2. So, it  works the same way. So, you got to raise 0.2 2 two  
+29:56
+we have -2 -2 to the power of uh -1 you get0.5 and  that will be uh 0.5 because you watch the house  
+30:12
+watch the house and that's basically perfect thank  you Monday I love you too so two to the power of  
+30:19
+um uh of uh one uh will be or of negative one  will E 0.5 uh but that's really.5 in half. So  
+30:29
+it tells the growth factor over E. Let's try E  epsilon. Let's try number E. E E to the power of  
+30:38
+um of square of -1 will give me um 0 um basically  this is the ratio of um 0.3 678 which I mean the  
+30:51
+growth factor of a unit. So it tells me the growth  factor of a unit. to grow to something before it   happens. So this what it tells you because  you this is why it scales. So basically this  
+30:59
+is a symmetric system. It's like a conjugate  system for matrices. So I did so I did I did E   which is identity uh the which number 2.718281  and I get um to the power of -1 uh 0.3678794
+31:18
+or 795 uh 793. So this will give me the  the growth factor of a unit and the unit  
+31:25
+is dynamic controllable too. So you can have it  grow linearly or nonlinearly uh via polar lapis  
+31:32
+ros. Uh thank you guys for watching this video.  I go have my lunch now. Uh but thank you guys  
+31:37
+like share subscribe. If you don't like it, don't  actually subscribe. Uh leave a comment um dislike   and like you know share it just keep communion  but this consistency system uh consistency concern  
+31:48
+the goal is to have memory held where you are not  needed when you're not needed to have memory held  
+31:55
+for you. So have memory l just help in place  before you compute something uh via trident  
+32:01
+interpretation. Thank you guys for watching  the video. Like, share and subscribe if you

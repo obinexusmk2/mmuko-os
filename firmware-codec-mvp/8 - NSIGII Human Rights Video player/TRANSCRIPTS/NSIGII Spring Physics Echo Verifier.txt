@@ -1,0 +1,773 @@
+
+Okay. Okay. Um, today's date is uh the 24th of
+0:06
+January 26. Time now is time now is
+0:12
+uh uh 2:1 a.m. Uh, let's go to
+0:19
+this music. No need to read.
+0:29
+I put the keyword read before it read reader mode.
+0:35
+Um so we got 11 minutes. This is this is
+0:40
+what what I call a hard pointer. So it's basically a pointer can deocate uh soft
+0:50
+can never be deated. uh parti put it okay there's a policy let's make it in
+0:55
+sigi ende I for India for golf I for India I for India in honor of SA which is high to
+1:04
+low tone uh I mean low to high tone s
+1:13
+high to low you see you see with the okay anyway it's a low to high tone so
+1:19
+that's why making the two eyes at the end Uh this is basically uh the death of the two article I wrote uh but it's called
+1:27
+um it's called interpretator interpretation uh to train like so uh
+1:34
+three things uh we s about so the problem maybe problem it's about the
+1:39
+maybe problem but treating uh by treating like a pointer uh a computer is done intent intent uh
+1:47
+but we're going to cover some other things we just have n more 950 seconds uh to address the pointer
+1:54
+problem which are soft and hard pointers uh which is the goal of this uh before we move on to the other one which is the
+2:01
+spring echo physics. Okay, read allow this around I solved the maybe problem by treating
+2:08
+it like a pointer and computers finally understood intent.
+2:14
+How symbolic interpretation turned trinary logic into a memory
+2:20
+allocation problem. Posted on January 19th, 2026
+2:27
+# webdev # polygot # programming # oven nexus.
+2:34
+I used to think maybe was just indecision until I realized it's
+2:40
+actually a pointer problem disguised as a logic problem. Here's
+2:45
+the seveninut story and the symbolic interpretation engine that let me build
+2:52
+systems where I love to hate you has three valid interpretations and the
+2:58
+computer knows which one you mean. Okay. So this is a point. So uh this is
+3:04
+going to code. So I post a code. Uh but this this is basically have three
+3:09
+pointers to some data. uh it doesn't matter what program you use C um C uh
+3:16
+C++ R um just um this either point to the nodes the point data whether it's
+3:22
+like a data structure data point like a node so tree uh the node is what you
+3:29
+point to structure can be a n list you know a nut
+3:35
+it can be a node um like a a graph node u link list or any kind um node like a
+3:43
+like a link list node or or or like a a double point to double link list doesn't
+3:49
+matter how you do it you know the pointer problem is the problem of three pointers there's three pointers included
+3:55
+in the resolving of that uh state uh for humanit so um um the model on um on human uh
+4:05
+things are preserved so uh this program here the point noted
+4:11
+Uh response equals do you consent? Yes or no? If response equals yes, consent
+4:16
+equals true. Uh else consent equals false. No equals maybe equals no. No.
+4:24
+Look at this angry guy. Maybe equals no. Uh but maybe could mean yes, you know. So I'm saying so this is what first
+4:31
+people. Okay, let's go continue with that. Uh let's continue from here.
+4:37
+I used to think maybe here's the seven minutes hashtraditional approach
+4:43
+response equals input do you consent y if response equals equals y consent
+4:52
+equals true else consent equals false hash maybe equals no parting face
+5:00
+parting face so so it's basically that's the problem the bug Enter full screen
+5:07
+mode. Exit full screen mode.
+5:13
+The bug. There's no pointer to intent. Type. What kind of answer?
+5:21
+Yes or no or maybe? Value. What did you say?
+5:28
+Yes. Maybe. Idk. Memory. What do you mean?
+5:35
+Consent, refusal, thinking. When you say maybe, the computer needs
+5:42
+to know. Do you need time? Allocate memory for future decision.
+5:51
+Do you want more info? Allocate space for clarification.
+5:58
+Are you refusing politely? Deallocate Reject request.
+6:05
+This is a pointer problem. We need three addresses type, value, memory to resolve
+6:13
+one word. The symbolic interpretation break.
+6:18
+So basically the goal here is to have three pointers type value and memory. But you cannot have a you have a token
+6:24
+type value and memory. You have a token kind. This kind is basically classification. So you have many types in one kind. And that kind of like a
+6:32
+heterogeneous kind or homogeneous kind depending on how the heterogeneous you get how this structure. So you get
+6:38
+homogeneousity of a type which is a kind or kind of woman. A woman is a woman is
+6:44
+a type of woman. Girl is a type of example. For example, a girl is a type of woman is a kind of woman.
+6:52
+A girl is a type of woman. Yeah. Uh a girl is a a type of woman. A girl, a
+6:58
+young girl, a teenage girl is a kind of woman. A woman is a a woman is a is a
+7:08
+is a woman is a type and is a type and kind of girl of of teenager and young
+7:13
+teenager and a woman and child. Uh and then you get the adult. So you get the same for the males uh you know but you
+7:19
+know you get two women. So you get two women to one male because they have double the power, double the strength.
+7:25
+So uh you know uh you know hogenous kind
+7:30
+is like a mixed kind of data. So hogous homogeneous I'm saying it works the same that way because you know type value
+7:37
+memory classifications of kind and type in that kind of relationship model. So don't try
+7:43
+to move yourself to thinking of type only. Think of a a kind of token kind uh
+7:48
+the kind of data uh that is being allocated for via via structured homogeneous only or structured
+7:56
+unstructured only structured classifiable. Yeah.
+8:03
+Breakthrough I realized I love to hate you isn't ambiguous. It's
+8:10
+symbolically triple bound. #3 valid interpretations interpretation
+8:17
+underscore1 equals I enjoy our rivalry #
+8:22
+lovehate you interpretation underscore2 equals you frustrate me daily #hate love
+8:31
+you interpretation underscore3 equals I'm conflicted about us #abia love hate
+8:40
+enter full screen mode exit full screen mode. The computer needs three pointers.
+8:49
+Token type. Is this love? Hate
+8:54
+both. Token value. Which emotion is dominant?
+9:01
+Token memory. What action should I take?
+9:06
+This is exactly like the maybe state type trinary. Yes. N or maybe
+9:16
+value current state min -1 0 1
+9:23
+memory allocated space for resolution. The incigi pointer architecture
+9:32
+instead of a forcing binary I built a symbolic
+9:37
+pointer system from data classes. import data class
+9:43
+from typing import optional at data class. So you go to symbolic
+9:50
+python but basically this is saying so you got token type token memory and you got the resolve and you got the resolver
+9:57
+token so basically it's to allocate memory some kind of um system you know
+10:03
+but you know this one is very basication but the goal is to have code I'm going
+10:08
+to call like a dynamic programmer so it has some allocated for his own operation. So the pro doesn't have to go
+10:14
+through instructions to uh do go through
+10:19
+space I have space I can start my operation I can continue
+10:30
+so components uh token
+10:43
+the echo echo chambers memory. So you go the echo server you know the eos.
+10:49
+So um the memorable is an ecosystem you know uh but you know that's a bit more complex. So you know it basically means
+10:55
+to send me message messages allocate memory uh but you know um so you got an
+11:01
+echos server uh uh web servers echo it relays information but you know the goal
+11:07
+of echos is to um you know uh just for you to build a full server but this is a
+11:12
+single echos server so it's a work in progress so it's basically going to send you what you need before you need it.
+11:22
+So you can send what you need before you actually need it. So it's going to work on your
+11:27
+terms. So it's going to work on you know if I send something you're working on um
+11:33
+nothing back because it's do but they don't send um the system of a secure channel it's going to work um using this
+11:39
+kind of framework of echo ch it's going to bounce off the system because the server is going to uh it's going to echo
+11:45
+back some data. So something that's meaningful.
+11:50
+So B that's finished you can go and look at this article I love to hate you uh to
+11:55
+hear forever but you know go to yourself. So uh continue with the framework of what we do now. Uh so this
+12:02
+basically unlike me. So we're going to go here. Going to go back. I'm going to go to
+12:09
+to here. Oh I can use OBS OBS using my days. So you can go here
+12:16
+and go to uh lights. move to uh one I saw spring for linear spring force
+12:23
+surface. So this is the actual one for free spring of force but we use this for nonlinear spring force. So basically
+12:30
+this is the linear and nonlinear spring for tutorial. Uh I've been dying for to do but you know this is basically on
+12:38
+sciencebodies.org uh science for so uh so this is science
+12:43
+fair. So you know you got the force equals um the kind of a kinematic force
+12:48
+plus of an axis k. So the you know uh the force so basically you got the force of something acting on something which
+12:55
+is called kinematics um but you know kinatics of system okay got inverse kinematics which is um the inverse force
+13:01
+happen on system but K stands for kinematics formula. So K is
+13:07
+basically the change unit. So yeah you get kind of formula. So uh let's look at
+13:12
+this uh um more formally. So uh this is the linear spring. So uh uh so we
+13:20
+looking for nonlinear springs uh we got if you do need it. So this what we need.
+13:25
+So we need to do the division of it. So f of u use a unit of du
+13:32
+d is a uh differentiation of u.
+13:37
+Uh yeah. So let's start. So let's start using this. uh article on read mode read mode.
+13:47
+So linear and nonlinear springs tutorial
+13:53
+reference materials. So let's try here definition
+13:58
+definitions. A linear spring is one with a linear
+14:03
+relationship between force and displacement. Meaning the force and displacement are
+14:10
+directly proportional to each other. A graph showing force versus
+14:16
+displacement for a linear spring will always be a straight line with a
+14:21
+constant slope. A nonlinear spring has a nonlinear
+14:26
+relationship between force and displacement. A graph showing force versus
+14:33
+displacement for a nonlinear spring will be more complicated than a straight line
+14:39
+with a changing slope. Equations at a glance.
+14:45
+Swipe left to see more linear springs.
+14:52
+Nonlinear springs. Force
+14:57
+stiffness. So basically says um says this I can't
+15:04
+see my formula mate. So let me just go to
+15:10
+stiffness potential energy.
+15:15
+Swipe left to see more. F force in newtons. N
+15:22
+X displacement from spring's neutral position in meters. M
+15:29
+K spring stiffness in newtons per meter. N M
+15:36
+P potential energy in J.
+15:41
+U is a dummy variable used for displacement in the integral for
+15:46
+potential energy of a nonlinear spring in meters m.
+15:52
+Okay. So correct definitions but I'll say this definitions are not it's not it's not
+15:59
+fully complete. So you know I'm going to go through it myself now to show you what I mean. So we got the line uh
+16:05
+system of linear spring force= K. K is stiffest of newton per meter. Uh the
+16:11
+force you're going to put on the system but K is a spring because I K which the
+16:16
+inverse kinematics. Uh so if a push you got to push. So if I'm pushing if I'm pulling on this spring, it's pushing me
+16:23
+double. It's pushing me it's pushing me uh it's pushing me double. So say if I'm pulling off any object any object that's
+16:29
+no spring this uh linear system applies uh but you know it is not complete in
+16:35
+the nonlinear system. So I'm saying that I'm going to define the redefine the definitions properly. So we got F which
+16:42
+is force force newtons. Um we got the three laws of force equals mass acceleration.
+16:49
+net force net force net force equals zero and force= negative force uh but
+16:56
+you know these are all formulas of specific so they work on uh the kind of
+17:01
+the kind of space of space so um the I'll start to define the stiffness first
+17:07
+uh stiffness is defined as k equals change in force or change in x which is
+17:13
+the k is the stiffness of uh k equals uh the differential of force
+17:18
+of x uh which is n / 4id m. So uh for this to be coherent in the system of
+17:25
+linear equations I'll change so k is equal to the change uh the dative of f yes I agree with that position k over
+17:32
+the dative of x but x but you know x is not x is a unit of um dimension which is
+17:39
+like based on so of my lambda of my lambda. So you got
+17:46
+like the lapis calculus which was polar go to lambda which is a power. So you
+17:51
+know if I was to derive this to the power um which is lambda which I don't know how to do yet you know I will use
+17:56
+the lapis one which is backward. So you know um the stiffness is k which is the
+18:01
+stiffness but you got you got k i k i k. So I K is the inverse kinematics of K to
+18:11
+uh uh the force over uh over the over the system. So that IK will be uh
+18:18
+derivative of the force over uh I'm sorry um one one over dative of the
+18:24
+force uh of the force uh uh uh one over the d of the force divided by dative of
+18:31
+the k. So it takes one entire unit one entire unit of the one entire unit of
+18:38
+the force of the force uh one one of the force and one divided by uh uh uh so
+18:46
+this is Iver but this one is entire unit of the system so it is like you know
+18:51
+having um double the force pane so so if I to do it properly so the the summation
+18:57
+up to the b uh so uh so it take so if I'm putting a force I have a push if I'm
+19:04
+pulling a spring per newton K is Newton uh per meters there's a there's a 10 so
+19:11
+if K if the newtons is uh meters is 10 m uh the newtons is the uh uh uh the force
+19:19
+newton let's say the force is 15 newtons so 15 by 10 is uh I don't know 15 10 is
+19:27
+uh uh uh 0 0.5 newtons uh per meters. Uh
+19:33
+yes, that's that will be the change in the force uh K. So K would be uh so IK
+19:40
+would be uh 1 / 0.5 m 1.5 which
+19:48
+kilometers of K will be 1.5 m. But 0.5 m per meters will mean that there is the
+19:55
+share unit of meters meters. So you have to have 0.5
+20:02
+for for the meters. the share of meters only share what so you have to then uh
+20:07
+have the uh meters separate that would be uh 0.5 the meters will be uh uh uh
+20:14
+whatever so this was 10 mters 10 m so this share 10 meters 10 meters would be
+20:20
+uh for the new so that would be um so if the ike owns a tenth of it a tenth of 50
+20:26
+a tenth of 50 which would be five me the share of five me ratio so the share of
+20:32
+And you know um you know but for because you know the committees has to have to
+20:38
+have um so this year 5 m of force five five liters uh five so you get 15
+20:45
+newtons this year 5 m uh 5 lit of force
+20:50
+uh uh um 5 lit and this bally a tenth a tenth this year a tenth of um all 50 all
+20:58
+50 which is 5 lit and this 5 lit will be the same for every Take so meter will be
+21:04
+a tenth of the meters. So 10 meter will be divid by 10 will be one. So uh 15
+21:10
+newton divided by meters meters. So this meters uh the newtons which is the the
+21:15
+power uh the pull the pull force uh the pull force the p the pull and push force
+21:21
+over a meter over over 10 meters depending over
+21:28
+over 10 meters. So this year uh five units having five five newtons of force
+21:35
+uh as a ratio of uh uh and then uh uh uh that's just as a ratio. So five. Uh so
+21:43
+uh k is when k equals u uh uh when uh k equals uh five
+21:50
+of when the force equals uh when the force equals 50
+21:55
+in k they um uh in ik the force equals uh uh uh 10 10 10 10 because it doubles.
+22:04
+So step is a sh 50 k is 10 but the priority of k. So K has inverse five
+22:12
+more. So if I k of 10 meters 10 newtons of force you know and there's 50 10 over
+22:18
+50 is five five and 50 uh over over 10
+22:23
+uh 50 over uh over 10 50 over 5 is 10
+22:29
+you know these are basically uh the force the force of 10. So 50 uh is 50 by
+22:35
+five uh 50 / 5 which is 10 10. So they have shared 10
+22:43
+but this is about four. So uh close the uh you know because you know they sh 10 10. tell you know the I own temp
+22:54
+uh you know when you pull down when you pull down when you have a pull you have a push and
+23:00
+the push is basically because the object rest and object is really pushing back or something so that's the idea the
+23:06
+object is pushing back at you at rest at rest so that net force equals zero so
+23:11
+you know this force of system working against you is
+23:17
+zero because is pushing back at you and therefore it's stationary. Uh so in this kind of framework that's the problem
+23:22
+here of the stiffness. So the stiffness has an inverse kinematic that is net force equals to zero and you can verify
+23:28
+this by ensuring that the net force is zero in a system of line using a kind of force framework which is what I'm trying
+23:33
+to do. So uh k i k equals u uh u ik of f
+23:39
+f of f of uh uh f f of
+23:44
+uh ix which is inverse x is uh pushing back of f of i force uh the net force of
+23:52
+iix or sub iix uh of iix is a parameter in i sub i sub i of x which is inverse x
+24:01
+which is not I'm busy.
+24:08
+I'm busy. I'm busy. Come in, sir. Hello, doctor.
+24:14
+How are you doing? Oh, fine. You've been in your bedroom all day? Yeah, I've been busy. I've been working.
+24:20
+Okay. Yeah. I'm going leave you to Okay. continue on your work. Yeah, good. Thank you.
+24:27
+So uh so the uh fix of the system of b
+24:33
+uh zero because zero is just nothing else but you know cuz it doesn't matter what pushes you if got push you got to
+24:40
+pull just remember that you know if you have additional force to you have to keep addition addition force to keep the
+24:46
+object uh so you don't know you keep additional force to keep the object moving moving uh in one direction and
+24:52
+that's what the problem is you know the force has to be it doesn't matter how much power you have you have to have the same power uh equivalent to it which is
+24:59
+called potential energy uh so you got to have power so I'm going to go to the
+25:04
+second one so the formula will be uh net force of uh net force net force of net
+25:11
+force of u of net force of of inverse force uh net force of inverse force 1 /x
+25:21
+uh uh net force so the net force of
+25:26
+inverse force 1 / x which is uh 1 /x not x uh uh 1 / x is equal to zero is equal
+25:36
+to zero uh when= to zero when there's a if uh if
+25:44
+you got if it's stationary if it's stationary when when there's no power when there's
+25:50
+no power something that can't be moved say um so you push. So you have double.
+25:56
+So so you got a K stiff. So when the stiffness when the stiffness K uh so you
+26:02
+got to one that equals to K.
+26:08
+So I got here uh uh the force of K force
+26:14
+of one net force of 1 /x=xative k. So that's the first one I've got. So
+26:20
+the net the net force net force which is the summation of the forces of 1 / k= k
+26:27
+and the force net force of x uh equals uh k when k and k when k equals z. So
+26:36
+this is the first one I have. So uh so you get net force of 1 /x= k equals z
+26:44
+and k is the stiffness of the system. So it is it is no stiffness. It is nothing. U K uh K= Z and or K= Z or or U or U uh
+26:55
+U is just representing of the unit system. So K equals I.
+27:01
+So this is one uh uh U or I K= I because
+27:06
+you know if I use I I'm using indexes. So you know because my one is I not even U. So k equals uh uh uh the index i um k
+27:15
+equals z or k equals uh u u or r i u or i. So so k can be uh so k is a vector of
+27:23
+zero u i and u. So k equals so so k is a
+27:29
+vector. So uh let's call it k is an vector. So uh so K is either uh K is
+27:36
+either uh uh uh uh I uh zero uh I and U.
+27:43
+So, so, so again, so the net force to summation of forces 1 /x =xative k and k is either
+27:54
+zero uh one as zero zero which is nothing i which is imaging unit i and u
+28:00
+which is the unit of imaginary units. So you get because I'm using I'm using i as
+28:06
+in indexing I'm using i because I is imaginary. So this is a computer program. So it's not just an indexing. I
+28:13
+is the uh uh imagative one which is one. So you get a
+28:20
+I there which is R I. So get um I so get um I you get uh I J should I use I J K
+28:29
+or I don't know so I don't know actually to do I have to find this properly. So you know so you know I don't get
+28:34
+confused. So I'll use I use I but I index notation I J K I J K to symbolize
+28:40
+the dimension of U VW. So U VW. So if you go I go U if you go J go V. equal to
+28:48
+K W because you give this dimensions of um indexing. So you get I so you know
+28:53
+this is the unit of I so you get the index of I which is nothing. So I ru which one can dimensions. So you know so
+29:00
+the commits can be so how so you get k u k u k uh uh u u i uh and u u uh uh uh uh
+29:13
+zero you are nothing un new zero. So this u so u subk is equal
+29:20
+to uh uh uh u subk u sub i uh u sub u
+29:25
+sub i k i j k equals uh which is not equal to u sub uh
+29:33
+sub zero uh uh which is not equal to u i i j k is
+29:42
+not equal to k is not equal to uh K is not equal to is not equals to V uh I J K
+29:53
+because the V is not there. So you got so so that's how so my ring oh I
+30:01
+finished. So and one more thing so you know so we got a potential equation which is this. So uh so the first one's
+30:08
+done so we got differential difference done I K and K. So now we got the
+30:14
+potential equation. Uh so we got potential energy. So we got potential energy which is about to do work. You
+30:21
+know something that has potential to do something this construction in mind. So you know it has potential to do work has
+30:28
+to be seen observe it has potential to fall
+30:33
+to drop you height and that energy is basically a system of height. So if you
+30:39
+know you should let go. So the potential edges is a half of the K squ. So this a
+30:47
+half. So the potential. So if you have if you have if you have if you have a
+30:52
+spring you're pulling you put it down. The position is half of the K kx squ a k k which is the kinematics of k k
+31:01
+is the stiffness time x x coordinate system and then time uh x which is
+31:06
+squared. So K is the d the displacement on. So if I so if I K X is thement of
+31:13
+the spring in neutrons and if I have a spring and I let go you know I have to put a half of the energy in to let it go
+31:19
+to. So that's half I have to push it there's no push. So so I already pull
+31:25
+the spring I don't have to push the spring to activate it. I just let it go. So I spring go and this is correct. So
+31:32
+uh in so this is correct. half of the and x squ will be uh the uh half of the
+31:39
+x². So basically because you go to half of the kinematic spring you got the squared here. So if you go you have to
+31:45
+multiply two if it's one by two you get x if it's 1 by 3 you have to do one/3 of
+31:50
+the energy because you have two times the spring down. So one one over three will be k * x ^ 3 and get the p equals
+31:58
+um the integ x over p potential energy
+32:03
+uh so you get potential energy and get the um u the uh potential the the do
+32:10
+work and you get the actual energy uh which is the work done. So you get the work done which is force times displacement equals work but you get the
+32:17
+potential energy which is uh pre = 12 of k f². So you say you see this formula
+32:24
+here you use it to verify the work done uh so you just need the force to be double uh so to triple
+32:32
+this formula work so um so potential energy equals uh the zero s of zero uh
+32:38
+to the integration of fx which is the all of x uh which f of uh given du g du
+32:45
+so du is dative of u and u is supposed to be a d variable for the of the integral uh of non uh du was the graph.
+32:53
+So this is not complete again. So the the potential energy potential energy uh
+32:58
+0 to zero given x of the for you
+33:03
+the force shoe. So the force represents a unit of a
+33:08
+complete whole unit in a dimension. So u will be the whole unit of x uh uh and
+33:14
+this is this is the force given u uh will be the force of unit over integration over the graph integration
+33:21
+uh which is area under the curve you know uh over so this is the area of x is
+33:26
+an x is the x is an axis and d is the d of that unit of that segment. So du is
+33:34
+all x of x. So d is the d of x du. So the force we need. So this is saying
+33:40
+that we need a force u over d of u. So this works on soa. So u y car x
+33:50
+to o toa which is so so you got to have the coine. So this is not good enough. As you can be uh Pential or potential
+33:58
+energy equals X or the the integral of X of zero F U F U uh FU where U where U is
+34:09
+where U is where U is the cosine the co the cosine cause
+34:16
+uh so so u over the roof cause of over the polar axis. So this would be a cause
+34:22
+of uh uh uh of the of the of the du du d
+34:30
+uh der of u. So the change of u. So this would be uh for my first one this would be uh the force du = the force of cosine
+34:40
+u force of uh kinematics would be force of uh cosine
+34:47
+u which is du or or d or cosine u uh which is d of cosine u which is so u
+34:54
+equals cosine cosine of u uh because you get x of y but you know this whole
+35:03
+arrow. So you have to take the root of it. So you have to work on the polar coes. So you get the kind of get the
+35:10
+kind of co. So if you if you take a cosine you get a sign. Uh so so this
+35:17
+would be cosine. So du be so you get co you get a sign uh sign. So that be so so
+35:24
+get so you got times uh u minus one power uh minus one power. This is from
+35:31
+the power of the system. So if you have a cosine you have to get the axis and that axis will be sign. So cosine of
+35:39
+will become sin u and sin u will become uh uh uh minus one for the poweride one.
+35:48
+So, so what I'm saying, so it's basically mentioned hypothesis. So this one will
+35:53
+be um uh the uh zero integral x f of u uh u dx will be d uh cosine = sin u uh
+36:02
+sin uh time sin u time uh -
+36:09
+powerus power
+36:14
+uh powerus power and time power. So this will be u
+36:22
+cosine sin sin u * cosine * cosine u. So this will be first you know you get
+36:28
+cosine time s cosine time s will be whatever will be the end result
+36:34
+of uh so you so you have to keep sign so uh so sus
+36:41
+time cosine time su and then minus one from cosine s
+36:47
+which will be uh cosine which mean you get a coseant coseant of u uh uh which
+36:55
+is cosine term and you get the divided by sin
+37:01
+minus one. So divided by sin u sin u and this will be the the integration of the
+37:07
+force uh u uh over du. Uh so we just um
+37:13
+force du. So so um so I'm writing this down. So uh so we got
+37:19
+net force = 1 / x = uh k uh net force =
+37:27
+x / k and we get uh which is called stiffness where where k equals uh uh u
+37:34
+vw uh u subig j k uh and j k for all for all. How do you
+37:44
+say for all? I'll just write the number for all of XY
+37:50
+Z uh for Z and then we get the sign we get uh this one we get P E P this is
+37:58
+first P uh P E= half * K 2 uh we get uh P
+38:07
+= integral of X0 F of U dU and we now
+38:13
+get um uh U E uh P E = uh uh 1 / 1 over
+38:23
+one over uh one over uh one over u
+38:32
+one over u uh one over uh u one over p 1 / p where p equals the power where p is
+38:39
+the power one e okay 1 e is exponent so e is exponent um k x e. So e is an
+38:48
+exponential equals exponential exponent uh and then we get down we get
+38:54
+um uh force. So we get this one uh P E P uh minus P E= because you know you get
+39:01
+two type of information X integral of integral of F uh FU equals equals uh uh
+39:11
+equals uh uh uh uh uh equals
+39:17
+F= coseant coseant uh u uh uh uh d Okay.
+39:26
+Uh this is so
+39:33
+which is yz. So the goal is to have the next which is that we get last one. I don't do this.
+39:41
+So get force= force= k uh k x and
+39:47
+that means a negative force will be negative k / x and then we get force
+39:53
+force = force kx I'll get so
+40:00
+force= force= x. So so you get formulization. So I'm
+40:06
+going to take a picture of this and I'll upload it to my system. Uh this is done because you know the system has to be working in polar. So I don't know lamb
+40:13
+cockus. I know I know lapis calculus. So it's hard for me to use lambda because you know we got beta rules. You got to
+40:19
+kind of rules you got to apply in lambda for power. So that's called beta beta reduction. Uh but reduction and alpha
+40:27
+reduction. You know what I'm saying? Uh but you know I know there's one you can't reduce all the system to one system either beta or alpha you know to
+40:34
+one system. can't resist everything to uh the same framing. So those are called the rules of the dimensions I call in the game of the dimension gives you the
+40:40
+frame of I'm from and kind of a power work duality of force of work equals
+40:46
+force times placement uh but the goal is to have one rule set that you can reduce
+40:51
+the problem to ensure that you can continue solving more problems as you tend to use polar axis problem to solve
+40:57
+the system. Okay, thank you guys. Bye-bye and the video now. Um but this is how the in works. So again the C
+41:04
+protocol is a bas nonlinear springs. So this is the first one. This is non this
+41:10
+is nonlinear springs model of the problem. Uh but we also got no problem.
+41:15
+So you got nonlinear springs and you got um kind of a what I call snails law.
+41:22
+Snail's law. So snails law verifier. So what is that? So what is that? So go
+41:27
+here. So just law. So go here.
+41:35
+So we get spring. So we get this one here and we get reflection and snail's law. So this is love video. So
+41:43
+in the last couple of videos we talked about reflection and that's just the idea of the light.
+41:49
+So this is a geek for geek snails law. Uh but you know I love geek for geek but
+41:54
+you know this is reflection. You get reflection, you get a reflection uh and you get reflection reflection and you
+42:02
+get so basically um is a reflection protocol. So but you refraction refraction. So you get the ref to bounce
+42:09
+off the uh system medium. So to or to vr
+42:14
+so you can get provides refraction which actually snails refraction uh which is um v sine
+42:22
+of theta 2 but I don't really sure about that so snails s
+42:30
+for echo lima lima is the next feature I'm trying to work on is basically the
+42:38
+refractive index uh uh that determines whe the system uh reflects or reflects
+42:43
+but but you know it's basically meant to mirror have a mirror mirror reflection that determines the kind of refractory
+42:49
+refraction angle uh the system takes to uh uh uh
+42:55
+to send through the medium uh because you know via to point through basically
+43:02
+has a echo chamber and the echo refraction to reflect uh the message um via the trident part three the three
+43:10
+misses as prints and they bounce off each other. So the three messages um bounce off each other and they send
+43:18
+doesn't matter how you send it. It's more easy to send the message than actually um get the message back. There's a bounce to the if you put if
+43:24
+you put it one way it bounces more out one way and the spring the refraction index which the center which is nails
+43:31
+low. Okay. I think it on the
+

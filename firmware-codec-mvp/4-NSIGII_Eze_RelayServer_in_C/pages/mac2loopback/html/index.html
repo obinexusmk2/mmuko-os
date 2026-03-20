@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NSIGII Trident Command & Control - Human Rights Verification System</title>
+    <link rel="stylesheet" href="../styles/nsigii.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>NSIGII Trident C&C</h1>
+            <p class="subtitle">Human Rights Verification System - Rectorial Reasoning Rational Wheel</p>
+            <div class="version">Version 7.0.0</div>
+        </header>
+
+        <!-- Status Panel -->
+        <section class="status-panel">
+            <div class="status-item" id="ws-status">
+                <span class="status-label">WebSocket:</span>
+                <span class="status-value disconnected">Disconnected</span>
+            </div>
+            <div class="status-item" id="wheel-position">
+                <span class="status-label">Rational Wheel:</span>
+                <span class="status-value">0°</span>
+            </div>
+            <div class="status-item" id="consensus-score">
+                <span class="status-label">Consensus:</span>
+                <span class="status-value">--</span>
+            </div>
+        </section>
+
+        <!-- Trident Topology Visualization -->
+        <section class="topology-section">
+            <h2>Trident Topology</h2>
+            <div class="trident-container">
+                <div class="channel transmitter" id="ch0">
+                    <div class="channel-icon">📡</div>
+                    <div class="channel-name">Transmitter</div>
+                    <div class="channel-info">CH0 (1 * 1/3)</div>
+                    <div class="channel-state">State: ORDER</div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="channel receiver" id="ch1">
+                    <div class="channel-icon">📥</div>
+                    <div class="channel-name">Receiver</div>
+                    <div class="channel-info">CH1 (2 * 2/3)</div>
+                    <div class="channel-state">State: CHAOS</div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="channel verifier" id="ch2">
+                    <div class="channel-icon">✓</div>
+                    <div class="channel-name">Verifier</div>
+                    <div class="channel-info">CH2 (3 * 3/3)</div>
+                    <div class="channel-state">State: VERIFIED</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Message Input -->
+        <section class="message-section">
+            <h2>Send Message</h2>
+            <div class="input-group">
+                <textarea id="message-input" placeholder="Enter message to encode and transmit..." rows="4"></textarea>
+                <button id="send-btn" class="btn-primary">Transmit</button>
+            </div>
+        </section>
+
+        <!-- MAC to Loopback Mapping -->
+        <section class="mac-mapping-section">
+            <h2>MAC to Loopback Mapping</h2>
+            <div class="mapping-table">
+                <div class="mapping-row header">
+                    <div class="mapping-cell">MAC Address</div>
+                    <div class="mapping-cell">Channel</div>
+                    <div class="mapping-cell">Loopback Address</div>
+                    <div class="mapping-cell">DNS Name</div>
+                </div>
+                <div class="mapping-row">
+                    <div class="mapping-cell">02:00:00:00:00:00</div>
+                    <div class="mapping-cell">Transmitter</div>
+                    <div class="mapping-cell">127.0.0.1</div>
+                    <div class="mapping-cell">transmitter.nsigii.humanrights.local</div>
+                </div>
+                <div class="mapping-row">
+                    <div class="mapping-cell">02:00:00:00:00:01</div>
+                    <div class="mapping-cell">Receiver</div>
+                    <div class="mapping-cell">127.0.0.2</div>
+                    <div class="mapping-cell">receiver.nsigii.humanrights.local</div>
+                </div>
+                <div class="mapping-row">
+                    <div class="mapping-cell">02:00:00:00:00:02</div>
+                    <div class="mapping-cell">Verifier</div>
+                    <div class="mapping-cell">127.0.0.3</div>
+                    <div class="mapping-cell">verifier.nsigii.humanrights.local</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Log Output -->
+        <section class="log-section">
+            <h2>System Log</h2>
+            <div class="log-container" id="log-output">
+                <div class="log-entry info">NSIGII System initialized...</div>
+            </div>
+            <button id="clear-log-btn" class="btn-secondary">Clear Log</button>
+        </section>
+
+        <!-- DOP Adapter Demo -->
+        <section class="dop-adapter-section">
+            <h2>DOP Adapter Component</h2>
+            <div class="dop-demo">
+                <div id="dop-button-container">
+                    <button id="dop-toggle-btn" class="dop-button">OFF</button>
+                </div>
+                <div class="dop-info">
+                    <p>Data-Oriented Programming Adapter</p>
+                    <p>Functional ↔ OOP transformation</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="../js/xhr.mjs"></script>
+    <script type="module" src="../js/websocket.mjs"></script>
+    <script type="module" src="../js/dop-adapter.mjs"></script>
+    <script type="module" src="../js/main.mjs"></script>
+</body>
+</html>

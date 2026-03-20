@@ -1,0 +1,756 @@
+2
+Okay. Okay. So, this is um so today's date is
+0:10
+uh the 31st of January 22nd. The time now is midnight on tonight at 1:10 a.m.
+0:17
+10 minutes past midnight. So, continue the video here.
+0:23
+But because I'm not tired, so we can have video here. Yeah. So this video is
+0:29
+basically on the try to verify uh but you don't need to verify this.
+0:36
+It's not going to do verify. We're going to work on the um the compass system for
+0:42
+the system because must go somewhere before doing verifier. So we got to get the compass system
+0:48
+compass system uh for the XYZ cooling system GE system. So you can send it to
+0:55
+system to uh graphic system. So you can to um three
+1:02
+people um three people or uh land network. So I need started the board um
+1:10
+the board is just started here. So So I got the white choke.
+1:17
+Got the white ch.
+1:22
+So take the white choke
+1:27
+green choke today. So put it here. So you get
+1:35
+so you know um let's start with the topology firstraphy
+1:41
+first before we start with the actual system. So we got a standard uh P2P
+1:47
+topology P2P to
+1:54
+get you got two type of this P2P circle
+2:01
+you get. So the circle means a node uh it means
+2:07
+dynamic. So the circle is dynamic the X is think of it as a dressing system. um
+2:14
+uh uh IP addressing um which is still in the form of
+2:19
+uh IP addressing problems in in the space of uh but these are just m of
+2:25
+system for me I use system for local for local
+2:31
+topology so your friend can read here your friend can read here
+2:38
+and send us send a message to
+2:46
+on the Pable G. Notice that the the circle is a dynamic system
+2:53
+or dynamic circle IP
+3:00
+context context you get a C IP which is X X. So
+3:08
+O is O is direct cross is static IP
+3:14
+static IP. So um first this is the model here. So uh let's get to the the second
+3:21
+page before we discuss um the next step next step the next model. So this model
+3:28
+we also got here bus here bus which is basically
+3:35
+interdependency. Um so get bus like a bus wheel. So you
+3:41
+get a box wheels. Oh,
+4:02
+and you get so see as you can see here the circles
+4:09
+are stuck at this but this cross here is static and this must be knocked over the
+4:16
+place. So you see the busy has like wheels you get like a um an area here
+4:26
+you get um where the v the range of the system but you get a new conation this is a triangular model
+4:34
+the the connect here so uh see um so let me give you a camera close so you get a
+4:41
+model here for the system you get one more which is a hybrid model
+4:47
+so this is uh um um sometimes so as you can see here's a peerto-peer a static IP
+4:54
+and static circle and square so you get um two two static IPs um and one IP so
+5:01
+you can two ST IP to one you can have two IPs can be uh refresher like a
+5:06
+virtual IP uh which will be this is D system um in the making so you can get a virtual IP and that's how that works you
+5:12
+get two ST IPs and then you get model these are the BS on the
+5:18
+They basically map out of a plan a floor plan. So work on floor plan you can use for a wild wide area network a wide no
+5:28
+wide if worldwide wide wide like it's sparse.
+5:35
+It's basically modeled on the um some rough system but the area cover is this kind of triangle here or this triangle
+5:42
+here but this is basically the physical wires um this has to be here. Yeah. So
+5:48
+connection here here and here and here and present systems of um the equation
+5:54
+solving the system. So this will be a computer program a computer program on a computer here if it's a centralized
+6:01
+computer and this will be a centralized computer this a bus topology. Now get a hybrid model here.
+6:10
+So the hybrid model will be
+6:16
+will be this will be this.
+6:30
+As you can see, as you can see, this is a star. This is two triangles of overlapping. Two
+6:36
+triangles of two triangles overlapping. uh close the scale. So two you know the
+6:44
+edges are either can be ident
+7:00
+and this IP address is called a hybrid version but it's work on the top. So the
+7:05
+errors are here one two three four five
+7:11
+the errors are you have six areas of coverage and this mean control so cover
+7:17
+you always get OS so this is more tomography tomography
+7:23
+not topology you get topology which is the area perimeter of the area then you get actual area which is the tomographic
+7:30
+measurement of this you get tomography so we have one two three four five Areas of smaller triangles you can cover
+7:37
+on 1 2 3 4 5 6 7 1 2 3 4 5 6 7 areas of
+7:43
+smaller triangles you can cover if you have two available triangles and what they talking about they have coverage
+7:48
+you have seven total. So number seven is the area of topography area which is for
+7:54
+service area. You can offer service to people uh via disob
+8:08
+service operation. So you got a
+8:15
+service operation obsess
+8:27
+um
+8:38
+so the service are here already. So one less what? So what? So how does this
+8:43
+works? As mentally this works by um the verify box informally by creating a yes
+8:51
+no uh um yes no maybe Friday which means what is this message? What do yes no
+9:00
+maybe? Yes, no or maybe. Try that. So we try
+9:06
+this is Cisco or RCO. Now Cisco is a bottom up execution order and risk is uh
+9:13
+risk is trying to check who's like a risk is such like a Cisco or risely
+9:19
+um um old um which is top down resolution for 70 languages
+9:26
+if you want to um
+9:31
+I think so you get uh the shape of you get here So you get uh yes no maybe
+9:40
+as triangles here you see so this is compass the compass. So in the compass
+9:46
+you have uh flash sequence and the flash
+9:51
+works like this. You remember the old chaos model we had in last video. Um they have um they have four um four
+10:01
+states to resolve to four four resultant uh states order or chaos order and
+10:07
+chaos. So you have filter and flash. So
+10:12
+you have filter define it properly. So a filter is a source filter is a function filter is
+10:21
+any algorithm that that sorts data but does not mutate
+10:27
+the data mut. So you can have sort
+10:32
+salt and never mutate never mutates
+10:38
+results. So the result is salt organization
+10:44
+does and the flash the flash the flash does opposite a flash mutate mutate the
+10:50
+results mutation but think of fusion results that's fis
+10:58
+flash sequences are happening in your computer what's the processing so
+11:04
+processing order is cisco now get cisco c i F O which is bottom up
+11:13
+bottom up uh bottom up execution order
+11:20
+which is like a execution order which is basically NASA NASA NASA that's why
+11:28
+NASA uses this and you get which is the old shirt which
+11:34
+are the older one like top down top down top down execution
+11:41
+to run. So this is what assembly uses the instruction set to go assembly
+11:48
+instruction set. So um now you get
+11:53
+the order by Python by Python. So by Python the B system is basically a
+12:00
+promise of future in Python future language. Yeah, Python order.
+12:06
+It's a promise that's um that doesn't doesn't append. It doesn't have pending.
+12:12
+It doesn't have a promise that's resolved because the so you get if you get a promise library um feature library
+12:20
+you can work with futures but they have a pending state have a yield state. So
+12:25
+user is dynamic. So you know this is resolve itself. This is sticking. So user bally has the system has some
+12:32
+default that resolve the state. So the are classifiers. So um so you get to bypass
+12:40
+ordering this which is by um order
+12:45
+you get order you have chaos and the chaos result of a system uh of a systems
+12:55
+trident which can be examples here.
+13:00
+So you have triangle
+13:06
+triangle here. to try and put the product here. So you have this compass
+13:12
+here a compass here but you can't see it's a new compass. So you have
+13:20
+you know compass has a direction. So this is just this point the compass and
+13:26
+the compass represent kind of the model using for the order. So you know to mitigate order let's be case among the
+13:33
+system. So if I have if I'm this comp is rotating spinning this needle this
+13:38
+needle compass where is this order happening. So you have four to one state
+13:43
+of the system and that's basically based on the system of natural entropy around the world you know um get from nothing
+13:51
+can mean something that we don't really know it mean something based on our frame of reference
+13:57
+example we have um uh no signal no we
+14:03
+have the mucus which is like noise which means noise means u the system is uh be
+14:10
+destroyed by this. We have no we have no information information we're getting
+14:16
+just getting noise random data count of mean too much information too little too
+14:21
+little data too too much and get noise you get um noise
+14:29
+you get noise so the system is equally
+14:40
+a clear picture so Noise is no noise but this noise has to be ordered by order
+14:46
+you get noise you get no noise you get no signal.
+14:54
+So this is the trial here. you get no signal and if you can keep control all of this um this system um no signal that
+15:03
+means you can have signal which is so channel you're not connected to someone
+15:09
+channels here is noise and no signal and the pattern order has organizes into
+15:16
+categories so we can always have a clear picture and that picture is signal which
+15:22
+is like a computer graphics interface um signal So this ensures no locker no
+15:28
+locker. So signal signal means like you are using computer and stabilization
+15:34
+signal and signal means like you are using so
+15:39
+no you get lock out. So we get signal get lock out no lock out. So this is the
+15:45
+lock out problem really. So the spring when the spring comes into
+15:51
+place you know um is you know am I having a clear picture of the message you know the spring basically works on
+15:58
+the kind of system of low signal transition you have noise here and you
+16:04
+have noise on the root on the top and the tip of the lever and you have on the right you have no noise and you have um
+16:13
+no signal on the right to make signal but So you can think of
+16:19
+you can think of this um um uh uh system as u either filters um the the the the
+16:30
+order as filters. So you get one filter which is order and the filters are are
+16:35
+to see less and see more see more. Basically the filters are just the
+16:41
+things you apply to the needle to to get the receiver. So the filters are
+16:46
+basically um so you have two filters. You have one other filter, you have one filter and the filters basically are by
+16:53
+Python. So you can switch around to have to see um where the point where
+17:00
+compass points to. So the goal of this to have that has no lockout and the
+17:05
+system that has no lock but lock means the lock out. So there's
+17:12
+no account here. They never lock you out.
+17:20
+So that that works before. So it's
+17:26
+basically a system of soy. How would this work?
+17:33
+This would be the same as having yes, no or maybe consensus. But you know we have
+17:40
+to bypass over uh you know yes no maybe can use say you understand this but the
+17:47
+rule is no. So we have this we have this yes no maybe because you know thisly the
+17:52
+replaces do and this is one yes no consensus the r consensus offset view.
+17:59
+So compos does the job properly. So let me get closer to it. Let me show you what you're doing. So we talked about
+18:06
+the bipart we talk about the chaos ordering and how the filters two filters for two two
+18:14
+bypass one bypass filter. So you can switch one byp one tripod one B you have
+18:22
+noise signal signal and this is the compass searching searching space for the needle
+18:27
+which can dictate the result of devices and via the topology toography of the
+18:33
+state of the hybrid architecture and this should work. So the goal of this is to resolve the system perfectly.
+18:40
+So we're not going to go to the math now math side of it things but you know just take the visual down a filter you get a
+18:46
+filter which is again uh uh um you know it doesn't change the resultant it just
+18:53
+um the the state of the state or data of the program it doesn't change it doesn't
+18:58
+change one thing keeps the same keep the same and keeping data and the state of the program does the filter and you get
+19:05
+the misses one or the other pure function that does one or the But it doesn't mean you the result of it either
+19:11
+of that system. Um you get flash storing like you know it stores one thing and
+19:16
+not other present which is basically the quantum system
+19:23
+flash modeling here quantum filing. So you get a Cisco risco bottom up
+19:30
+execution order risco instruction set um uh top down execution order and you can
+19:37
+bypass the order. So I'm going to put this here.
+19:42
+So run now. So now I'm going to uh erase this now just to work.
+20:13
+Buzz over here. So, you know, uh uh if you want
+20:34
+So the last I want to show you today is how it work and that will be via the
+20:41
+local secret. Um so how this work? So normally because
+20:47
+it works like this. It works like a yes no maybe system. We try this system just
+20:52
+determine how verifies. So the verifiation needs
+20:59
+spring. So you get my remember you get net force
+21:05
+= 1 / net force of 1 /x = - x. Net force
+21:12
+of x = k. Um the integral the integral
+21:19
+of um of of 0 to 2x is defined as
+21:26
+the seeant
+21:33
+seeant over time paper.
+21:39
+So
+21:46
+just remember
+21:54
+to half one.
+22:10
+So 1 / e when this exponent uh uh 1 e to the power of n
+22:19
+/ 2 3.
+22:26
+So you get two. So you get the two equations you have. So you get the next
+22:33
+force = to 1 /x=ative k. Nowative k just to remember guys
+22:41
+negative k means negative kinematics negative negative force you know force
+22:46
+in the opposite direction and that force is kinematic force. So you get 1 /x 1 /
+22:52
+x is the the force in direction. This force has a relationship to this force K which is the force in one one
+22:59
+works on XYZ axis you know so you get a one half of the force 1/2 of the force
+23:07
+which will mean 12 * D 1/2 * D
+23:14
+uh U where U is the unit and D is the uh derivative of U. So one half where is
+23:22
+the unit? So the unit is one one
+23:27
+uh for the second but we need a ratio. So one half of the ratio um is uh one
+23:34
+half of the ratio is um half you get um 1/2 we get this one half is
+23:42
+one half of a pull force of a push and a pull force um z work done. So the work
+23:48
+done equation is what we need is work equals displacement
+23:54
+time force and force equals
+23:59
+mass timeation. So you know because I can't find the document my working out before you know this individual is I
+24:08
+can't I can't open my lap if I can I'll pause it and check it out. Let me try it
+24:13
+actually. Let me try it actually. Let me try to pause my live stream. Uh yeah, I'm not
+24:19
+going to shoot it live. I thought it was so you see what I'm saying? So you know
+24:26
+what I'm saying? Um so let me try to find my video
+24:34
+on the system of um yeah. So orbit no
+24:40
+play chess. So we get so we get um force um we get
+24:48
+um integral of fu uh given du uh cosine
+24:55
+um uh u over sin u g the force u. So the
+25:00
+integral of the force u is the potential equation and this would be the um potential
+25:08
+equation you get 1 / e. So so I get it now. So I know I'm working on now. So So let
+25:15
+me just finish this now. Um so you get
+25:23
+so you get Thank you Monday. Thank you.
+25:31
+So you get the potential equation of the integral is 1 /
+25:38
+so you get this y = displace time space of displacement time force
+25:44
+and this force is the essential but now you get this equation here so you get other equations too and they are
+25:54
+uh the potential P
+26:00
+The potential P the potential P E potential of P the
+26:06
+potential of um the potential of um so the work potential of a displacement D
+26:13
+uh so you get um two type of work you get work of potential work and you get um uh work done you get work done work
+26:21
+um displacement as false but if you get potential work you get a ratio to displacement so you get um the work
+26:26
+displaced u but the work is working if divide by F you get you get
+26:34
+so you divide by F so for by S you get so so
+26:40
+to get um displacement by itself you have to do work divided by F and that to
+26:48
+which displacement of the system. So this is what you need but you get two type of displacement. You get potential
+26:54
+displacement uh you get two type of you get potential displacement and relative
+26:59
+displacement. So you get um you get um absolute displacement you get potential dis you get sorry you get absolute
+27:06
+displacement absolute and potential and the relative displacement. Um but the model is
+27:13
+basically um for modeling uh potential um potential work
+27:19
+or like you know if you're in if you're in a helicopter you jump in off the helicopter and you get potential work and you get potential work get potential
+27:25
+energy like um if you're in about to jump you don't just jump you just have to fall down to get you get potential
+27:32
+energy and um uh uh non-p potential energy um so you get um energy that just
+27:40
+um in the Of course you have to add energy somewhere like you know if if
+27:46
+you're already in gravity you have to keep the orbit around the gravity if you can't maintain the orbit then you have
+27:51
+to add more work to maintain that orbit. Uh and so so work force displacement. So
+27:58
+this function this for this kind of formula here uh work equals work divided
+28:03
+by force equals displacement is that has two type of potential and potential and
+28:09
+non potential work displacement um to determine the potential work down um
+28:14
+because they're related to work and given the force um related to work which is work force displacement
+28:23
+force. So we get this formula here already. Now this one we have the uh
+28:28
+potential uh the potential
+28:35
+to get the potential uh you get the non potential work potential
+28:42
+you get the displacement that's um the displacement n but I'm going to write this down I'm going to write what I have here so we get potential we're going to
+28:49
+have so we're going to have the integral you get because my video is very long so you get you get Um the integral x o zero
+28:58
+f u fa u uh d u
+29:04
+d sorry d circle sorry guys
+29:15
+we do uh uh integral of x to f U
+29:24
+D C S C sine
+29:31
+U. So we get um the integration not the lapis integration uh of a of a force of
+29:39
+a unit and the unit is basically um the unit of um uh work force or uh and
+29:47
+displacement only. You need that to which is half the half the system. So
+29:54
+you get half um of so you get the force unit of displacement. You get uh force
+30:01
+um which is over a unit displacement derivative of derivative of um of
+30:06
+coseant over the sign of of of the units which is the unit measurement of the xy
+30:14
+d axis via soa. Uh so you get a system there, you get a system here, you get
+30:21
+force equals uh system here. So you get a system here. So the potential equation of the
+30:28
+system is system. You know this equation determines how much um how much how the
+30:34
+integration of a potential system scales um via lapis rule. So this is very
+30:39
+important for me to have in your mind guys. So you get now get the potential equation which is 1 / e. So you get
+30:44
+potential which you get 1 / e. So 1 / E * this is this what it mean. So this is
+30:51
+the force F. F F F F F F F F F F F F F F F F F F F F F is a force of unit U where U is a force being acted some some kind
+30:58
+of object being acted upon and you get cosine over S coseant over coseant of
+31:06
+the unit over S of the unit which is just coseant divided
+31:12
+by seeant U where share the same unit as input uh via lambda reduction. Um this
+31:19
+is the what's in the unit. So this is what's on base reduction. Um it's the
+31:24
+same resource once one and you then finally get and you get finally get the system of
+31:32
+the resource itself nonlinearly because
+31:37
+because um f times um sorry guys because
+31:42
+1 / e uh time um uh time kx
+31:48
+uh to the power of e 1 / * t
+31:56
+all the way when I put e^
+32:06
+So for this result itself you have e to the power e * k of x
+32:14
+uh yeah so you get 1 / I wrote it down improperly I think yeah
+32:20
+so you now have the e 1 / k e * k of x.
+32:28
+Um so you get uh one over e. So you get one over 1 / k
+32:35
+1 / k * e to the power 1 / k 1 / k 1 / k
+32:41
+1 / x um 1 /x uh where x is the input of the share the
+32:48
+share 10% ratio of between e and x. That be 1 over e. I put e here should be
+32:54
+an x. kx * kx.
+33:01
+Oh, I put one e. So 1 / e is the exponent of the system. You know the
+33:06
+more system 10% um the more one eid e
+33:11
+say 1 e will be the threshold of the force. So the maximum of e. So e will be
+33:18
+an exponent. So 1 / e is correct I believe in my board view. So I'm proud of it. One over e. So let me just put
+33:25
+this one over e here. Stop now.
+33:30
+One divided by
+33:37
+1 / by
+33:42
+1 / e 03 uh 678
+33:50
+1 to 0.0.3 2.3 67 9
+33:58
+3 * K and K is the kinematics. So you get two K you get 1 / X which minus K
+34:05
+you get X which is just system for this one E
+34:10
+termin
+34:15
+is a one E. So it's 10% stable but it's the inverse. So you get one divided by E
+34:23
+but this one t something that's going so you know going
+34:30
+inside. So what inver is the inverse of the system that you're pulling back you know you're holding the potential this
+34:37
+potential is what you can hold between we can we can send we can push and pull
+34:42
+uh we put this 0 um uh 0 367 uh 8 and
+34:49
+then 1 / e time k is the so k is if k is
+34:55
+uh k is uh uh is the force acting on X is uh
+35:04
+uh uh 45° 45 uh the force
+35:10
+uh is force is uh the force is uh the
+35:15
+force of X for X force of the force unit X is
+35:21
+by D which is K d is K d is K uh uh
+35:28
+uh let's say 45 45 um
+35:35
+um over 100 uh 0.45 0.45
+35:41
+and now times 0.45 uh 0.45 four five uh so you get one over
+35:50
+1 e * k * k or d or g
+35:57
+or d um * x
+36:08
+times
+36:17
+Uh 0.3 0.3679
+36:24
+* 45°. So 30 * 45 will be
+36:30
+um uh 45 watt 0.45. So times 0.45 45 *
+36:37
+045 is 0.166 1 6655
+36:45
+166 0 1 66
+36:53
+55 55 and this is the kind of spaces you
+36:59
+get the force. So you have a force. So by the force
+37:04
+will be the force force force but one e is the ratio that's between so if I just
+37:12
+want to do I can compute the inverse y which is the y so now I have 1 / e the
+37:18
+force I have the ratio of um of 0.166.166
+37:28
+oh 0.16554 4 554
+37:36
+and that was what I sent uh with the system of messages but you know so so
+37:42
+the verifiable will have this potential energy um and that I have half of that so half of that energy will be so this
+37:49
+is 10% stable 10% stable uh if I have half of this message half
+37:56
+of the half of them this will be I um should be so basically 10% should be
+38:03
+4.5 so this is 1% stable it's not really good so it should be so if using 45 I
+38:10
+should be using um 45 using 10% of 45 which should be 4.5 so that would be 4.5
+38:17
+times the kinematics time 4.5
+38:22
+so that be 4.5 times the time x divided
+38:29
+by x uh which is 4.5 x should be 4.5 uh
+38:34
+divided by x of b 0.45 and um is 10% 5 so that 4.5 * x
+38:44
+um whatever uh was x
+38:50
+so you half of the system half of
+38:58
+I made a mistake but you know I learned from my mistake so you know so I'm going to write it up on a good note but do you
+39:05
+know here come with me so I get half
+39:10
+1 / 2 * x and x is um um
+39:18
+uh uh uh 0.5 so x is 0.5 so one e so
+39:23
+half of the w will be uh minus k. So we get uh times 45 divid by 100
+39:32
+* 45 / by uh 10 for 10% stability which will
+39:38
+give you 4.5 0.5 * 4.5 will give you 2.25. So the 22 stable so 2.25 is what
+39:46
+you get. But this message is basically um what you say to verify ring. So for
+39:51
+this to work properly you're going to have 2.25 25 already there for 10%
+39:57
+by 10.5. So that you have 2.25 and the 2.25 will have something else and
+40:04
+altitude and that last one will be uh the one which will be uh divided by uh
+40:12
+which will be the coseant of uh the coseant over the s of u uh which is 45.
+40:23
+uh because you do 10%. So that mean so we times times the coseant
+40:33
+just um cosecant will be 25.4713
+40:38
+divided by the sign
+40:44
+uh which should be 0.8416 8416 0
+40:49
+uh um and the unit is basically um 45 degrees. So we get 45 4.5 divided by 45
+40:58
+divided by of the of the of units of two times times unit times unit of 45. So
+41:05
+times use of 45 will be uh yeah so you get the ratio um so you
+41:13
+get divided by no divide you have to have divided by
+41:19
+the unit of yeah so basically because so again it
+41:24
+was 4 to 5 / 10 10% stable 45id by 10 4.5 times times times uh
+41:35
+times u time um times 1 / e
+41:42
+times uh time by 10 / 10 times the um which is the which is
+41:51
+the displacement of the system we get times or so get the force the force
+41:56
+equals work so we get the force the force is basically um the work so work
+42:02
+by force work is so the work is basically Basically the integration of the work is basically the potential. So
+42:09
+times times the integral of coseant
+42:15
+of u but u is not defined the force of u. force is basically times the coseant
+42:21
+of the force which is uh um um okay times the cosecant which is um 12.745
+42:30
+which is coseant which is the integration over the cosecant over over the over the area coseant um divided by
+42:38
+sid by um the divided by the s of u sine of
+42:46
+s of u which is 4.5 so 4.5 5 / sin of u
+42:52
+which is 4.5 which is um 0 0
+43:00
+divided by the sign of oh let me go back again
+43:06
+z so which is um um um
+43:14
+uh uh 4.5 which is 68 8 point uh 3 point
+43:20
+uh one 8.15
+43:26
+um 111 7511 uh 1 141
+43:33
+stop working guys so basically you see the integation has worked so I'm going to give go you know you have to take
+43:40
+this ination formula as for notice so you have the force u the force of units
+43:47
+which is basically due to the whole system uh which like 45° 45
+43:56
+over the unit. So um sub the units 45 45 you get 4.5 4.5
+44:03
+but you know over the ratio of 45. So this is 10% stability factor. Thank you guys for watching my video.
+
+All
+
+From OBINexus

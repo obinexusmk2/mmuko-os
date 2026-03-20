@@ -1,0 +1,1036 @@
+
+Oh my. So yeah. So this video is um the CB uh command
+0:09
+control on the fly uh on the fly uh read
+0:14
+read write and execute um verification. Um
+0:20
+yeah so uh the world's first human rights protocol by me daming hopefully goes
+0:26
+viral anyway. Um for S for Sarah I for Indigo G for golf for golf I for India
+0:38
+oper
+0:47
+command and control as in control and command just controlling stuff and commanding scope sig is a scripting
+0:53
+system but it's basically scripting that that removes Google. So verifies the
+1:00
+paperwork. They give you houses. Well, gives you houses where you need houses. Nobody want houses. So
+1:07
+um scripted think of s
+1:13
+for France expressation.
+1:21
+Do I want house? Do I need house? Should I should I should I do I want a
+1:28
+house? Do I need a house? Um um do I want a house? A question of
+1:35
+ambiguity. Do I want or need? Could I instead of asking for house, do I want a
+1:42
+house? Yes or no? Uh do I need a house? Yes or no? Uh uh.
+1:51
+And there may be one um should I get a house?
+1:56
+Yes or no? Uh these questions are what consensus is based on via the principle
+2:02
+of a on the fly verification resolve in time ahead of time uh in
+2:08
+time. So if I give you a one, you give me a zero. Uh but do we have consensus
+2:13
+in the middle? Can we always agree on that we need as foundation? That's what C verify is
+2:20
+doing. It's verifying do I need a house? Do I want a house? Should I buy a house?
+2:26
+These two questions concern to yes no and maybe yes no and maybe no it's a
+2:34
+question answer system but it's a simple question for the foundation via principle the dimension of principle
+2:39
+build the principal principles of dimensions of the questions and shared [laughter] heristic problems they solve
+2:46
+via repair and renew build and break and um
+2:53
+uh create and destroy um in is a human system used to automate
+2:59
+stuffing system. Yes, to um allow you to
+3:07
+see it's an on the fly scripting system. Um a scripting system that allows you to
+3:14
+automate the things you don't need to do like paperwork to issue someone houses like me. Um but that's good. It's a
+3:21
+scripting system. It's a screening system that that runs that hold the
+3:26
+memory that the chain holds space for allocation for things
+3:31
+that needed not uh before you can get the want to get together need
+3:41
+the principles of dimensions that all dimensions said left right up down or
+3:46
+center whether the center will agree with the center based on the rules defined in the framework of
+3:53
+logistic the frame of the framework of consensus non flexible polar consensus
+4:02
+um to give you structure of syntax what is the meaning of love what is the
+4:08
+mean of hate what's the meaning of um orthological system so let's get started
+4:17
+So uh what you see my board the board has uh uh three systems read
+4:26
+write execute and we got I'm making a read execution table here
+4:33
+via the framework of R um R read R for read uh W for right
+4:39
+um this is a Cisco order model of the system
+4:45
+Cisco works here and verify. So system means left bottom up to you get two type
+4:52
+of system bottom system and top down system. So bottom of Cisco will be uh
+4:58
+this one uh left left node root node
+5:04
+left left uh uh root left right and
+5:10
+that's what all the persons agree on root left right this a self tree you see
+5:16
+[clears throat] in the so r x if my read is your right we have read
+5:23
+write execution schema A hand following poem. Read then write
+5:29
+then execute. Read then write then execute. Then we have read write. We
+5:36
+have write then execute then read. Right then execute then read. Then we have the
+5:42
+last one. Uh execute write and then read. Um execute write and then read. Um
+5:50
+this ratio of computation. These are three matrices that you should never code the system for the system uh to
+5:58
+execute in order of any order there is you know. So the mat again will be
+6:04
+R W X W R X and X R and X W
+6:16
+R. Now this table is a lookup table too. Uh because you have
+6:23
+uh a shared read uh read mode and a shared um uh one read
+6:30
+one three read and one right start from [clears throat] read you have angular read. So you have 0 0 as a read one one
+6:39
+and two two as a read you can areas two. So if you if you need
+6:46
+an area of um of index one uh of x x and
+6:52
+then y x y don't need the other ones.
+6:58
+So you get xx rewrite you get x x here. So execute means um uh
+7:05
+run execution execute uh read
+7:10
+we have as you see we have uh um R22 not equal to R22 is read read
+7:19
+and we have command read read
+7:27
+W uh you have read then write then execute you have rice then read then execute
+7:33
+It depends on what you need but you can have execute
+7:39
+execute you have the main one for reading. So I'm going to use this one for reading and writing and going
+7:46
+execute. So this is just read. So the uh writing mode will be if I want to write
+7:51
+then execute as start from right. So right to be uh w
+7:57
+um w u w uh w uh uh
+8:06
+so uh w write
+8:13
+to read execute if you want to execute. So if you want to read execute to a read
+8:20
+and a right. So two reads one read and one right [clears throat] here
+8:26
+right. So right execute read.
+8:31
+So right execute right
+8:37
+um right execute.
+8:46
+Right. This kilos
+8:52
+kilos attitude right
+9:01
+we have
+9:09
+as you can see I consider the matrix here all I can see basically so you get
+9:15
+Right, execute and read and you get read, write and execute. But
+9:21
+at the angles they we share a read and a right you know at the diagonals we have
+9:27
+right right and this are writing means um uh uh writing to some kind of system
+9:33
+while it's operating and you get read read now we have to have a Cisco model
+9:40
+of the cell tree that can give us read read and write right in this kind of
+9:45
+framework of polarity as dimensions not as the values literally but as a space for the vehicle
+9:52
+So we only want to write have a R w but we can have an X as well. So the X will
+9:58
+be let me just make the X as well because you know that makes sense. So the execution order will be um so if I'm
+10:05
+reading them right this is one this is one two execution order. So this is two
+10:11
+execute. So we need the right execute. The execute will be
+10:17
+uh uh execute then we write execute
+10:29
+uh execute the way execute right.
+10:39
+Yes, execute then write then read. She also want to end with the reading or the
+10:44
+writing and that's one. So execute read and write and read right or read.
+10:53
+Oh yes. So basically the following will be sorry execute will be uh
+11:00
+execute execute then write and read execute uh execute then read.
+11:11
+So execute them execute then write and then execute then read.
+11:21
+Oh, read execute.
+11:31
+We execute the Y
+11:37
+get X here. We write X. So we have three table of
+11:44
+consensus we can formalize. Now mathematically this is basically the consensus matrix.
+11:50
+So we have uh um um uh read write execute on the left on the root uh left
+11:58
+again we have uh write read and then execute on the left node of the string
+12:05
+node and because a tree it's not t for tango r for roia i for indigo and e for echo and x but you have to try to form a
+12:13
+tree a tree that's basically in parallel and it's this joint tree form world so
+12:18
+you know So the indexing will be isomeorphic to some of state of the system system here in we have the
+12:26
+command to execute while system is uh which run and this is where the bottom up
+12:32
+pausing comes in we try to determine how to rotate the tray uh Cisco tray to have
+12:39
+an execution order of uh something as some ascent that will be sent over the
+12:45
+time of integral. So that's the problem there. So and how the problem how we solve solve is basically a calculator.
+12:53
+So we have write SQ execute right frame and then read write SQ
+13:01
+and then we have we have execute right frame read execute
+13:08
+right and write execute uh write right
+13:13
+uh right read execute uh as you can see accesses.
+13:19
+So if these are access where does the where does the trade come in? When does the trade become uh
+13:26
+interdependent of the execute? What does it mean to have a shared concept tripolar system? When do we agree with
+13:33
+something execute? Because you know for when we execute is basically um when we
+13:39
+agree on the um execute flag what the execute flag is and that how we do this
+13:45
+is this. So we get a 1 2 3
+14:02
+right then Write um write.
+14:23
+So the problem here is this kind of problem. So we need to find execute a map read.
+14:30
+Right. So the map will be um how many reads? How many reads [clears throat] make one right? So you have look table
+14:38
+now. So how many reads makes one right? So so this house we have two reads to
+14:45
+one or two reads. So we have a table here.
+14:53
+Um um so we have two rings.
+15:01
+Two rings. Two rings of R R
+15:08
+two R two out one right. Two readings to make one.
+15:13
+Uh and then two reads to make one right.
+15:21
+One observation one two R.
+15:27
+So it turns out that 1 / 2 R is basically the convert of three and this
+15:34
+will give you execution order. So this you have to have the system the whole unit with two read operations which is
+15:41
+one filter one flash to send to execute the method.
+15:48
+So for every for for every two region how are the program state demographic
+15:55
+state that is equal to later time
+16:01
+later. Thank you. So for every two for every two reads you have you have one
+16:09
+right one implicit one implicit um uh
+16:14
+one one explicit right operation to do. This exclusive right is a reflection of the system filter and flash sequences.
+16:21
+So the filter represents sorting of the system but the flash is the sequence of
+16:26
+flash. So um the flash will be the sending of the message or the command
+16:31
+and the control system like um actually give. So the one read two read equals to one
+16:38
+right we have a whole message sent the whole message if the can be sent one
+16:44
+whole unit of the message that should be uh um um 256 um um one whole unit of the
+16:54
+message will be 52 bytes over 2 seconds. Uh that would be 52 seconds. 512 bytes
+17:03
+over two seconds is one 512 bytes of memory
+17:10
+um per read per two read operations per which is one execute operation.
+17:17
+Um two RR two reads make a right. Two rights make
+17:22
+an execute. Two two reads make one.
+17:29
+All right. Two reads.
+17:38
+Yes. Two reads and then to one right operation. Basically uh two two reads
+17:44
+bottom two reads at the bottom make one right. No one right one read is a right.
+17:49
+But two right two two reads makes one equation. the tree has to balance itself
+17:54
+out and that's going. So 525 bytes of data is um just a difficult back of data
+18:00
+per two seconds. So two reads will be um two R to one right as you can see here
+18:07
+you get to get one two so you get um write execute and read and you get um um
+18:13
+exe right then read execute and read you get um two hops. You get two hops from
+18:20
+one hop from read to um read to left
+18:25
+root right. One hop um one hop from um the um the the one hop from
+18:35
+the right node. uh which is read um one hop from the
+18:41
+right node uh of the right node which is one hop from the right node which is uh
+18:47
+read uh to the left node which is um read um root root left right
+18:55
+which is right which which one from right and you get execution. So uh and you have from the sq flag you have two
+19:02
+hops two hops you get um two hops that be uh
+19:07
+right read readers right and then um uh one left so you have two hops two hops
+19:14
+two hops uh left two hops uh left to execute and
+19:24
+those two hop have uh if you're if I'm writing depending on the state I am in so
+19:31
+if I'm if I'm if I am um if I am already executing I do if I'm writing if I'm
+19:36
+reading something for the state of reading and I want to execute I can do uh uh I can do a filter a read filter uh
+19:46
+a root a read flash a root flash represent idea of one over two one over
+19:52
+two um one few me 512 bytes of data and The flash will be the sending of the
+19:59
+information. So that'll be one hop one hop uh right one hop right one hop right
+20:07
+one hop right to execute. But if I'm already reading um that'll be one if I'm already right. write one right note is
+20:15
+reading I have to have two hops to um execute one
+20:21
+making a total of um if I'm if I'm reading and I want to execute another platform system uh and that will be uh
+20:28
+the um so one so more for me will be one hop one hop
+20:35
+one hop uh left one hop left uh one hop left and uh uh if I'm reading
+20:43
+And uh and my last my last operation was execute. My last my last mission was an
+20:48
+execute. Uh and then if I'm if I'm if I'm if I'm reading and my last operation
+20:54
+was a right. So that two hubs uh right um if my hub I use a function function.
+21:02
+So mathematically this is the correct way to do it. So you have to have uh a a
+21:09
+filter and a flash. So the flash is the sending of information or the execution
+21:15
+order the flash. So flash can be the organization of the center. So the flash will be uh one hop left um and one hop
+21:22
+left two hops left maximum two uh left hops
+21:29
+to um two left hops. Um based on the current state of the system uh maximum
+21:36
+two left hops uh maximum uh and one hop
+21:41
+minimum one hop minimum. So one one hop um uh uh one hop in the worst case uh
+21:49
+two hops in the worst case and that worst case will be uh uh two two for the
+21:56
+two time for the two times the message to be sent to one space allocation. Um
+22:01
+so so we say two times um the two times will be uh uh two times will be to one
+22:07
+space will be uh 512 uh 51 um n
+22:13
+millconds 51 51 uh millconds plus 17 of
+22:18
+time for each four bytes I have four bytes I've been allocated memory so uh
+22:24
+for each four bytes of allocated memory the has to be allocated four bytes ahead of time and that four bytes will be uh
+22:31
+500 512 um 512
+22:37
+512 * 4 and that'll be 2,48
+22:43
+24 bytes of data allocated in order in order in a in a in a in in an order in
+22:49
+sequence order. So the two left hubs are are not serial
+22:55
+hubs. They are they are they me full maximum and one full hop. They're meant to be split up but the stand as one
+23:02
+execute um execute equals some execute operations that can be determined a
+23:08
+state of graphic step. So 512 * 4 which would be 2014 by 20148 bytes of data
+23:15
+sent over a protoc of three hops over the sequence of three hops.
+23:22
+So the maximum hop you can have is uh two wait one two one two over two hops
+23:30
+two hops uh over two hops two hops you get two hops
+23:36
+you get two hops read um you get two hops you get two hops which are uh two
+23:43
+uh two uh two two two left hops not right hops two left hops you get on the
+23:49
+root uh left right uh two left hops two left hops uh to get to the root of
+23:56
+execute uh and these two left hop can practice with uh 512 bytes of message
+24:03
+which is 248 bytes of messages over the over two hops over two divided
+24:10
+by two two hops um but these two hops are not hop you don't have to do this
+24:15
+hops you have just rotate your dimension so you don't want to do the hops per se you just have to switch the you can't
+24:20
+just you have to do a content switch. Um so the content switching uh represents to
+24:27
+the dimension of of of you don't have to do the hops per say you don't have to just do one one one content switch and
+24:34
+the cont switch just the change of the trade. So if if you're operating on read write execute train you just take the
+24:39
+state of the choice you so read becomes um your read becomes a right and that
+24:44
+right is one switch of you have two two hops instead of two hops you have uh two
+24:50
+rotations of the tree. So the three uh semblance you have to rotate twice uh to
+24:55
+these are two you just have two two twice which will give you um the message you same message of the message but the
+25:02
+two is too much um but you know um you can have um a read if you just want to
+25:07
+execute you just have to um uh change your view to execute uh but execution is not implicit it's explicitly stated as
+25:15
+two uh two two hops which is two rotations so my execute and your execute
+25:21
+becomes my right my right and my right and my read and your read becomes my right and my right becomes your execute
+25:28
+and vice versa. Uh so the the the the dimension of the system uh is preserved
+25:34
+because the filter which is the the flashing is sent uh because you just um
+25:41
+um looked away and it sent you just change the angle of the message. You just change what was there. So you can
+25:47
+have the the the table again which is um two uh one or two R makes one two R two
+25:54
+read one R. So, so one read operation is on the right and you have one right and
+26:00
+you get one right and one left operation uh one right uh one right and you get
+26:06
+one left one so you get a read uh execute so you have table of let me draw
+26:12
+it here so I don't mess up so let me draw it here
+26:18
+so you have two main tables of operation you have you have uh uh read or read execute and then um
+26:27
+uh read uh execute then write uh then write.
+26:34
+So, so you know if I have a rate I have a right but that means the table the table will be uh uh uh uh uh RXR
+26:46
+W R no RX RX
+26:55
+W um RX
+27:01
+So the three bases you have three bases you have RX X out. She have um read
+27:08
+read. You have um R write execute
+27:15
+uh read and you have two vectors of a get right. Get the read
+27:22
+read right read read uh read
+27:29
+write right read write execute write execute write
+27:36
+execute write execute read I have execute right
+27:42
+read execute right read and then you have
+27:48
+execute read.
+27:54
+So basically that's the choice table here uh you get uh read write write
+28:00
+execute right read read and then you have the last one which is um uh execute
+28:07
+you have read write execute you have read
+28:14
+uh uh read execute right um so the uh as you can see the system
+28:21
+of read execute as you know but you just need you just need two access of it and this access will be a read write execute
+28:28
+right and execute right these are two uh this is one m you need you know one order you need so this is one order one
+28:35
+matrix you need so if you get right you get execute if you get execute you get right you get read two reads I can see
+28:41
+that two reads at the bottom at the bottom of this table here so you get the order right then execute
+28:51
+right then execute S with this table this m here is a two point true operation this the order so
+28:58
+the order is on the right so the order is on the far right and that's basically so you get right execute the execute
+29:05
+right and then read array so you have two reads at the bottom and you can see there's also two read or two right at
+29:10
+the bottom and that's what gives you one execution order in the framework of you know implicitly implicit one implicit
+29:16
+execution order for every two uh tables you construct of this so the next one will be um Um uh right don't write. You
+29:24
+see basically the matrix is 9 by 9 but you're taking the the uh the 3x
+29:30
+is 2x two uh 3x3 but you're taking a two making a you're making this you're
+29:37
+taking a you're taking a uh you can take a 3x two matrix to make it to make the
+29:43
+message um uh to have to have three you can take a 2x3 matrix which is three two
+29:50
+rows three columns um uh you're going to use them to um going to transpose to uh
+29:56
+send a message out to you two by two transpose of it. uh but you know um the
+30:02
+samples of this mission will be let's try it 2x3 will be uh uh uh uh read
+30:08
+execute execute read write and you get write
+30:14
+execute uh and you say so you have the uh uh oh this is uh and you get the
+30:21
+determinant so you have to come determinant so determinations will be uh if same um if they're same the will
+30:30
+uh uh one / a * b so the so the
+30:36
+determinance of this for b um this is not determin this this is transpose this you need you need two matrix you need
+30:42
+two so you have to have the right do this why I need I need I need the right operation um the transpose so the
+30:48
+transpose of the right operation is what I need to get a determin of so determinant to set the the the bound
+30:53
+dimension of operation of action order so I do which is 1 / a a d a * D * C * A
+31:02
+* 1 / A * A * D
+31:08
+time plus C + B. So one divided by um this kind of matrix
+31:14
+by calculating the matricum the matrix of determinance of two trident systems you get the execution of system on the
+31:21
+fly for controlling system or commanding something uh for security concern you know since the launch time I'm going to
+31:28
+try to do it properly so uh so I have two breeds here so I
+31:35
+need two right as well so two right as well so two rights would be uh two right would
+31:40
+Uh two right to be uh uh two right to be
+31:53
+so right here two right
+31:59
+so I just two right one matrix um two right at the bottom um as one axis so
+32:05
+the axis of like um XYZ so this one's on the bottom axis Z so you get Z. So you get um so to get two right so I'm trying
+32:12
+to find um two right one bottom axis so what's my tree model so we have
+32:18
+so the problem so you get if I start with right if I start with a um a read
+32:24
+I get read write execute um write execute if I go to read execute
+32:32
+I can start with read or I can start with a read execute on write uh as a sequence um read execute Right. So read
+32:40
+execute write real uh read execute write uh write uh write um write read execute
+32:50
+u but this is not complete. This is um wrong uh uh to write no this is the wrong one.
+32:57
+So I need a read write execute. So the reader could be read um write execute
+33:03
+uh uh write execute read um but I'm trying to find this now
+33:11
+uh will be uh that's not transfer only for two execute is one access to find so
+33:18
+basically you can have access of um right anywhere you go but you know I'm going to have it on the bottom on the
+33:25
+bottom because it doesn't matter the order it just basically can be diagonal two but single what to do. So you know
+33:31
+um as I go you get uh read write execute as in red and then you get which is
+33:37
+right read execute you get read execute to
+33:42
+uh write you get write execute read and get read uh uh execute and then write
+33:50
+uh write read and then execute right read and execute
+33:57
+read write execute
+34:05
+So read, write, execute and then you get read, execute and then write. Uh but
+34:11
+this is not the B to balance itself out with a access on the bottom. So XYZ
+34:16
+where the where the where the we have two sequences. You know since I can't
+34:22
+find can't compute uh so use index index index one
+34:29
+uh one one uh I mean one zero so the mission is one zero one zero on the x axis and um 01 on
+34:37
+the y axis and that will give me uh uh 01 01 and 01 on the xaxis as one right
+34:45
+equation. So the right matrix is right matrix is for one right is here uh one
+34:50
+zero uh 01 and the read matrix is um um if I start with right oh
+34:58
+if I start with reading if I uh the the the the
+35:04
+so if I start with writing and I and I read operation here if I start with reading
+35:10
+no if I start with reading if I start with reading and I have a
+35:15
+right operation. So, so if I if I so R sub R
+35:21
+sub right is um the matrix one comma 0 comma one and the matrix comma the
+35:26
+matrix um comma comma right is um right is um right is um right um w right read
+35:35
+right is right sub read is um uh uh um
+35:43
+uh if I want to read if I want to read right execute we get 012
+35:49
+0 2 012 02. So the matrix um will go on
+35:55
+the board now is computed as determin.
+36:01
+So let me try to here
+36:06
+one second. Oh here.
+36:34
+So the the terminal addition is basically a d * bc a * d um but I'm
+36:40
+looking for 1 / the terminal that will give me the base. So I get the
+36:47
+so um the the transpose we're doing the frame is 0 0
+36:55
+so the concept is what by sharing some information if I share the transpose the transpose not the actual matrix the
+37:01
+transpose so uh so if I share if my so my
+37:11
+so very important now you understand this some great we have
+37:17
+r = r
+37:22
+= r sub w =
+37:28
+1 0 1 and our sub
+37:37
+0 2 so So, oh 1 2 one one
+37:49
+two one.
+38:00
+So write one two. So most interestingly when you find read operation right
+38:06
+systems and this is present kind of system of homogeneity because
+38:13
+there basically you get read to right so this share so this operation there
+38:19
+between right and this so I'm going to give you so this I'm give the transpose
+38:27
+the transpose all this transpose to transpose of the read and Right? So I
+38:32
+put a t at the top uh here. So again rewrite transpose the transpose will be
+38:38
+uh rewrite t r sub w is equal to
+38:48
+which include uh one become a zero. So this here so
+38:53
+get 0 one one zero and this makes why it gives s
+39:00
+we share. So we share a zero and a one uh but we don't we don't send this we send the right place to be right of t
+39:08
+right of uh right trans transpose of right to braid right is [clears throat]
+39:16
+uh one
+39:23
+two 1 comma 2 0 comma 2 so uh so I send the
+39:30
+transpose all my measures instead of the actual measures to the system or to compute it dynamically. So you need to
+39:36
+send it by the way. So you know essentially you get read right then read subt and you get triangle. So trans will
+39:44
+be 01 uh transpose of um the trans of rewrite will be 01 and that would be 1 0
+39:50
+0 1 1 0 which is the matrix of x0 x you get the transpose of the y will be 1 2
+39:59
+02 02 and now you have to now compute the a
+40:04
+* d uh a * d plus b * c one over the
+40:10
+determinant of the this matrix you know matrices And the motivation facility to do it
+40:16
+and the motion will be so I have to write down here somewhere.
+40:21
+So I'm going to uh raise this on the left. I'm going to execute this problem
+40:28
+right.
+40:34
+So what is what is
+41:03
+good?
+41:13
+So, so you get um the transpose
+41:20
+mean a * z. So we get uh 0 * a * uh 0 *
+41:26
+2 uh where 2 is um uh a * d
+41:33
+of a * a b a c a * d will be 2 * 0
+41:43
+uh 2 * 0 uh which *
+41:48
+uh a * plus other a * d plus uh so yeah sorry so
+41:58
+plus other a so you get 2 * 0 plus other you need so a * g is this so 2 * 0
+42:06
+um the transform mat you get 2 * 0 plus 1 * 2 + 1 * 2 + 1 * 2 and that will give
+42:17
+you 2 * 0 is 0 2 so a a d is two two two
+42:23
+two and then we get uh uh a * d
+42:31
+a * d plus b * 6 no plus b and c
+42:40
+8 * c uh a and c you know just do one matrix you know let
+42:48
+me just do one matrix let me So we get uh transition of the trans if I with the
+42:55
+transpose matrix. So we get uh 0 * 2 is two uh two uh 1 * 2 is 2 uh so 2 * 2 is
+43:07
+a * j is 2. I wish to transpose two a two comma
+43:13
+a * d a * d plus b * c + b * c. So 2 +
+43:22
+uh plus b * c 2 + 2 * 1 uh is two. So you get two
+43:32
+two and you get a * z a * d which is uh
+43:37
+a * z again is u uh one. So two a * z
+43:44
+this one. So this is a * b. So this is B. B is one. Uh A is B. B * 1 * 0. Uh B
+43:56
+* D 1 * 2 is 2 + 2 uh * 2 *
+44:04
+8 * D + B. One second.
+45:05
+Yeah. So when I'm saying to you, [laughter] so you have 2 * 2, 2 * 2 is 4.
+45:14
+Four, but you got to have four back. So you have uh a * b * c * g. So 2 + 2 is
+45:23
+four. Four. Let me erase this and put four. Now you're going to get um two
+45:29
+already. 2 a * d plus b * c. Um, a * 2
+45:36
+is 0. A * 2 is 2. 2 * 2 * 0 is 0. Um,
+45:41
+plus 0 * 1. So, so you get one 1 + uh 1
+45:47
++ um oh minus 1 -
+45:55
+1us what? Uh one. So you get so you get one there.
+46:04
+One one uh one and you get one one minus b + c was it plus I don't know
+46:14
+yes it's minus minus minus so minus minus minus i minus plus this correct me
+46:23
+is minus a b minus b plus minus b yes it's minus
+46:29
+um so one you get a * * b + c which is minus And then that will be a t
+46:37
+you get for you get one and then a d.
+46:42
+So if you go to uh B 2 * D 2 * D 2 * 0 is 0
+46:53
+uh 0 * uh 0 +
+46:59
+uh a a 2 0 + 1 * 0 + 1 * 0 is uh 0 + 1 2
+47:10
+* 1 is 2 * d + 2 2 - 2. So this is so
+47:16
+one two one one twous
+47:23
+two. So two 1 comma 2 we get c 0 * uh c * c * a * d
+47:33
+* a is 1 0 * 1 is zero uh then 0 + u uh
+47:38
+0 * d a * d a * d a * d c + c * c * * 0 and then 0 *
+47:51
+b * Uh this is 1 * 1 1 * 2 is 2. two and we have um uh one
+48:02
+more to do. Do 2 * 1 is 2. 2 * 1 -
+48:09
+2 * 1us um 2 * 1 minus something called
+48:17
+2 * 1 minus uh a * c
+48:23
+a * t * b + c 2 - 1
+48:29
+so 2 so you get 1 2 1 comma 2 2a for the
+48:34
+matrix and that you consist the share they share the determinant over the system. So the number the matrix one
+48:41
+comma 2 on the x x1 x01 uh x0 0 x0 0 is
+48:46
+one uh x01 is two x02 is two 01 is 0
+48:51
+comma y1 is two and the last one is two. So you get the ab c is one two three
+48:58
+four or two vectors that's unit at the time two vectors you need a time as one
+49:04
+two what you looking at so you get the system here of system but this equation
+49:10
+is here what is the tendant so it's not going to f you because this is just the
+49:18
+transpose but I'm going to try to transose this from here so let me use let me use my Capital
+49:25
+for will be um so we get um capital will be write on
+49:32
+the board here will be green color in green will be
+49:40
+a * 3 is 3 1 * 2 is 2 2 +
+49:45
+2 + 2 + 1 * 0 2 - 1 * 0 is
+49:53
+And you get uh a d a you get u
+50:00
+uh two uh you get b 0 * 0 is 0 2 * 1 2 * 2
+50:09
+so you get two zero * b * g [clears throat]
+50:17
+of 2 is 2 is zero minus minus um
+50:26
+should be minus two. This is minus should be minus two hereus
+50:32
+that both two mean the system. So you got to keep the one I meanus
+50:39
+two which is two 0 * 0 * 1
+50:45
+0 minus minus 0 * 1
+50:54
+d a d b minus b minus
+51:01
+minus 2 * 2= B
+51:08
+0 * 2 * 2 is 0 * 2 -
+51:14
+B C uh - 2 *
+51:22
+2 * 0 so this will be zero here and this will be this show
+51:30
+there show C C will
+51:36
+1 * 1 * uh 0 * 0 *
+51:46
+0 * 0 0 and then 0 * 0 0 * 0 0 * 0 0
+51:52
+then 0 and then you get 0 * you get d [clears throat]
+51:58
+which is one 1 time uh z 1 * uh 0 C * A B * C 0 * 2 is 0. So
+52:13
+C to to ABC C to A and D to C or one to
+52:21
+be one. So one here, one here you get last one which is J 1 * uh 0 0 * 1 uh 0
+52:33
+* 1 a 1 * 2
+52:39
+1 * 2 is two. So you get two. So the missions are u
+52:55
+so you get one here. So the matrix will be for this one there not show so this
+53:01
+will be for the transpose of this one. So now the relation between the transpose and the matrix itself. So you
+53:06
+get this matrix written matrix is 0 one one zero zero uh one uh on the right
+53:13
+read right matrix on the right 02 one two and you get these two matrices here
+53:19
+you have one zero one zero which is basically one zero one zero one two uh
+53:24
+which is the one to determine the share this share uh and you get the transpose has determination which is one uh
+53:33
+one two two uh which I believe is so but I don't believe is right one something um yeah
+53:40
+so one two notative two one two one two
+53:46
+um two two now now we can now operate safely on the system and that
+53:54
+system so the this is here two
+54:00
+here arrows here
+54:08
+to solve the problem but one over so
+54:13
+the matrix this has to be that because it's determin of matrix
+54:20
+multiplication so the calcul of the matrix multiply which will be determined
+54:25
+to be one over the determinant matrix for the matrix to be set and Java is basically
+54:31
+52 bytes of data uh that will need this kind of matrix of readr execution order
+54:37
+to send something to control and command something uh which are what interfaces do they control and command. So you see
+54:45
+control and command on the file system but the training rules the training rules apply here because they have they
+54:52
+have a shared binary figure. uh so I can I can tell like the message the message
+54:58
+over the segment of AD BC it's like this so for example if I'm if I'm working on the transpose I can use the verifier the
+55:05
+verifier is sent I can message like this so basically 512 bytes of data 512
+55:11
+divided by a D * BC and AD will be um um
+55:18
+AD * BC will be the matrix there so 512 bytes of data over along the axis of one
+55:25
+um along the axis of um of of which is um uh uh one
+55:34
+um 1 + 3 in terms of things. You get a becomes
+55:40
+bus
+55:51
+x-axis will be 1 + 1 which is two
+55:57
+uh divided by two which was uh 512 256
+56:02
+uh bytes used of data we get uh 0 plus two oh So sorry.
+56:08
+Um uh u so in the in the in the half term 52 by data divided by two uh 1 + 1
+56:16
+which is xaxis is two divided by two uh uh uh 1 * 1 you get 512 bytes of data
+56:23
+divided by two which will be 256. Wait. Oh, wait.
+56:32
+512 bytes of data divided by two will give you 256 bytes of data which is one
+56:37
+plus one. And this the um the x-axis um one they have the half system they're
+56:44
+verifying. So for the system to work they'll be verifying if they're using the normal um the one that was um the
+56:51
+original which is 25 of data half time. So this proves that they have half verification because two is basically
+56:58
+[clears throat] um giving you this 256 by data over segments over the segments of the model. So 25* 2 is 512 and um you
+57:08
+now have the other one which is um 512 divided by two again in the in the in
+57:14
+the first matrix which will be the read to write and the right to read matrix 200. So if this by rotator in the memory
+57:21
+of the OBS message OB is O for E for bravo I for indigo N number E for echo X
+57:27
+for Xray U forella and S for Sarah. So that beally the two bytes to one system
+57:33
+they hold two memory and you have the half message. So the half message will be the determinant and determinant work
+57:39
+in three. you have uh x + y. So you see you get
+57:44
+1 + 3. 1 + 2 is 3. Uh because you get two separate matrices. 1 + 2 is 3. And
+57:51
+you get uh you get an x of 1 2 and then 2. So you get one. So you get 512
+58:01
+/ two which will be 20
+58:07
+512 / 3 uh which is 1 + 2 is 3 which is
+58:12
+um 177 1170665
+58:21
+1770 1,00 170 uh 67
+58:28
+Okay. 512 / 3 will give us 170.6.6
+58:36
+recurren 17.67 bytes recurrent. But they add up 2 plus
+58:44
+plus 512 512.
+58:52
+So you get um again what is what is 17.66 666
+58:59
+67 plus 512
+59:07
+divided by divided by uh divided by 4 2 + 2 is 4
+59:14
+which will give you uh 29 296 so plus 29
+59:20
+um plus 512 divided by um divided by 72 divided by 4
+59:30
+which should add up to the message of which should add up to the message of 200
+59:36
+uh 2 plus 2. So basically the message some of the message which I got here
+59:43
+which I got here uh right but this I got right here 29 but the same here
+59:50
+it will give you the other half of the message because other half this how fast the message sends which is
+59:57
+basically the work done there's potential work and there's potential position do energy to send position to
+1:00:03
+send a message which like um if you're like a helicopter top and you're going to do a parachute put your energy to
+1:00:09
+fall down and going to put you down. You having a measurement of gravity which a muon one of 100. So you you have 100
+1:00:18
+potential energy of someone on the floor to fall down stability factor to fall
+1:00:23
+down. So the factor of 100 is um as you rise up to the sky you're going to jump that's a potential energy of the work
+1:00:29
+and the work is basically work of the potential and work of the down work potential and work done. uh which is the
+1:00:35
+halfway of the pen which is like a quarter of the energy you're gonna have to actually um do in 25
+1:00:42
+in in ratio of 100 divided by uh 100 divided by four divided by four which
+1:00:48
+will be 25. So you have 25 um units of energy in potential work and you
+1:00:55
+energy in potential work. But potential work has a ratio to um uh 3 to so you
+1:01:01
+have you have 3 to four 3id by four potential and plus to one
+1:01:09
+over four work done you can act on uh to send a message which is work time
+1:01:15
+displacement times work times work force times displacement to force an object an
+1:01:21
+object the polar via uh theta which is the rule of um uh theta angular
+1:01:26
+momentum. Um, thank you guys. Angular momentum is what I said. Thank you for
+1:01:32
+watching the video. Uh, like, share if you get the message. Um, that's works the protocol for human rights and
+1:01:39
+basically use to control using command and control something whilst it's flying the message of Python script because
+1:01:46
+it's polyglatic. So that mean any language you want but descriping system it is not a full-blown program language.
+1:01:52
+It's a scripting system. So you can you can stand as a script system. You can connect Python, C any standard script to
+1:01:58
+the system of a sig uh and sig will run chrome for d as a chrome job but it
+1:02:04
+works because it's safe um it's safe to run. So the file format is no session
+1:02:11
+files and no s for november for France um
+1:02:19
+intent files. Thank you for watching. Now that's going to eat brunch.

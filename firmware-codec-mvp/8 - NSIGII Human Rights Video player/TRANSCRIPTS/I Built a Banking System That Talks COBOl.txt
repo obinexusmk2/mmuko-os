@@ -1,0 +1,135 @@
+I Built a Banking System That Talks COBOL… and My Boss Didn't Notice
+#
+webdev
+#
+polyglot
+#
+programming
+I Built a Banking System That Talks COBOL… and My Boss Didn't Notice
+How I side-stepped a 5-year migration with 40 lines of C and a Unix daemon trick
+
+I used to think "daemon" meant demon—until last night when I finally wired a 1960s mainframe into a React dashboard without restarting a single job.
+
+Here's the 3-minute story (and the 40-line C file) that let me leave the office before midnight.
+
+The Problem That Kept Me Up
+Our core wire-transfer flow is still a COBOL batch JOB card. Every night at 02:00 it:
+
+Reads a VSAM file
+Calls DFH$MONEY (CICS)
+Prints a 400-page JES report
+New requirement: Expose it as a REST endpoint so the fintech front-end can trigger it on-demand.
+
+Constraints: Zero outage, zero JCL changes, zero budget.
+
+Resources: One intern (me), one Red Bull, one MacBook.
+
+The Unix Daemon Trick Nobody Talks About
+Here's what blew my mind: a daemon isn't magic—it's just a process that double-forks so the terminal can die without taking it down.
+
+When you run a program normally:
+
+\`bash
+$ ./my-service
+
+Close terminal = service dies 💀
+`\
+
+Your service is a child of your shell. Kill the parent, kill the child. Basic Unix genealogy.
+
+But a daemon? It cuts the umbilical cord:
+
+\`c
+pid_t pid = fork();
+if (pid > 0) exit(0); // Parent peace out
+
+setsid(); // New session, new life
+
+pid = fork(); // Fork again (trust me)
+if (pid > 0) exit(0);
+
+// Now we're immortal 🚀
+`\
+
+The 40-Line Warhead
+Instead of rewriting millions of lines of COBOL, I built a tiny bridge:
+
+\`c
+// main.c – libpolycall-cobol FFI
+char *cobol_job_invoke(const char *jcl_path, const char *parm){
+static char reply[65536];
+char cmd[1024];
+
+snprintf(cmd, sizeof(cmd),
+         "tsocmd 'submit %s parm(%s)' 2>&1", 
+         jcl_path, parm ? parm : "");
+
+FILE *fp = popen(cmd, "r");
+size_t n = fread(reply, 1, sizeof(reply)-1, fp);
+pclose(fp);
+reply[n] = '\0';
+
+return reply;
+}
+`\
+
+Compile → libpolycall-cobol.so → drop in /usr/lib/polycall/ → done.
+
+No root access needed. No recompile of legacy code. No new ports on the mainframe.
+
+The One-Makefile Pipeline
+I went full polyglot and glued every language into a single build:
+
+\makefile
+all: driver cobol go python java lua node
+@echo "🚀 All bindings compiled. DRIVER ready on port 3005→8085"
+\\
+
+One make all spits out:
+
+libpolycall-cobol.so ← tonight's hero
+libpolycall-go.so
+libpolycall-python.so
+Plus Java, Node, Lua...
+All register with the same C DRIVER daemon. One process, six languages, zero manual config.
+
+The Demo That Shut Everyone Up
+Open browser → http://localhost:8084
+Drag any .jcl file into the drop zone
+Click "Submit"
+Watch JESMSGLG appear in real-time
+Boss: "Wait… that's our production JOB?"
+
+Me: "Yep, and I didn't touch a single PROC."
+
+Boss: [confused silence]
+
+Why This Actually Matters
+Traditional "modernization" means a 5-year, $50M rewrite ending in Chernobyl-level outage.
+
+We just side-carred the beast:
+
+Legacy keeps running untouched
+New features ship in Go/React/whatever
+Rollback = pkill -f server.py
+And because we daemonized the bridge, the terminal could close, my SSH session could die, and the DRIVER would still route REST calls into JES at 02:00.
+
+No babysitting. No forgotten nohup. No & typed in panic.
+
+The Real Unix Lesson
+If your service dies when you close the laptop, you don't have a service—you have a shell child.
+
+Add the double-fork. Redirect stdout. Write a PID file. Let the parent exit gracefully.
+
+That's literally all a daemon is. Not demon magic. Just good parenting.
+
+What's Next?
+Tonight I'm swapping the drag-drop for a GraphQL mutation so the React kids can trigger million-dollar wires with type safety.
+
+The mainframe ops team still thinks I'm "just running tests." 😇
+
+And libpolycall? It's getting proper --detach support. Because polling in attached mode is for services that haven't grown up yet.
+
+Follow me for more "I can't believe this still runs the world" moments. Currently wiring OBINexus projects that make legacy systems feel like serverless functions.
+
+COBOL #Unix #Daemons #LegacyModernization #SystemsProgramming #Mainframe #DevOps #BankingTech #LibPolyCall

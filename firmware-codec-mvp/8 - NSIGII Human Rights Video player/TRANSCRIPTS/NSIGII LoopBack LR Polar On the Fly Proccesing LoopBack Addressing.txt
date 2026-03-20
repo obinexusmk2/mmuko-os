@@ -1,0 +1,828 @@
+So today's video uh is um uh in CI
+0:08
+verifier uh the command control sequence. Um um I'm going to complet it
+0:13
+here. We're going to uh start trying to tell before we continue uh because this is
+0:19
+basically an important thing to do before anything else. Um, so we got my memo here, my side
+0:24
+notes, but you know, I've got the green line this time cuz green choke is better than the
+0:31
+sticker board. Um, but you know, I'm going to read it out and show you what I'm doing here. So, let my camera first
+0:40
+and show the blinds one line at least. Got my calculator in
+0:46
+here, you know. Um, but it's going to be a bit formal today, but we're going to be literally the same thing. Sorry guys.
+0:54
+Going to be looking at the same concept just a bit less formally uh before we continue. But the next video we're going
+0:59
+to look at more formally. So I've got uh uh dendrite system for
+1:08
+control and command droid model for control and command system. So a dendrite has uh operates in sequences
+1:15
+and series. A sequence is a sequence of instructions uh like you know sequence
+1:21
+uh chemical like you know sequence you can get you can get um uh what do you
+1:26
+call it um you can get the kind of hitting of the board what's called um um
+1:33
+most code as a actual structure set most code can be interpreted as uh sequence
+1:39
+of you can say OBI physical words so most code is basically the the a part
+1:46
+of the protocol because it can literally instruct people to do so. So the command and control sequences are isomeorphic
+1:53
+via sequences. For example, you have something that most code for uh an
+1:58
+instruction executable instruction and an executable instruction such as a
+2:04
+program known as a program. But most code can have the most code equivalent of that. So you know we have the
+2:10
+cateization of the instruction two. Uh uh so the dendr model is meant to have
+2:17
+uh uh dend system for example is based on sinapse neuro
+2:22
+neuro neuron neurological fibers um to mitigate pathology pathology so uh and
+2:30
+basing off my ADHD knowledge of pathology and the people who are ADHD have four main types of protein and four
+2:37
+inverse polar inverse they have chosen information for the time and space they have you If there is time space um they
+2:45
+have uh you know um the priority also but a pathology is a problem in the
+2:50
+framework of example you have uh a neuron a neuron and you have a sign of
+2:56
+gap and the uh electron has to jump the sign gap to get actually you have to use your hands you have to use your to move
+3:03
+the hands um I'm not thinking about moving my hands but I am moving my hands forward you know and backwards in this
+3:08
+space you know I am just um standing in a T pose but I am not thinking about standing I don't want to think you know
+3:14
+I just I'm just now doing a bit of exercise like I'm uh lifting my hand up and down
+3:21
+left and right in front of the chalkboard you know but you know I'm spread across equal you know but this
+3:26
+exercise is not I'm not thinking about I'm just doing so I have more deficiencies for this um system
+3:34
+measuring moment so you have a sticky note which you place on the board here with no one here or you can have a
+3:40
+hardcoded so this uh this This is a temporary buffer zone with this hardcoded hardcoded rules for my system.
+3:48
+This this was taken. So I'm showing this how I think. So this chboard has given it in four quarters
+3:55
+and one quarter is used for temporal processing that was shifted to the right. So what I I can't put anything
+4:01
+I'm doing anything I'm doing temporary temporary conditions on the can be hardcoded as well but you
+4:09
+can hardcod memory to hardcode it and the goal is to have a consistent system
+4:15
+um that was still still less protocol like food having food that's not that's
+4:20
+ready in time that's made in time food that's made in time uh drinks that made in time things that are are still
+4:27
+expired so you want something that's that can sustain you and that's what integrates a here and now protocol. So
+4:33
+as you see here I wrote the dangerous system on the right I now have here and now on the on the left and the past
+4:42
+present and future the past present and future. So you have um a consistent past
+4:47
+present and future. So uh you have to have some kind of trident ruling uh which system who makes who decision a
+4:54
+ruling basically trident means like three people three three people involved in the decision or three uh computer
+5:00
+system three programs that involve making a consens decision you got program in uh yes that wants to say yes
+5:06
+someone wants to say no and someone says maybe they're not sure not sure so because maybe it's unsure um but you
+5:11
+know the ambiguity is resolved um to in the system for example if I say I need food now and I send it to the them. So
+5:19
+will say yes, he needs food now. I can verify that. And then the other will say no, he does not need food now. And then
+5:24
+and then and then the third person will say um uh maybe he needs maybe he
+5:29
+doesn't need food. When the third program will say yes and then the goal of this to deliver the food better safe
+5:34
+than sorry safe than safe not sorry policy. s is basically based on this trial model and it's humanentric because
+5:42
+it respect the value of the consensus of human whether you can verify it later
+5:47
+but because this shows that the volatility of so you have this par
+5:54
+ask you what what guiney's name lally just means what G for gold I for Indian
+6:01
+forever I for indic Go Guinea Guinea. Guinea means what in what
+6:09
+you call Guinea Nami. That is my name. Guinea Nambi. So what Nambi what you
+6:15
+know what is a pro is a pro. Um but you know if three trials so say
+6:21
+say I love you. I love you. Say I love you. I don't I'm using the term love because it's very ambiguous. I love you.
+6:27
+I can define love with my framework of computation. I love you. What is love? What what you say you and you say you
+6:34
+love me, you love me. Then we have a con we have love shared between two parties like who two people two people two
+6:41
+people or two parties two entities um that want to have consensus on and then I say then the third party will say uh
+6:48
+who loves who? Yes. And then you can then uh or or
+6:54
+who loves you and then because direction they have consent consensus
+7:00
+already cuz yes and no. I mean yes and yes yes yes I love you. Who loves me who
+7:06
+loves or or who loves who or guilty in the interpretation of the
+7:11
+compiler have to resolve the state of nothing. Who loves who? Uh uh uh uh
+7:17
+party A loves party B. B loves party A. So that that's what the program. So 4A
+7:24
+4A will be the first person say I love you as the term love is very you can find it awesome. So the responsible
+7:31
+let's say who loves who it will fail to allocate maybe a state of yes of
+7:36
+consciousness and it will be yes yes yes yes they love each other they love the word whatever they call you know or they
+7:42
+they give consent but the person can also interpret as I love you you love me
+7:48
+the third the third interpreter or the third ruling or the third poem say I who loves you I'm not sure what I means the
+7:55
+t I of you and I and you are it's referential it's reference version
+8:00
+through the system of the compiler phrases. You understand? So, you know, the compilers are built in the way that the translators are for human intent.
+8:07
+So, that's what the secret is for this this video is I love you, you love me, you love me, but my hat can be your
+8:14
+love. So, we have to ensure that the interest is aligned with the lexical analysis of the system or stage one
+8:21
+expression. You know, is the symbols the same? We have the same symbols. Um, does you does your love equals my hate? Does
+8:27
+your hate equal my love? What is doing? This must ensure that love is consensual and the part must ensure that the
+8:34
+statement is kind of you know as both phrases you know said consensious just
+8:40
+means a need. So this a need you know need is not optional. You need it. I need food. I need water. I need shock.
+8:46
+So it's basically a humorous protocol for forcing um
+8:52
+um uh uh systems of uh destroy systems of polar nonlinear equations of via
+9:01
+lapis intervals. So you go lapis alpha alpha if alpha lap
+9:08
+for which polar axis you know the poles you know basically the poles are like um
+9:14
+the tr poles. Yes. you know what I'm doing and it goes to resolve this term as a as as the term of loading or
+9:20
+thinking but I got thinking model of a computer my computer can think if I can get it right so you know the the
+9:27
+definitions of this rely on the um the
+9:32
+the program processing heristic difference so the post or the ruling so the person gives to is the person that
+9:38
+says yes yes I can say yes as a computer the localized server Say yes that
+9:46
+accepts the connection because this is a need. Food is a need. You don't want the food. You know I want
+9:52
+food. They're really hungry going crazy. So I need food. I need water. I need shelter. And the ruling
+9:58
+are the polls that dictate how the system topology. So I'm going to go the last
+10:05
+one. So So the last one I want to talk about is so you get the Cisco risk model
+10:11
+which is a risk a reduced instruction set. Um but you get risk um um u uh risk
+10:18
+reducing social set. Um um R I S E R for Romeo, I for Indigo, S for Sarah, O for
+10:25
+C for Charlie reduced instruction but you have this is top down path you know but working top down but these are
+10:32
+target execution orders risk assess. Now CIS is a standard one which is like ARM
+10:37
+or assembly but risk uh risk prevails in old leg systems. So uh but this is
+10:43
+really the most um easy one to use. So any any Per that has assembly or three
+10:49
+of a Cisco model will be the first priority because it's bottom up. It works from the bottom up and the
+10:55
+stillness is still preserved. Um so stillness the food doesn't get over the
+11:01
+time but Cisco order four for language expression tree for based on
+11:08
+phenology based onological points. Cisco Cisco Cisco stands for CIS Cisco stands for
+11:16
+CIS CIS CI C I S CS Cisco stands for CIS control or CIS command you go syscom I
+11:24
+guess Cisco so syscom c uh it stands for
+11:29
+Cisco command command and this commanding system that's part of a that
+11:34
+can be homogeneous only command system or control system or heterogeneous
+11:41
+homogeneous ous controls, you know, but one of them must be homogeneous. Are you am I commanding you to give me food? No,
+11:46
+I need the food. So Cisco is bottom up execution order. Um C for Charlie, I for
+11:52
+Indigo, S for Sarah, C for Charlie, Octop. And this um Cisco is a standard
+11:58
+uh execution sequence. So the sequence will just for left bit
+12:03
+encoding. So if you have 1 0 1 1 0 theta
+12:08
+1 0 theta 1 0 you have left left engine. So will give you theta will be maybe
+12:17
+maybe and that um one person saying yes instead once you know you don't need
+12:23
+food. So this maybe has two state one or zero but the one has to be violated. So
+12:29
+if you if you do this and you val the the computer will use an x or operator to compute a system of failure for
+12:36
+example you have uh maybe it may be one or zero but it's a duality it's a
+12:43
+superposition of space so it's one and zero at the same time and that's but this bally an x operator that gives you
+12:49
+a resulting vector so the uh the maybe represents a one or zero uh a one first
+12:55
+and a zero next or or z and then and then as a vector And then a zero index and one index. This this will be a one
+13:02
+zero uh one zero one zero uh uh column vector and you get
+13:11
+a one 0 one column vector. Next um which give you two independent yes no
+13:16
+consensus framework you know do you need the food? Are you lying to the system? Are you saying maybe I need food because
+13:21
+you're going crazy for whatever reason and you get yes or no. So the resultant of this if you add if you add this if
+13:27
+you have this message as in definition you have four sparse structure that
+13:33
+could be evaluated with an or x or operation. So you get 01
+13:40
+01. So this dat so if consent this is if you give consent you got permission you
+13:46
+got ask permission once you get permission but permission just permission to the protocol in that
+13:52
+region in that in that peer-to-peer region and that region is basically the local just type in yes I get permission
+13:58
+permission is like um yes I check the box I have I look for permission if I have consent I'm just already um have
+14:05
+consent you know I can I can um I can um get what I can get um hold things you
+14:11
+know but it's a consensus a consensus principle so it's a shared party consensus for um trade for human
+14:19
+right but you get you get a result
+14:24
+that is still it's encoded into the system um if it does work as intended if it works intended so the particular roll
+14:31
+back changes too if it's processing too long or thinking too long I'll come to that later so you know uh can he say
+14:39
+food so you get One permission. You need only one permission you need. You need two parties to have concession. You need
+14:44
+permission. You you have permission to have permission to give permission. You have the right to request permission. Uh
+14:51
+you always have the right always which have you know until you lose all your consensus for that fully and we share
+14:59
+consent. We share consent means you can have sexual consent or food consent or
+15:05
+or or new new consent is party based. What is it? You have concept to do many
+15:12
+things. You have peer-to-peer concept. You have a bus topology concept automographic concept. You have
+15:19
+a a ring or hybrid concept with a trident. The result the result are trident and verify the result. They
+15:25
+verify as trident as trident um as two or three. So you can verify
+15:32
+two nodes without a strider you know. So you have to have um so how does verify
+15:38
+work before I go to home? So you know so you have a peerto-peer topology. So mathematically speaking
+15:46
+like
+15:52
+so speaking we have a peer-to-peer graph we have a P2P P2P
+16:01
+where X is a static node and Y seven is a dedic
+16:08
+so X is static U node and um Y is dynamic some so you have this
+16:14
+peer-to-peer model. This can represent a server or MAC address on the system you know but you know the goal is to have
+16:20
+your system process and the probing system. So this video is going to talk about the pro system this map. So you
+16:27
+get the thinking system the probing system and the and the and the system.
+16:33
+So mathematically we're going to do like this. So let me sit down here. So basic in
+16:40
+case a bit of so here. So we're going to have um a consistent system that's proven. So
+16:48
+if the system is um so you have a peer-to-peer topology and they say you
+16:54
+have to um you have to um the the verification has to be non cryptography
+16:59
+um um cryptography if it's um has to be both cryptographic and uh have a loop back address. Loop
+17:06
+back address loop back address. So now we're going to start looking at a system. Well, you know, let's define this properly. So you have uh a process
+17:14
+system a process something that's actually processing uh is executing something on the fly. It's exe process
+17:21
+defining as computer um executing on the fly. So it's on the fly doing a job.
+17:27
+It's processing. It's doing a task. It's a task. It's like some kind of you could go to proxy something proxy
+17:36
+an agent. An agent. what Eden doing and relaying information and that's where the introvert comes from. So proxying
+17:42
+and it means um you get a reverse proxy uh reverse proxy system like lip polyico
+17:47
+and you get a proxy standard proxy which is like um uh watching. So you get a reverse proxy reverse um updates on the
+17:54
+fly updates on the fly you get the vision that's needed but a proxy just um
+17:59
+um intercepts intercepts an object uh but doesn't update um doesn't tell you
+18:05
+cannot tell an arbitrary system uh to update. You cannot tell a new plug in the system, you know, and that's what
+18:11
+github.com/ limma, I for indigo, B for B, B for B, B for papa, O for orange, al for lima, uh,
+18:20
+Y for Yankee, um, C for Charlie, F alpha, alpha lima, alpha lima, li poly
+18:26
+is what's polomic library because it works by using a a program called
+18:32
+poly.exe exe and um separating binaries
+18:37
+which are called squares from rectangles which are uh drivers. So
+18:43
+direct executable but they have a use and the bindings have are bindings have let me sparse use
+18:52
+sparse use and the uh bindings are sparse bindings sparse um conions but
+18:59
+not use um sparse inter intermediary condition for example you can have the
+19:04
+polycom serp uh over in sig which you have sig
+19:10
+running running running a polygraphic poly system. So like poly. So the
+19:17
+recursion of the square and the rect all rectangles are squares. All rectangles are squares. Not all rect not all
+19:25
+squares are rectangles. And this solution between bindings and drivers. The binaries are packet target package
+19:30
+packet targets for an ecosystem like uh Python uh C
+19:36
+uh C uh Conan um uh C# package lure rocks um all these target languages that
+19:43
+make sure that the binary system respects it own interpretation of the system. So in sigy s for sarah i for
+19:50
+indium g for go g for go is a control is a command system uh s2 is a command have
+19:57
+two a command a command is a control but you know if if it's heterogeneous only
+20:02
+it will not work so you have the control packages the control packages of inigi which is in sigi control for the target
+20:09
+bindings but the all the binders can be uh bindings um have control and you have to
+20:15
+uh the package has to do with sematic version Semant X is a trident semantic version
+20:20
+X. So I'm giving you the full framework of the system. So, semantic sim x um is
+20:26
+a as a tri is a tri um trident um trident semantic
+20:34
+versioning extended you know extend semantic versioning to uh um from major
+20:40
+minor patch uh to uh uh major part uh long-term LTS
+20:49
+long-term support stable and experimental This they resolve in a D
+20:54
+graph. Um so because you you get schema like um uh you get you get stable major
+21:02
+uh stable major uh minor.patch.
+21:08
+But this table is a tag to uh a stable infrastructure such a stable ecosystem
+21:14
+uh such as um uh uh uh python pi pi pi python pip python pip micros
+21:22
+back to the the trident rule. So for example how this works in the real world got peer-to-peer topology. So you get a
+21:29
+static IP u a static IP and a loop back address you get. The first um way to
+21:35
+verify system is non cryptography and this non algorithm works by loop
+21:41
+back verification or I call lmac lmac lmac stands for loop back MAC address
+21:47
+loop back loop back MAC address um because you get a loop back address which is like 127
+21:53
+uh 127.0.0.1 0.1 but this address has a
+21:58
+definite MAC address and the MAC address can also be used to verify a system integrity uh non and this how this work
+22:07
+is basically like a like a pulse like a ping so my my system uh um I say I
+22:12
+expose I expose uh I expose 1270.01
+22:18
+01 which is local host to the internet internet and then this has a now uh uh
+22:24
+now a dynamic system. So this goes from being x not n o u t n o u t ht to a
+22:32
+static system that uh that no absolute to a d system which is a circle from
+22:38
+198.16123.0123.0.13 0.13 um.131
+22:45
+this is a D going to loop back LMAC LM MAC address now because you have uh uh
+22:52
+uh oh because you have an in address an address uh an IP 198.123.0
+23:00
+0 one um um the 1 2 3 1 0.13 um 0.13 you
+23:07
+also have a MAC address a physical MAC let's say the physical MAC is um in IPv4
+23:12
+and it's uh u um IPv6 you use for MAC addresses but the physical MAC is um u
+23:19
+okay let's say it's you get a Z c 6 a
+23:24
+column um 2 f Um um uh 2 F um B C
+23:37
+1 F F F F F F F F F F F F F F F F F F F F F1 and you get uh D B 3 C. So you get
+23:45
+um sequence of A2 C6 uh A 2 F BC 1 FF F1 D E3 and this is
+23:56
+basically an online MAC address. a local MAC address. Now this called a hardware address we go we get a loot
+24:02
+back MAC address. So you have to determine a loot back MAC address for the local system where you loop back M
+24:08
+is the position of you. So the L back M is very important to give you food in the D. So this loop back M. So the MAC
+24:16
+address verifies you in your current place in time your your current time in
+24:21
+place your current time and space some in sequence. some it has to verify you
+24:27
+on the move and this is called this is called a loop back MAC address uh because it works on uh inverse relay
+24:34
+inverse relay so you get get a relay system which can ping you uh ping you
+24:39
+but it pings your computer so it sends out um like a a pulse a ping send a ping
+24:45
+but hold it send a pulse out like a bloop out but you know it's a chip so
+24:52
+this can be a physical chip that can do this but you know a physical computer chip But in this relationship has to ensure that you know it's basically you
+24:58
+you are here and now here and now and it says this um uh while it's polling um
+25:04
+while is reverse polling. So reverse polling is basically the idea of um um
+25:10
+polling refers to waiting for something reverse polling means like um you probe the system. So you process what are you
+25:16
+there or you say here I am here here I am here I am. So if I'm proing system
+25:22
+I'm saying here I am. So I'm pro like I'm seen here and I'm or seeing what
+25:29
+like what where when where where um the five questions of space and time where
+25:35
+am I so the five W's are what symptoms what uh what what am I what am I what am
+25:41
+I needing what am I needing what am I where where am I where am I
+25:47
+uh what am I needing where am I uh when am
+25:54
+what you what am I needing here? Okay. What am I doing needing here and now? What am I needing here and now? Um
+26:00
+because you know the interpreter was trying. So if I say uh what where where
+26:07
+I'm asking a what what is the question? So the probe is actually what and this what gets interpreted. So you will get I
+26:13
+love you, you love me, who loves who or and uh channel one loves channel two,
+26:19
+channel two loves channel one and that situation. So the induation interpretation of system it's not is
+26:25
+wrong it's not wrong but can be run in one system or framework and it's not allowed to execute there. So this first
+26:30
+part so the chip actually tracks you by loop address. you send a signal you have a physical MAC address but when you have
+26:37
+you can have loop back address and the loop back address is your physical MAC address in that space in time you know u
+26:43
+basically it's a real time IP address called a loop back MAC so the loop back MAC is lally a local address tied to
+26:50
+your hardware it's basically an on the system inverse relay chip so a relay
+26:55
+chip that if you got observer consumer you have one divided by the relay so you
+27:02
+what you're saying so You get to relay. You get to relay. Which mean what am I saying? What what am I hearing? What am
+27:07
+I getting back from him? You know, you know, you get I did I get did I get what
+27:12
+I sent back? Did I get what I sent back? You know, and send you verify what you send back and that's how it look
+27:22
+on the fly, you know. This is what the system is done. So control system, you know, to order some food on the poly.
+27:29
+The poly has um a binding uh node polyle pi pi polyle but pi
+27:36
+polyle has a schema. The pi polyle to uh uh uh pi polyle pi poly python poly uh
+27:43
+can be the schema of pi poly when delivered by x can be in a protocol of pi policical uh stable or stable stable
+27:52
+or pi protocol or stable artifact um such as v1 based on stable of uh major
+27:58
+minor patch like um major minor patch or or pi or setup the pi to ser the pie to
+28:07
+no I'm ready to do it. So you have the kind of system here. So
+28:13
+you have this from sense you get something like this and you get um the li address is um uh
+28:21
+a28 um you get no this is the mac address you get a
+28:26
+liar max you comput a real time address that changes it can be distinct from anyone else um it doesn't have it's just
+28:34
+where you are in the physical it doesn't take anywhere to be cannot be computed so you can um probe it but it will
+28:41
+change directly so this the first phase of now the second phase 12. So you have
+28:46
+if the loop fails um this be probed let's go to you get an oral sales so you
+28:52
+get two public kills uh you get two public keys of two probably zero
+28:58
+knowledge proof keys to one private key you know one private key so two public
+29:03
+keys so um two public keys are the difference if you have one private key so you have two public keys for one person
+29:10
+um because you know if you attack one private key one public key you the other private key public key changes and the
+29:16
+system uh has to update the the consensus of the system. Um this one doesn't hack the system. So if you
+29:22
+verify a system and uh if you don't if you verify the system uh system will have to give you a real time loop back
+29:28
+address such as um uh 2 C I6 um CF F 2 F um VB C uh one 2 E uh 2 FB 2
+29:40
+FB one two uh um one 2 C B C3 uh uh uh uh B
+29:51
+D you know so basically loop back address of this um is basically loop back of um example based on the XYZ
+29:58
+column XY Z con this is doable because the control command so the control is going to be automated you know via the
+30:04
+polyatic infrastructure you know the math is there for here on out so this basically saying uh if I have the IPv6
+30:10
+of a2b same um one f1
+30:16
+uh g e3 I can have the exclusive operator it'll temporal system of of the
+30:22
+loop of injust based on the longitude and latitude
+30:28
+longitude of latitude um latitude of the system latitude longitude and latitude
+30:33
+of the the where deliver where the item is going to be basically um u it's
+30:39
+called geocore so if you go to so you get lip polic so geocore um geomorphic geomorphic uh
+30:47
+uh function call library uh so you get um uh um polycom and you get geio code.
+30:52
+So this is what geo code uses um on github git. So first so geio code uses
+30:58
+um g for go e for echo for oscar c for co for alpha alpha lima alpha lima. So
+31:05
+geocore infrastructure is basically um by x. So geioore is written in rust
+31:13
+and leore is written in C. Uh this is C. So you have C to rust poly bind them and
+31:20
+u uh uh geocore is basically u written in um uh s and you have um no written in
+31:30
+rust rust so rust is broken you get it's more you get automatic x uh so you can
+31:37
+have the bin I'm trying to write geocore in uh uh to bind the two pol so the poly
+31:43
+is the web interface geoc is the spark of geote for geographic coll
+31:49
+back addressing loot back addressing for the local system in real time as on the fly on the fly get some data back to say
+31:56
+I'm here and now asking like what so uh if you ask for example uh if you ask
+32:01
+some oh hello no this is me
+32:08
+I use it though so sorry so I I I got to do this sorry
+32:14
+me so you compare two public keys to one private key. So if you have exodimal public key two keys you have one private
+32:21
+key and one private key ensures that uh the the peer two block peer-to-peer
+32:27
+topology you know there only two block and they are two um two dynamic systems
+32:32
+two static systems so two static IP addresses um that you know that keys
+32:38
+that don't change um you know and the private key you get one static one static key and one dynamic key you know
+32:43
+but they're both dynamic but you know um they they act like stack so they update so If the if one becomes static or stale
+32:50
+uh the other property um uh verifies you can fix either fix the so you can auto
+32:57
+dynism. So you can have a dynamic resolution uh uh dynamic IP resolution uh of the sparse state of the loop of
+33:04
+address over public over the public IP network. Um but the but one can be static and dynamic one can be static. So
+33:12
+you can have statistical resolution of IP addressing via IP addressing internet protocol IP
+33:18
+addressing but because I have a loop back address that has an inverse relay that's a relay system that just just
+33:23
+gives away your location but um it keeps you can track the Facebook space of the
+33:29
+world but it creates a map of the environment you know so you know for example if I had um uh two static X
+33:36
+account two static X accounts uh two static web accounts that's static I could always have my I can always hold
+33:43
+one dynamic IP address uh one dynamic IP address one one one two private keys one
+33:48
+private key you have two stat private keys that are static I have one public dynamic one one if I have two public
+33:55
+keys dynamic I have one private static key one two one one private or public static key uh based on the system of on
+34:01
+or shell so this is the key so the first is for loop verifier and you have the IP
+34:07
+addressing loop back for the IP so for every IP you can also have they switched to IPv6 and IPv4, you know, IP
+34:14
+interpretable v4, which is basically hexodimal 255
+34:19
+0 to 255 um um based on the post mapping of the IP addressing, you know, but the goal is to have this as a hash table. So
+34:27
+you can always map a loop of address to an IPv4 address by it's a real time
+34:33
+addressing system um for the um polygon system. So um mathematically this is sound but you know um this board is um
+34:41
+part of the problem here but you know the two um so if you get theation foration work so let me start I just
+34:46
+need some of proof here. So you have a system so consist never held
+34:52
+so you know something that's held going to give you a problem you know something that's not held so you want to encode something that so you want to find
+34:58
+problems and solve problems and this problem system called them. you get a processing system. A process actually
+35:05
+actually do some processing uh process actually do some work. It's not it's not idle. It's not an id state. It's like
+35:11
+your goal my goal is to intercept is to determine a peer-to-peer topology um that um so you have a peer-to-peer
+35:18
+boundary is executing if a problem is executing is writing I should know it's
+35:23
+writing by observing the state of the writing um writing. So this so if for example this this works by um so if I'm
+35:29
+if I'm if I'm r if I'm r x or execution this is cisco execution
+35:35
+hold up so uh x so I have x on root uh I have um one right uh uh x write so
+35:42
+before I can read write so will start bottom so x so if x is the root operation you know on the program the
+35:48
+problem is cisco model I'm write I have to write the program and then read the program you know so but you know I have
+35:54
+um uh uh after right so after I have a right read operation uh then I have a read
+36:00
+write operation so I have two distinct pair models here so the right read
+36:05
+operation represents writing before reading then executing um the execution is um write read write if um uh if if if
+36:14
+um um if I'm executing I'm writing then I'm reading uh x so write um write read
+36:20
+or then read right so these are two sp so example if I have bytes of memory. If
+36:26
+I'm have 0 1 0 1 1 0 1 0 1 1 theta. If I
+36:33
+have theta, if I have theta 1 0 1 0 1 2 3
+36:42
+0 1 theta. So if I have um theta
+36:48
+theta the ais of theta one and zero and then have one theta one. So I have one
+36:55
+theta one uh basically same. So you have the two addresses uh here you have you
+37:03
+have uh write and read right and read are one operation on uh on on read. So
+37:10
+you write read one access and um uh read write access these are two accesses you have x and y to have an execution order
+37:17
+of sys. So if I'm writing subsystem I have the the the I have to write um yes
+37:23
+no and maybe so I have a sequence of write write read first then I have read write to have to uh to to execute you
+37:31
+know to execute. So if it's executing I can intercept the operation via a write and read command. So this is basically a
+37:36
+command procedure a command. So as a control system control the system to the system I have to write and read. If I'm
+37:42
+writing or reading the B. So if I have uh if if I if I if I have uh uh um if
+37:50
+I'm if I have uh if I have theta 1 theta
+37:55
+1 0 uh 0 theta 1 theta 1 0 I have um
+38:02
+theta 1 0 and I have one uh one
+38:08
+uh or one one one of the um so If I have 0 one one left to
+38:16
+right engineers I have 0 0 one one right one and 0 one one. So this is the same
+38:22
+thing over Cisco execute. So this is the inverse opposite of executable over the
+38:28
+order of left end right. So if I do so if I have um
+38:34
+if I have a right sub maybe right sub theta right sub theta where theta is
+38:39
+maybe I have a vector of one zero one zero 01 you know because you know
+38:48
+all of this of theta I have read of theta have read of the read of theta will be um read of theta will be uh uh
+38:56
+read of theta will be uh the uh 1 0
+39:01
+0 0 1 0 0 one and the two independent vectors. These are called um these are called input vectors. So this is
+39:07
+basically um the input vectors that that sparse you know because one and zero are same. So you know so you know if I have
+39:13
+if I write have read write don't read I have to have this matrix encoded in the system state tomographic state uh to to
+39:20
+to take over to to compute over uh uh 01 0 u uh uh uh right right 011
+39:31
+and uh read uh 01 but operation is right 011 and read 011. Um so mathematically
+39:38
+this is going to be defined as an X operator but you do a pipe operator. So
+39:43
+the pipe off the pipe right shift and pipe will realign it. So so you have to have realignment. So uh before the final
+39:51
+step you have realignment. So you have pipe pipe left shift pipe right shift
+39:57
+right shift and pipe um uh right shift um the uh the vector.
+40:04
+So there's a so you have a pipe left shape and you
+40:09
+have a pipe right shape right zero. So pipe um pipe right of zero will give you the dimensions um of um the size you get
+40:18
+the whole dimensions but zero is nothing. If you pipe um pipe um u um
+40:23
+like a pipe right um right um right right angle more than if you pipe right
+40:29
+angle right angle right angle zero you have uh the size of the dimension you
+40:35
+dimension if you have a pipe right shape pipe pipe left ship
+40:42
+um left ship um pipe right ship pipe is one so this give you one axis one axis
+40:48
+of me one pipe of two you have second you get x and y so you have uh you're
+40:54
+getting the result of um uh the the thing on opposite side so you you're starting processing the system opposite
+41:00
+so you have pipe right shift pipe pipe pipe right shift so if you have pi is
+41:05
+zero you have you have if the size is um uh if the size is um if the right
+41:10
+operation if you're getting the right the pipe of the right and then read operation you're getting one um if the dimension if the matrix is um if the
+41:16
+matrix is um 1 z and 01 you get and you get the full size of the matrix you get
+41:22
+1 0 1 this bally uh this will be example you this will be uh a 2x2 matrix for the
+41:29
+right operation and um you get for the read you get 2x2 2x2 so you get a rally
+41:35
+an rx of theta r r of total you know and this r right of theta well this right
+41:42
+oft is same as 2x2 m so you get 2x two uh so you get a total of right and read
+41:48
+which is 4x4 uh so you get 4x4 measures. So you get dimension 4x4 if you do a pipe of this
+41:56
+of this maybe of this data to zero. So theta will be pipe so so this theta will
+42:02
+be pipe right shift theta. So if you do pipe right shift one you know you lose
+42:07
+the dimension. So um one one axis so you move one axis to the system. So you can
+42:13
+do pipe minus one pipe or pipe zero or pipe pipe um right shift um pipe. So if
+42:19
+you take um this right Wr R W and you pipe it to pipe which is
+42:26
+like a straight straight line a straight line on the computer but you have to press the uh shift pipe just press the
+42:33
+pipe you have to have a function key pipe uh right shift zero you have full access if you pipe oh get two pipe right
+42:42
+shift one you have you lose the dimension you lose the cost so you have so this will be two by two matri This
+42:48
+should be two by two pipe cuz you you have four divided by two. You have
+42:53
+dimension banners. You have you having stuff now. So you have having four by two you get half you get two actually
+43:00
+you get only read or write or or write and read. So you get right and read if right was first before but the goal is
+43:06
+to have over consensus. So you get um pipe one one of the right you get to
+43:12
+write vice vers right two and basically you get um the x
+43:19
+operation which is like or zero or one of one. until you get a one you get uh
+43:25
+or one or one or right over here which is basically one or
+43:32
+one or one uh one or one is one one one
+43:39
+or zero uh is one or model zero is one.
+43:44
+So the result will be one and this is the right or read matrix you get right you get one or one or zero one or zero
+43:52
+is zero zero or one as well. So you get a one one matrix right matrix and you also get for you get pipe one pipe one
+44:01
+uh pipe one you get one dimension of right and bra which you see these of right so this right is a vector of one
+44:07
+zero this was encoded so right you get a pipe for zero uh pipe zero you get right
+44:12
+only but you know four divided by false you get one dimension so this first um
+44:17
+output of the Cisco model so basically a right version gen this this bar code of is the resultant
+44:25
+of what is um being written um what is being read what is being written before
+44:30
+uh written written backwards backwards backwards you just change the access right this will be a read operation one
+44:37
+one will be the result of a read operation and you get oh done so you get the opposition so 01 will be uh uh one
+44:46
+one so you get a one one matrix of right you get one so you get you get the relative
+44:52
+vector one. So you get result vector one or one. So you get one or one.
+

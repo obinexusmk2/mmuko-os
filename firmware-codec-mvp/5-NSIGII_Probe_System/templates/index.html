@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NSIGII Command & Control | Trident Verification System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="nsigii-header">
+        <div class="header-content">
+            <div class="logo">
+                <span class="trident-icon">&#9733;</span>
+                <h1>NSIGII</h1>
+            </div>
+            <div class="subtitle">Command & Control Human Rights Verification System</div>
+            <div class="version">v7.0.0 | Trident Topology</div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-container">
+        
+        <!-- Left Panel: System Dashboard -->
+        <section class="dashboard-panel">
+            <h2><span class="icon">&#9874;</span> System Dashboard</h2>
+            
+            <!-- System Status -->
+            <div class="status-card" id="systemStatus">
+                <h3>System Status</h3>
+                <div class="status-grid">
+                    <div class="status-item">
+                        <span class="label">Protocol:</span>
+                        <span class="value status-active">HERE AND NOW</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="label">Topology:</span>
+                        <span class="value">Trident (3-Channel)</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="label">LMAC:</span>
+                        <span class="value status-active">VERIFIED</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="label">Bipartite:</span>
+                        <span class="value" id="bipartiteStatus">INTACT</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trident Channels -->
+            <div class="channels-card">
+                <h3>Trident Channels</h3>
+                <div class="channel-list">
+                    <div class="channel transmitter">
+                        <div class="channel-header">
+                            <span class="channel-name">Channel 0: Transmitter</span>
+                            <span class="channel-badge">WRITE</span>
+                        </div>
+                        <div class="channel-details">
+                            <span>127.0.0.1 | Codec: 1/3 | 0°</span>
+                        </div>
+                    </div>
+                    <div class="channel receiver">
+                        <div class="channel-header">
+                            <span class="channel-name">Channel 1: Receiver</span>
+                            <span class="channel-badge">READ</span>
+                        </div>
+                        <div class="channel-details">
+                            <span>127.0.0.2 | Codec: 2/3 | 120°</span>
+                        </div>
+                    </div>
+                    <div class="channel verifier">
+                        <div class="channel-header">
+                            <span class="channel-name">Channel 2: Verifier</span>
+                            <span class="channel-badge">EXECUTE</span>
+                        </div>
+                        <div class="channel-details">
+                            <span>127.0.0.3 | Codec: 3/3 | 240°</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LMAC Status -->
+            <div class="lmac-card">
+                <h3>Loopback MAC (LMAC)</h3>
+                <div class="lmac-info">
+                    <div class="lmac-row">
+                        <span class="label">Physical MAC:</span>
+                        <span class="value mono" id="physicalMac">--</span>
+                    </div>
+                    <div class="lmac-row">
+                        <span class="label">Loopback MAC:</span>
+                        <span class="value mono" id="loopbackMac">--</span>
+                    </div>
+                    <div class="lmac-row">
+                        <span class="label">Geospatial:</span>
+                        <span class="value" id="geospatial">--</span>
+                    </div>
+                </div>
+                <button class="btn-secondary" onclick="updateLocation()">Update Location</button>
+            </div>
+
+            <!-- Probe Visualization -->
+            <div class="probe-card">
+                <h3>System Probe</h3>
+                <canvas id="probeCanvas" width="200" height="200"></canvas>
+                <div class="probe-metrics">
+                    <div class="metric">
+                        <span class="label">Magnitude:</span>
+                        <span class="value" id="magnitude">--</span>
+                    </div>
+                    <div class="metric">
+                        <span class="label">Angle:</span>
+                        <span class="value" id="angle">--</span>
+                    </div>
+                    <div class="metric">
+                        <span class="label">Discriminant:</span>
+                        <span class="value" id="discriminant">--</span>
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="runProbe()">Run Probe</button>
+            </div>
+        </section>
+
+        <!-- Center Panel: Need Requests -->
+        <section class="requests-panel">
+            <h2><span class="icon">&#9758;</span> Human Rights Requests</h2>
+            
+            <div class="needs-container">
+                <!-- Food Request -->
+                <div class="need-card" data-need="food">
+                    <div class="need-icon">&#127860;</div>
+                    <h3>Food Request</h3>
+                    <p>Request food delivery based on geospatial locality</p>
+                    <div class="need-status" id="foodStatus">Ready</div>
+                    <button class="btn-need" onclick="requestNeed('food')">
+                        Request Food
+                    </button>
+                </div>
+
+                <!-- Water Request -->
+                <div class="need-card" data-need="water">
+                    <div class="need-icon">&#128167;</div>
+                    <h3>Water Request</h3>
+                    <p>Request water delivery based on geospatial locality</p>
+                    <div class="need-status" id="waterStatus">Ready</div>
+                    <button class="btn-need" onclick="requestNeed('water')">
+                        Request Water
+                    </button>
+                </div>
+
+                <!-- Shelter Request -->
+                <div class="need-card" data-need="shelter">
+                    <div class="need-icon">&#127968;</div>
+                    <h3>Shelter Request</h3>
+                    <p>Request shelter based on geospatial locality</p>
+                    <div class="need-status" id="shelterStatus">Ready</div>
+                    <button class="btn-need" onclick="requestNeed('shelter')">
+                        Request Shelter
+                    </button>
+                </div>
+            </div>
+
+            <!-- Trident Voting -->
+            <div class="trident-vote-card">
+                <h3>Trident Consensus Voting</h3>
+                <p class="vote-description">
+                    Three-party consensus: Yes | No | Maybe
+                    <br>
+                    <small>2/3 majority required for approval</small>
+                </p>
+                
+                <div class="vote-slots">
+                    <div class="vote-slot">
+                        <label>Party A (Transmitter)</label>
+                        <select id="vote1">
+                            <option value="yes">YES</option>
+                            <option value="no">NO</option>
+                            <option value="maybe">MAYBE</option>
+                        </select>
+                    </div>
+                    <div class="vote-slot">
+                        <label>Party B (Receiver)</label>
+                        <select id="vote2">
+                            <option value="yes">YES</option>
+                            <option value="no">NO</option>
+                            <option value="maybe">MAYBE</option>
+                        </select>
+                    </div>
+                    <div class="vote-slot">
+                        <label>Party C (Verifier)</label>
+                        <select id="vote3">
+                            <option value="yes">YES</option>
+                            <option value="no">NO</option>
+                            <option value="maybe" selected>MAYBE</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button class="btn-primary" onclick="submitVote()">Submit Consensus Vote</button>
+                
+                <div class="vote-result" id="voteResult"></div>
+            </div>
+
+            <!-- Request Log -->
+            <div class="log-card">
+                <h3>Request Log</h3>
+                <div class="log-container" id="requestLog">
+                    <div class="log-entry system">
+                        <span class="timestamp">--:--:--</span>
+                        <span class="message">System initialized. NSIGII v7.0.0 active.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Right Panel: Framework Documentation -->
+        <section class="docs-panel">
+            <h2><span class="icon">&#9776;</span> NSIGII Framework</h2>
+            
+            <div class="docs-container">
+                <!-- Overview -->
+                <div class="doc-section">
+                    <h3 onclick="toggleSection(this)">&#9654; System Overview</h3>
+                    <div class="doc-content">
+                        <p><strong>NSIGII</strong> (November Sierra Indigo Golf India India) is a <strong>Command and Control Human Rights Verification System</strong> built on the <strong>Rectorial Reasoning Rational Wheel Framework</strong>.</p>
+                        
+                        <p>The system implements <strong>on-the-fly realtime verification</strong> through a <strong>Trident Topology</strong> consisting of three channels:</p>
+                        
+                        <ul>
+                            <li><strong>Channel 0 (Transmitter)</strong>: 1 × 1/3 codec - WRITE permission</li>
+                            <li><strong>Channel 1 (Receiver)</strong>: 2 × 2/3 codec - READ permission</li>
+                            <li><strong>Channel 2 (Verifier)</strong>: 3 × 3/3 codec - EXECUTE permission</li>
+                        </ul>
+                        
+                        <p>The system operates on the principle of <strong>"Encoding Suffering into Silicon"</strong> - transforming human rights needs into processable protocol instructions.</p>
+                    </div>
+                </div>
+
+                <!-- Here and Now Protocol -->
+                <div class="doc-section">
+                    <h3 onclick="toggleSection(this)">&#9654; Here and Now Protocol</h3>
+                    <div class="doc-content">
+                        <p>The <strong>Here and Now Protocol</strong> ensures that the system always operates in the present moment, tracking:</p>
+                        
+                        <ul>
+                            <li><strong>Past</strong>: Historical state and previous requests</li>
+                            <li><strong>Present</strong>: Current system state and immediate needs</li>
+                            <li><strong>Future</strong>: Predicted requirements and pre-positioning</li>
+                        </ul>
+                        
+                        <p>This creates a <strong>consistent temporal framework</strong> where food, water, and shelter are delivered based on actual need rather than scheduled assumptions.</p>
+                        
+                        <p>The protocol uses <strong>inverse relay</strong> - instead of polling outward, the system proclaims "Here I am" and waits for verification.</p>
+                    </div>
+                </div>
+
+                <!-- LMAC Verification -->
+                <div class="doc-section">
+                    <h3 onclick="toggleSection(this)">&#9654; LMAC (Loopback MAC Address)</h3>
+                    <div class="doc-content">
+                        <p><strong>LMAC</strong> stands for <strong>Loopback MAC Address</strong> - a real-time hardware address tied to your physical location in time and space.</p>
+                        
+                        <p>Unlike static MAC addresses, LMAC:</p>
+                        <ul>
+                            <li>Changes based on <strong>geospatial coordinates</strong> (latitude/longitude)</li>
+                            <li>Incorporates <strong>temporal factors</strong> (timestamp)</li>
+                            <li>Provides <strong>inverse relay verification</strong></li>
+                            <li>Enables <strong>non-cryptographic verification</strong> via pulse/ping</li>
+                        </ul>
+                        
+                        <p>The LMAC formula:</p>
+                        <code class="formula">LMAC = f(MAC, lat, lon, time)</code>
+                        
+                        <p>This allows the system to verify "where and when" you are without requiring external servers.</p>
+                    </div>
+                </div>
+
+                <!-- Bipartite Consensus -->
+                <div class="doc-section">
+                    <h3 onclick="toggleSection(this)">&#9654; Bipartite Consensus</h3>
+                    <div class="doc-content">
+                        <p>The system uses <strong>bipartite graph theory</strong> to model relationships between two parties:</p>
+                        
+                        <ul>
+                            <li><strong>Set U</strong>: The requester (citizen)</li>
+                            <li><strong>Set V</strong>: The provider (system)</li>
+                            <li><strong>Edges</strong>: Constitutional obligations</li>
+                        </ul>
+                        
+                        <p>A healthy system is <strong>2-colorable</strong> - the parties have distinct but coupled roles.</p>
+                        
+                        <p>The <strong>discriminant</strong> detects when the relationship degrades:</p>
+                        
+                        <code class="formula">Δ = coherence² - 4αβ</code>
+                        
+                        <p>Where:</p>
+                        <ul>
+                            <li><strong>α (power_alpha)</strong>: Energy from requester</li>
+                            <li><strong>β (power_beta)</strong>: Energy from provider</li>
+                            <li><strong>coherence</strong>: √(α × β)</li>
+                        </ul>
+                        
+                        <p>Interpretation:</p>
+                        <ul>
+                            <li><strong>Δ > 0</strong>: Two real solutions - System stable and separable</li>
+                            <li><strong>Δ = 0</strong>: Critical point - System at threshold</li>
+                            <li><strong>Δ < 0</strong>: Complex solutions - Constitutional violation detected</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Trident Voting -->
+                <div class="doc-section">
+                    <h3 onclick="toggleSection(this)">&#9654; Trident Consensus Model</h3>
+                    <div class="doc-content">
+                        <p>The <strong>Trident Model</strong> requires three parties to reach consensus:</p>
+                        
+                        <ul>
+                            <li><strong>Party A</strong>: Says YES (approves)</li>
+                            <li><strong>Party B</strong>: Says NO (rejects)</li>
+                            <li><strong>Party C</strong>: Says MAYBE (uncertain)</li>
+                        </ul>
+                        
+                        <p>Voting rules:</p>
+                        <ul>
+                            <li><strong>2/3 majority</strong> required for decision</li>
+                            <li><strong>YES + YES + MAYBE = YES</strong> (better safe than sorry)</li>
+                            <li><strong>NO + NO + MAYBE = NO</strong></li>
+                            <li><strong>MAYBE</strong> creates superposition - requires more information</li>
+                        </ul>
+                        
+                        <p>This model is <strong>human-centric</strong> because it respects the value of consensus and allows verification after the fact.</p>
+                    </div>
+                </div>
+
+                <!-- Cisco RISC -->
+                <div class="doc-section">
+                    <h3 onclick="toggleSection(this)">&#9654; Cisco RISC Execution</h3>
+                    <div class="doc-content">
+                        <p><strong>CISCO</strong> stands for <strong>Command Instruction Sequence Control Operation</strong>.</p>
+                        
+                        <p>Unlike traditional top-down RISC (Reduced Instruction Set Computing), Cisco uses <strong>bottom-up execution</strong>:</p>
+                        
+                        <ul>
+                            <li><strong>RISC</strong>: Top-down path, target execution orders</li>
+                            <li><strong>CISCO</strong>: Bottom-up, stillness preserved</li>
+                        </ul>
+                        
+                        <p>Cisco uses <strong>left-bit encoding</strong> where instructions are processed from least significant to most significant bit.</p>
+                        
+                        <p>This creates a <strong>theta state</strong> for each instruction:</p>
+                        <ul>
+                            <li><strong>θ = 1</strong>: Definite state</li>
+                            <li><strong>θ = 0</strong>: Definite state</li>
+                            <li><strong>θ = maybe</strong>: Superposition (1 and 0 simultaneously)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Probing System -->
+                <div class="doc-section">
+                    <h3 onclick="toggleSection(this)">&#9654; Probing System</h3>
+                    <div class="doc-content">
+                        <p>A <strong>probe operator</strong> is a function that extracts measurable structure from system state:</p>
+                        
+                        <code class="formula">P: S → M</code>
+                        
+                        <p>Where:</p>
+                        <ul>
+                            <li><strong>S</strong>: State space of the system</li>
+                            <li><strong>M</strong>: Measurement space</li>
+                            <li><strong>P(s)</strong>: Measured representation of state s</li>
+                        </ul>
+                        
+                        <p>The probe extracts:</p>
+                        <ul>
+                            <li><strong>Magnitude</strong>: Distance from center (√(x² + y²))</li>
+                            <li><strong>Direction</strong>: Angle (tan⁻¹(y/x))</li>
+                            <li><strong>Quadrant</strong>: Sign structure</li>
+                            <li><strong>Consensus state</strong>: Bipartite integrity</li>
+                        </ul>
+                        
+                        <p>The system asks itself the <strong>Five W's</strong>:</p>
+                        <ul>
+                            <li><strong>What</strong> am I needing?</li>
+                            <li><strong>Where</strong> am I?</li>
+                            <li><strong>When</strong> do I need it?</li>
+                            <li><strong>Why</strong> do I need it?</li>
+                            <li><strong>Who</strong> can provide it?</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- RWX Verification -->
+                <div class="doc-section">
+                    <h3 onclick="toggleSection(this)">&#9654; RWX Verification</h3>
+                    <div class="doc-content">
+                        <p><strong>RWX</strong> stands for <strong>Read, Write, Execute</strong> - the permission flags for each channel:</p>
+                        
+                        <table class="rwx-table">
+                            <tr>
+                                <th>Channel</th>
+                                <th>Permission</th>
+                                <th>Hex</th>
+                                <th>Purpose</th>
+                            </tr>
+                            <tr>
+                                <td>Transmitter</td>
+                                <td>WRITE</td>
+                                <td>0x02</td>
+                                <td>Encode and send messages</td>
+                            </tr>
+                            <tr>
+                                <td>Receiver</td>
+                                <td>READ</td>
+                                <td>0x04</td>
+                                <td>Decode and verify integrity</td>
+                            </tr>
+                            <tr>
+                                <td>Verifier</td>
+                                <td>EXECUTE</td>
+                                <td>0x01</td>
+                                <td>Validate and emit consensus</td>
+                            </tr>
+                            <tr>
+                                <td>Verified</td>
+                                <td>FULL</td>
+                                <td>0x07</td>
+                                <td>All permissions granted</td>
+                            </tr>
+                        </table>
+                        
+                        <p>The RWX chain must form a valid sequence: <strong>Write → Read → Execute</strong></p>
+                    </div>
+                </div>
+
+                <!-- Rational Wheel -->
+                <div class="doc-section">
+                    <h3 onclick="toggleSection(this)">&#9654; Rational Wheel</h3>
+                    <div class="doc-content">
+                        <p>The <strong>Rational Wheel</strong> is a 360-degree representation of system state:</p>
+                        
+                        <ul>
+                            <li><strong>0°</strong>: Transmitter position</li>
+                            <li><strong>120°</strong>: Receiver position</li>
+                            <li><strong>240°</strong>: Verifier position</li>
+                            <li><strong>360°</strong>: Full circle - consensus achieved</li>
+                        </ul>
+                        
+                        <p>The wheel rotates continuously, updating channel positions and maintaining the trident balance.</p>
+                        
+                        <p>Channel positions are calculated as:</p>
+                        <code class="formula">position = (current + channel_offset) % 360</code>
+                    </div>
+                </div>
+
+                <!-- Human Rights Tags -->
+                <div class="doc-section">
+                    <h3 onclick="toggleSection(this)">&#9654; Human Rights Protocol</h3>
+                    <div class="doc-content">
+                        <p>All NSIGII messages carry <strong>Human Rights Tags</strong>:</p>
+                        
+                        <ul>
+                            <li><code>NSIGII_HR_TRANSMIT</code>: Message being transmitted</li>
+                            <li><code>NSIGII_HR_RECEIVE</code>: Message being received</li>
+                            <li><code>NSIGII_HR_VERIFY</code>: Message being verified</li>
+                            <li><code>NSIGII_HR_VERIFIED</code>: Message verified and approved</li>
+                        </ul>
+                        
+                        <p>The system prioritizes three fundamental needs:</p>
+                        <ol>
+                            <li><strong>Food</strong> - Sustenance and nutrition</li>
+                            <li><strong>Water</strong> - Hydration and sanitation</li>
+                            <li><strong>Shelter</strong> - Safety and protection</li>
+                        </ol>
+                        
+                        <p>These are <strong>non-optional</strong> human rights that the system ensures are met through peer-to-peer topology without middleman servers.</p>
+                    </div>
+                </div>
+
+                <!-- API Reference -->
+                <div class="doc-section">
+                    <h3 onclick="toggleSection(this)">&#9654; API Reference</h3>
+                    <div class="doc-content">
+                        <p><strong>Available Endpoints:</strong></p>
+                        
+                        <div class="api-endpoint">
+                            <span class="method get">GET</span>
+                            <code>/api/system/status</code>
+                            <p>Get complete system status</p>
+                        </div>
+                        
+                        <div class="api-endpoint">
+                            <span class="method get">GET</span>
+                            <code>/api/probe</code>
+                            <p>Run system probe</p>
+                        </div>
+                        
+                        <div class="api-endpoint">
+                            <span class="method get">GET</span>
+                            <code>/api/lmac</code>
+                            <p>Get LMAC status</p>
+                        </div>
+                        
+                        <div class="api-endpoint">
+                            <span class="method post">POST</span>
+                            <code>/api/need/request</code>
+                            <p>Request food/water/shelter</p>
+                            <pre>{"need": "food", "location": {"lat": 51.5, "lon": -0.1}}</pre>
+                        </div>
+                        
+                        <div class="api-endpoint">
+                            <span class="method post">POST</span>
+                            <code>/api/trident/vote</code>
+                            <p>Submit trident votes</p>
+                            <pre>{"votes": ["yes", "yes", "maybe"]}</pre>
+                        </div>
+                        
+                        <div class="api-endpoint">
+                            <span class="method post">POST</span>
+                            <code>/api/bipartite</code>
+                            <p>Update bipartite state</p>
+                            <pre>{"power_alpha": 0.7, "power_beta": 0.3}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="nsigii-footer">
+        <div class="footer-content">
+            <p><strong>NSIGII</strong> | November Sierra Indigo Golf India India</p>
+            <p>Human Rights Born of Blood, Sweat and Tears</p>
+            <p class="motto">"Breathing is never optional. Survival is never optional."</p>
+            <p class="signature">OBINexus Computing | Rectorial Reasoning Rational Wheel Framework</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='probe.js') }}"></script>
+</body>
+</html>

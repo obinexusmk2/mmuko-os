@@ -1,0 +1,1809 @@
+
+Okay. So, um this very important to understand. So, I'm going to try to to go back to paper the best one to use if
+0:16
+this the medium blank doesn't matter. This one is having some idea the one is
+0:22
+the fair one to prove pro something now really important to myself. Uh so, this
+0:27
+is a 30 minutes timer. Uh so basically uh guys I'm going to show you something I'm going to do but I'm going to use my
+0:33
+framework of lambda calculus uh what I call integral lambda integral calculus because I got so basically got the lap
+0:39
+transform which is symbol is um uh the l pass transform but we're going to watch
+0:45
+this video but we're going to sort this problem out uh but I want you guys to really understand in problem because
+0:50
+you're good at model already but we're going to look at this from an angle because one
+0:55
+give you the wrong one be funny mess up the whole Uh but it's my model of calculus problems uh for real intelligent
+1:01
+problems. So I got it here and I'm going to start now. Okay, where do I start? Can you look at my face now? Oh, that's
+1:07
+my face. I'm here. I'm still problem to ground it on. It's just paper. So
+1:13
+this is the B you need to start and a pen. That's what you need to start. Doesn't matter has to still want to do
+1:20
+doesn't matter how big the board is, but you have to have the equivalent time. Uh if it's been this policy now the store
+1:26
+going to work because you have something to look at and you know it doesn't matter this is a pen this pen is red
+1:33
+it's red pen but it's like a little bit red cuz like I love red I don't love red I just find a pen but I just pick a pen
+1:38
+I got one pen and I got simply two of this cuz simple thing you know you have a backup one you know outside your room
+1:44
+cuz you know the store room to your store room cuz your emergency as emergency get one outside you know
+1:51
+sparse model okay thank So what I'm saying here, so we got this is what what is that? This is so this is
+1:57
+a legation. So we got this the right route but this is the right route. So I don't really want to describe what I'm
+2:04
+doing but some no masking. I want to show this everything follow the standard procedure. So we got something called
+2:10
+the la pass transform. So the la transform is this simple.
+2:15
+Look at that. I didn't want to draw a bigger draw bigger because you know my screen. So I this symbol for uh this
+2:22
+symbol for I don't hate it. I I hate it because it's it's kind of a mouse. So
+2:27
+this this one to me mean this symbol uh is equivalent is equivalent uh like the
+2:36
+lambda equivalent of um so if you use the l equivalent of this
+2:43
+but this is like a sorry so this symbol is the lambda equivalent of half half a
+2:48
+so half a system half a half half a solution so this half a solution this
+2:54
+doesn't matter what integration or or for this what the problem is um this um la pass L for lima a for alpha p for
+3:01
+papa a for alpha c for cha e for echo is a it's bally having an area um doesn't matter if it's a curve or signature it
+3:08
+just solves half the problem it doesn't matter for space and time because you know if you have half the energy you have half the do it solves the half the
+3:14
+problem and this is what I hate you know it doesn't evolve it doesn't solve the full problem because it doesn't it
+3:20
+solves the problem for half the resources it has and that's why I hate it it doesn't matter whether it's integration or not over the area linear
+3:26
+it's still linear so this is why I see so this this symbol is like uh this is what you guys are doing when you solve
+3:32
+problems fully you have two solutions uh two integrations but you know this integration can be reduced to one thing
+3:39
+so this is two integration so this two is equal to my one so this my one so this one I just flipped it why did I
+3:45
+flip it because I'm small because I'm small no because I'm going to represent 02 to one my one because you know I I
+3:50
+flipped because it's a for series it doesn't matter what it is it's dynamic and can evolve and can be one and a half
+3:56
+and it can be pass it just doesn't it's not it doesn't make sense you know because you know you guys work hard but
+4:02
+you don't work hard enough you know you work on your own time and your own pace and it's annoying because you know you don't really want to think about the
+4:07
+problem from your angle um so basically I'm saying that for me I see your problems
+4:13
+it doesn't matter so say you see this area this sheet of paper this area uh this area like dots you know that's um
+4:19
+you know the heat propagates doesn't really matter to me you know 1 2 3 4 1 2 3 4 1 2 3 4 5 Six 1 2 4 1 2 3 4 5 6 2 4
+4:28
+5 6 This six here is literally um areas of heating space and you know this six
+4:34
+things here have to heat up to get the other end uh between the other end like um other end of the ship like it doesn't
+4:40
+matter the structure whether it's like um a shape of glass
+4:45
+or the whe solitude got you got a solid so you got
+4:52
+a solitude so whether the solitude is like um the material that's hard or solid or plastitude because you know I
+4:58
+want to do it prop uh your solution is just always do half you know it's kind of annoying uh cuz it's energy or
+5:04
+anything you know doesn't matter what it is so plastitude plastic energy distribution uh like this is plastic
+5:11
+everything was plastic plastic via plastic medium actually makes sense to me um if you start our point if you
+5:19
+doesn't matter what it is um basically if water boils 100% 100°C Celsius. Uh 100°C is warm water. It has to propagate
+5:27
+to other other area but you know on the surface area which is a problem with the plastic because the plastic doesn't cook up because plastic can melt but you know
+5:33
+it makes contain water and volume. So you get 100° squared uh 100° cube that
+5:39
+would be 100 * 100 which would be 1 0 0 1 0 1 0 1 um 1 0 0 power of three which
+5:48
+will be 0 0 0 that would be 0 power of nine because you're going to get nine zeros nine instead of zeros you know but
+5:54
+it doesn't preserve that pressure it you don't think guys you don't think for yourself you don't think about the one you think about the what is the problem
+6:00
+yes but you don't think about how the consequences of not fight is even a bad you don't think about what you the
+6:05
+structure of the problem you some don't think about problem because it's kind of annoying to me because like so back to
+6:12
+my problem so I don't want to talk about this plus so everything has got a plastitude it's literally uh a plastic
+6:19
+um equivalent of medium so medium the medium is what uh doesn't matter whether
+6:24
+it's a silicon is ice the silicon is if electricity if it can promote this model
+6:31
+we use um I'm trying to do it now so we get the A B so half wave A / A. So you
+6:38
+did a Hamiltonian graph cycle. You can model this um based on the the dynamic waves of waves how they move around
+6:44
+mediums. Um so you got a plastic but you go solid solitude solid. So you get a
+6:50
+solitude because you know it's a solid medium for all solids. Um you know is a solid you know but you get that chemical
+6:56
+type a plastic get plastitude you know um you know you get a platitude. Sorry.
+7:02
+uh for for for air you get for because you have to do the for more time because you know solid water liquid liquitude
+7:07
+you know because it works in liquid so basically you can solve the problem for this one but I don't want to solve it because I'm tired but you know I'm going
+7:14
+to give the formal frame here because it's basically a part so I'm wring it down because I'm g for actually give you
+7:19
+the jargon um so a a and b between if you get something that's 100 point is is
+7:26
+a stop get b is an end but b is an end is a stop if you want one way you can B
+7:32
+is an N. So we just complete for one way you not complete for when you complete
+7:37
+for one way you for stop that mean you start to end if the content does come
+7:42
+back to start because if you come to start that's mean the system stable so everything must go to start you know
+7:47
+doesn't matter if the if the system dynamically fails you know halfway you know it has to restart you know because
+7:53
+rough way is like a restart you know has to continue and that's the restart doesn't matter if you have something that doesn't restart that mean failed
+8:00
+you know it bugged out you clashing and you done this you get pi r
+8:05
+square that's pi square p r square standard one you get a 2 pi to what pi
+8:10
+just perimeter but the perimeter is not enough so you are always perimeter bound you know if you get solution because you you're trying to go from a to b to a but
+8:16
+you know you don't think about the area you think about you don't think about the long-term effect of the path how many parts can take the sparse part
+8:23
+sparse part um which is the policy sparse solution you have path um first um integration based on the medium the
+8:30
+path of the medium it's just a path It's a space and that's our path because you know it
+8:35
+doesn't matter who you are where you are you have a path but your path is your space and your time and what you want to
+8:40
+do uh which I'm saying is your path basically your path can be my space you know this space from this is your space
+8:46
+know human rights this is not my space but this is not my path either I took I took this space I I shifted my conscious
+8:53
+I I shifted my way of basically I'm almost spectrum but I'm trying to give
+8:58
+you so A B. So basically this is a branch. This is a
+9:03
+branch B. Uh this is a branch. This like a path but this is a branch. A branch is a branch is like a path. What path we
+9:09
+take? But it's a branch because it's a path we can take. This is this is your space and this is my time. Uh this this
+9:15
+is the path we take. This is the area we take. This will be uh 45° plus 45° uh um
+9:22
+2 pi r 2 45 degrees is 90 90 pi r. Oh, I got a calculator here. 90 90 90 90 is R
+9:30
+90 is the radius 90 uh 45 degrees for 5° 90° um degrees plus uh uh uh 2 pi r 2 r
+9:40
+so that's 90°* r I've got my calculator here guys I can do this with our calculator 90 all all American are bad all all export
+9:49
+are good um for um to are bad so that's 19 R
+10:03
+90 pi. Okay. So 90 pi will be 228 uh uh degrees because you know that's
+10:09
+equivalent in the path because you know the edge is the path. Doesn't matter where you are. You have to equivalent in
+10:14
+the in the physical wall. Um because you know you are if you're too in your head you are you have a physical form.
+10:19
+Doesn't matter who you are. If you are two physical you know you have uh one physical because it's pass topology and
+10:26
+that's the policy of the system must continue whether you're in a physical metaphysical physical form. So you have a physical form. You have a physical
+10:32
+form form that's your hand your fingers. If you get so way uh where you want to go and your physical basis on how you
+10:39
+want to do something it doesn't matter whe it's auxiliary or not what you do everyone's so you have the pathway the
+10:44
+branch everyone's a branch everyone's a branch who's a way the pathway to be the edge or some kind of time they want to
+10:50
+do something uh uh time to think about you know thinking space is my time to because you I'm saying uh so so space
+10:57
+and time b so everyone has a space branch and a time structure and that space branch time is a way to go and
+11:02
+that's their way to go my way to go your way to go and you got what um pathway uh
+11:09
+very way shape shape like uh the physical shape or the the mental shape
+11:14
+of our consciousness um uh based on latice district now latis very important but I'll come back to that later so
+11:20
+that's I'm trying to s latis district uh but but you know the spaceship w shape and form way shape and form shape
+11:28
+because how we are allows the circle does not think of a square because if it's a triangle because you can't you
+11:34
+can't can't take a circle make a square that's just
+11:39
+squares in my framework you know those squares are put there and a band so if you see squ
+11:45
+to triangle some way or shape or form you have to describe it so so got it so
+11:52
+and that's valition
+11:58
+mean a rigid edge that's You have to pop it can pop it easily. So you get get four edges but you know four edges are
+12:04
+literally can be more than get a square is hard to sh is impossible. It's so rigid that you know can sh can get
+12:10
+computable triangle but it's so hard so expensive. That's why balance quest computation. It may sound crazy but you know if you have a square circle square
+12:17
+you have to compute the edge of the circle uh but you have to comput some of arbitrary numbers that that you don't
+12:23
+even know how to get. you know because it takes so much space and time in your frame of mind in our universe to get and that's why it's banned because I don't b
+12:29
+squares because I hid them I b squares because there's so much problems you know round edges because that's why I b
+12:34
+them even like a small edge can lead to compute that growth of a um okay uh what
+12:40
+else so today I'm going to solve the problem you have four series uh but this is one
+12:46
+integration so this is your one uh but you know I'm not going to solve my so this is my one so your two one so your
+12:52
+two uh your is my one. So this is like you want two integration is my one uh my my one left
+13:00
+basically basically where you're going basically what I'm saying to you it's like a shift of plane of existence here.
+13:06
+So um it doesn't matter the path you're going your two clockwise or right
+13:12
+rotation is my two left. So it's my two left your two clockwise. So if you go
+13:17
+clockwise um 360 once 360 you're 720 you're back where you started um where you're going you started and you ended
+13:23
+you are already your two rotation clockwise no so your two rotation clockwise is my one rotation and
+13:31
+anticlockwise because you know I already know where I'm going that's why you see doesn't matter how slow you I'm saying a
+13:36
+polit I'm seeing so um * 2 360 if the if everything is
+13:43
+over 360 you know you got pi r² uh you get 2 plus 2 pi r uh uh but you know
+13:50
+every every time you rotate 360 you go 90° 180° 270° 360° that's what I'm
+13:57
+saying you get a a path you can take and take where you guys are going you guys don't know what you're going to do
+14:02
+because I already know what you're going to do before you do what I'm saying I I I know things that you don't know ahead
+14:07
+of time because I already know I'm going to do you know that's what I'm saying because I'm smart even because I already know what I'm doing and I can see what
+14:12
+you guys are doing before you do because you don't know what you're going to do yet uh uh which I'm saying is the policy in my framework that's what I do. So
+14:17
+this why I really know the shape of things you know the outcome of things. I'm not telepathic. I just know really
+14:23
+know really know if you if you really really know and that's why I'm saying that um that's what I'm saying. Um it's
+14:28
+really uh what it is. Okay. Uh let me start. So I'm trying to use this the
+14:34
+comput uh what is the problem? The problem is um um this problem here. So this is a problem here. Um very
+14:40
+important problem. So I'm going to watch this video. I'm going to show you the problem define here in a minute. But let's watch this video. Okay. The beauty
+14:46
+of mathematics. Two lines on this piece of paper. And suppose I drop this needle now on the
+14:52
+paper. Sometimes when you drop the needle, it will cut a line. And sometimes it drops
+14:58
+between the lines. It turns out the probability that the needle lands so it cuts a line is exactly 2 over pi or
+15:07
+about 64%. Now what that means is that in principle
+15:15
+I could drop this needle millions of times. I could count the times when it crosses a line and when it doesn't cross
+15:21
+a line and I could actually even calculate pi even though there are no
+15:26
+circles here, no diameters of a circle, nothing like that. It's really amazing.
+15:31
+Suppose I take this needle. So basically the thing is basically auxiliary. Uh so basically think of this
+15:37
+as r. So f is moving away from us. But why is everything moving over? That's the question. Why are we in this
+15:43
+universe? Why are we here? But we're not really we're here now. But but we are we
+15:48
+are moving away from this because you know things fall but things fall for reasons. So things fall down you know
+15:53
+you know you think about it everything is going less more entropy together and they don't make any sense you know but
+15:59
+why is that you know it doesn't matter what it is you know it doesn't matter let's say your sense you know this like
+16:05
+a kind of conraint you know of everything. Uh basically if there's a rabbit here the rabbit knows me but you
+16:11
+know I don't know rabbit but rabbit is smaller but he knows more it can observe more because it's freer to do what it
+16:17
+does it doesn't matter but it's like rabbit is like there because he knows what to do like it's not about rabbits I
+16:24
+like but you know because rabbits are there but but they need space to do it like all you know you get you get like a
+16:32
+free space can breathe the breathing spaces of rabbit but If you cut the if you cut
+16:38
+the natural habitat out which is the which is our habitat you know but when they drive when they drive they try to
+16:44
+you know get actual air so you have all the position
+16:50
+the the flowers they really come to go that means I'm not free doesn't matter
+16:56
+what it is happen at local level for them and when driving all the black
+17:02
+bunnies and the blackheads driving the policy now I Robinson uh um Robinson Hit
+17:11
+equilibrium uh so if I change my perspect what does that mean for Rob is
+17:17
+a utopian no no is not utopia rabbit is just a joy joy life because they meet the rabbit friends you know I'm saying
+17:22
+because you know they're utopian I just know you know you know from angle it's
+17:28
+about to have a good life because if not there then something's wrong with our biome you know something's wrong uh but
+17:34
+I don't use an example Yeah, because at least the one I stand actually
+17:40
+let say two black bunnies two black bunnies two black bunnies uh to every one or one of us you know to one one
+17:47
+human be one me one if if there's two it can be what four
+17:53
+four you know four and this four back bunnies see back bunnies two four bag that means
+17:59
+there are what two nandies like two ns like can I just say um they're male and female cuz you know That's what B do you
+18:05
+know because I'm using myself example that would be like one male one female bally there's someone I can go to um one
+18:13
+m one friend one female friend uh that's kind of saying it's stable for everyone
+18:18
+you know it doesn't matter whether is there or not in the physical and whether it doesn't matter whe
+18:30
+[Music] there is n you know I'm about like a sexy I'm just I'm giving like idea cuz
+18:36
+I'm giving you cuz it's kind of real life. It doesn't really matter as a person you use real life to you use the kind of thing. So we're going to steal
+18:42
+the body cuz I love bunnies. So we don't keep myself in there no more all the bodies. Um but the goal of this is keep
+18:48
+this doesn't matter a stick for you get a black man like me. Me and so me and a man a man. So it's a black man black
+18:55
+guy. So I'm saying that's what I'm saying. Two bunnies equals um four bunnies and the four bunnies equals
+19:00
+eight bunnies you know cuz they are bunnies. So that's an idea. But there's more of this joint here. So we share a
+19:05
+reality. One reality. Um so the four two bunnies two bunnies to one mean we all
+19:11
+sleep. We're all okay. I'm okay because you know there's a bunny somewhere in Bra right now. Um uh two bunnies because
+19:17
+they're driving. We do have bunnies there. We do have so two to one. So two two union one two disjoint one. Uh so
+19:26
+and one one or two intersection one. So b these are two space. So there for every two bunnies there is what? Uh 2 B
+19:33
+2 B 2 B two bunnies we have uh the pi framework. So we get 2 B of 2 B get like
+19:39
+a pi R square. So two bunnies. So let's do um pi to what 15 small places because
+19:44
+you know I I love pi pi pi as well 3.14. Let me write it
+19:50
+here. I don't forget it. Um three it doesn't matter cuz I'm 3 but4159
+19:56
+to 65 you know three 3.15959
+20:02
+two 56
+20:09
+right so see the body thing I'm proud of doesn't matter how I write it cuz I'm trying to get structure in my
+20:16
+own way um uh that's go there so this is the thing I'm doing myself see the buddy the two bunnies are there and they're
+20:22
+happy cuz we have bunnies there. But but they kind of stay on the same because they are they there and they are and
+20:29
+they're thriving. But that means someone is happy, you know, someone's one person's okay, you know, and happy, you know, actually in a good mood, you know,
+20:35
+to actually move in life. That's what that means. You know, it doesn't matter who that person is. It just matters they're okay.
+20:41
+And that's why you don't touch bodies or touch ostriches because ostriches can kick you or you keep all the bunnies and
+20:47
+alone. black ostrich. All the African actually black ostriches only uh we get black chickens, roosters,
+20:53
+get to get cows, you get fish um get all the fish there and they are uh but this
+21:00
+can produce anything that can produce two if you have to put two of them together and you put together that includes ostriches uh ostriches
+21:08
+to have um no foxes like so you get two you get four you know for a human being
+21:14
+you know here you get two cats two cats No big cats. Never big cats. Two two cats get two cats get what? Two small
+21:22
+cats, you know. Big cat there in that's kind of l
+21:28
+you know that's uh but we get zoos away from them because you know you travel to
+21:33
+zoo danger you get zoos because wild cats and stuff but never the apes. Never
+21:38
+the apes because you know apes are too like us. This can live freely in the world
+21:43
+get nothing like an ape. Doesn't matter whether it's like a meat you know things that okay m are fine because if you just
+21:51
+put one you just brea so anything that can come in two mathematically no elephants you know anything that um can
+21:58
+you can just be by two is free you know I'm just saying just be there because stability is stable uh anything I can't
+22:05
+be I don't want them there but I don't really know that for a long time so I'm going to come do that research Um
+22:18
+wait a second. So the idea is 3.145
+22:24
+uh so two bunnies um two bunnies. So you get the so you get two 2 B two bunnies
+22:30
+to two bunnies uh to two bunnies and two um because I'm giving simple examples. You get two B and you get B square. So
+22:37
+you get opposite B square or 2 B. But you know uh the space and time of you get the number squared. So doesn't
+22:42
+matter uh it can be can be cubed but that means you have to map all the cubes. Example, if the bunnies are cube,
+22:48
+um you have three have one thing. Why is that stable? B cube to get the area dimension of B. But D is a plane. Three
+22:54
+B have section you don't need. You just need a one bunny um stable thing. But
+22:59
+it's because I'm using the myical framework to prove it. The real because I don't like the kind of racism uh uh uh
+23:04
+we do uh uh for this kind of so we get as racism everything is bad like that. You always people uh use it if every
+23:12
+human being you do find this kind of thing from uh
+23:18
+so get b uh b two bunnies uh two bunnies two bunnies uh pi squ
+23:26
+to get uh b squ uh and then we get b
+23:32
+pi uh b pi and b square as well b² uh b is
+23:39
+2 B 2 B 2 P and that's a set equation. These are two branches of what to one to
+23:44
+one me. So uh that's kind of idea here. So why
+23:52
+does it matter to me? So this is our access. So share a half reality half get
+23:58
+half reality here for all the you share we share half of it. You know in some way shape or form this only some way in
+24:04
+some way you go you see your body in some form some metaphysical form or we share half of everything but you know we
+24:11
+can't see it because it's this joint. So basically that is the way one reality they have one full reality they have
+24:17
+that we cannot see it doesn't matter the algorithm you use or the space you have no or the or the physical space you have
+24:23
+or the metaphysical there's one full reality one full body reality one full one that's not a half that they can see
+24:31
+um one full one full one that they can observe and act on and that we can never do that you know because it's ditching
+24:37
+so that's dig so this is the conate of everything around us because everything is naturally dist So the natural half
+24:43
+because you know we are over the half. Um so if you can see a b can see you can
+24:49
+see you fully uh fully because it's like um the body can see fully because it's
+24:54
+more of them. They know more they know more and they can do more because they're normal. You never can never catch a bunny. Um
+25:03
+never catch a bunny. You're allowed to be near a bunny. You know if a B allows you consent you know consension you can
+25:08
+get a catch touch a bunny but you know you don't have to catch a bunny and run and run because you guys want to hold the bunnies but you know you know when
+25:13
+they go when they leave you you leave them straight forward as a policy don't violate that policy. So that's kind of
+25:20
+idea that's kind of get half half everything. So we they have shared this this one. So we have 1/2 + 1/2 and
+25:28
+that's one of the 1/2 one= 1 but we share 1* a half one times 1/2 is what a
+25:36
+quarter. So therefore what is equal to one quarter plus one quarter
+25:44
+share and they can know and they can all know but we can never all know never know because you know that's never
+25:50
+without the right tools the right way basically based on some kind of path algorithm we define uh basically form
+25:57
+structure uh we observe them some kind of and space time but be in space time
+26:04
+duality um but they can never know this because we don't have the right instrument. We can know it but you know we can only know it at a time at one
+26:10
+space in time one point of space or one time you know we can know it I know it can work but but that's the idea we
+26:16
+start for loose ice start to build up our suff but that's ideal
+26:28
+time which is the area they have a policy now you know to show that they can expand the horizons and they can
+26:34
+tell us more they can give us more to about anthology so can we short front. That's the idea. You give them three,
+26:40
+they can grow like some just by put another bunny in the physical what you know in the physical space you know. Oh
+26:46
+two more bunnies because they come in two as a p two more p you get two you get four can become what? Four. So you
+26:53
+get four for two bunnies um two four and that becomes eight eight bunnies eight
+26:58
+bunnies. So that be one over eight um for us more real observe you know but it's just district. So they have the
+27:05
+rabbits have their own individual. You can tell us more. Give us some more about ontology. I'm just going to go go here. It's like that.
+27:12
+Oh, what is this? 26 minutes. Uh so what's the problem here? So the problem is this. So this is the problem here
+27:18
+guys. The bit of my Okay, let's just watch the video. So that the length of the needle is equal to the distance between two lines
+27:25
+on this piece of paper. And suppose I drop this needle now on the paper.
+27:30
+Sometimes when you drop the needle, it will cut a line and sometimes it drops between the lines. It turns out the
+27:37
+probability that the needle lands so it cuts a line is exactly 2 over pi or
+27:44
+about 64%. Now what that means is that in principle
+27:52
+I could drop this needle millions of times. I could count the times when it crosses a line and when it doesn't cross
+27:59
+a line and I could actually even calculate pi even though there are no
+28:04
+circles here, no diameters of a circle, nothing like that. It's really amazing.
+28:09
+Suppose I take this. Okay, so my instance of this problem is very important. This problem is very
+28:15
+important for two reasons only. stable um biological stability and what um biologically it's a bionatic bi
+28:22
+biological structure being what is the mind there's um there's some kind of way
+28:28
+um the that rabbit can bolt uh but safely um with the mind um so the
+28:34
+bunnies are stable two bunnies to two people it doesn't matter what it is but you know that's kind of idea here you
+28:40
+know there's some kind of stability in there I don't care what it's sex or no it's way you can all go we can all go
+28:46
+whether we are discharged or not you know it's kind of this so basically the idea of this so if I' if I go
+28:54
+counterclockwise um which is my own lapist you all you all if you're going right if everyone so if one person is
+29:00
+going right if one body is going right another going right you know you get two
+29:05
+people right hands or one person right hand so that's two um six two six two lapis structures you two integrations
+29:11
+but their right equals one um one one person with the right right um one right one right and one left because they went
+29:16
+the right way with where the people were right hand but there's one person uh that share my reality that didn't get
+29:23
+that either did not get um a bunny didn't get a bunny and what did not get um did not get um so if I didn't get a
+29:30
+bunny if I didn't get a woman I don't really care about women I don't care about the bunnies if one bunny so if you get three bunnies and one bunny has if
+29:36
+you get one bunny and they don't go the other way one more bunny more rabbit they go left because they go left alone
+29:43
+um then there has to be another puppy somewhere Uh sometime
+29:48
+two more bunnies one more bunny can get a bunny but I don't get a bunny
+29:53
+for a bunny b sure that the bunnies are fine because stable mentally and physically. So if you get a bunny you
+29:59
+get a bunny don't get a bunny get a bunny um get from nowhere put bunny in there it doesn't matter because the
+30:05
+bunny has a final bunny in the frame doesn't matter this idea. So you get a level. So go if you go right if so if
+30:10
+you go if you rotate um clockwise if two buttons rotate clockwise 90° um if if
+30:15
+two so 180 plus 180 is 360 but this is um two 290° um 290° is you can get the
+30:24
+commission of 180 plus 180 uh when you add them 90 plus um 270 but you try to
+30:29
+rotate 270 degrees which a quarter of it=
+30:35
+so you get one plus one see you Four quads. Four quadrants. But this four
+30:40
+quadrants is like a one. But this for two. Two over four. Two over four which is um two over four is what? A half
+30:48
+equals to half. So you get a half uh quadrant uh shared between two people or two realities and two can be four
+30:54
+realities uh one full. And this is kind of stability implementing here. Um but
+31:01
+biologically so there's no problem. So it has to happen over the 10% bro. There's no growth. This happens
+31:06
+increments. So 10% if you exist something 10% it's not be popped up. This is my antipop protocol uh for like
+31:12
+my oper operating system. Uh so my antip show I can't pop. So so basically um if
+31:19
+my fails it fails because I I didn't want to fail. So I'm visioning is this
+31:24
+kind of matter. So you see basically this line this man he he did write wrongly. Basically the lines are meant
+31:30
+to be uh he doesn't know this but he made a mistake. see these lines there must be according to the paper because this paper is the whole field of the
+31:37
+system. So you know if if this wasn't the whole field you know he can't only see the lines and see the line is measur
+31:43
+to measure his output and that's where the big failure is his framework he's failing because you know he doesn't have
+31:48
+the lines drawn um precisely uh uh if this like
+31:54
+should be the bare unit should be everything should be 10 everything should be 10%. So 10 so 10% 20% to 30%
+32:03
+40% 60% 60% uh 70% uh 80% 100%. So it's
+32:09
+like a 10 lines but you see this one is like this is with the needle you get 10 lines of needle and that's the problem
+32:14
+he has um here my page run of ink it just run up so this line is what I'm saying it has to be or linear so if you
+32:21
+learn to draw suppose someone to draw straight lines now uh as a policy cuz you know
+32:27
+so get the my working so get the lines there but you know this is the so this your 10% if you if you want 10% you know
+32:33
+we can share any path we take 10% 10% if you start from other end you know get 10% % 10% but we share what the 10% here
+32:42
+but it just takes time space and time to get from here to here to the center of the 10% which will be our 10% you know
+32:48
+our 10% you know our stability and that's the problem of the uh system here really so you see it you don't
+32:54
+understand what you did but you know has to be equal 100% is too bad for this kind of thing so 100% is here you get
+32:59
+100% you don't want to lose any potential so go you go your way it doesn't matter where you're trying so if
+33:04
+you're going here you go here you go anywhere but this like a grid this is a pathway Okay, this one is um you get
+33:09
+this grid. It's good because it's a lattice of energy. So you get 10% uh for everything you do. So you get 100 by 100
+33:16
+grit um uh uh based on model un the uni system. So you get um this one you get
+33:21
+you get other one this can go this way. But this is a bit harder cuz this is like a a triple lapis inspiration. So
+33:27
+you see this paper to 10 seconds 10% 10% of everything. So he's doing it wrong
+33:32
+but he doesn't understand what he's doing cuz you know he's just making the matter funny. Um because he's taking he's taking the wrong measurement
+33:38
+because you know the lines where what you can see is the whole paper. I can see the whole paper too. But I'm taking the right measurement. I'm taking the
+33:44
+right measurement of my system. Uh because my system allows me to do so. Oh, what is this?
+33:50
+Let me just save this guys. Let me just save this. I'm recording. Uh pi pi pi. Sorry guys. Uh let me see
+33:58
+this 32 minutes. pi export. Uh I can think I just do pi pi pi
+34:06
+uh and that's uh pi and file name
+34:11
+uh pi. Let me see this again. So this is pi export. So basically the kind of thing is to basically you have to map
+34:16
+the system doesn't matter how much you put dat
+34:33
+one by one and then define some area you have to define some area as a policy. So if you try if you find if if you want to
+34:38
+find this area you can start from um the literal integration of each point we have to find units of error and then you
+34:44
+can copy the area you can if you find this you can find can find all the area of your universe you can you can do you
+34:49
+can find all the area of this one uh based on the yx and xy and you have all the areas you share and I share uh uh y
+34:56
+and x and x and y axis and you can get what um a grid a path you can go to and
+35:01
+the path is the way you go you know computationally literally it's just what it is you're stable like I'm computing
+35:07
+it now because I'm only to have it. So you get an X. So if you get an X you get minus X. So if if you get an X code you
+35:14
+get - 6 - 6 but - 6 is what not stable for you. Uh your instability it's woman
+35:20
+or man as well but do you have a yaxis? Uh so you get x get a y get a plus y get
+35:26
+a minus y get a minus y get a plus. So basically this y plus y this minus y for
+35:33
+me uh this minus y is unstable because um I canot see it I can even see the women think what is do
+35:41
+that's where the district happens the intuition this way um that's if you don't know about it by your own insight
+35:47
+you don't really need to know about it you need to care about just body reality here um that's right there we share one
+35:54
+my x y we share uh we share a chemical x so your xaxis is my minus X ais your
+36:00
+your minus X ais is my X ais and my Y ais is your minus Y but I can never see your Y ais because know it's just
+36:07
+observing your state mine but you know I don't have the full I can't I can see I can see you you but I can never see your
+36:14
+um your manuscript so my go is like so what makes me this
+36:21
+why this is the integration of so this is what it means because this is what the is so the idea like doesn't matter
+36:27
+who you are what you do It's computational because it's going to do it. So if I compute you ahead of time,
+36:34
+that's what my ES I'm going to do, you know, because to be you. Uh but this I'm not really seeing the ES here in the
+36:40
+problem. I'm see I'm computing this cuz it's like um in color. So I can never see that why no matter how trying to see
+36:45
+you, you know, the physical I can't see your metaphysical you. Uh so you get a plus um you get a um you your minus plus
+36:54
+uh yourus minus one is your form physical this is about
+36:59
+physical u and I can never see it. Oh I just put a line I cannot see it. I'm not allowed to see
+37:05
+it because if I allow to see it then it you can see my x y but you know if I let you see it that's what we call x minus
+37:11
+but you know you can never see because your plus is my minus you know uh that's the operator's there as a person. So why
+37:18
+am I talking about this Robert? So uh two to one two to one mapping two to one when you got two to one mapping. So did
+37:25
+I did I start this already? So two to one is there. So you get two two realities you share that we all
+37:31
+share and we get you get um two one reality will share and that's your physical reality one physical reality
+37:37
+but you know that's two realities in total two um to your your two senses but open s
+37:43
+you know no matter who it is. I'm going to go back to the thing uh um thing now.
+37:49
+Um for every one something, you get two of it. For every two something, you get one of it. Uh but it's this. That's the
+37:55
+idea. For every two something, you get one of it, you know. But we share that space. We share that space and time. Uh
+38:01
+you get that space and time. No matter this area, you don't share shares a
+38:06
+distance. This where we share the space and time between it. So this where the district happen this happen. So for me
+38:13
+to express it mathematically to you I will have to um define is good and that's what has come. So I define is
+38:19
+good. So so let me define it here.
+38:25
+So we got the line here messing with this model.
+38:31
+Seeographically the air is stable but no matter where you stay we can get stability and that has to go here it's
+38:38
+mathematically certain because I really don't care um and this is outside
+38:44
+anything you go doesn't matter can help you do it because you know can help you do it go to the system to assist you in your dayto-day living everything you do
+38:51
+um you know um I don't really like the women here but you know they kind of this kind of competition um because you
+38:57
+know the world No matter if you can grow your bubble, you you have more you have infinite sex and same confusion. So you
+39:04
+don't know where you're going. So this kind of has to ground you first. you know in BF you don't run away to any Japan and forget people and then you
+39:11
+know the same thing happens to people a lot of people uh uh I'm saying to you it doesn't work on magic it works on
+39:18
+medical principles to me because I I'm a I'm you know I'm a suffering a lot of
+39:23
+way you get out you know pathway what you can do to get out you know no matter what you're doing you give some new
+39:28
+objective um you can because you don't m you don't shift how you access you don't
+39:33
+try to rotate your mind or crack yourself to become mind you just you posing your objective will be your new
+39:40
+order and that's the part you do try go trade your objective to get a new area to see more from less um for less cuz
+39:47
+you know if you see less and this is more to see on the other axis you see more uh other things so I have to say
+39:53
+this now if I get wrong so you get the nutrino which is like um the physical mass of the the the mental mass what's
+40:00
+the mental the mental mass and the physical mass uh in form form way and structure gives use mut
+40:07
+um only mass uh that's gravity uh and it grounds you assistance that ground you uh so you never pop you never break and
+40:14
+what you get the nutrinos and you get the bosom which is the wave equivalent of the nutrinos that's like they
+40:19
+propagate waves but they are a wave form a chemical signal everyone can understand uh you know known as um you
+40:25
+know system uses a chemical pro that's what you guys put in there you can can get it
+40:31
+uh you see this here so finally uh let me find this You see this kind of thing? Oh guys, I need this
+40:37
+properly here. So this what I'm saying. So I'm going to try to do it properly now, but I'm not going to use this book. So um so 0 0 let me try to do it. So the
+40:45
+problem to solve really is this. So this kind of problem here uh the needle. So
+40:51
+that the length of the needle is equal to the distance between two lines on this piece of paper. And suppose I drop
+40:57
+this needle now on the paper. Sometimes when you drop the needle, it will cut a
+41:03
+line and sometimes it drops between the lines. It turns out the probability that
+41:08
+the needle lands so it cuts a line is exactly 2 over pi or about
+41:16
+64%. Now try this out properly cuz two over pi is what I think it is. Uh two over pi
+41:24
+uh what pi is what? Uh 0.0 0 uh 0 uh 063
+41:32
+uh 0.6 uh 0.0 sorry again 0.63 63 66619
+41:39
+7723. So that's like um uh uh what 64%. Uh so
+41:44
+if I divide this by um plus let me have to add this what to pi over because you
+41:50
+have to add it because it's addition. So pi plus pi / 2 that be
+42:02
+oh so we get um uh plus pi = 2. So basically pi / 2 plus p / 2. So
+42:08
+plus pi / 2= to um so you get pi / 2 get
+42:14
+a number I didn't like. So pi / 2 uh that will be uh pi / 2 is
+42:23
+equals to 1 uh 1.5707
+42:31
+uh you know 1.5707963
+42:38
+26794 8 uh to 57 places. So basically got uh 2
+42:43
+over pi 2 over pi um plus uh pi / 2 you b 2 over pi is what 0.06
+42:50
+0.63 63 68 let me just show you guys just show you guys show you guys things because you
+42:56
+guys are intuitive like that so you get these two numbers there you know uh uh there so even
+43:03
+just working on pi because uh I can now tell you other things too but these two numbers are very important because they
+43:09
+work on the the structure of a university bubble so you pop you just divide pi so you divide anything by two
+43:16
+half if you if you have half of something that mean you imploding something um doesn't matter a grenade that is imploding. You know, if you're
+43:22
+half an explosion, well, you get nothing. So, basically, if someone is exploding, it's it's pressed out. You know, if you're half explosion before,
+43:29
+if you have the space, if you have a space, if you have the time to have the explosion, you hold it and and explos in
+43:35
+your hand, you know, but but it half explosion. Um, it start to have explosion. It start you you never
+43:41
+explode. imploding inside and you never get you get shot
+43:47
+explodes but it's nothing there anymore because nothing to destroy your hand I'm trying to drop um but goes down it's
+43:54
+like you know you hold the grenade but it explodes your hand but it doesn't explode you so good idea uh because you
+43:59
+know the force um is equivalent is that because you get everything that's exploding has a space it holds and the
+44:05
+time it can explode and that's kind of like the thing you got to do you got to keep it never explosible but I don't want to talk about it now
+44:12
+So you get a 2 pi r 2 over pi I get plus pi / r but you guys you should get for
+44:17
+shoes or sine wave. So what the sign you can get like the sign of this. So uh the
+44:24
+sign of this uh I'm trying to give you the sign equivalent of it um here.
+44:31
+So we get a sign equivalent the sign will be um so the sign of two pi will be um
+44:37
+so let me just get my ratios down because I have to get this ratio down once and for all. Um so we get two over pi um
+44:46
+two over pi 2 pi is 0.63661 63661
+44:52
+977 2367 uh pi / 2 as well. Pi / 2 pi / 2 pi / 2
+44:59
+or pi / 2 uh is um is 1.570796
+45:05
+32679 uh 52 and then 2 pi pi squ
+45:10
+is what? Uh because you're getting pi pi squ
+45:16
+is what? um pi square um 9. So 9 + 8 6 9 8 um 9 um basically
+45:27
+pi square is like the area of pi um alone what I call uni pi um because space uh system host uh is 9 um uh 9.8
+45:38
+um 9.869 644
+45:43
+440 1. This is very these are just constants you have to preserve you know you know
+45:49
+doesn't matter what's your once you set it up you have to preserve the state of this constants
+45:55
+so you get to pi 2 pi r 2 pi r uh and then get p r²
+46:02
+but you did the ones I really like which is a 360 view because you know you get 2 pi over 360 bically you get 2 pi r 360
+46:09
+and that will be the unit over the space you physical for you get 2 pi r 360 but
+46:16
+get 2 pi over 1. They show one because one is e to b. So get 2 pi r 2 pi r 2 pi
+46:23
+r 2 pi um / um
+46:28
+over 18. And that basically gives you the ratio that you already have to preserve. So this pi 2 pi over 2 pi over
+46:34
+18 is what? Uh 2 pi um 0.0174537.
+46:41
+uh and that's the pi and you get pi and pi squ.
+46:48
+So you get that this ratio all share you know doesn't matter who you are.
+46:53
+Oh this is 2 pi uh now this two pi is what pi squ and you get this pi so you
+46:59
+get pi pi pi 2 pi over what 180 and this will be uh over you go over 180. Oh no
+47:06
+no no. So you get to this 2 pi 180 and you get 2 pi which is like a you get a
+47:12
+180 because you get over the stage over 180 you have to use the 180 as a as a you know um so if you if you have two
+47:19
+left if you have two right two right axis two right rotations of P from you
+47:24
+right you're going green right you have to take what two left to go back um you have to just turn around you have to
+47:29
+just turn around but turn around is too much effort so just walk back but you don't see where you're going you know you can just be back where you are but
+47:35
+you don't see you have to go you know where you're going because that's the thing you know where you're going so you can go You're going to see where you're
+47:41
+going, but you have to see. You have to get another axis rotation cuz all you can shift your view entirely where
+47:46
+you're going to go cuz your view is going back. You're going back right in front of you. But you just shift your plane way of thinking and you be there.
+47:54
+You shift your sight where you're looking at just don't even go to um
+47:59
+change your way direction. The goal is to be there, you know, be at B at A. Um
+48:04
+so you have to shift your axis um as opposed to that you your y your yx your x y axis and that's what you got to do.
+48:11
+You don't shift anybody's y reference point as opposed to if my xy if my yx is
+48:16
+your yx. If my x y ais is one my integration um that would be your uh x
+48:23
+your minus x ais my minus x ais um yourus which is my epsilon axis I'm
+48:29
+looking up uh but I don't know that end so I'm trying to find that so I have to change my y ais uh my if I'm going to y
+48:36
+if I'm at y point b uh point b um I'm actually going back to point a uh but
+48:42
+point a will be what um another axis of yx so my so yx will be two uh xx um xy
+48:49
+uh uh uh u yx and uh uh xx position they all plus plus minus minus all the
+48:55
+combination of the position just give the axis of x y x yx um that's what the
+49:00
+left represents so I have the left my one is like a left because I'm going backwards and I'm trying to see what you
+49:07
+already know or don't know and that's what you think divergent because I am new I'm probably because I know where
+49:12
+I'm going for example so come on this my Guys, this is what I'm trying to build. So
+49:18
+this is my security model cuz you know this um this model cuz you know if you share if I share a safe space here in
+49:25
+marity your space so you know in the worst case you know you cannot share you know the best case you can never share that space uh because you know you know
+49:32
+cuz you know that's my reality that's what I hold on to uh uh which possible can I do that you know don't know how to
+49:37
+do it but you know it's worth saying to you because you know the grid is like a liquid a latice um that you can
+49:42
+polarize. So this is like an X code. This is some X Y. But if I go this way, this is the max. No matter if I start
+49:48
+from here, you know, stable here 100%. This is this is if this is my 10%. So
+49:54
+your to the opposite of if if I shared go if if you share one Y one Y physical
+50:00
+mental, you know, this is my Y, but this is your but I'm 10% of my Y. I'm 100% of
+50:06
+my Y because I really know what I'm doing. Um I'm really going. I 100% of my Y. uh have all the single space and time
+50:13
+I have that be 10% stability for our space and time you know because you know
+50:18
+these two people share uh dynamically or not um that's what I'm saying so the
+50:23
+kind of physics I'm saying is important is just this rule so the axis integration so the lap transform so the
+50:30
+lap transform is important because allows to ground yourself so let me give you one more paper
+50:36
+uh I'm going to try to do it properly now uh uh let me just stop this
+50:47
+Lapis. Lapis the W.
+50:56
+Oh, Lapis the W. So, we get L the W. We get
+51:04
+Oh, so this kind of thing I'm doing. So, we get this one.
+51:09
+So, so basically you have to you have to say doesn't matter where you go left or right. It's just like um you have to um
+51:14
+show that you know you can stop and you start uh the same way you have come to a full stop before you come to a full stop
+51:21
+you know that's the kind of persistent you know if if you stop if if you're going somewhere you're you're wasting the energy um you have to come to a full
+51:28
+stop you know a maximum stop you have to stop just stop a point stop you know and stop stop time then turn because that's
+51:36
+more energy you could turn you know and then you can come back you know to your idea you don't just um mangle war This
+51:43
+is this will be a warping of warping of your relationship and that will distort your brain and your space time and you still lose time because that's when you
+51:49
+lose your frame your mind um in design of the system whether you're teleporting or not you have to work in a signal work
+51:57
+with the the framework of polarity so that's mean for transition this what I call a lapis um a left a left left
+52:06
+lapis less lapis um lapis a forer for series proof um uh for what does that
+52:14
+mean? So you get a polar axis you get so so caua. So the yxx y y z the tangent
+52:23
+line is the parameter. So when when I have a tangent right this is a tangent line I measure but this is my y this is
+52:28
+basically your y cuz you know you can this is your y your full y I can see
+52:34
+your yaxis you know this is your this y this z you get this z so axis of z so
+52:39
+the tangent line is like the parameter you can see tomographic so if you me so y run
+52:46
+so opposite of opposite of hypotenuse I get a tangent line here here uh uh so
+52:52
+opposite S equals opposite of opposite. This is opposite. This is Y axis. The
+52:58
+sin Y sin Y and then we got cosine X uh but X has two inputs. X can be what
+53:04
+polar system or what? Because it doesn't matter the map or latis. It doesn't matter what it is. It takes two type of input for some set of equations um that
+53:12
+maps to um some kind of coordinate system. Uh we use a model past topology
+53:17
+uh tomography. uh so you can get no matter whether the condition is consistent or polar system you get that
+53:23
+some kind of out that's what you want always always it doesn't matter uh where whether it's um but you get that's where
+53:29
+the latis matters this lis matters you know you don't want to even know usually tell you where you are in the world what
+53:36
+is cartian you know where you are you know this man is polar get equivalent
+53:41
+based on the field equation the field you're already in and that's what is a signal you get a what is an signal you
+53:47
+get a full signal you get or you get a full analysis in a polar system you get two ways doing
+53:54
+stuff to the stable uh normal way you go in the universe it's the same thing I'm building for life myself so sign okay so
+54:01
+what does this mean so what I'm trying to do is a fresh like a so is digital
+54:07
+equivalent okay a tripart is a by dial equivalent of of an
+54:14
+empty you get for a free equation of a lap A left you get two right if you have
+54:20
+two left if you go two left you get one right you know you right you have wrong right equation do if you get two right
+54:26
+equations you have one one equal one this one called simultaneous lapis equation basically trying to define the
+54:31
+sum of equation now lapis equation lap plus let's come down so the idea here so
+54:39
+so we get two pi so what's my go
+54:45
+now it's kind of annoying actually I didn't really um kind of mis but but
+54:51
+this not what I want this one to this one. So every two left rotation um if
+54:56
+you if you rotate twice or if you go to two left hs anything you do um opposite something else you get two uh you got
+55:02
+one something you can do that makes it easier um via hamilton graph rotation um
+55:08
+uh I'm not trying to use hamiltonian system to do it via hops um but you know
+55:13
+I love hops body hops so I'm trying to the antip this okay two
+55:19
+pi over pi is what 64% uh uh uh let me just try to do it Um simp let me try to
+55:24
+compute it now. So my cost is 2 over pi. Two 2 over pi is what?
+55:29
+2 over pi.
+55:35
+2 over pi is um 2 over pi is what? Um a constant um pi is half p. Let's call it
+55:40
+half pi. Half pi. Half pi because you know it's half of pi. Uh it's half pi. Um so two not two over pi. Half pi. We
+55:47
+get 0.63661. Uh and that's easy for me. And that's basically the the half area get pi / two
+55:55
+which is the uh so this unit unit perimeter this unit because pi is if pi is the radius uh this is unit perimeter
+56:02
+which is half pi get that's half pi uh 2 over pi 2 over pi is what half pi and
+56:08
+that will be 0.6 uh so 1 - 4 somethingus 1 - 0.6 Six
+56:15
+uh 3 uh 661977 uh uh let me do one. Okay. One one minus
+56:23
+1 minus 0.6 0.6
+56:28
+3661 977 is what uh um so this has some kind of
+56:36
+thing you can measure. So uh so if you if you get a minus get minus if you minus you get minus something else. So 1
+56:43
+- 0.3638027 will give you two. If you get this equal
+56:50
+to digits that's why I have the 15 decimal but is 1 2 3 4 5 6 7 8 9 decimal
+56:57
+places uh uh but you know this 9 plus 9 is fine n is fine this n so one - 1 2 is
+57:04
+uh 1 - um zero can give other one you know if you see you know that's why it matters. 2 over pi. Now pi
+57:12
+minus 2 pi / 2 or pi or pi pi pi / 2 is
+57:17
+what? Uh pi divid by two. So uh this is pi pi
+57:22
+by two. It's like a half pi half pi but you know it's basically the area area half area pi but it's bally pi by two pi
+57:32
+if it was b to parameter. This is b to area. So half of the area will be one
+57:37
+minus uh one minus divide by two one divid
+57:44
+1 over 570 um 7963 267 right that be one minus um 1 point
+57:51
+and one point do one minus 1.5707
+57:57
+this number is very important to keep 96 uniform uh so I'm going to keep nine digits of the nine digits because you
+58:03
+know it's so 1 two three four five six seven eight nine
+58:08
+and that will be uh oh sorry because you got to divide it I have to divide by the other one so I do um so if I do one
+58:15
+divided by this I did I'll do um the other way so that'll be um
+58:21
+because uh if I pi that be if pi is the pi is what 3.14 I'll do one divid one
+58:28
+over one I one divided by 570570
+58:34
+uh 63 2675
+58:39
+uh divided by pi oh that'll be um divided by pi that
+58:45
+would be minus one 57088 4693
+58:51
+332 know uh that's one way but you know get the one we can get the multiply so this is half pi now we get what pi
+58:58
+square this is 2 and get the pi square now pi square is what uh uh p square so you get pi Pi 2 and get 2 pi.
+59:06
+So if you get pi square you get pi square you get pi to get um the model here. So you have to know this pi / 2.
+59:19
+So you get pi * pi or p square and that will be uh 9.869
+59:25
+644. But this pi square is like a uh the the
+59:31
+the area it covers. But you know get two pie get the property covers minimum because the get the the area 4 pi this
+59:38
+is 4 pi 4 pi uh well you get the unit pi get the unit area get the what comput
+59:43
+get the unit get 2 pi two you have to comput all the dimensions you can access basically unit model and the full scale
+59:50
+model I'm trying to do pi square 2 pi square 2 pi 2 2 pi 2 pi what
+59:58
+pi * 2 get this model uh that's two four okay get one one half but we go the
+1:00:05
+other half of the pi but you know this a half unit half parameter but you know get a full parameter that's your point
+1:00:10
+so that'll be pi that 3.14 3.1415 because I can't remember pi
+1:00:16
+so that be 3.1415 so this is a table you need to ensure that the coding never breaks you know because you know if you
+1:00:23
+get something uh like breaking this you know get you know so keep aside you know this is the model I've got so this why
+1:00:29
+I'm trying to uh verify at the local maximum uh uh local minimum and the maximum you know b half half the system.
+1:00:36
+So you don't understand this but this one by the choice model for my new OS M for Mike M for Mike U for umbrella K for
+1:00:44
+O for Oscar uh github.com/ O for Oscar V for bravo I for indigo N
+1:00:49
+for November E for E for S for E for umbrella S for this OS so that's idea
+1:00:55
+here you get it so it may seem count but you know so doesn't matter what it is you using the medium of wave you know
+1:01:02
+there's not construction I'm sorry construction that's in temporary in a full way in a full half and a full and a
+1:01:08
+full perimeter to comput this pi and that'll be 4%. So two over pi is what um so basically
+1:01:15
+I'm going to use the equivalent of it now. So 2 over pi uh two over pi cuz I'm not done with it. I have to get a table
+1:01:20
+correctly cuz if I fail this test now I [ __ ] up you know two over pi is what?
+1:01:27
+Uh and then times 100 and that'll be um because you know 100 is still um that'll be two over pi is what? So you have to
+1:01:34
+get the um two over pi is 64 63 um so I
+1:01:39
+got 64% here uh that'll be 64% and you get the oppos
+1:01:46
+264 26%
+1:01:52
+get what you have to go get 56 uh 57 you get 58% you get 58% here 58% you get 58
+1:01:59
+minus what uh you get two 10
+1:02:08
+Uh uh 10 10
+1:02:16
+I'll get 42% because to get 9 86 86% 87
+1:02:21
+no 87 uh 86 87% here cuz 86 9.86 pi squ
+1:02:28
+9.869 869 P is 89 89 89 it's 6 87 87 plus three uh end is 10 10 carry one
+1:02:35
+it's 19 get 30% and then pi is just the full one but pi is like has the opposite
+1:02:41
+one over pi so get if you get pi get one over pi so this just pi uh but one pi is
+1:02:46
+what one divided by pi one 1 - pi uh and that would be 1 - pi one look I don't
+1:02:52
+want to talk about pi but pi is just one pi one pi one pi you know just to find a perfect circle Cool. So this is like a
+1:02:59
+one over pi. So we get uh pi is just basically no matter the medium you get one over pi.
+1:03:05
+So what about pi? Pi is what? Pi pi. If you get one pi it gets pi you get 0.318
+1:03:14
+30 98 but you don't get pi squ pi * pi uh uh
+1:03:21
+so you get one unit of pi 10%. So this is going to try to do because you uh one
+1:03:26
+of pi is like one4 of a pi be 0 uh 6 1% 1% and this is pi uh 100% this 1% is the
+1:03:34
+0 uh 0.316309 8861837
+1:03:42
+so 0.3 [Music]
+1:03:52
+I don't know I think I'm going to space. Oh, look. Okay, guys. I'm going to stop recording so I can upload it. I'm going to start recording. Okay, upload. Okay.
+1:03:59
+So, uh I start 0.186 cuz you know it's P divided by you know.
+1:04:06
+So, the thing that be 0.13
+1:04:12
+know this is the 1% of it because one divided by one divided by pi is what uh just give the unit pi. This is the same
+1:04:18
+thing as 0. I don't time. You have to do this properly now because you know if you fail this you'll fail everyone and
+1:04:23
+we don't know where we're wrong. Uh so this cockus is like a uh that's why it's important you do it properly
+1:04:31
+calculate it's like one over 0 318
+1:04:39
+986 you know so if you get one over pi it will be one divided by pi
+1:04:46
+you know that would be 0.3 0.0 0. So it doesn't matter if you make one mistake guys. Mathematically this has to be
+1:04:51
+perfectly um got you know every single time. So we don't mathematically make a mistake you know this one is a mistake
+1:04:57
+and the proof is a mistake guys. This will [ __ ] up everything in production. I'm sure that you know it doesn't matter
+1:05:02
+African or not you know. So this is very important to understand it's here. So this kind of pack so this have the the
+1:05:08
+kind of saying especally the bottom one the because the clinical start of anything is 1% but she is 1% literally
+1:05:14
+in everything we do but you don't know it. uh fewers. Um okay, so I'm trying to formalize this for me. So
+1:05:21
+let me just see if this like literally like I'm trying to stop this now. So, I'm trying to go export this
+1:05:29
+uh pi pi pi 3. I'll get pi 4
+1:05:37
+pi the pi three le lecture I'm trying to up my journal
+1:05:44
+um get a pile new uh I'm using audacity to do it to do
+1:05:52
+this kind of things I hate you know automating because I'm I should do some so have to start automating Python so we
+1:05:59
+got that um so what I'm saying is that you got this kind of series of this like the kind of signal every signal that
+1:06:04
+gets in the medium space and the analog space share this kind of framework of of
+1:06:10
+you know via signal processing um but you know they get the um so if you get if you get one over sign which you call
+1:06:16
+the ar sign because you know the ox see the opposite you know so if you get a sign if if you get ar sign you're
+1:06:22
+computing um this all of this but the opposite things you know you get the ox sign and you got the arc so cosine and
+1:06:28
+what you get the arc tangent but the oct is like um the the but the zed is saying or your zed is
+1:06:34
+see my y my y but she doesn't see my x you know she doesn't see my x but just
+1:06:39
+half of my y which is my full y one full one y axis um you see one axis but it doesn't seem my old axis you just see
+1:06:46
+one y axis fully but it's not see or two half of my y so two half of my y get if
+1:06:52
+I get y only see one set of height homogeneous data you're going to get two axis of homogeneous you're going to get
+1:06:58
+the full picture of my y but you can see can guess opposite know the opposite um fully um which is why it really matters
+1:07:04
+you know we just use extra use expensive resources that's why I don't want one so this same guys so get the ox sign so get
+1:07:13
+everything that's a sign uh equation that matches 0 to one so sign so you get a sign equation the sign equation
+1:07:19
+literally uh uh so you get a sign so equation so the kind of idea I'm trying to vision is you get a sign equation the
+1:07:25
+sign is what um rise so if so sign is a number that's 90 90
+1:07:30
+But this signal can probably get 90° get sign
+1:07:36
+but they get inverse. So you get so you have to put in what um a fraction a fraction which is like the one put
+1:07:44
+because of rotation is like a polar. So if I put.5 you know is half of anything I have uh anything you have. So that's
+1:07:51
+same as a half of 90° but you know you don't know you don't know whether to turn right or left and that's kind of the ambiguity of it
+1:07:58
+that's what I'm saying you know if I see half turn halfway you know half is either half of my mouth my direction but
+1:08:06
+that half of 6:00 know 6:00 half is 12 half of 12 of of my 12:00 clock is what
+1:08:12
+6:00 but you know if it's danger if it's danger if it's a real danger you know 6:00 just means my right cuz you know
+1:08:19
+just think oh yes my Right. This is my sister. That kind of intuition I'm giving you guys cuz you know this if
+1:08:24
+like if you kind of shed if kind of this kind of wolves in the dunge if there's a wolf in the park. Uh if there's a wolf
+1:08:29
+in the park in the parking you go for what you're in a park you are you're a werewolf or you go for be hunted by a
+1:08:35
+pack of wolves. What would you do? Turn right. You know turn right. It's a shed. You know don't turn right. You know
+1:08:40
+doesn't matter the danger there. You know that you're trying to get the safety. And that's what I'm saying today matters because your safety of turning
+1:08:46
+right um is like you go right um 6:00 you know uh 12 12 6 um to get to 12 or
+1:08:52
+zero uh uh three or three or three three um 3 hours um 3 hours 6 hours 6 7 8
+1:08:58
+hours but the 9 hours is what yes you get that you get uh uh 0 3 69
+1:09:08
+uh that's so it doesn't matter where you are you know you're we have we have to of time and that's 45° we share
+1:09:15
+equivalent of a half of three uh half your half of three is my so don't forget
+1:09:20
+your your your half one and a half 1.53 uh is basically when you say one and a
+1:09:26
+half one and a half uh one one and a half that means um rotation right right
+1:09:31
+I see left I see uh that's why matter so basically everything is in half so if you have 90 45 you're looking at uh we
+1:09:38
+share 45 degrees so if half or something you half half positive half positive. You just
+1:09:44
+have to find how to do that thing and that's what really matters here. Uh so um let me try your paper
+1:09:50
+like the ugly one but this is what you did. Um this we're going to try to use to compute it. Okay. Uh but you know so
+1:09:56
+we share 45 degrees access one but you know we share 45 degrees of path. So
+1:10:03
+just like a session um continuity um of the system. Let me get a new paper now. So we share
+1:10:10
+a half of everything you know whether you like it or not you know that's what it says you share whether you share
+1:10:17
+whether you care for it or not it doesn't matter but we share it you know if you're in the public world if you're if you're public
+1:10:23
+know she will share it together
+1:10:28
+people I will no m guys no masking guys I love and is a beautiful woman and
+1:10:35
+you're a beautiful woman you know I'm as beautiful as you fuse Who's this fuse nor is a fuse of
+1:10:41
+lightning? It's like literally that um because it matters to you.
+1:10:48
+So uh uh uh uh so um 126 I'm not using my [ __ ] analogy 12 369 12 and then we
+1:10:55
+get um so doesn't matter the path we take. Uh so your start if we start at
+1:11:01
+what uh uh so if we at 0 bically we at where northeast
+1:11:06
+so if we at 0000 that must mean uh we start to go somewhere uh but this can be anywhere
+1:11:13
+around the world you know this our end so if you start as 0 0 my 0 is your my
+1:11:20
+we start at epsilon epsilon epsilon epsilon we get four four uh epsilon
+1:11:25
+epsilon we get which is zero because I don't X1 Z
+1:11:32
+share one over a access. So we have a trident axis model but let's look at the genome they recorded. Uh it's very
+1:11:38
+important you look at this um formally. So for example your your your 3:00 is what? My 3:00 is what? Um my 3:00 is um
+1:11:47
+your what? Um two months. So be so if I start zero um this will be north
+1:11:54
+north uh south south so south to the power four because you
+1:12:01
+get you get this two four south so you have four south because you know that's one path it takes you get four south you
+1:12:06
+have four south we have four north to the power north four north to the^ four and then we get south east to the power
+1:12:12
+four but east to the power four is a start and end so we get a start state of east and start and end depending on
+1:12:17
+where you get where they coming back and that's the point gets state. So we get so we get up epilon
+1:12:25
+state and based on the form of model of north not is is we get for every
+1:12:31
+direction we have every way there is every way to raise to be for us in our physical form we have what um e to the
+1:12:38
+power 16 uh uh because why why you get 4
+1:12:43
++ 4 which is like um the way we go north north um and we get the direction we got to go uh which is um that's what we need
+1:12:50
+um because we get we get So be four four cub we share in the physical location.
+1:12:56
+Thank you honey. 4 square. Thank you honey. And four square is what? 4 + 4^
+1:13:02
+16 minimum uh you know based on the direction we're going to go uh whether north or south or east doesn't matter
+1:13:07
+because thank you for I love you. Um we the space and time
+1:13:13
+I love you. Uh so I'm saying guys we share that thing but if we're going to get there if we're going safely together
+1:13:19
+but you know if we get there safely together so the idea is like um the spin of the quantum physics
+1:13:27
+stability for children everywhere but the body uh the kind of body concept you know body go anywhere but safe you know
+1:13:33
+keep the body safe I don't know die you know when they come they go can go safely
+1:13:40
+there should get bing in a biome want to see the bad doesn't
+1:13:46
+matter you're a terrorist a tourist tourist never tourist so not start not end not end not start
+1:13:53
+we sh it uh if you're not sure but one on show so we're going to leave that out
+1:13:59
+um uh for the encoding so start end um uh not sure we're going to leave that out for the coding for now because
+1:14:04
+that's the nail state that's for because we haven't we don't know where we are you know in the world but we just got to
+1:14:11
+go uh So this can fold you can see all when I
+1:14:20
+fold this can see how you can see how this gen
+1:14:26
+fall down this one with the what's oh my days and you're right auntie our f
+1:14:32
+is 90° and we we fell down here that's why I cannot go up that's why I cannot climb with my legs I'm walls and auntie
+1:14:39
+lally a how I don't know basically we had a big um gap in our and you know we
+1:14:46
+had a gap uh some some kind of way we dimension but literally because our
+1:14:51
+relative folded in it has a big crunch has a big crunch somewhere a big crunch
+1:14:56
+happened something imploded itself and then uh started to fold itself because if you so something imploded imploded
+1:15:05
+imploded first but away from us a long time ago like decades years we didn't even know it happened um but that
+1:15:11
+imploded Something imploded on us. Um but that's not that I forget our reality. Um so imploded on us that means
+1:15:17
+um okay something exploded some sorry something exploded or imploded. Thank you honey. Um and then there we we we f
+1:15:24
+that we became what created. So we become created and then we never died.
+1:15:30
+So because we going force we created what we crunched which we which are half
+1:15:35
+which which half everything our space and time our reality our form everything in this universe is half we can see half
+1:15:41
+we can feel half fully uh but we are because we already this exploded
+1:15:46
+imploed. So if you create try think let me try to get it uh uh read write
+1:15:53
+execute uh uh read right because everything is executed on the fly
+1:15:59
+read right execute read write execute. So two reads equals one right um is one
+1:16:05
+right uh one right is one read uh two right um you get two rights is um what
+1:16:10
+one read uh two right equals one right two right equals one read because you know the share to one uh guys I love you
+1:16:18
+so say guys it doesn't matter what it is everything's on the flight I have quant physics because two right equals two
+1:16:23
+reads and two you know you don't have to execute anything you know to read because you just have to change the state you are in uh you know and it
+1:16:30
+doesn't matter how you do it and that's kind the hacking of the relay system. So that's what I'm trying to mitigate. Thank you. Um this ahead of time you
+1:16:36
+just think as oh you know uh 2x if you got if you have an R square you got the whole R square you have the whole
+1:16:42
+spectral of R you can get a sequence you can read an R you can get you can just observe a reading state you can relay
+1:16:48
+that reading state four times you can get I take the whole system yes so basically R squ if you have two
+1:16:55
+read um two read you get one right permission but one doesn't mean you have full access right to one file uh so R
+1:17:02
+square is two um equals Um two reads equals one right. Uh but you think about
+1:17:08
+the read permission two reads one right uh and three reads equals one execute.
+1:17:13
+Uh so I need three reads minimum but I need so again um let me think about it probably think about it one read one
+1:17:19
+right one execute. So when you need three * three to get three reads and three rights and that'll be three reads
+1:17:24
+and three reads will be what? Uh 3 * 3 will be r cube three right. So that three * 3 to
+1:17:31
+get three * 3 is what? 9 now you get one read all right permission but you know
+1:17:37
+fully hack system the full area of a system uh 3 * 3 is 9 that's a local
+1:17:42
+maximum you alone can hack your system thank you I love you for remembering this and then you get um 3 * 3 uh is 9
+1:17:50
+and get 3 + 3 is six uh so 69 is the stability for me to kill the system
+1:17:56
+hostage so 9 + 9 15 so if I if I maintain the area of nine of uh if I'm
+1:18:03
+within the area of um uh nine I have to keep six active states or six active
+1:18:08
+nodes minimum to hijack via the read permission you know if I maintain six
+1:18:13
+right six right buffers I have full access of the full system uh uh full
+1:18:19
+right access doesn't matter what the whole system uh that's why the matters basically it's a matter so everything
+1:18:25
+hacks to me because I already know what's done is what's done um can be can be undone but you have to undo it u Uh
+1:18:33
+uh uh nonlia via the for right via one way. We can't do electronic or digital.
+1:18:40
+You have to do it. You have to do it at uh what do you know? Okay.
+1:18:46
+So let me do this now. Uh let me do this now. So basically this my framework. So what am I going to compute now? Uh
+1:18:53
+so basically I'm trying to figure this out. I love you
+1:18:59
+RWX. Uh that thank you cuz I don't want to forget this and thank you. Uh thank
+1:19:04
+you and you you're here now you know uh I don't you need to cover the area for the area but you are here because I
+1:19:11
+accept you here but I don't never accept you because you don't with me and I don't accept you. I even accept him but
+1:19:16
+I don't think it's rubbish. It's annoying and you're very beautiful. So
+1:19:22
+I'm thinking myself right now what am I thinking? So goal of this AI is to be really just
+1:19:29
+hold for you where you don't need it where you need it when you don't need it because if you have internet to hold
+1:19:36
+some physical space for you uh where you need that kind of a problem there uh what is the ui okay so what's the
+1:19:43
+problem here so let me think so integration so get um
+1:19:49
+so I'm trying to comput two xy your xy your reality my xy uh so your x y so I
+1:19:55
+need to go through the state of So,
+1:20:00
+so after I get the x so I have to get how so I get my epsilon so I get sin what sin x sin x but I can do sin x I
+1:20:08
+can do sin - x uh or I can do r sin x I can do r sin minus x and that'll be fine
+1:20:16
+so the four the four things I need uh because there two uh two minimum so uh how would I do this uh uh let me give
+1:20:23
+some of area and that be over 180 180 from A to B. Uh because 180 is like the
+1:20:28
+area of A to B 2 pi R and that pi R square and that would be um 180 you see.
+1:20:35
+So what would I comput with this then uh the bunny thing?
+1:20:42
+Yes. Oh my security buffer. No no no my shirt. So this is my one. So this is security. What that mean? So so we get
+1:20:48
+to a point. So you see this point this like your center point 0. This is where your perfect this where your 10% can go
+1:20:54
+anywhere. But you know this where your 1% this your 1% 1% this where you start but you know it gets one one use one one
+1:21:01
+to do let's just use the numbers maximum of 10 10 is the maximum number you use
+1:21:06
+10 10 10 if it's above above 10 so one to 10 uh is the maximum you got to do to
+1:21:12
+make sure to prove this trying to comput this over red so it doesn't matter what it is RGB or colors or so if you have a
+1:21:20
+red green blue model you're trying to ensure that this red Google um disposity
+1:21:26
+of green green green or like cuz you know if you have red green red you get um three you get three
+1:21:33
+reds three reds um three reds per per segment of a screen uh three reds three
+1:21:39
+red colors now three request is the same as the power because you so this power three is
+1:21:45
+equal to three red and that's what it's saying because three red just one cone one cone one cone three if it's if it's
+1:21:52
+not the fluid if it's like a very system that that just displays grids of colors you know that's equal to the same flow
+1:21:58
+system you're doing over R cubed RQ share the full state of the same but you
+1:22:04
+have to do it with a different digital signal VR digital signals uh you know digital signals never anal
+1:22:10
+both both no matter what um V not so uh there still
+1:22:20
+oh 21 uh I got um 9:30 So 10%. So if I'm if I'm looking to show me now 10% 10%
+1:22:28
+path where you can go see where you can go. Um but this 10% is a stem. This is my stem. This one grounded. This was
+1:22:34
+just a point stem but you know stem like just a point. So I'm trying to define this properly.
+1:22:42
+So basically get a tomography layer here. So this like I'm saying so you may think here uh so this where this this is
+1:22:49
+my model here but basically these are the the are not here uh but not important. So uh so have to fold the
+1:22:55
+note in. So this model is actually this model because know if I take initiative. So basically this is what I'm saying. Uh
+1:23:02
+if I'm here if I'm here if I'm stuck here I can go all the way forward. I can go all the way forward
+1:23:08
+because you know I I'm sure I ground that space on time. You know it doesn't matter what it is. I'm just going to do
+1:23:13
+here um because it's like about if I get two static ones and dynamic uh so this
+1:23:20
+if I if I do this for five and that's a half um so sign a half um so get this
+1:23:28
+math done now tonight um no should sign
+1:23:35
+a half sign is what yeah sign sorry so four minutes okay one
+1:23:42
+S uh s.5 is the sign of of a half is what?
+1:23:47
+Sign of a half is what? 45 degrees. And that will be s of a half 45° uh the sign
+1:23:53
+of a half of half of what 0.0875 0 0875 and this will be half of 90 90 uh 90 and
+1:24:00
+this will be assign what assign 45 uh five I don't check it I just check this I just know the same thing is here
+1:24:06
+but this sign of 90° be have the opposite one of the cartian one uh be oxide so the oxide will give you the
+1:24:12
+same because I don't make sense so the oxide will give you um the input so if you put oxide
+1:24:19
+uh if I flip this over the oxide divide this by the oxide divide this by the oxide
+1:24:31
+So, okay, let me just do one over a sign. One of Let me just let me do Let me do one of sign cuz it give me the same thing. If it doesn't give me
+1:24:37
+because [ __ ] one of s uh one over sin one sin 45°
+1:24:43
+uh one over s because you compute um if it doesn't compute because you know it's
+1:24:49
+one over s oh one cosine sorry this is this is just the y1 this y axis um this
+1:24:56
+is 2 y so if it would do one over cosine that will give me the x axis sorry one
+1:25:01
+cosine 445 or.5 No, no. 45. Sorry. One co.
+1:25:12
+Okay, let's do 45. No, five is for 5°. I'll do one side coine. Thank you. Uh,
+1:25:18
+one cosine plus will give me 0. So, I mean cosine. So, get the coine 0.9
+1:25:25
+93. So, you get two ways to do it. So, I'm trying to give you the area. So the area
+1:25:30
+of two parts are basically just two ways can go for five degrees two ways can go over 45 degrees or half of half. So that
+1:25:37
+be one four one two or one half is what 12 is one quarter and so we get five
+1:25:44
+degrees by two. So you get so you get 90° you get you get 90° you get 45 degrees
+1:25:51
+and I go straight just to do it now because I'm going to go up. So get this way this is what it's going to be. So get 45° 45 times half five degrees five
+1:26:02
+that's lally from going back and forth. Uh so I take the same part 0.25. Now 0.25 is um 18 of 45. So if I can go back
+1:26:10
+and forth I take um I have 0.25 to go. Now 0.5 is can go 0.25 plus uh 0.5. So I
+1:26:18
+don't I don't want to think about computing the 18. So this 18 state is um is already in there. Um that's why I
+1:26:23
+don't want to observe I don't want to know but I know I can comput someone can comput it for me or send it to me that's what I want um or send to really to me
+1:26:29
+but you know if I get lost if I'm not sure that's from so 0.25 0.25 is uh 0.5
+1:26:37
+is half of half um 025 is 18 1.8 uh
+1:26:44
+so 025 0.25 25 sign will be u uh from
+1:26:49
+the north from the north from the east east um from if I'm going to east if I'm
+1:26:54
+trying to go to the east east so that basically going right so if I go east once uh that'll be me starting from the
+1:27:01
+the north but I'm trying to go from the north to the east go from east if I start from east for east start if then
+1:27:08
+if I go east uh start east east to the
+1:27:13
+west east norththeast is east to the east northwest. So if you go to the west that be one is one east will be what? Pi
+1:27:21
+that be um 0.25 uh times oxide.
+1:27:30
+So that be 25 * 5. Wait. Yes. Yes. Fine. Uh uh uh 0.25 uh 0.25 25
+1:27:39
+uh uh times time pi * what?
+1:27:46
+P square 2 uh so get p square 2i
+1:27:53
+* p
+1:27:59
+p * p is p squ and that'll be 9.86964 86964
+1:28:06
+um this will be cubed um cubed squared um squared but you know I get I can double this um 9.85 85 will be 5% a
+1:28:14
+stable five. I already know this without thinking about it. And I go right. So I'm looking going to go right but not
+1:28:21
+left. So that will be uh this will be one left up one left x
+1:28:26
+um one is my view one plus x looking right uh because I'm turning left from
+1:28:31
+right to left from right to left. So I get uh from right I'm looking left but I'm go 2 L. So if I go right again I'll
+1:28:38
+be at one state. I'll be I have to double this. So that be like * 2 + two plus or times two same thing here. So if
+1:28:45
+I go once I go so I'm now at um 19 degrees u 19 and a half or three is 92
+1:28:52
+32 uh 88 80 81 now I can either take this and copy this
+1:28:58
+full one u I can shift my plane of my plane of understanding because you know I know more by so I can observe more of
+1:29:05
+my reality so I don't I never need to so I just copy this data so anything I can see in the area is this uh v unit uh
+1:29:13
+because we started from 0.25 and that will be uh 19.7 and then that'll be uh
+1:29:21
+the squared area. Now that'll be divided by 180. Uh once you give me the freess from a to b uh but I don't want to do
+1:29:28
+180. I want to do this let me divide by 180. Um I'm going divide by 180. So this number uh how we divide by so this
+1:29:34
+number 19.739208802178
+1:29:41
+divided by 180 going from my start a to b uh will be uh uh 0.1
+1:29:49
+10 um 110 0.1096622 10 0.1096622
+1:29:56
+711273 um but this is like um the the kind of um the unit I cover um so that divided
+1:30:03
+by 180 from a to b over the polar axis um pi square so this is pi square so pi
+1:30:08
+squ over 180 that's computed just for me alone so this is my pi squ get there I'm
+1:30:15
+trying to so if I invert this so if I invert this um if I if I invert this sign
+1:30:21
+my pi squad um if I this is what I could um but if I if I then do 180 minus it um
+1:30:29
+there's a plus of it so if I do let me just copy it down properly because I can't use this properly now if at least I [ __ ] it up you know so the number is
+1:30:35
+0.19 66 22711
+1:30:41
+23 250 957 uh this is my 180 this is pi squ over
+1:30:50
+180 Now this is 1. Now I want to get the opposite one which will be flip it. So this will be the
+1:30:57
+sign of it. So if I get this I get the sign this my this my coine of it. So so this number I need to go. So I have to
+1:31:03
+get the coine of it and the arc coine but you know the coine of this is a number. Uh so what do I use? I need so I
+1:31:11
+use cosine. If I use cosine I have to get an angle. This is not an angle. So this is not the way to put it. So I put
+1:31:16
+into arc. So I get the arc. So I have to put trigonometry. I have to go to cosine. This the cosine
+1:31:23
+bically the cosine is one over the co cosine. Uh so I divide by so I take this
+1:31:29
+number I cop this number.
+1:31:34
+So I get the one one. So I get one over cosine
+1:31:44
+cosine this. Let's try the coine of this
+1:31:53
+coine
+1:32:03
+number coine
+1:32:10
+uh of 0.1 of 0.109 109
+1:32:16
+662 27 1 2 3 2 1 5 Z
+1:32:25
+957 and that'll be
+1:32:31
+uh 8 um 83 um the 704152
+1:32:37
+uh 646 degrees. So basically if I hold this state um in unit uh this is my um
+1:32:43
+this over 10% uh this means the the the system is stable over the area model. So basically it's tracking the state but
+1:32:49
+it's tracking the area uh that's why the integration m it's lapis integration via
+1:32:55
+the so if I if I have the if I have the area if I have one + one um if I have
+1:33:00
+the units a full one I have a full half if I have a half squared that's a full
+1:33:06
+area of one but that full area of one is the rotating right left so this is the inverse so I I this integration of of
+1:33:15
+for um no matter what single I If I for the two right integrations I take the
+1:33:22
+two right integrations I have one full left integration or left algorith I can do uh a function I can take and you can
+1:33:29
+see I've got it now so uh this is r cosine which is one over the cosine uh and one of the coseant is like um the
+1:33:35
+same thing but it's the cosine is um so you got a sequence which is like the the s over tan y um but the that's the final
+1:33:44
+one you need to do uh for your stability for how I look at so you see same thing
+1:33:49
+so the the function is concentration so it doesn't matter whe the PS are concentration the the integration of the
+1:33:55
+system is this one space and this one time equivalation
+1:34:02
+rule um 10% is sustainable for the pauses uh for rift via metadata m
+1:34:10
+rf or metal rifiles or rf files and rift um we share a calculus of rift uh uh for
+1:34:17
+polygraphic tommo files for Python you know whatever the build target is uh for the target language uh uh you know
+1:34:24
+because you can use the standard rift files for the packaging um rift is a target but you know they have the or use
+1:34:31
+the rift or the rift toml file or python rift toml show you the standard pack or
+1:34:37
+or lure rocks package manager or or c canon doesn't matter package manager it's just rifting and that's what I'm
+1:34:43
+trying to um uh give you guys here uh Um again um so basically I've just showed
+1:34:49
+you guys how this works. So guys look at it
+1:34:56
+guys. Uh I'm going to show you guys what I put against one two three four five. It doesn't
+1:35:03
+matter uh what basically if anything's loading what should be I don't think loading is banned because loading is
+1:35:08
+banned just doesn't matter but have some space um it needs so it's preloaded
+1:35:14
+because you know um just loaded because it's there um because I'm trying to code myself into reality but in a
+1:35:19
+metaphysical sense so most just antipop protocol so we can never pop because we have to space and time at one time uh
+1:35:26
+because what I'm trying to really do is this so so I'm trying to smooth out the edges
+1:35:32
+But I'm not trying to smooth it from side. I'm trying to like shape this into some kind of curve. But to shape this to
+1:35:37
+some kind of curve will be the flame. So this a little pointy end cuz you know this is a point. So this point is like protected. But for this to be protected
+1:35:44
+it has to be bubbled. So um you get this axis. So if you get a you get um the lapis can go up and down like you know
+1:35:50
+you get infinite um dimensions of the same axis but you know the goal is like you start from where you start you are
+1:35:55
+shaping with a care you are. So if it's a point of a and b you get a a path. This is you here. If you are outside, if
+1:36:03
+you're outside, you are you're not safe. But you know, you are inside when you're inside, you're safe. So you get a burning burner, you get like a dynamic
+1:36:10
+effect to that, you know, if you go into it's like a bubble, but it be like a water, but your part you're solving um
+1:36:17
+to show that you are you are safe at the space of time, you need to be safe. You know, when you need to be safe, you need to get safe because it's going to like,
+1:36:23
+you know, when you have a red bum red flame, watch, it's not really dangerous. If you have orange flame, it's more dangerous and you know, you know, you're
+1:36:29
+getting in danger. If you got a green flame, you know you're bad. You really bad and you get red, green, red, red,
+1:36:35
+green, don't get it, but you get the red, orange, RGB, uh, red, green, blue,
+1:36:40
+uh, uh, but the blue means you're moving away. So that's blue shift. Uh, uh, so you know something is in danger and you
+1:36:46
+can signal danger without actually being told there's danger. Uh, that's kind of encoding program what you're doing. It doesn't matter where it's like words or
+1:36:52
+something. You know the language means danger. Uh, basically it's a danger problem. It's kind of kind of symbology.
+1:37:00
+So you know this one was a hard or something but that's the problem we're trying to solve. Uh because we have a kind of um color and that's why having
+1:37:09
+the color state is no matter the medium we use we have a shared medium in the medium we all use whether it's pen and
+1:37:15
+paper or pastels or or ink that's what I'm saying here guys. Okay. Thank you guys.
+

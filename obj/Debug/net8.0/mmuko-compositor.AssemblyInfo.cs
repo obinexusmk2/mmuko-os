@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("NSIGII Heartfull Firmware Compositor - MMUKO-OS")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("0.1.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("0.1.0-DRAFT")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("0.1.0-DRAFT+9b68db9732aca68c90c94f32f1efd4df6851d0d4")]
 [assembly: System.Reflection.AssemblyProductAttribute("mmuko-compositor")]
 [assembly: System.Reflection.AssemblyTitleAttribute("mmuko-compositor")]
 [assembly: System.Reflection.AssemblyVersionAttribute("0.1.0.0")]

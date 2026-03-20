@@ -1,0 +1,1031 @@
+Fitler and Flash Interdepe CISCO Sequence and sERIES Exectaion ORder Relay Message Packet
+
+Let me get my life.
+1:20
+Okay, let's just start. Oh, started. Okay, so now it started. So, let's Okay,
+1:25
+the time now is 1 minute 20 [ __ ]
+1:37
+black. So the title of this video chalk the title is
+1:45
+I go 43 minutes timer on it. Oh it's not recording. Yep. It's now recording. Yep. Is it
+1:53
+guys? Uh the white is going on. Okay. Fresh. Um yeah go to title
+2:00
+original here. Title is sent to me sent to me plan.
+2:07
+filter flash interdependency uh sequence and series Cisco order
+2:14
+here. Oh no, I'm busy. I'm busy. I'm busy. I'm streaming. I'm streaming. Well, you're not going to come. I know
+2:20
+you're not listen. I'm sorry, but I cannot
+2:29
+just go sequence [snorts] and see this.
+2:36
+Execution order inverse
+2:42
+relay messages
+2:48
+try okay
+2:53
+to type ready I can't see myself anymore now I can see myself uh yeah so try to
+2:59
+do flash is
+3:05
+I don't know.
+3:10
+So uh filter
+3:22
+flash
+3:36
+dependence. What's up?
+3:48
+Um,
+3:59
+vertically
+4:04
+here. here.
+4:13
+done. So there
+4:19
+uh let's see once you receive the so basically the title guys here
+4:28
+the title is filter and flash interdependent um inter interdependent
+4:34
+Cisco uh Cisco sequence and series instruction uh instruction execution
+4:40
+order uh VR inverse relay u try messages
+4:45
+Um yeah so a brief the brief a brief desription of the title
+4:51
+the title is about so what we're getting into is quite complex but it's basically statements
+4:58
+for human rights oper system um but today's date is um the 13th of January
+5:03
+26 the time now is 10:15 a.m. Um the goal of this have a conscious message
+5:08
+packet. So um you can think of this as a chamber of echo chamber uh something
+5:15
+echoser echo chamber not echos server it's basically try and read message system
+5:21
+for the beauty ination in computer so it's basically filter flash sequence
+5:29
+into the sequence so something for inmemoration so it's um it's
+5:38
+independent because it's supposed to filter and flash of filtering and flashing. uh filtering
+5:45
+uh ref idea of sodium uh sodium but it's basically a type of
+5:52
+function function funers of functions functors which is a mo functions um
+6:01
+filters filtering sorting searching merge sort all the search all all the algorith does
+6:08
+not destroy anything. We just mutate the data. It's not destroy have state
+6:15
+pure functions um that are functions that just mutate the uh um uh mutate the
+6:22
+state but not the data. Mut data but not the state of the system. Um you know you
+6:28
+don't for example splice splice and splice. Uh splice is um splice is like a
+6:35
+a computation function like you're splicing your you're trimming [clears throat] out data moving like
+6:40
+some kind of index your prun you're not mutating the data you're not you're not
+6:46
+mutating the state of the program or said you're mutating just the data you're working on the data so we just
+6:52
+have to get information without the state of the program and that's what I'm saying it doesn't um it's a filter we
+6:58
+need a slice uh as a slice. But the slice means you're taking all the programs and um uh
+7:05
+even all the data like uh for example here I'm going to write this example here. So uh before I start I'm going to
+7:12
+use my business name um um OBS. Um so I'm going to have an axis here to
+7:18
+determine ahead of time what I'm talking about. So it's basically example I give you if I give the word my business name
+7:24
+OB nexus
+7:30
+this is one axis uh I can choose um I can search for index uh uh this
+7:36
+[clears throat] is x axis uh xaxis it's basically um xaxis um I think I made a
+7:44
+mistake uh x and uh uh x X X here
+7:52
+goes this way. Y goes this way. So uh what uh xx2
+8:04
+and this same message here will be nexus is my um
+8:11
+yeah they have two axis of so it's basically the term distance is bally hot
+8:17
+and soul uh model but the filtering is like a sodium
+8:23
+search merging without changing Chrome state and flashing is the actual storage of the data. Um the quality the problem
+8:31
+here is uh all for E for Bravo, I for indigo,
+8:37
+Nvember, E for echo, X for X-ray, E for etc. have two axis X for Y. But they
+8:45
+have three accesses message have three axises X Y and Z. But this message is a
+8:51
+trident. It's a trident message because the world is threedimensional.
+8:56
+So the interpretation must be served threedimension. It's called a trident message back. You know because the world
+9:02
+has three dimensions. We have X Y and Z. And this protocol shows that message go
+9:08
+through the X Y and Z and preserves the message. So the work on polar inverse
+9:15
+two. So the preserve the data structure. So the work as you can see in the board has future fashion dependency. Uh so
+9:24
+fing dependency is the idea that they work on polar my model of lapis
+9:29
+integration. So which I put back. Lapis equation basically a lapis is a
+9:35
+polar polar system but the work on
+9:40
+the work on pi on p
+9:46
+um the work pie west
+9:53
+high is west high is west pi4
+9:59
+is North. Oh, sorry.
+10:05
+So, pi north, east, southwest. So, we get pi / 4 is north. Pi over 3 is east.
+10:15
+East and pi over pi over two is going to be south
+10:26
+and pi over pi. This part
+10:31
+is so west. So as you can see you have uh polarity lapis L for normal E for
+10:39
+apple P for copper I for in S for SA it stands for it's my calculus intuition my
+10:47
+calculus I used to um code polar systems so they work on the kind of system of
+10:53
+dependency too. So you know it's work 0 0 but the 0 0 is basically um referring
+11:01
+to the the um kind of um um you get turn
+11:07
+you have an angle you determine the angle you want to move first before you u go which is obvious to the x and y. So
+11:15
+you have an angle theta and that angle is theta. Theta is the angle and theta
+11:22
+is defined by the angle you want to move first and that the direction you want to go. So theta of rotation and power the
+11:31
+power use. So can be just lambda you get
+11:36
+lambda lambda calculus and calculus you use them in kind of power what power
+11:42
+what power want to use and the power use for power power equals 1 / something
+11:49
+else or lambda power and distribution but
+11:54
+they work together to send a message um via trident the tr system three
+12:02
+messages three um three um three messages that sent together for the work
+12:07
+spring. So I come on but this so you know let's just
+12:13
+[laughter] here you know the message how you get you get O
+12:20
+you get BB you get um 2B um Z so how do
+12:26
+you see this like an axis of letters I told you how I did it uh so it's
+12:31
+basically uh BB O so B B so you have the
+12:37
+packet BB here two B's when you're doing the two Bs
+12:43
+here on the B on the axis X B and B and B you know B and B which if I send
+12:52
+one message if I send one send one B in two systems there's a there's aation
+12:58
+there's a chemical shared there two B's the two B's are
+13:04
+you see So, and the two beats are basically
+13:54
+Thank you.
+14:13
+Okay. Okay. Um,
+14:19
+calculus trigonometry. So, one second, guys.
+14:24
+trigger memory look up click up table.
+14:30
+Uh uh so
+14:42
+yes. So basically uh video coding science
+14:53
+video I'm saying to you one second.
+15:04
+So insane. So we're going to continue the video but literally it's not 030
+15:13
+truth table 0 30 uh uh square to half square to 3 pi
+15:21
+and you know
+15:27
+so simple trick table so let me just go to trick table here
+15:33
+six radian motor so it's modifying.
+15:44
+Okay, one second, guys. I'm going to have to do this the hard way, I think. So, so you know, I need to find
+15:52
+Yeah. Okay. uh currently I'm still currently currently need to find uh uh
+16:00
+uh memory memory pneumonics table for um
+16:05
+uh integration for uh for before I continue for trigonometry
+16:12
+I need a list image that shows me in a table.
+16:21
+So, so
+16:31
+how the how how the how the integration
+16:37
+how the differentiation works. Okay. So, let's continue.
+16:46
+So we got this bas where we left off on stairs. So where we
+16:53
+left off was stairs [gasps]
+16:58
+basically so to right angle opposite
+17:08
+two. Okay. basically close creat
+17:19
+but litally get um 2. So P and B you get
+17:25
+B and I or I and B and I get I here
+17:32
+and you get see let's get VB V R
+17:38
+and uh So R
+17:48
+get I get excit
+18:07
+just depends on the code access um the way it observe the message from so you
+18:12
+get how you are okay so let me see the code that table
+18:20
+yeah [gasps]
+18:29
+okay so close finish this table um so
+18:34
+like I was saying to you um the video is um to continue. So we
+18:42
+get the message OBS from two angles two axises uh two axis.
+18:48
+So you get the x ais or be r x you get a y axis and you get a z ais ais um but
+18:56
+this bally axis the z uh which is basically um the uh uh the tangent line
+19:05
+uh the tangent line but z is not tangent line it's basically um the um
+19:14
+the mathem wonderful way to divide the x axis or not. You get the projection of the uh x and y axis.
+19:22
+Let me just read the message first. So the message will be
+19:29
+nexus but you know depending on how you look at the message. So, uh, a bit of a
+19:34
+redundancy. You got BN BN. Oh, this is the first two lines of
+19:41
+it. BN uh uh B uh E
+19:47
+B S uh B U and B S.
+19:53
+But our goal is to send this message. Uh so we draw the first two lines which is
+19:59
+indexis and uh uh the first ais x0 x index zero the z index on the x0
+20:12
+x for this here. So here and now
+20:21
+here
+20:30
+it's like the the as you can see as you can see
+20:35
+guys the message is here already
+20:41
+you can form the message up so it's basically uh over graph so the first
+20:47
+index of X axis you just have two X axis um X and Y you
+20:53
+get you get four [clears throat] combinations you get X which is like um
+20:58
+two X now you get uh X Y for the Y ais you get YX
+21:06
+and you get Y um so the the term the term uh se
+21:14
+sequence represents the sequence of communication So you got xx xy yx and y y y y y y y y
+21:22
+y y y y y y y y y y y y y these are three axises three axis to have comput. So if you comput the y ais you use x and
+21:28
+x mathematically of course you can use it but to get to the yaxis
+21:33
+of y have uh sequences sequences and series of instructions [clears throat]
+21:39
+um message say what I'm doing so the sequences
+21:45
+request double the message um trouble try to one message two messages to one
+21:52
+or interpretation of the system uh like ox can represented as next OB where next
+21:59
+OB will be backward. The word OB for V for bra
+22:07
+for echo X for X-ray for S can be S for sugar formula X for Xray E for echo for
+22:16
+E for bra for Oscar. Yeah. Can be that way too. You just have to um depending on the kind of how set that you are
+22:24
+inter way Cisco this is the standard way you send stuff you have
+22:32
+citizen
+22:41
+it's a standard way solution video works basically uh it's basically the chemical way everything every legend yeah get
+22:48
+there's no garb um you can stop ging by using Cisco. So
+22:53
+the Cisco represents the system of um self balancing trees you have on the
+22:58
+left and right. So I'm going to this book one more time and give you I'm
+23:04
+going to using this uh place here. So 1 2 3 4 I'm going to use this area here.
+23:09
+So I will show you what Cisco is doing after I do this complet but um so now
+23:15
+the three. So, so the term obus is hard can be can be said as uh sex sex
+23:24
+sus sex next ebo ebo success word flip order and
+23:34
+you could say obis but are do you mean obelis or no? So an x to y sequence uh x
+23:44
+to y sequence you know x inverse y so x
+23:49
+inverse x sequence because you give a two direction flow and you know it's
+23:55
+basically what I'm
+24:00
+bottom up so this I'm going to discuss here but let me finish with this so the message
+24:07
+can Again bottom up which is like started from um
+24:14
+the S to the O uh top down from the O as root to the S but respecting left root
+24:21
+right left I mean root left right uh root root
+24:28
+being the O being the root B being the the left and the I being the right and
+24:33
+um and so on you have a balanced um uh uh red black tree that doesn't black
+24:40
+tree doesn't need to be pruned. Um you go I'm going to prune anything it's can't produce for example um the message
+24:49
+of October I for India is Octo be India it can be can be
+24:56
+represented as two different ways so two different colors now it's kind of
+25:03
+kind of funny so you know so you get I I you get N when you get I N you get two
+25:12
+orders you have back and forth. You get an I. Um but depending on the order of the system, you get an I. You get I get
+25:20
+E. You get I get E
+25:26
+and then you get this. Then you get
+25:34
+uh uh odd odd
+25:39
+then x then you get odd
+25:44
+then you then you get
+25:50
+odd. So get vectors you get
+25:57
+the board. In the first set to get two B's um BB BB I I you're trying to reduce
+26:05
+the system to a state where there's no ambiguity in the message. So over the
+26:10
+x-axis y axis the the losses x so you get two axis of messages you use the
+26:16
+loss of varation but l just know that's how works so the work access and the
+26:21
+last so you have three axis here xxy yx the last y can be used for rotation
+26:31
+um if the message is is a y axis sent in the the x the y axis of the world or
+26:38
+something the the the the x-axis is already in there. So you can use you
+26:43
+just use the one axis to verify the message. But the trident is the trident is basically XY X to Y2X and Y to Y.
+26:51
+That's the message. That's the full message. Um so for any verification the stick works on one axis only and that's
+26:57
+the X axis check the the share the X notion. It's just the message just to
+27:05
+message. So the X the X sequence is basically um double the memory and half
+27:10
+the time. That's the sequence of C double the memory and half the time a try me. So the memory is basically
+27:17
+double the memory and half the time. Okay. So that be half the time and triple the message. So the message
+27:25
+so let me finish the board now. So you get um uh NP
+27:32
+NP you get uh N I
+27:38
+you get N you get N E you get N X you get N U or U
+27:53
+N depending on how a reflection I'm sorry.
+28:01
+So this is a full board here. Let move closer to see how it looks like.
+28:07
+So here computer work sometime. So the here now protocol is OBI Nexus. See how
+28:12
+you get X here X is just for vacation but it contains you can't have you can't
+28:18
+have a Yaxis. You cannot have a Yaxis without an X-axis you know. So y can be
+28:23
+computed as um mathematically y can be computed from x we need two x-axis and
+28:29
+how that will be is uh via polar sequences. So for example you have uh xx
+28:35
+uh xx really two axis of x negative x and positive x uh and therefore you can
+28:41
+have one y axis y axis because you know um you can have for example if you have
+28:46
+so toa y x you have cosine cosine the cosine is basically the x equivalent of
+28:53
+theta the x of theta um cosine u um uh
+28:59
+30° equals um uh something. So let me
+29:04
+try to give a copy and do it perfectly. So as you can see this axis of OBS has
+29:11
+no my pen broken too.
+29:17
+So this axis one second guys
+29:23
+broke my choke broke. So [clears throat]
+29:28
+you have the axis of XYZ
+29:34
+and the mathematical because they are interdependent
+29:39
+by design interdependent by design. Uh you can have intermissions which are a
+29:45
+sequence of instructions can run while the system control command system by me
+29:52
+as a so it's a command system on the fly. So they share some kind of lapis
+29:57
+integration over polar work. So as you can see here we have pi / 4. Pi / 4 is
+30:04
+equivalent to uh a system of pi / 4. uh P4 is no east is P3 but you get a system
+30:12
+that's interdependent that you can you can run can that can be executed on the fly because you know it's so g
+30:24
+messages messages that mean something via three interpretations in one system for consensus yes no and
+30:32
+maybe so you can see here you have pi 4 pi / 3 which is east, pi over uh two
+30:40
+which is south and pi over pi which is west. The sun rises in the east and sets
+30:46
+in the west. The sun rises in the east and set in the west. So you can use your your hands to do this mathematically
+30:51
+verify too. Now the second protocol is November I indicate
+31:02
+to verify ahead of time. Uh so it's not
+31:07
+It's not a bureaucratic system can actually do something uh via command
+31:13
+commanding and controlling. So you get the um uh sigi uh symbolic expression
+31:18
+files uh expression of intent symbolic intent files those can run
+31:25
+command and control and just send me. So the messages are protocol buffers
+31:33
+and they work on protocol because they are they have can have a standardized
+31:38
+schisma and the schema is supposed to verify not the message. So this maps the
+31:44
+schema too because message can be tampered with but not the schema. This is called standard work. Then you get
+31:51
+the same problem you have with someone using your system via ruling. But the
+31:56
+yes no concerns yes no maybe problem is what is based on because you can have my
+32:02
+yes be your no. Your no be my yes. And we can go agree on maybe maybe we can
+32:08
+say maybe and what maybe means you know show maybe.
+32:14
+We can say yes. If I know yes that mean yes my my head not a yes my shake head
+32:19
+shake is a no but also maybe it's a struggle the shoulder maybe maybe or
+32:25
+lifted the hand and you know that's why the system matters because this is needed for parties to negotiate in terms
+32:31
+of the system um uh so as you can see here guys uh the let me just read it out
+32:38
+you know xx xxx ais x ais y axis so as
+32:44
+you The x2 exercises have the same yaxis depending on the message
+32:49
+but the construction is independent. So you don't need the yaxis it's not needed you don't need the y axis you know two
+32:56
+different axises two different dimensions. So that's what I'm saying to you. The goal of this to have a fully
+33:02
+separation and they have to look on FM
+33:07
+which is like polar culace polar calculus um because the whole world has accesses and those axises have degrees
+33:15
+of dexterity um which are called message range um
+33:21
+message range message space range for every pathway shape or form the machine
+33:26
+takes there's a way to resolve that message. So you know so the yaxis is independent
+33:34
+to the x axis you don't need the x you can choose the y axis you don't need so the y can be your x my axis my axis y
+33:40
+axis can be your baseline x and uh if you can give me your access because you
+33:47
+maybe maybe that is something else for you that can be your epsilon and we have determin
+33:55
+so that's what system is driven so um order is same problem the message has
+34:00
+but the basically you get the sequences which are the axises and you get the
+34:05
+series which are which so the schema schema symbolic expression
+34:12
+files n files or you know n expression of the
+34:19
+single symbolic intent file is a a file
+34:24
+that can have hold the space of the training forever indefinitely so people can only
+34:29
+and water and shut up and that's the problem. It's not it's not
+34:36
+something that problem. So breathing and living are optional.
+34:41
+So because it's not breeding and living only work the once once the point is
+34:48
+allocated once the point is allocated working the program hold it indefinitely. Um the holding is cannot
+34:56
+remove can be reallocated and that's how the paperwork is done. So any people who have anything they can understand intent
+35:02
+via natural language understanding via the natural language of the system. So
+35:08
+natural language but without using AI there's no AI involvement in it because I've seen I know you can work as a
+35:14
+natural language you know without you don't need to understand language or
+35:20
+feel just understand human understand
+35:30
+so this what how uh so let's go to the tree itself So the
+35:36
+tree of this will be root left right. Let me start with the yaxis. Y my x is
+35:42
+your y. So my x do my x
+35:48
+my x is your y. My x is your y.
+35:55
+My y is your x. So that means we share a
+36:01
+dependence relation of practice form. This is my [clears throat] Y is X. We have an X. We share an X to Y
+36:11
+relationship. We share that position X to Y and you say X to Y axis I'm saying to you. So this is how we get my Z axis
+36:21
+my up and down. So my left and right my left to right is your uh my left to
+36:27
+right is your side to side is your side to side. you decides my left or right
+36:33
+simple as um so I'm going to verify the x z ais
+36:41
+you get x y and if y get uh
+36:47
+y z then you get z y you get zed
+36:54
+see this axis of yaxis b tangent model uh but until you get a tangent line you
+37:00
+can computer well system uh which just tracks what you need. So I'm saying to
+37:06
+you what the message obvious is not done. Yeah. So you know I'm going to use this to verify the Yaxis first. So this
+37:13
+Y we need one dimension of rotation via X and Y. So the message sent in X and Y.
+37:21
+So this is the message again. So the message again is exist.
+37:50
+So this is a self balancing tree. We're trying to construct the trees um that
+37:56
+will never break down the message of the protocol um because the protocol is here
+38:02
+and now. So I'm going to message here and now friend. So I don't have to send
+38:08
+all the you can see here this is self tree. So if I'm saying
+38:16
+these are three characters and that's why I need to start. So these three moving on I look them up in X and Y X
+38:24
+and Y. So X to Y X X X to Y and Y to X which is this problem here.
+38:32
+So I'm saying so you know so the message works. So you got the X and Y axis here but this is
+38:39
+not really the X and Y say um the system of um my X is your Y but this but if it
+38:45
+is I should verify it now. So, so x to y and y to x is what we're going to be using here. We just share some
+38:51
+dependencies here. It just say just see that they're alternating.
+38:58
+Yeah, I'm quite busy now. One second later. Yeah. So, you can see um um y beam beam
+39:07
+my beam is your beam. My i is your i. My
+39:12
+n is your m. But they work another axis. And that is basically the sequence rules. So for example you can see this
+39:20
+really same I just check this same. So B I M B O B. So my going to be my O2
+39:27
+right. So but this axis basically um the axis of auxiliary. So I'm trying to find relationship between
+39:34
+I can have so mathematically this will be what's sending a message to because a
+39:41
+chain reaction like a chain action and that works basically like this. So you get OB but this not going down. No it's
+39:48
+not going up index. So if you use index if this is in 0 0
+39:55
+or 0 0 which is index then index 0 0
+40:04
+and zero. So the two indexes 0 0 represent the kind of uh degree of
+40:09
+access or message. But you know basically the screen [clears throat] works on send this message here but it's verifying the first sending. So um I
+40:16
+should 0011 22 for the length of the message um which
+40:24
+is uh 1 2 3 4 5 6 7 8 1 2 3 4 5 6 7 8.
+40:30
+So the has eight characters. So that mean the seven indexes here 2 3 3
+40:39
+4 0 0 1 1 22 are encodings for the
+40:44
+message. So if I don't receive if I get 32 [clears throat] this message is incorrect. It's
+40:50
+incorrect automatically because 32 represents N I N I or I am depending on
+40:57
+the access of the system. Um 32 literally 32 was recording.
+41:03
+I don't know recording. Yeah. So the numbers literally 32 will
+41:09
+mean that you know because this message is basically 0 0 1 1 22.
+41:15
+No. Oh come. Oh okay. So 33 22. So so will be the kind of um
+41:25
+result. So if I get um a one two as well one two. This will mean I guess index
+41:31
+one will be of the y axis literally index one of y axis will be
+41:37
+uh uh index one will be b and two and index two will be b i so b i will be b i
+41:45
+for the message but this message is incorrect because you know b i is not index one one so this schema is
+41:51
+basically for the characters dynamic programming so I just have this access
+41:58
+So 0011 22 2 33 uh and uh and uh and uh
+42:06
+44 44 55. So basically index zero
+42:12
+zero zero is basically referring to the system of uh uh uh 0 to 8 0 to 888
+42:24
+0 to 888. But these are basically input input indexes.
+42:30
+Input indexes. So input input 0 to 88. And when you say the message, you have
+42:36
+to use a spring to push push pull back and push it. But you really have a message to send. Um so 88 this will be
+42:44
+so the trident will be um how many combinations of 88 you have the trident will be 88 88 but 88 to the^ of 3 to
+42:54
+the^ 3 for the xyz axis and that will be
+43:00
+let out 8. So 8 8 is an indexing of 8 of 8 to
+43:06
+the power of three will be 512
+43:14
+512 bytes of data if it's just um if it's just uh if it's a asy
+43:22
+uh asky um or UTFA 500 validation because at the maximum you have 52 52
+43:33
+indexes This will be easily 512 bytes of data will be sent uh at the
+43:40
+local min maximum. So to send OBX to someone else um around the world am I
+43:47
+wrong? No, I'm wrong. Yeah. No, I'm wrong because you know the I'm wrong because the here now so the message is
+43:54
+already constructed but in this case I have I can constru
+44:00
+for for the entire alphabet which is the power of three. So this is to the power of three.
+44:10
+Um no 25 to the^ of three because you get zero indexing to the power of three
+44:15
+we get 25 to the power of three and for XYZ
+44:22
+you have 1,500 15,625,65
+44:30
+um bytes of data um in bits of data index bits index bits of data um
+44:36
+indexing sequence I confused like right now but you know It's kind of hazy. So I'm doing I'm doing wrong. So I'm doing
+44:43
+wrong. I'm doing right. So you know uh there's way to verify the system of the system but you know is know ahead of
+44:49
+time what the memory needs. So you know because I'm calculating in access. So be a 8 index. So as you know time so 80 to
+44:57
+the^ of two a to the^ of two is 64 64. So you need
+45:04
+64 bytes allocated ahead of time. Um and then that be hard the system. So half in
+45:10
+half the time. So basically not no one needs when the noise is sent what is be allocated 64 bytes 64 bytes of data
+45:17
+allocated 64 bytes of memory is allocated um as a local maximum for
+45:22
+squared but for a to the^ three you have 64 bytes of data uh 64 bytes of data the
+45:30
+index rule indexing rule of the system represent the four bytes of data if it's
+45:35
+OB the OBN just 64 bytes of data not
+45:41
+memory. So that's the four bytes is basically half the space and double the time. But double the time will be
+45:47
+require equation of field equation. So the four bytes of data will be six power square and a to the^ of three
+45:56
+is 514 512 bytes of data. So how this works mathematically is mathematically
+46:03
+64 bytes of data is send two messages two messages. So if you got mistake just
+46:09
+say just send two messages two messages and that is 64. So you just need to power one
+46:18
+eight by eight by memory but four by what you
+46:23
+need to do by memory. So mathematically I can't write both. So let me just try to improvise.
+46:34
+So let me try. So this this work by
+46:40
+um I got a calculator here on the board uh the just try and rub it out because
+46:46
+you know um here
+46:52
+oh
+46:57
+so the processing how the processing work
+47:02
+um so the processing works like this um blue white.
+47:08
+So you get the blue. So you get um the kind of type one type one processing
+47:14
+uh type two type one full inverse type one full inverse which means half the
+47:20
+time and government space. So if the space is a to the power of three a^ 3 to
+47:28
+the^ 3 y 512
+47:35
+512 bytes bytes 512
+47:42
+and this is the default by allocated to the system uh and it's power three by
+47:47
+something this is the memory memory memory allocated and the time you got harder time. So if I'm receiving a
+47:53
+message in like um 16 let's say message in two seconds two seconds you get one second. So just two seconds uh in Newton
+48:01
+of course Newton 2 seconds two seconds will be seconds 2 seconds 2 seconds
+48:08
+would be um or equal to 6,000 times. So this was
+48:14
+the bit rate. So the bit rate of the message is 512 bytes over 2 seconds
+48:20
+which is 60,000 12,000 milliseconds
+48:25
+1200,000 millconds 1200,000 you get two 6,000 millconds
+48:35
+um you get two two it's basically a system of um um trust
+48:42
+the right half the space and double the time is not the worst case. You want the worst
+48:47
+case of the time and that time two seconds 2 seconds you get 1 second. 1 second
+48:55
+which is 60,000 milliseconds divided by half space and double the
+49:01
+time. Now the time for try the message is 512 512 * 2 [clears throat]
+49:09
+512 * 2 512 * 2
+49:16
+is 1,00 and 1,24
+49:24
+this bit rate. So uh so this question is 1,24
+49:29
+uh 6,000 divided by 6,000 /4
+49:36
+1,24 64
+49:44
+is 59 5.85.86
+49:53
+86 5.86 um time time first 5.86 time first
+50:01
+to space. So if I time um that'll be 5.8
+50:08
+859 5.859 uh which is 5.86 86
+50:15
+um from time to the time not the space
+50:21
+first and that was allocated to the for for half the time and double the space.
+50:28
+Now you get half double the space uh double the time double half the space and half the space and double the time
+50:34
+you can have half the time. So half the space will be 512 / 2 which be 26
+50:44
+by of data over double the space double space or or just space you know um
+50:52
+double space um space allocated but you know the double space is not really
+50:57
+double space is basically 512 + 512 um but uh uh that will be the maximum
+51:02
+rate so 512 + 52 is giving you 512 * 2 give you * 2 give you 1,24
+51:10
+200 you have 26 bytes of data uh memory
+51:16
+divided by over double time over half the time double time the time will be 4
+51:22
+seconds* 4 so you have to be divided by 4 seconds
+51:28
+which be 64 so 256 / 64 will give you
+51:34
+256 Six by four
+51:39
+would be uh four four by four bytes
+51:47
+um four by sequences four by sequences so of memory allocated
+51:55
+ahead of time. So you can do this by verifying the indexing operation and doing this. So the now the last part of
+52:02
+this is basically sequence of the system. So sequence is basically four byt sequence for the space this is space
+52:09
+space the space is s the space allocated need to be four by sequence only four
+52:15
+bytes of four by four by um four bytes for uh uh uh double the time for half
+52:22
+the time for half the space and half the time half the space is this one half the space is 256 um by which is four bytes.
+52:30
+So that 26* 4 to give you 512 um in sequence. So basically that's allocated
+52:36
+for the C four bytes four bytes to four bytes for
+52:42
+every 64 seconds you take uh to send a message ahead of time. So the Mexican is
+52:49
+sustainable via like a to like V onion systems onions um which are systems of
+52:56
+onion onions onions but you know don't worry about that for now. So you get you
+53:01
+get the the time S and T the space and the time the space in bytes bytes it's
+53:08
+called which you need um the time so you for um to the 5.86 86 sequences
+53:15
+sequences of time by we get a series of series basically the polar space
+53:21
+of time first I can space of the system the space of the message or I can time so I could
+53:29
+just do two time 2t to 1 s and that's the ratio of the
+53:35
+system so this one every two message I send that failed every two message I
+53:40
+send to team in time I send I said one I said one space I allocate back to the
+53:47
+allocate for the next sequence and that's a series so series execution is in parallel too because you get two time
+53:55
+to have the space um so next next lecture we'll be looking at um formally
+54:02
+um in the next video we'll be looking at double the space double time that will be that will be my calculator v so we
+54:10
+have 25.86 86 86 25.86 86*
+54:18
+2 57
+54:24
+57 51 51 second 51 nconds
+54:30
+for one 51 ncond uh 51 51 51.72
+54:38
+time which is milliseconds milliseconds in time over to the ratio of
+54:44
+uh one space and How will be four backs? So for every
+54:50
+for every for every second of time two 22 two t two seconds of time um uh we
+54:57
+have 513 572 to one space and that will be per four
+55:04
+bytes per four bytes of memory [clears throat] per four bytes of allocation for the message will be
+55:10
+excellent to be delivered safely and securely to um uh uh um someone that's
+55:16
+waiting for response um via inverse relay kinematics inverse kinematics
+55:23
+inverse relay. So you know um which is for next but the go this is here.
+55:32
+So OB get 0 get one one get 22 is a tree and
+55:41
+it's a tri number. So I can send OBI as indexes too and you can verify in that table [laughter] if they have a dynamic
+55:47
+table too you know um but you know they don't need one too you know zero zi this
+55:53
+selfing tree O is on the left B is on the right and I is on the on the right so this will be the the space will be
+56:01
+calculated as um um um 88 88 um OB index
+56:07
+88 88 which are which are indexing operations to the system of eight comma
+56:14
+8 which will be indexing. So that'll be what we use here to calculate the math
+56:20
+regist four by per four bytes. So you know it's not over four by it's per four bytes. So
+56:27
+it works in terms of grid and the grid is basically what you search the space to see what are the meaning as a signal.
+56:33
+So you get a signal which is search. So you pi / 3 or pi / 2 I mean direction of direction number of square root over two
+56:40
+one one one half one over square root. So if you get if you have
+56:45
+if you have one more thing if you have one got it.
+56:54
+If you have um pi over pi over um six bases if you
+57:03
+have pi u the original first. So you have first
+57:10
+the first d of cosine sign you get cosine. So it works same way as a system of sign you get one of one square root
+57:19
+of one one over of two which [clears throat] is 30°
+57:27
+um but you know
+57:35
+that's one of two
+57:42
+I say what this is like um the standard one you get you get like a sin x sin x
+57:48
+you get sin x you get sin y um cosine y which is so you have y
+57:55
+know what's the y so sin x will be um the what x mean sin
+58:02
+x sin x so you get sin y which is um uh 30° you get sin x which is - 30 - 30 -
+58:10
+30° which is which is cosine x. So sin x is cosine x you share x and y
+58:18
+uh kind of function which is direct the first derative of it. So sin x is
+58:25
+cosine. So, so get so
+58:30
+you get signs
+58:37
+and you get I'm looking at it here
+58:43
+s cosine uh but s cosine will give you x y and z.
+58:48
+So you get s cosine which is rise of s will basically s give you rise over y x
+58:56
+which is sign rise around will give you x y
+59:03
+and tangent will give you um the ration between them. So this will
+59:08
+give you uh one over one system of x to y one y x
+59:21
+depending on the tangent [clears throat] line will give you s
+59:26
+y s
+59:32
+will tell you the agent of opposite opposite angle
+59:39
+that give you the ratio of the opposite to opposite which will be y
+59:47
+um the ratio over the hypotenuse opposite which is y x over the hypotenuse
+59:55
+over h will give you um y h so this system of formulation you guys you know
+1:00:02
+so this what I'm using to formalize it but you know uh review Give this the roots of that some.
+1:00:11
+So the continuity of the framework is this. So you get s
+1:00:19
+cosine and tangent. See the tangent is y which is same as the sign but the sign
+1:00:25
+is not it's not the sign over half be so
+1:00:31
+posit and now the h is over that will be something of the y give you self
+1:00:40
+evaluate the polar series which I rubbed off here but that's the end of the message here uh on this video we look at
+1:00:46
+spring physics the spring physics application of a
+1:00:51
+system force and via like a forces push of force. So equals displacement time
+1:01:00
+force um so that easy lapis integrals to solve the issue.
+1:01:09
+Okay, lots of love guys. Thank you very much for watching. If you watch the video, if you like it, give a thumbs up. Uh subscribe if you want to. But you
+1:01:15
+know, it's up to you right. But that's the secret protocol. The here
+1:01:21
+now it's going to verify in time now and the here and space but the here is where
+1:01:28
+you at. So it's basically to use the kind of system where you are help
+1:01:40
+protocol for here and now we are constitutional compilers. Um uh take care of yourself and always u always
+1:01:47
+look yourself in every shape everywhere shape form you can um in every pathway
+1:01:52
+you go uh every way you go every form you take every persona you take
+1:01:58
+masquerade don't mask and uh every pathway shape and form you take every
+1:02:05
+form part of the shape shape of the path you take or the structure you became
+1:02:11
+something you structure you um Yeah. Take care of something. Goodbye.

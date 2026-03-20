@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RIFT Player — OBINexus Symbol Interpretation System</title>
+<style>
+  :root {
+    --order:     #00ff88;
+    --consensus: #4488ff;
+    --chaos:     #ff4444;
+    --maybe:     #ffaa00;
+    --bg:        #0a0a0f;
+    --surface:   #111118;
+    --border:    #1e1e2e;
+    --text:      #e0e0f0;
+    --dim:       #666680;
+    --font-mono: 'Courier New', 'Lucida Console', monospace;
+    --font-ui:   'Georgia', 'Times New Roman', serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-ui);
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .logo {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--order);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    border: 1px solid var(--order);
+    padding: 4px 8px;
+  }
+
+  header h1 {
+    font-size: 14px;
+    font-weight: normal;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+  }
+
+  .status-pill {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    color: var(--dim);
+  }
+
+  .status-pill.active { color: var(--order); border-color: var(--order); }
+
+  /* ── MAIN LAYOUT ── */
+  main {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 0;
+    overflow: hidden;
+  }
+
+  /* ── VIDEO ZONE ── */
+  .video-zone {
+    background: #000;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border);
+  }
+
+  .video-wrapper {
+    position: relative;
+    flex: 1;
+    background: #000;
+    min-height: 300px;
+  }
+
+  #videoPlayer {
+    width: 100%;
+    height: 100%;
+    max-height: 480px;
+    object-fit: contain;
+    display: block;
+  }
+
+  /* ── SYMBOL OVERLAY ── */
+  #symbolOverlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  /* ── CAPTION BAR ── */
+  .caption-bar {
+    background: rgba(0,0,0,0.92);
+    padding: 10px 16px;
+    min-height: 54px;
+    display: flex;
+    align-items: center;
+    border-top: 1px solid var(--border);
+  }
+
+  #captionText {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: #ffff00;
+    line-height: 1.5;
+    letter-spacing: 0.03em;
+  }
+
+  /* ── CONTROLS ── */
+  .controls {
+    background: var(--surface);
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-top: 1px solid var(--border);
+  }
+
+  .controls-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .progress-bar {
+    flex: 1;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--order);
+    border-radius: 2px;
+    transition: width 0.1s linear;
+    width: 0%;
+  }
+
+  .btn {
+    background: var(--border);
+    border: 1px solid #2a2a3e;
+    color: var(--text);
+    padding: 6px 14px;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    transition: all 0.15s;
+  }
+
+  .btn:hover { background: #2a2a3e; border-color: var(--order); }
+  .btn.active { border-color: var(--order); color: var(--order); }
+
+  .time-display {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--dim);
+    min-width: 90px;
+  }
+
+  /* ── LOAD AREA ── */
+  .load-area {
+    background: var(--surface);
+    border: 1px dashed var(--border);
+    margin: 12px 16px;
+    padding: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+
+  .load-area:hover { border-color: var(--order); }
+
+  .load-area p {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--dim);
+    margin-top: 6px;
+  }
+
+  #fileInput { display: none; }
+
+  /* ── SIDE PANEL ── */
+  .side-panel {
+    background: var(--surface);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .panel-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tab {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    color: var(--dim);
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+  }
+
+  .tab.active { color: var(--order); border-bottom-color: var(--order); }
+
+  .tab-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+    display: none;
+  }
+
+  .tab-content.active { display: block; }
+
+  /* ── TRISTATE METER ── */
+  .tristate-meter {
+    margin-bottom: 16px;
+  }
+
+  .tristate-meter h3 {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--dim);
+    letter-spacing: 0.15em;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .tristate-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
+  }
+
+  .tristate-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    width: 48px;
+  }
+
+  .tristate-bar-bg {
+    flex: 1;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+  }
+
+  .tristate-bar {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s ease;
+  }
+
+  .tristate-val {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--dim);
+    width: 28px;
+    text-align: right;
+  }
+
+  /* ── DISCRIMINANT STATE ── */
+  .delta-display {
+    border: 1px solid var(--border);
+    padding: 12px;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  .delta-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--dim);
+    letter-spacing: 0.15em;
+    margin-bottom: 4px;
+  }
+
+  .delta-value {
+    font-family: var(--font-mono);
+    font-size: 22px;
+    font-weight: bold;
+    transition: color 0.3s;
+  }
+
+  .delta-desc {
+    font-size: 11px;
+    color: var(--dim);
+    margin-top: 4px;
+    font-family: var(--font-mono);
+  }
+
+  /* ── SYMBOL TABLE ── */
+  .sym-entry {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 10px;
+  }
+
+  .sym-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .sym-key {
+    color: var(--text);
+    min-width: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .sym-type {
+    color: var(--dim);
+    flex: 1;
+  }
+
+  .sym-state {
+    font-size: 9px;
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid currentColor;
+  }
+
+  /* ── TRANSCRIPT PANEL ── */
+  #transcriptLog {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.7;
+  }
+
+  .transcript-cue {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .cue-time {
+    color: var(--dim);
+    font-size: 10px;
+    margin-bottom: 3px;
+  }
+
+  .cue-text { color: var(--text); }
+
+  .cue-label {
+    font-size: 9px;
+    margin-top: 3px;
+    padding: 2px 6px;
+    display: inline-block;
+    border-radius: 2px;
+  }
+
+  /* ── TEXT INPUT AREA ── */
+  .text-input-area {
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+    background: var(--bg);
+  }
+
+  .text-input-area h4 {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--dim);
+    letter-spacing: 0.15em;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  textarea {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 8px;
+    resize: vertical;
+    min-height: 60px;
+    outline: none;
+  }
+
+  textarea:focus { border-color: var(--order); }
+
+  .interpret-btn {
+    margin-top: 6px;
+    width: 100%;
+    padding: 8px;
+    background: var(--order);
+    color: #000;
+    border: none;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: opacity 0.15s;
+  }
+
+  .interpret-btn:hover { opacity: 0.85; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 8px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+  }
+
+  .footer-chain span { margin: 0 4px; }
+  .footer-chain span:not(:last-child)::after { content: "→"; margin-left: 8px; color: var(--order); }
+
+  /* ── ACCESSIBILITY SKIP LINK ── */
+  .skip-link {
+    position: absolute;
+    top: -100%;
+    left: 8px;
+    background: var(--order);
+    color: #000;
+    padding: 6px 12px;
+    z-index: 999;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    text-decoration: none;
+  }
+
+  .skip-link:focus { top: 8px; }
+
+  /* ── ARIA LIVE REGIONS ── */
+  #ariaStatus {
+    position: absolute;
+    width: 1px; height: 1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  /* ── CANVAS OVERLAY ANIMATION ── */
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .symbol-flash { animation: fadeIn 0.2s ease; }
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- ARIA live regions for screen readers -->
+<div id="ariaStatus" aria-live="polite" aria-atomic="true" role="status"></div>
+<div id="ariaCaption" aria-live="assertive" aria-atomic="true" role="alert" 
+     style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)"></div>
+
+<header role="banner">
+  <div class="logo" aria-label="RIFT Logo">RIFT</div>
+  <h1>Symbol Interpretation Player — OBINexus Computing</h1>
+  <div class="status-pill" id="engineStatus" role="status">ENGINE OFFLINE</div>
+</header>
+
+<main id="main-content" role="main">
+
+  <!-- ── VIDEO ZONE ── -->
+  <section class="video-zone" aria-label="Video Player">
+
+    <div class="load-area" id="dropZone" 
+         role="button" tabindex="0" 
+         aria-label="Load video file — click or drag and drop"
+         onclick="document.getElementById('fileInput').click()"
+         onkeydown="if(event.key==='Enter'||event.key===' '){this.click()}">
+      <div style="font-family:var(--font-mono);font-size:13px;color:var(--order)">
+        [ LOAD VIDEO ]
+      </div>
+      <p>Click to browse · Drag & Drop · Any web-compatible format</p>
+      <input type="file" id="fileInput" accept="video/*,.nsigii" aria-label="Video file input">
+    </div>
+
+    <div class="video-wrapper" role="region" aria-label="Video display">
+      <video id="videoPlayer" 
+             preload="metadata"
+             aria-label="RIFT Video Player"
+             crossorigin="anonymous">
+        <track id="vttTrack" kind="captions" srclang="en" label="RIFT Symbolic Captions" default>
+        Your browser does not support HTML5 video.
+      </video>
+
+      <!-- Canvas overlay for symbol annotations -->
+      <canvas id="symbolOverlay" 
+              role="img" 
+              aria-label="Symbolic interpretation overlay — visual annotations"></canvas>
+    </div>
+
+    <!-- Caption bar — WAI compliant -->
+    <div class="caption-bar" role="region" aria-label="Symbolic captions" aria-live="polite">
+      <div id="captionText" aria-live="polite" aria-atomic="true">
+        ◈ Load a video or enter text to begin symbolic interpretation
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls" role="group" aria-label="Playback controls">
+      <div class="controls-row">
+        <div class="progress-bar" id="progressBar" 
+             role="slider" aria-label="Playback position" 
+             aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"
+             tabindex="0"
+             onclick="seekVideo(event)">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <span class="time-display" id="timeDisplay" aria-live="off">0:00 / 0:00</span>
+      </div>
+
+      <div class="controls-row">
+        <button class="btn" id="playBtn" onclick="togglePlay()" aria-label="Play/Pause">▶ PLAY</button>
+        <button class="btn" onclick="restartVideo()" aria-label="Restart video">⟳ RESTART</button>
+        <button class="btn active" id="captionsBtn" onclick="toggleCaptions()" 
+                aria-pressed="true" aria-label="Toggle symbolic captions">CC ON</button>
+        <button class="btn" onclick="downloadTranscript()" aria-label="Download WebVTT transcript">⬇ VTT</button>
+        <button class="btn" onclick="resetEngine()" aria-label="Reset symbol engine">⟳ RESET</button>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── SIDE PANEL ── -->
+  <aside class="side-panel" role="complementary" aria-label="Symbol Analysis Panel">
+
+    <div class="panel-tabs" role="tablist">
+      <button class="tab active" role="tab" aria-selected="true" 
+              onclick="switchTab('analysis')" aria-controls="tab-analysis">ANALYSIS</button>
+      <button class="tab" role="tab" aria-selected="false"
+              onclick="switchTab('symbols')" aria-controls="tab-symbols">SYMBOLS</button>
+      <button class="tab" role="tab" aria-selected="false"
+              onclick="switchTab('transcript')" aria-controls="tab-transcript">TRANSCRIPT</button>
+    </div>
+
+    <!-- Analysis Tab -->
+    <div class="tab-content active" id="tab-analysis" role="tabpanel">
+
+      <div class="delta-display" aria-label="Discriminant state indicator">
+        <div class="delta-label">Δ = b² − 4ac</div>
+        <div class="delta-value" id="deltaValue" style="color:var(--dim)">—</div>
+        <div class="delta-desc" id="deltaDesc">Awaiting signal</div>
+      </div>
+
+      <div class="tristate-meter" aria-label="Tristate execution summary">
+        <h3>Tristate Execution</h3>
+
+        <div class="tristate-row">
+          <span class="tristate-label" style="color:var(--order)">YES(1)</span>
+          <div class="tristate-bar-bg">
+            <div class="tristate-bar" id="barYES" style="width:0%;background:var(--order)"></div>
+          </div>
+          <span class="tristate-val" id="valYES">0</span>
+        </div>
+
+        <div class="tristate-row">
+          <span class="tristate-label" style="color:var(--chaos)">NO(0)</span>
+          <div class="tristate-bar-bg">
+            <div class="tristate-bar" id="barNO" style="width:0%;background:var(--chaos)"></div>
+          </div>
+          <span class="tristate-val" id="valNO">0</span>
+        </div>
+
+        <div class="tristate-row">
+          <span class="tristate-label" style="color:var(--maybe)">MAYBE(∞)</span>
+          <div class="tristate-bar-bg">
+            <div class="tristate-bar" id="barMAYBE" style="width:0%;background:var(--maybe)"></div>
+          </div>
+          <span class="tristate-val" id="valMAYBE">0</span>
+        </div>
+      </div>
+
+      <div style="margin-bottom:12px;">
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--dim);letter-spacing:0.15em;margin-bottom:6px;text-transform:uppercase;">
+          Semantic Label
+        </div>
+        <div id="semanticLabel" style="font-family:var(--font-mono);font-size:10px;color:var(--consensus);line-height:1.6;word-break:break-word;">
+          —
+        </div>
+      </div>
+
+      <div>
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--dim);letter-spacing:0.15em;margin-bottom:6px;text-transform:uppercase;">
+          Trident Pipeline
+        </div>
+        <div style="font-family:var(--font-mono);font-size:10px;display:flex;gap:4px;align-items:center;">
+          <span id="ch0" style="padding:3px 8px;border:1px solid var(--border);color:var(--dim)">TRANSMIT</span>
+          <span style="color:var(--order)">→</span>
+          <span id="ch1" style="padding:3px 8px;border:1px solid var(--border);color:var(--dim)">RECEIVE</span>
+          <span style="color:var(--order)">→</span>
+          <span id="ch2" style="padding:3px 8px;border:1px solid var(--border);color:var(--dim)">VERIFY</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Symbols Tab -->
+    <div class="tab-content" id="tab-symbols" role="tabpanel">
+      <div id="symbolTableDisplay" aria-live="polite" aria-label="Symbol table">
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--dim);padding:8px 0;">
+          No symbols indexed yet.
+        </div>
+      </div>
+    </div>
+
+    <!-- Transcript Tab -->
+    <div class="tab-content" id="tab-transcript" role="tabpanel">
+      <div id="transcriptLog" aria-live="polite" aria-label="Symbolic interpretation transcript">
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--dim);padding:8px 0;">
+          Transcript will appear here as content is interpreted.
+        </div>
+      </div>
+    </div>
+
+    <!-- Text Input -->
+    <div class="text-input-area" role="region" aria-label="Manual text interpretation">
+      <h4>Interpret Text</h4>
+      <textarea id="textInput" 
+                placeholder="Enter text or transcript segment to interpret…"
+                aria-label="Text input for symbolic interpretation"
+                rows="3"></textarea>
+      <button class="interpret-btn" onclick="interpretText()" 
+              aria-label="Run symbolic interpretation on entered text">
+        ◈ INTERPRET
+      </button>
+    </div>
+
+  </aside>
+
+</main>
+
+<footer role="contentinfo">
+  <div class="footer-chain" aria-label="OBINexus toolchain">
+    <span>riftlang.exe</span>
+    <span>.so.a</span>
+    <span>rift.exe</span>
+    <span>gosilang</span>
+    <span>nsigii-codec</span>
+  </div>
+  <div>nlink → polybuild | WCAG 2.2 AA | OBINexus Computing © 2026</div>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// RIFT PLAYER — Symbol Interpretation Engine (Client)
+// Tripartite Tristate: YES(1) / NO(0) / MAYBE(-∞→1)
+// Filter-Flash Functor: Δ = b² - 4ac → ORDER/CONSENSUS/CHAOS
+// ═══════════════════════════════════════════════════════════════════
+
+const video   = document.getElementById('videoPlayer');
+const canvas  = document.getElementById('symbolOverlay');
+const ctx     = canvas.getContext('2d');
+const caption = document.getElementById('captionText');
+
+let captionsOn     = true;
+let currentSymbols = [];
+let frameTimer     = null;
+let vttCues        = [];
+let engineOnline   = false;
+
+// ── Client-side symbol engine (standalone, no server required) ──────
+
+const TOKEN_PATTERNS = [
+  { type: 'IDENTIFIER', re: /^[a-zA-Z_]\w*$/ },
+  { type: 'NUMBER',     re: /^\d+(\.\d+)?$/ },
+  { type: 'OPERATOR',   re: /^[+\-*/=<>!&|^~%]$/ },
+  { type: 'GLYPH',      re: /^[^\x00-\x7F]+$/ },
+  { type: 'PUNCTUATION',re: /^[.,;:()\[\]{}"']$/ },
+];
+
+function classifyToken(tok) {
+  for (const {type, re} of TOKEN_PATTERNS) {
+    if (re.test(tok)) return type;
+  }
+  return 'UNKNOWN';
+}
+
+function tristate(tokenType) {
+  if (['IDENTIFIER','NUMBER','GLYPH'].includes(tokenType)) return 'YES';
+  if (tokenType === 'UNKNOWN') return 'MAYBE';
+  return 'NO';
+}
+
+function discriminant(b) {
+  // Δ = b² - 4(1)(1)
+  const d = b * b - 4;
+  if (d > 0) return { state: 'ORDER',     color: '#00ff88', d };
+  if (d === 0) return { state: 'CONSENSUS', color: '#4488ff', d };
+  return              { state: 'CHAOS',     color: '#ff4444', d };
+}
+
+function runTripartite(text) {
+  // TRANSMIT — tokenize
+  const rawTokens = text.trim().split(/[\s,;]+/).filter(t => t.length > 0);
+  
+  // RECEIVE — classify
+  const classified = rawTokens.map(tok => ({
+    key: tok,
+    type: classifyToken(tok),
+    tristate: tristate(classifyToken(tok)),
+  }));
+
+  // VERIFY — discriminant gate
+  const counts = { YES: 0, NO: 0, MAYBE: 0 };
+  const symbols = classified.map(sym => {
+    counts[sym.tristate]++;
+    const total = rawTokens.length || 1;
+    const yesRatio = counts.YES / total;
+    const b = sym.tristate === 'YES' ? 4.0 :
+              sym.tristate === 'MAYBE' ? 2.0 : 0.0;
+    const disc = discriminant(b);
+    return { ...sym, discriminantState: disc.state, color: disc.color, b, delta: disc.d };
+  });
+
+  // Dominant state
+  const stateCount = { ORDER: 0, CONSENSUS: 0, CHAOS: 0 };
+  symbols.forEach(s => stateCount[s.discriminantState]++);
+  const dominant = Object.entries(stateCount).sort((a,b)=>b[1]-a[1])[0][0];
+  
+  const total = symbols.length || 1;
+  const finalCounts = { YES: 0, NO: 0, MAYBE: 0 };
+  symbols.forEach(s => finalCounts[s.tristate]++);
+
+  return { symbols, dominant, counts: finalCounts, raw: text };
+}
+
+// ── UPDATE UI FROM RESULT ────────────────────────────────────────────
+
+function updateAnalysisPanel(result) {
+  const { symbols, dominant, counts } = result;
+  const total = symbols.length || 1;
+
+  // Delta display
+  const domColor = { ORDER: '#00ff88', CONSENSUS: '#4488ff', CHAOS: '#ff4444' };
+  document.getElementById('deltaValue').textContent = dominant;
+  document.getElementById('deltaValue').style.color = domColor[dominant];
+  document.getElementById('deltaDesc').textContent = {
+    ORDER:     'Δ > 0 — Two real roots — Interpretable',
+    CONSENSUS: 'Δ = 0 — Flash point — Canonical state',
+    CHAOS:     'Δ < 0 — Complex roots — Enzyme repair',
+  }[dominant];
+
+  // Tristate bars
+  ['YES','NO','MAYBE'].forEach(state => {
+    const pct = Math.round((counts[state] / total) * 100);
+    document.getElementById('bar' + state).style.width = pct + '%';
+    document.getElementById('val' + state).textContent = counts[state];
+  });
+
+  // Trident pipeline highlight
+  animateTrident();
+
+  // Semantic label
+  const ids = symbols.filter(s=>s.type==='IDENTIFIER').slice(0,4).map(s=>s.key);
+  const nums = symbols.filter(s=>s.type==='NUMBER').slice(0,3).map(s=>s.key);
+  let label = `[${dominant}]`;
+  if (ids.length) label += ` Symbols: ${ids.join(', ')}`;
+  if (nums.length) label += ` | Values: ${nums.join(', ')}`;
+  document.getElementById('semanticLabel').textContent = label;
+
+  // ARIA announce
+  document.getElementById('ariaStatus').textContent =
+    `Symbolic interpretation: ${dominant}. ${counts.YES} YES, ${counts.NO} NO, ${counts.MAYBE} MAYBE.`;
+}
+
+function animateTrident() {
+  const channels = ['ch0','ch1','ch2'];
+  const colors = ['#00ff88','#4488ff','#ffffff'];
+  channels.forEach((id, i) => {
+    const el = document.getElementById(id);
+    setTimeout(() => {
+      el.style.borderColor = colors[i];
+      el.style.color = colors[i];
+      setTimeout(() => {
+        el.style.borderColor = 'var(--border)';
+        el.style.color = 'var(--dim)';
+      }, 400);
+    }, i * 150);
+  });
+}
+
+// ── CANVAS OVERLAY ───────────────────────────────────────────────────
+
+function resizeCanvas() {
+  canvas.width  = video.clientWidth  || 640;
+  canvas.height = video.clientHeight || 360;
+}
+
+function drawSymbolOverlay(symbols, dominant) {
+  resizeCanvas();
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  if (!symbols || !symbols.length) return;
+
+  const colorMap = { ORDER: '#00ff88', CONSENSUS: '#4488ff', CHAOS: '#ff4444' };
+  const mainColor = colorMap[dominant] || '#ffffff';
+
+  // Draw discriminant equation top-left
+  ctx.font = 'bold 11px "Courier New"';
+  ctx.fillStyle = mainColor + 'cc';
+  ctx.fillText(`Δ: ${dominant}`, 12, 20);
+
+  // Draw top-right: tristate summary
+  const yes   = symbols.filter(s=>s.tristate==='YES').length;
+  const no    = symbols.filter(s=>s.tristate==='NO').length;
+  const maybe = symbols.filter(s=>s.tristate==='MAYBE').length;
+  ctx.font = '10px "Courier New"';
+  ctx.fillStyle = '#00ff8899';
+  ctx.fillText(`YES:${yes}`, canvas.width - 120, 18);
+  ctx.fillStyle = '#ff444499';
+  ctx.fillText(`NO:${no}`, canvas.width - 80, 18);
+  ctx.fillStyle = '#ffaa0099';
+  ctx.fillText(`M:${maybe}`, canvas.width - 44, 18);
+
+  // Draw symbol tokens scattered on canvas (yellow — per spec)
+  const executableSyms = symbols.filter(s => s.tristate === 'YES').slice(0, 8);
+  executableSyms.forEach((sym, i) => {
+    const x = 12 + (i % 4) * (canvas.width / 4.2);
+    const y = canvas.height - 40 - Math.floor(i / 4) * 22;
+    ctx.font = '11px "Courier New"';
+    ctx.fillStyle = '#ffff00dd';  // Yellow per spec
+    ctx.fillText(`${sym.key}[${sym.type[0]}]`, x, y);
+  });
+
+  // Frame indicator bottom right
+  ctx.font = '10px "Courier New"';
+  ctx.fillStyle = '#ffffff44';
+  ctx.fillText('NSIGII_HR_TRANSMIT', canvas.width - 130, canvas.height - 8);
+}
+
+// ── CAPTION SYSTEM ───────────────────────────────────────────────────
+
+function updateCaption(text, color) {
+  if (!captionsOn) return;
+  caption.textContent = text;
+  caption.style.color = color || '#ffff00';
+  document.getElementById('ariaCaption').textContent = text;
+}
+
+function addTranscriptCue(result, timeStr) {
+  const log = document.getElementById('transcriptLog');
+  const color = { ORDER: '#00ff88', CONSENSUS: '#4488ff', CHAOS: '#ff4444' }[result.dominant];
+  
+  const entry = document.createElement('div');
+  entry.className = 'transcript-cue';
+  entry.innerHTML = `
+    <div class="cue-time">${timeStr}</div>
+    <div class="cue-text">${escHtml(result.raw.slice(0, 100))}</div>
+    <span class="cue-label" style="color:${color};border-color:${color};background:${color}18">
+      ${result.dominant}
+    </span>`;
+  log.prepend(entry);
+}
+
+function updateSymbolTable(symbols) {
+  const display = document.getElementById('symbolTableDisplay');
+  display.innerHTML = symbols.slice(0, 30).map(sym => {
+    const color = { ORDER: '#00ff88', CONSENSUS: '#4488ff', CHAOS: '#ff4444' }[sym.discriminantState] || '#888';
+    const tsColor = { YES: '#00ff88', NO: '#ff4444', MAYBE: '#ffaa00' }[sym.tristate];
+    return `<div class="sym-entry">
+      <div class="sym-dot" style="background:${color}"></div>
+      <span class="sym-key">${escHtml(sym.key)}</span>
+      <span class="sym-type">${sym.type}</span>
+      <span class="sym-state" style="color:${tsColor}">${sym.tristate}</span>
+    </div>`;
+  }).join('');
+}
+
+// ── MAIN INTERPRET FUNCTION ─────────────────────────────────────────
+
+function processText(text) {
+  if (!text.trim()) return;
+  const result = runTripartite(text);
+  
+  updateAnalysisPanel(result);
+  drawSymbolOverlay(result.symbols, result.dominant);
+  updateSymbolTable(result.symbols);
+
+  const color = { ORDER: '#00ff88', CONSENSUS: '#4488ff', CHAOS: '#ff4444' }[result.dominant] || '#ffff00';
+  const prefix = { ORDER: '[ORDER]', CONSENSUS: '[CONSENSUS]', CHAOS: '[CHAOS→REPAIR]' }[result.dominant];
+  const short = text.length > 80 ? text.slice(0, 80) + '…' : text;
+  updateCaption(`${prefix} ${short}`, '#ffff00');
+
+  const timeStr = video.src ? formatTime(video.currentTime) : new Date().toLocaleTimeString();
+  addTranscriptCue(result, timeStr);
+}
+
+function interpretText() {
+  const text = document.getElementById('textInput').value;
+  processText(text);
+}
+
+// ── VIDEO CONTROLS ───────────────────────────────────────────────────
+
+function togglePlay() {
+  if (video.paused) {
+    video.play();
+    document.getElementById('playBtn').textContent = '⏸ PAUSE';
+  } else {
+    video.pause();
+    document.getElementById('playBtn').textContent = '▶ PLAY';
+  }
+}
+
+function restartVideo() {
+  video.currentTime = 0;
+  video.play();
+  document.getElementById('playBtn').textContent = '⏸ PAUSE';
+}
+
+function seekVideo(e) {
+  const bar = document.getElementById('progressBar');
+  const rect = bar.getBoundingClientRect();
+  const pct = (e.clientX - rect.left) / rect.width;
+  video.currentTime = pct * (video.duration || 0);
+}
+
+function toggleCaptions() {
+  captionsOn = !captionsOn;
+  const btn = document.getElementById('captionsBtn');
+  btn.textContent = captionsOn ? 'CC ON' : 'CC OFF';
+  btn.setAttribute('aria-pressed', captionsOn);
+  if (!captionsOn) {
+    caption.textContent = '';
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+}
+
+function formatTime(secs) {
+  const m = Math.floor(secs / 60);
+  const s = Math.floor(secs % 60);
+  return `${m}:${s.toString().padStart(2,'0')}`;
+}
+
+video.addEventListener('timeupdate', () => {
+  const pct = video.duration ? (video.currentTime / video.duration) * 100 : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressBar').setAttribute('aria-valuenow', Math.round(pct));
+  document.getElementById('timeDisplay').textContent =
+    `${formatTime(video.currentTime)} / ${formatTime(video.duration || 0)}`;
+});
+
+video.addEventListener('ended', () => {
+  document.getElementById('playBtn').textContent = '▶ PLAY';
+});
+
+// ── FILE LOAD ────────────────────────────────────────────────────────
+
+document.getElementById('fileInput').addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  loadVideoFile(file);
+});
+
+// Drag and drop
+const dropZone = document.getElementById('dropZone');
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.style.borderColor = '#00ff88'; });
+dropZone.addEventListener('dragleave', () => { dropZone.style.borderColor = 'var(--border)'; });
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.style.borderColor = 'var(--border)';
+  const file = e.dataTransfer.files[0];
+  if (file) loadVideoFile(file);
+});
+
+function loadVideoFile(file) {
+  const url = URL.createObjectURL(file);
+  video.src = url;
+  video.load();
+  document.getElementById('dropZone').style.display = 'none';
+  document.getElementById('engineStatus').textContent = 'ENGINE ACTIVE';
+  document.getElementById('engineStatus').className = 'status-pill active';
+  engineOnline = true;
+
+  // Auto-interpret filename as first symbol input
+  processText(file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' '));
+
+  // Start frame-based interpretation ticker
+  if (frameTimer) clearInterval(frameTimer);
+  frameTimer = setInterval(() => {
+    if (!video.paused && video.currentTime > 0) {
+      // Generate interpretation from current video progress context
+      const t = video.currentTime;
+      const label = `frame t=${t.toFixed(2)} x²+y²=t² position=${(t*t).toFixed(1)}`;
+      processText(label);
+    }
+  }, 4000);
+}
+
+// ── TRANSCRIPT DOWNLOAD ──────────────────────────────────────────────
+
+function downloadTranscript() {
+  const log = document.getElementById('transcriptLog');
+  const cues = log.querySelectorAll('.transcript-cue');
+  let vtt = 'WEBVTT\n\n';
+  let i = 0;
+  cues.forEach(cue => {
+    const time = cue.querySelector('.cue-time')?.textContent || '0:00';
+    const text = cue.querySelector('.cue-text')?.textContent || '';
+    const label = cue.querySelector('.cue-label')?.textContent?.trim() || '';
+    vtt += `NOTE ${time}\n00:${i.toString().padStart(2,'0')}.000 --> 00:${(i+3).toString().padStart(2,'0')}.000\n<v RIFT>${label}: ${text}\n\n`;
+    i += 3;
+  });
+  const blob = new Blob([vtt], {type:'text/vtt'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'rift_transcript.vtt';
+  a.click();
+}
+
+// ── RESET ────────────────────────────────────────────────────────────
+
+function resetEngine() {
+  if (frameTimer) clearInterval(frameTimer);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  caption.textContent = '◈ Engine reset — ready';
+  document.getElementById('transcriptLog').innerHTML = '';
+  document.getElementById('symbolTableDisplay').innerHTML = '';
+  document.getElementById('semanticLabel').textContent = '—';
+  document.getElementById('deltaValue').textContent = '—';
+  ['barYES','barNO','barMAYBE'].forEach(id => document.getElementById(id).style.width = '0%');
+  document.getElementById('ariaStatus').textContent = 'Symbol engine reset.';
+}
+
+// ── TABS ─────────────────────────────────────────────────────────────
+
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach((t,i) => {
+    const names = ['analysis','symbols','transcript'];
+    t.classList.toggle('active', names[i] === name);
+    t.setAttribute('aria-selected', names[i] === name);
+  });
+  document.querySelectorAll('.tab-content').forEach(c => {
+    c.classList.toggle('active', c.id === 'tab-' + name);
+  });
+}
+
+// ── KEYBOARD SUPPORT ─────────────────────────────────────────────────
+
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'TEXTAREA') return;
+  if (e.key === ' ') { e.preventDefault(); togglePlay(); }
+  if (e.key === 'c' || e.key === 'C') toggleCaptions();
+  if (e.key === 'ArrowLeft') video.currentTime = Math.max(0, video.currentTime - 5);
+  if (e.key === 'ArrowRight') video.currentTime = Math.min(video.duration, video.currentTime + 5);
+});
+
+// ── TEXTAREA ENTER ───────────────────────────────────────────────────
+
+document.getElementById('textInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); interpretText(); }
+});
+
+// ── CANVAS RESIZE ────────────────────────────────────────────────────
+
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+// ── UTIL ─────────────────────────────────────────────────────────────
+
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────
+
+// Auto-interpret on the perception-calibration transcript on load
+setTimeout(() => {
+  processText("perception calibration system x squared plus y squared equals t squared tristate symbolic interpreter RIFT OBINexus");
+}, 300);
+</script>
+</body>
+</html>
