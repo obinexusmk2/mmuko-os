@@ -1,0 +1,71 @@
+# gosi.toml — Gosilang Package Manifest
+# OBINexus Computing | gosilang pkg system v0.1
+# Author: Nnamdi Michael Okpala
+
+[package]
+name        = "drift_theorem"
+version     = "0.1.0"
+author      = "Nnamdi Michael Okpala"
+license     = "OBINexus-OpenSense"
+description = "Drift Theorem: Edge-Colourable Graph for Ahead-of-Time Computation"
+entry       = "src/main.gs"
+
+[build]
+# Toolchain pipeline:
+# riftlang.exe → .so.a → rift.exe → gosilang
+toolchain   = "rift"
+target      = "gosi-bin"
+output      = "pkg/drift_theorem.gosi"
+
+# NLINK linker settings
+[build.nlink]
+tree_shake       = true
+state_minimize   = true
+nomeltdown       = true
+thread_safe      = true
+
+# Compilation stages
+[[build.stages]]
+name   = "rift-parse"
+input  = "src/*.gs"
+output = "build/rift/*.so.a"
+tool   = "riftlang.exe"
+
+[[build.stages]]
+name   = "rift-compile"
+input  = "build/rift/*.so.a"
+output = "build/bin/*.gs.bin"
+tool   = "rift.exe"
+
+[[build.stages]]
+name   = "gosi-link"
+input  = "build/bin/*.gs.bin"
+output = "pkg/drift_theorem.gosi"
+tool   = "gosilang"
+flags  = ["--hacc", "--no-ghost", "--drift-aware"]
+
+# Dependencies
+[dependencies]
+librift    = ">=1.0.0"
+libgosiuml = ">=1.0.0"
+nlink      = ">=1.0.0"
+
+# Feature flags
+[features]
+drift_theorem  = true
+hacc           = true        # Human-Aligned Critical Computing
+zero_trust     = true        # NSIGII RIFT V1 zero-trust routing
+humanitarian   = true        # Two-indicator routing model
+
+# IWU Constitutional compliance
+[compliance]
+article_ii_opensense   = true
+article_iii_investment = true
+article_v_human_rights = true
+article_vii_noghosting = true
+
+# Package metadata for registry
+[registry]
+org        = "obinexus"
+repo       = "github.com/obinexusmk2/gosilang"
+tags       = ["drift", "graph", "hacc", "humanitarian", "polyglot"]
