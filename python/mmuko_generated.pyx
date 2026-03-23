@@ -1,5 +1,5 @@
 # Generated file. Do not edit by hand.
-# Authoritative input: MMUKO-OS.txt
+# Authoritative input: C:/Users/OBINexus/Projects/mmuko-os/MMUKO-OS.txt
 # distutils: language = c
 from libc.string cimport strlen
 cimport mmuko_codegen

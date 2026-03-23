@@ -1,8 +1,11 @@
 ; -----------------------------------------------------------------------------
 ; Generated file. Do not edit by hand.
-; Authoritative input: MMUKO-OS.txt
-; Primary pseudocode: mmuko-boot/pseudocode/mmuko-boot.psc
-; Supporting pseudocode count: 14
+; Authoritative input: C:/Users/OBINexus/Projects/mmuko-os/MMUKO-OS.txt
+; Primary pseudocode: C:/Users/OBINexus/Projects/mmuko-os/pseudocode/mmuko-boot.psc
+; Supporting pseudocode count: 24
+; Parsed ENUM types: MMUKO_BOOT_OUTCOME, MMUKO_BOOT_PHASE
+; Parsed STRUCT types: MMUKO_BOOT_HANDOFF
+; Boot contract: MMKO magic, 6 phases, outcome PASS=0xAA
 ; -----------------------------------------------------------------------------
 ; Key generated phases:
 ;   PHASE 0 - Vacuum Medium Initialization
@@ -47,13 +50,36 @@ start:
     mov sp, 0x7C00
     sti
 
+    ; Save boot drive number
+    mov [boot_drive], dl
+
+    ; Print boot banner
     mov si, boot_banner
     call print_string
-    mov si, boot_stage1
+
+    ; Load stage-2 from disk (sectors 1..16) into 0x0000:0x8000
+    mov ax, 0x0000
+    mov es, ax
+    mov bx, 0x8000          ; load address
+
+load_stage2:
+    mov ah, 0x02            ; BIOS read sectors
+    mov al, 16              ; sector count
+    mov ch, 0               ; cylinder 0
+    mov cl, 2               ; sector 2 (1-based, sector 1 = boot)
+    mov dh, 0               ; head 0
+    mov dl, [boot_drive]
+    int 0x13
+    jc  disk_error
+
+    mov si, boot_stage2_ok
     call print_string
-    mov si, boot_stage2
-    call print_string
-    mov si, boot_ready
+
+    ; Jump to stage-2
+    jmp 0x0000:0x8000
+
+disk_error:
+    mov si, boot_disk_err
     call print_string
 
 halt_forever:
@@ -72,10 +98,10 @@ print_string:
 .done:
     ret
 
-boot_banner db 13,10, "MMUKO-OS generated stage-1", 13,10, 0
-boot_stage1 db "Spec: MMUKO-OS.txt", 13,10, 0
-boot_stage2 db "Stage-2 handoff: kernel/mmuko_stage2_loader.c", 13,10, 0
-boot_ready  db "BOOTSTRAP_READY", 13,10, 0
+boot_drive   db 0
+boot_banner  db 13,10, "MMUKO-OS stage-1", 13,10, 0
+boot_stage2_ok db "Stage-2 loaded OK", 13,10, 0
+boot_disk_err  db "Disk error - halting", 13,10, 0
 
 times 510-($-$$) db 0
 dw 0xAA55

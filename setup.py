@@ -3,6 +3,10 @@ from setuptools import Extension, setup
 from Cython.Build import cythonize
 
 _libraries = ["m"] if sys.platform != "win32" else []
+# Suppress MSVC C4244 (double→float conversion in Cython-generated code)
+_c_extra   = ["/wd4244"] if sys.platform == "win32" else []
+# C++ extension also needs C++17 for nested namespace syntax
+_cxx_extra = ["/wd4244", "/std:c++17"] if sys.platform == "win32" else ["-std=c++17"]
 
 extensions = [
     Extension(
@@ -15,6 +19,7 @@ extensions = [
         ],
         include_dirs=["."],
         libraries=_libraries,
+        extra_compile_args=_c_extra,
     ),
     Extension(
         name="mmuko_os._firmware",
@@ -27,6 +32,7 @@ extensions = [
         ],
         include_dirs=["."],
         libraries=_libraries,
+        extra_compile_args=_cxx_extra,
         language="c++",
     ),
 ]

@@ -1,6 +1,6 @@
 // Generated file. Do not edit by hand.
-// Authoritative input: MMUKO-OS.txt
-// Primary pseudocode: mmuko-boot/pseudocode/mmuko-boot.psc
+// Authoritative input: C:/Users/OBINexus/Projects/mmuko-os/MMUKO-OS.txt
+// Primary pseudocode: C:/Users/OBINexus/Projects/mmuko-os/pseudocode/mmuko-boot.psc
 #include "mmuko_codegen.h"
 
 #include <sstream>
@@ -19,8 +19,8 @@ std::vector<std::string> pseudocode_sources() {
 
 std::string stage2_report() {
     std::ostringstream report;
-    report << "Authoritative input: MMUKO-OS.txt\n";
-    report << "Primary pseudocode: mmuko-boot/pseudocode/mmuko-boot.psc\n";
+    report << "Authoritative input: C:/Users/OBINexus/Projects/mmuko-os/MMUKO-OS.txt\n";
+    report << "Primary pseudocode: C:/Users/OBINexus/Projects/mmuko-os/pseudocode/mmuko-boot.psc\n";
     report << "Phase count: " << mmuko_stage2_phase_count() << "\n";
 
     const auto *phases = mmuko_stage2_phases();

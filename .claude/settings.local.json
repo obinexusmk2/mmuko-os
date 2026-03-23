@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//mnt/c/Users/OBINexus/Projects/**)",
+      "Bash(python3 tools/mmuko_codegen/generate.py --root . --spec MMUKO-OS.txt --primary pseudocode/mmuko-boot.psc --pseudocode-dir pseudocode/)",
+      "Bash(wsl -e bash -c \"cd ''/mnt/c/Users/OBINexus/Projects/mmuko-os'' && python3 tools/mmuko_codegen/generate.py --root . --spec MMUKO-OS.txt --primary pseudocode/mmuko-boot.psc --pseudocode-dir pseudocode/ 2>&1\")",
+      "Bash(python \"C:\\\\Users\\\\OBINexus\\\\Projects\\\\mmuko-os\\\\tools\\\\mmuko_codegen\\\\generate.py\" --root \"C:\\\\Users\\\\OBINexus\\\\Projects\\\\mmuko-os\" --spec \"C:\\\\Users\\\\OBINexus\\\\Projects\\\\mmuko-os\\\\MMUKO-OS.txt\" --primary \"C:\\\\Users\\\\OBINexus\\\\Projects\\\\mmuko-os\\\\pseudocode\\\\mmuko-boot.psc\" --pseudocode-dir \"C:\\\\Users\\\\OBINexus\\\\Projects\\\\mmuko-os\\\\pseudocode\")",
+      "Bash(python -c \"from pathlib import Path; files = [''boot/mmuko_stage1_boot.asm'',''include/mmuko_codegen.h'',''kernel/mmuko_stage2_loader.c'',''tools/mmuko_codegen/manifest.txt'']; root = Path\\(r''C:/Users/OBINexus/Projects/mmuko-os''\\); [print\\(f, len\\(Path\\(root/f\\).read_text\\(\\)\\)\\) for f in files]\")",
+      "Bash(python -m build)",
+      "Bash(python -c \"import sys; print\\(sys.executable, sys.version\\)\")",
+      "Bash(\"C:\\\\Users\\\\OBINexus\\\\miniconda3\\\\python.exe\" -m build)"
+    ]
+  }
+}
