@@ -11,9 +11,10 @@
 #   make firmware-cpp      compile C++ wrapper
 #   make boot              assemble generated stage-1 source -> build/boot.bin
 #   make image             write boot sector into mmuko-os.img
-#   make compositor        dotnet build (needs .NET 8 SDK)
+#   make cython-build      build Python wheel + sdist
+#   make cython-develop    install editable Cython package
+#   make run-ui            run Python console compositor
 #   make run               boot with QEMU
-#   make run-compositor    C# compositor dev boot-gate bypass (PASS path)
 #   make verify            NSIGII verification checks
 #   make clean             remove build/ directory
 
@@ -23,10 +24,11 @@
 CC     := gcc
 CXX    := g++
 NASM   := nasm
-DOTNET := dotnet
-# python3 is used for cross-platform mkdir, image writing, and verify.
+# python3 is used for cross-platform mkdir, image writing, packaging, and verify.
 # It is available on both Windows (Conda/Python install) and WSL.
 PY     := python3
+PIP    := $(PY) -m pip
+BUILD_PY := $(PY) -m build
 
 # ============================================================
 # Build output directories
@@ -77,8 +79,10 @@ all: codegen dirs firmware boot image
 	@echo "  Boot     : $(BOOT_BIN)"
 	@echo "  Image    : $(DISK_IMG)"
 	@echo ""
+	@echo "  make cython-build   - build Python wheel + sdist"
+	@echo "  make cython-develop - install editable package"
+	@echo "  make run-ui         - run Python console compositor"
 	@echo "  make run            - boot in QEMU"
-	@echo "  make run-compositor - run C# compositor (dev PASS bypass)"
 
 
 # ============================================================
@@ -184,28 +188,23 @@ run: $(DISK_IMG)
 	qemu-system-x86_64 -drive format=raw,file=$(DISK_IMG) -m 32M || echo "[QEMU] Not found - https://www.qemu.org"
 
 # ============================================================
-# C# compositor
+# Python / Cython package
 # ============================================================
-.PHONY: compositor
-compositor: firmware
-	@echo "[DOTNET] Building C# compositor..."
-	@$(PY) -c "import shutil,sys; d=shutil.which('dotnet'); sys.exit(0) if d else (print('[DOTNET] Not found - https://dot.net'), sys.exit(0))"
-	$(DOTNET) build mmuko-compositor.csproj -c Release --nologo -v quiet && echo "[DOTNET] Build complete." || echo "[DOTNET] Build failed - check errors above."
+.PHONY: cython-build
+cython-build: firmware
+	@echo "[PYTHON] Building sdist + wheel..."
+	$(PIP) install --quiet build Cython
+	$(BUILD_PY)
 
-.PHONY: run-compositor
-run-compositor:
-	@echo "[COMPOSITOR] dev boot-gate bypass with explicit PASS inputs..."
-	$(DOTNET) run --project mmuko-compositor.csproj -- --simulate-pass --tier1 yes --tier2 yes --w-actor yes
+.PHONY: cython-develop
+cython-develop: firmware
+	@echo "[PYTHON] Installing editable package..."
+	$(PIP) install --quiet -e .
 
-.PHONY: run-compositor-pass
-run-compositor-pass:
-	@echo "[COMPOSITOR] explicit PASS path (boot-passed + T1/T2/W = yes)..."
-	$(DOTNET) run --project mmuko-compositor.csproj -- --boot-passed true --tier1 yes --tier2 yes --w-actor yes
-
-.PHONY: run-compositor-maybe
-run-compositor-maybe:
-	@echo "[COMPOSITOR] diagnostic HOLD path (boot-passed + unresolved inputs)..."
-	$(DOTNET) run --project mmuko-compositor.csproj -- --boot-passed true --tier1 maybe --tier2 maybe --w-actor maybe
+.PHONY: run-ui
+run-ui: cython-develop
+	@echo "[UI] Running Python console compositor..."
+	PYTHONPATH=python $(PY) -m mmuko_os --tier1 yes --tier2 yes --w-actor yes
 
 # ============================================================
 # NSIGII verification checks (python3 -c one-liners, no heredoc)
@@ -242,6 +241,7 @@ clean:
 help:
 	@echo ""
 	@echo "MMUKO-OS / NSIGII Heartfull Firmware - Build System"
+	@echo "Primary workflow: Python/Cython bindings and console UI"
 	@echo "OBINexus Computing | Nnamdi Michael Okpala"
 	@echo ""
 	@echo "FIRST TIME SETUP (WSL/Ubuntu):"
@@ -251,9 +251,9 @@ help:
 	@echo "WINDOWS (PowerShell / native make):"
 	@echo "  make firmware           <- GCC compiles fine via conda"
 	@echo "  make image              <- uses pre-built boot.bin"
-	@echo "  make compositor         <- dotnet build"
+	@echo "  make cython-develop     <- install editable Python package"
 	@echo "  make run                <- QEMU boot"
-	@echo "  make run-compositor     <- C# compositor dev PASS bypass"
+	@echo "  make run-ui             <- Python console compositor"
 	@echo "  boot: run from WSL (nasm not in conda path)"
 	@echo ""
 	@echo "ALL TARGETS:"
@@ -263,11 +263,10 @@ help:
 	@echo "  make firmware-cpp         C++ wrapper .so"
 	@echo "  make boot                 boot/mmuko_stage1_boot.asm -> build/boot.bin (WSL)"
 	@echo "  make image                boot sector -> mmuko-os.img"
-	@echo "  make compositor           dotnet build"
+	@echo "  make cython-build         build Python wheel + sdist"
+	@echo "  make cython-develop       install editable package"
+	@echo "  make run-ui               Python console compositor"
 	@echo "  make run                  QEMU boot"
-	@echo "  make run-compositor       compositor dev PASS bypass (--simulate-pass + yes/yes/yes)"
-	@echo "  make run-compositor-pass  compositor PASS path (--boot-passed true + yes/yes/yes)"
-	@echo "  make run-compositor-maybe compositor diagnostic HOLD path (--boot-passed true + maybe/maybe/maybe)"
 	@echo "  make verify               NSIGII checks"
 	@echo "  make clean                remove build/"
 	@echo ""
