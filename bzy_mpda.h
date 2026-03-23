@@ -20,6 +20,10 @@
 #include "heartfull_firmware.h"
 #include <stddef.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* =========================================================================
  * AUTOMATON STATE SET  Q
  * ========================================================================= */
@@ -123,5 +127,9 @@ TemporalFrame mpda_theta_to_frame(float theta);
 
 /* Print MPDA state for debugging */
 void mpda_print_state(const MPDA *m);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* BZY_MPDA_H */

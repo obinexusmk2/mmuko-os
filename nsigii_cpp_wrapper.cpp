@@ -17,6 +17,8 @@ extern "C" {
 #include "tripartite_discriminant.h"
 }
 
+#include "nsigii_cpp_wrapper.h"
+
 #include <stdexcept>
 #include <string>
 #include <vector>
