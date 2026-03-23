@@ -115,7 +115,8 @@ dotnet run --project mmuko-compositor.csproj -- --boot-passed true --tier1 no --
 
 | File | Language | Role |
 |------|----------|------|
-| `boot.asm` | NASM x86-16 | FAT12 ring boot sector. Six-phase NSIGII calibration in assembly. Exactly 512 bytes. |
+| `boot.asm` | NASM x86-16 | FAT12 ring boot sector. Six-phase NSIGII calibration in assembly. Writes the shared boot contract to physical address `0x0000:0x0600`. Exactly 512 bytes. |
+| `mmuko-boot/mmuko_boot_contract.h` | C header | Shared boot ABI for assembly/runtime handoff: statuses, phase IDs, metadata structs, magic constants, and memory layout. |
 | `heartfull_firmware.h` | C | All types: `TrinaryState`, `MembraneOutcome`, `PerspectiveMembrane`, `QubitCompass`, `MaslowNeedsState`, `EnzymeOp`, `KanbanTrack`. |
 | `heartfull_membrane.c` | C | Six-phase NSIGII calibrator. Trinary composition, enzyme degradation, compass rotation, drift theorem, membrane gate. |
 | `bzy_mpda.h` / `bzy_mpda.c` | C | Byzantine Maybe PDA — formal 5-tuple `M=(Q,Σ,Γ,δ,q₀,F)`, magnetic transition table, pushdown stack, LTCodec reverse-read. |
@@ -144,7 +145,7 @@ boot.asm  (NASM, 16-bit)
   Phase I — Internal probe P_I (compose alpha x beta x gamma)
   Phase I — Integrity / delta  (discriminant >= 0 ?)
       |
-  MEMBRANE_PASS = 0xAA
+  mmuko_boot_contract_record @ 0x0000:0x0600
       |
 C firmware library (libnsigii_firmware.so / .a)
   heartfull_membrane.c    -- calibration engine
@@ -162,7 +163,7 @@ C# compositor (.NET 8)
 
 ### LTF — Linkable Then Executable
 
-This project uses the **LTF (Linkable Then Format)** pipeline. Files are linked before they are permitted to execute. The C# compositor will not run until `HeartfullFirmware.Create(bootPassed: true)` is called — the boot gate is the precondition. In production, the assembly writes `OUTCOME_PASS = 0xAA` to a shared memory location that the compositor reads before constructing.
+This project uses the **LTF (Linkable Then Format)** pipeline. Files are linked before they are permitted to execute. The C# compositor will not run until `HeartfullFirmware.Create(bootPassed: true)` is called — the boot gate is the precondition. In production, the assembly writes a `mmuko_boot_contract_record` to physical address `0x0000:0x0600`; later stages and hosted runtimes consume the same phase IDs, status values, and metadata before constructing higher layers.
 
 ---
 
