@@ -1,0 +1,106 @@
+{
+  "boot_phases": [
+    {
+      "order": 1,
+      "phase_id": "PHASE_NEED_STATE_INIT",
+      "letter": "N",
+      "title": "Need-state initialization",
+      "description": "Validate Tier 1 physiological inputs and seed the boot handoff with HOLD defaults."
+    },
+    {
+      "order": 2,
+      "phase_id": "PHASE_SAFETY_SCAN",
+      "letter": "S",
+      "title": "Safety scan",
+      "description": "Validate Tier 2 safety inputs and the minimum firmware safety envelope."
+    },
+    {
+      "order": 3,
+      "phase_id": "PHASE_IDENTITY_CALIBRATION",
+      "letter": "I",
+      "title": "Identity calibration",
+      "description": "Bind operator identity, temporal frame, and calibration context into the handoff record."
+    },
+    {
+      "order": 4,
+      "phase_id": "PHASE_GOVERNANCE_CHECK",
+      "letter": "G",
+      "title": "Governance check",
+      "description": "Confirm policy, provenance, and execution-authority constraints before loading the filesystem target."
+    },
+    {
+      "order": 5,
+      "phase_id": "PHASE_INTERNAL_PROBE",
+      "letter": "I",
+      "title": "Internal probe",
+      "description": "Probe NSIGII firmware health, memory map integrity, and runtime compatibility signals."
+    },
+    {
+      "order": 6,
+      "phase_id": "PHASE_INTEGRITY_VERIFICATION",
+      "letter": "I",
+      "title": "Integrity verification",
+      "description": "Verify discriminant, artifact manifest, and kernel entry constraints before handoff."
+    }
+  ],
+  "filesystem_target": {
+    "layout": "FAT12",
+    "image_name": "mmuko-os.img",
+    "boot_sector": "boot.asm",
+    "boot_sector_bytes": "512",
+    "boot_signature": "0xAA55",
+    "root_artifact": "/boot/mmuko.kernel",
+    "fallback_artifact": "/boot/mmuko-runtime.bin",
+    "config_artifact": "/boot/mmuko-boot.cfg",
+    "manifest_artifact": "/boot/mmuko-artifacts.json",
+    "lookup_policy": "first FAT12 root directory match, then fallback_artifact"
+  },
+  "kernel_handoff_contract": {
+    "struct_name": "MMUKO_BOOT_HANDOFF",
+    "magic": "MMKO",
+    "revision": "0x0001",
+    "firmware_id": "NSIGII",
+    "outcome_enum": "MMUKO_BOOT_OUTCOME",
+    "outcome_pass": "PASS (0xAA)",
+    "outcome_hold": "HOLD (0xBB)",
+    "outcome_alert": "ALERT (0xCC)",
+    "phase_enum": "MMUKO_BOOT_PHASE",
+    "phase_count": "6",
+    "completed_phase_field": "completed_phases",
+    "last_phase_field": "last_completed_phase",
+    "filesystem_field": "filesystem_target",
+    "kernel_field": "kernel_path",
+    "manifest_field": "artifact_manifest_path",
+    "config_field": "config_path",
+    "entry_segment_field": "kernel_entry_segment",
+    "entry_offset_field": "kernel_entry_offset",
+    "flags_field": "validation_flags",
+    "checksum_field": "handoff_checksum",
+    "contract_rule": "The bootloader must fully populate MMUKO_BOOT_HANDOFF before attempting kernel transfer.",
+    "kernel_rule": "The kernel must validate magic, revision, outcome PASS, completed_phases == 6, and handoff_checksum before executing runtime initialization."
+  },
+  "nsigii_firmware_requirements": {
+    "fw_1": "Implement all six canonical phases using the exact phase identifiers listed above.",
+    "fw_2": "Default the handoff outcome to HOLD until integrity verification promotes it to PASS.",
+    "fw_3": "Abort with ALERT when Tier 1 or Tier 2 requirements resolve to NO.",
+    "fw_4": "Persist the filesystem target, kernel artifact path, and manifest path in the handoff contract.",
+    "fw_5": "Expose phase completion, outcome codes, and validation flags to native runtime consumers.",
+    "fw_6": "Reject handoff if the kernel artifact or manifest cannot be resolved from the FAT12 target.",
+    "fw_7": "Treat NSIGII firmware compatibility as a precondition for the kernel handoff contract."
+  },
+  "artifact_names": {
+    "boot_asm": "boot.asm",
+    "boot_binary": "boot.bin",
+    "boot_image": "mmuko-os.img",
+    "spec_file": "MMUKO-OS.txt",
+    "pseudocode": "mmuko-boot/pseudocode/mmuko-boot.psc",
+    "boot_c": "mmuko-boot/mmuko-boot.c",
+    "spec_header": "mmuko-boot/include/mmuko_boot_spec.h",
+    "runtime_header": "mmuko-boot/include/mmuko_runtime_interface.h",
+    "generator": "mmuko-boot/generate_from_spec.py",
+    "manifest": "/boot/mmuko-artifacts.json",
+    "kernel": "/boot/mmuko.kernel",
+    "runtime_fallback": "/boot/mmuko-runtime.bin",
+    "config": "/boot/mmuko-boot.cfg"
+  }
+}

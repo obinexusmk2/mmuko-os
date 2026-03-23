@@ -9,11 +9,12 @@
 #   make install-deps      install nasm in WSL/Ubuntu (run once)
 #   make firmware          compile C firmware -> .so + .a
 #   make firmware-cpp      compile C++ wrapper
-#   make boot              assemble boot.asm -> build/boot.bin
+#   make boot              assemble generated stage-1 source -> build/boot.bin
 #   make image             write boot sector into mmuko-os.img
-#   make compositor        build the Python/Cython compositor package
+#   make cython-build      build Python wheel + sdist
+#   make cython-develop    install editable Cython package
+#   make run-ui            run Python console compositor
 #   make run               boot with QEMU
-#   make run-compositor    run the Python/Cython compositor (dev PASS path)
 #   make verify            NSIGII verification checks
 #   make clean             remove build/ directory
 
@@ -23,9 +24,11 @@
 CC     := gcc
 CXX    := g++
 NASM   := nasm
-# python3 is used for cross-platform mkdir, image writing, and verify.
+# python3 is used for cross-platform mkdir, image writing, packaging, and verify.
 # It is available on both Windows (Conda/Python install) and WSL.
 PY     := python3
+PIP    := $(PY) -m pip
+BUILD_PY := $(PY) -m build
 
 # ============================================================
 # Build output directories
@@ -35,6 +38,16 @@ OBJ_DIR  := $(BUILD)/obj
 LIB_DIR  := $(BUILD)/lib
 BOOT_BIN := $(BUILD)/boot.bin
 DISK_IMG := mmuko-os.img
+
+CODEGEN_SCRIPT := tools/mmuko_codegen/generate.py
+PSC_DIR := mmuko-boot/pseudocode
+PRIMARY_PSC := $(PSC_DIR)/mmuko-boot.psc
+CODEGEN_STAMP := $(BUILD)/mmuko_codegen.stamp
+GENERATED_BOOT_SRC := boot/mmuko_stage1_boot.asm
+GENERATED_STAGE2_C := kernel/mmuko_stage2_loader.c
+GENERATED_STAGE2_CPP := kernel/mmuko_stage2_bridge.cpp
+GENERATED_HEADER := include/mmuko_codegen.h
+GENERATED_CYTHON := python/mmuko_codegen.pxd python/mmuko_generated.pyx
 
 # ============================================================
 # Compiler flags
@@ -46,8 +59,10 @@ LDFLAGS  := -shared -lm
 # ============================================================
 # Source files (flat - all in current directory)
 # ============================================================
-C_SRCS  := heartfull_membrane.c bzy_mpda.c tripartite_discriminant.c
+C_SRCS  := heartfull_membrane.c bzy_mpda.c tripartite_discriminant.c $(GENERATED_STAGE2_C)
 C_OBJS  := $(addprefix $(OBJ_DIR)/,$(C_SRCS:.c=.o))
+CPP_SRCS := nsigii_cpp_wrapper.cpp $(GENERATED_STAGE2_CPP)
+CPP_OBJS := $(addprefix $(OBJ_DIR)/,$(CPP_SRCS:.cpp=.o))
 FW_LIB  := $(LIB_DIR)/libnsigii_firmware.so
 FW_ARC  := $(LIB_DIR)/libnsigii_firmware.a
 CPP_LIB := $(LIB_DIR)/libnsigii_firmware_cpp.so
@@ -56,7 +71,7 @@ CPP_LIB := $(LIB_DIR)/libnsigii_firmware_cpp.so
 # Default target
 # ============================================================
 .PHONY: all
-all: dirs firmware boot image
+all: codegen dirs firmware boot image
 	@echo ""
 	@echo "MMUKO-OS build complete."
 	@echo "  Firmware : $(FW_LIB)"
@@ -64,8 +79,22 @@ all: dirs firmware boot image
 	@echo "  Boot     : $(BOOT_BIN)"
 	@echo "  Image    : $(DISK_IMG)"
 	@echo ""
+	@echo "  make cython-build   - build Python wheel + sdist"
+	@echo "  make cython-develop - install editable package"
+	@echo "  make run-ui         - run Python console compositor"
 	@echo "  make run            - boot in QEMU"
-	@echo "  make run-compositor - run Python/Cython compositor (dev PASS path)"
+
+
+# ============================================================
+# Code generation from canonical spec + pseudocode
+# ============================================================
+.PHONY: codegen
+codegen: dirs $(CODEGEN_STAMP)
+
+$(CODEGEN_STAMP): MMUKO-OS.txt $(CODEGEN_SCRIPT) $(PRIMARY_PSC) $(PSC_DIR)
+	@echo "[CODEGEN] Generating MMUKO-OS derived sources..."
+	$(PY) $(CODEGEN_SCRIPT) --root . --spec MMUKO-OS.txt --primary $(PRIMARY_PSC) --pseudocode-dir $(PSC_DIR)
+	@$(PY) -c "from pathlib import Path; Path('$(CODEGEN_STAMP)').write_text('generated\n', encoding='utf-8')"
 
 # ============================================================
 # Create build directories using Python (cross-platform)
@@ -91,12 +120,13 @@ install-deps:
 # C firmware - shared library + static archive
 # ============================================================
 .PHONY: firmware
-firmware: dirs $(FW_LIB) $(FW_ARC)
+firmware: codegen dirs $(FW_LIB) $(FW_ARC)
 	@echo "[FIRMWARE] OK: $(FW_LIB)"
 
 $(OBJ_DIR)/%.o: %.c
 	@echo "[CC] $<"
-	$(CC) $(CFLAGS) -I. -c $< -o $@
+	@$(PY) -c "from pathlib import Path; Path('$@').parent.mkdir(parents=True, exist_ok=True)"
+	$(CC) $(CFLAGS) -I. -Iinclude -c $< -o $@
 
 $(FW_LIB): $(C_OBJS)
 	@echo "[LD] $@"
@@ -110,15 +140,16 @@ $(FW_ARC): $(C_OBJS)
 # C++ wrapper
 # ============================================================
 .PHONY: firmware-cpp
-firmware-cpp: dirs $(CPP_LIB)
+firmware-cpp: codegen dirs $(CPP_LIB)
 
-$(CPP_LIB): nsigii_cpp_wrapper.cpp $(C_OBJS)
+$(CPP_LIB): $(CPP_OBJS) $(C_OBJS)
 	@echo "[CXX] $@"
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -I. -o $@ $^
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -I. -Iinclude -o $@ $^
 
 $(OBJ_DIR)/%.o: %.cpp
 	@echo "[CXX obj] $<"
-	$(CXX) $(CXXFLAGS) -I. -c $< -o $@
+	@$(PY) -c "from pathlib import Path; Path('$@').parent.mkdir(parents=True, exist_ok=True)"
+	$(CXX) $(CXXFLAGS) -I. -Iinclude -c $< -o $@
 
 # ============================================================
 # NASM boot sector (WSL/Linux only)
@@ -127,12 +158,12 @@ $(OBJ_DIR)/%.o: %.cpp
 # To rebuild: run from WSL after: make install-deps
 # ============================================================
 .PHONY: boot
-boot: dirs $(BOOT_BIN)
+boot: codegen dirs $(BOOT_BIN)
 
-$(BOOT_BIN): boot.asm
-	@echo "[NASM] boot.asm -> $(BOOT_BIN)"
+$(BOOT_BIN): $(GENERATED_BOOT_SRC)
+	@echo "[NASM] $(GENERATED_BOOT_SRC) -> $(BOOT_BIN)"
 	@$(PY) -c "import shutil,sys; nasm=shutil.which('nasm'); sys.exit(0) if nasm else (print('[ERROR] nasm not found.'), print('  WSL:     make install-deps'), print('  Windows: use pre-built boot.bin (already included)'), sys.exit(1))"
-	$(NASM) -f bin boot.asm -o $(BOOT_BIN)
+	$(NASM) -f bin $(GENERATED_BOOT_SRC) -o $(BOOT_BIN)
 	@$(PY) -c "b=open('$(BOOT_BIN)','rb').read();assert len(b)==512,'size: '+str(len(b));sig=b[510]|(b[511]<<8);assert sig==0xAA55,'sig: '+hex(sig);print('[BOOT] '+str(len(b))+' bytes  sig=0x'+format(sig,'04X')+'  OK')"
 
 # ============================================================
@@ -157,27 +188,23 @@ run: $(DISK_IMG)
 	qemu-system-x86_64 -drive format=raw,file=$(DISK_IMG) -m 32M || echo "[QEMU] Not found - https://www.qemu.org"
 
 # ============================================================
-# Python/Cython compositor
+# Python / Cython package
 # ============================================================
-.PHONY: compositor
-compositor: firmware firmware-cpp
-	@echo "[CYTHON] Building Python/Cython compositor..."
-	$(PY) -m pip install -e .
+.PHONY: cython-build
+cython-build: firmware
+	@echo "[PYTHON] Building sdist + wheel..."
+	$(PIP) install --quiet build Cython
+	$(BUILD_PY)
 
-.PHONY: run-compositor
-run-compositor: compositor
-	@echo "[COMPOSITOR] dev boot-gate bypass with explicit PASS inputs..."
-	PYTHONPATH=python $(PY) -m mmuko_os --simulate-pass --tier1 yes --tier2 yes --w-actor yes
+.PHONY: cython-develop
+cython-develop: firmware
+	@echo "[PYTHON] Installing editable package..."
+	$(PIP) install --quiet -e .
 
-.PHONY: run-compositor-pass
-run-compositor-pass: compositor
-	@echo "[COMPOSITOR] explicit PASS path (boot-passed + T1/T2/W = yes)..."
-	PYTHONPATH=python $(PY) -m mmuko_os --boot-passed true --tier1 yes --tier2 yes --w-actor yes
-
-.PHONY: run-compositor-maybe
-run-compositor-maybe: compositor
-	@echo "[COMPOSITOR] diagnostic HOLD path (boot-passed + unresolved inputs)..."
-	PYTHONPATH=python $(PY) -m mmuko_os --boot-passed true --tier1 maybe --tier2 maybe --w-actor maybe
+.PHONY: run-ui
+run-ui: cython-develop
+	@echo "[UI] Running Python console compositor..."
+	PYTHONPATH=python $(PY) -m mmuko_os --tier1 yes --tier2 yes --w-actor yes
 
 # ============================================================
 # NSIGII verification checks (python3 -c one-liners, no heredoc)
@@ -214,6 +241,7 @@ clean:
 help:
 	@echo ""
 	@echo "MMUKO-OS / NSIGII Heartfull Firmware - Build System"
+	@echo "Primary workflow: Python/Cython bindings and console UI"
 	@echo "OBINexus Computing | Nnamdi Michael Okpala"
 	@echo ""
 	@echo "FIRST TIME SETUP (WSL/Ubuntu):"
@@ -223,9 +251,9 @@ help:
 	@echo "WINDOWS (PowerShell / native make):"
 	@echo "  make firmware           <- GCC compiles fine via conda"
 	@echo "  make image              <- uses pre-built boot.bin"
-	@echo "  make compositor         <- dotnet build"
+	@echo "  make cython-develop     <- install editable Python package"
 	@echo "  make run                <- QEMU boot"
-	@echo "  make run-compositor     <- C# compositor dev PASS bypass"
+	@echo "  make run-ui             <- Python console compositor"
 	@echo "  boot: run from WSL (nasm not in conda path)"
 	@echo ""
 	@echo "ALL TARGETS:"
@@ -233,13 +261,12 @@ help:
 	@echo "  make install-deps         nasm + build-essential (WSL)"
 	@echo "  make firmware             C firmware .so + .a"
 	@echo "  make firmware-cpp         C++ wrapper .so"
-	@echo "  make boot                 boot.asm -> build/boot.bin (WSL)"
+	@echo "  make boot                 boot/mmuko_stage1_boot.asm -> build/boot.bin (WSL)"
 	@echo "  make image                boot sector -> mmuko-os.img"
-	@echo "  make compositor           dotnet build"
+	@echo "  make cython-build         build Python wheel + sdist"
+	@echo "  make cython-develop       install editable package"
+	@echo "  make run-ui               Python console compositor"
 	@echo "  make run                  QEMU boot"
-	@echo "  make run-compositor       compositor dev PASS bypass (--simulate-pass + yes/yes/yes)"
-	@echo "  make run-compositor-pass  compositor PASS path (--boot-passed true + yes/yes/yes)"
-	@echo "  make run-compositor-maybe compositor diagnostic HOLD path (--boot-passed true + maybe/maybe/maybe)"
 	@echo "  make verify               NSIGII checks"
 	@echo "  make clean                remove build/"
 	@echo ""
