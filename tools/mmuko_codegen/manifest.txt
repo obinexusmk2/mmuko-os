@@ -1,0 +1,10 @@
+# MMUKO code generation manifest
+authoritative_input=MMUKO-OS.txt
+primary_pseudocode=mmuko-boot/pseudocode/mmuko-boot.psc
+generated_boot=boot/mmuko_stage1_boot.asm
+generated_stage2_c=kernel/mmuko_stage2_loader.c
+generated_stage2_cpp=kernel/mmuko_stage2_bridge.cpp
+generated_header=include/mmuko_codegen.h
+generated_cython_pxd=python/mmuko_codegen.pxd
+generated_cython_pyx=python/mmuko_generated.pyx
+pseudocode_sources=14

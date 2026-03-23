@@ -1,179 +1,236 @@
 # Makefile - MMUKO-OS / NSIGII Heartfull Firmware
 # OBINexus Computing | Nnamdi Michael Okpala | 20 March 2026
+#
+# Works on: WSL/Linux (make) and Windows native (make from Git Bash/MSYS2).
+# All source files flat in the same directory.
+#
+# Targets:
+#   make all               build firmware + boot + image
+#   make install-deps      install nasm in WSL/Ubuntu (run once)
+#   make firmware          compile C firmware -> .so + .a
+#   make firmware-cpp      compile C++ wrapper
+#   make boot              assemble generated stage-1 source -> build/boot.bin
+#   make image             write boot sector into mmuko-os.img
+#   make cython-build      build Python wheel + sdist
+#   make cython-develop    install editable Cython package
+#   make run-ui            run Python console compositor
+#   make run               boot with QEMU
+#   make verify            NSIGII verification checks
+#   make clean             remove build/ directory
 
-CC        := gcc
-CXX       := g++
-NASM      := nasm
-DOTNET    := dotnet
-PY        := python3
-MINGW_CC  ?= x86_64-w64-mingw32-gcc
-AR        := ar
+# ============================================================
+# Toolchain
+# ============================================================
+CC     := gcc
+CXX    := g++
+NASM   := nasm
+# python3 is used for cross-platform mkdir, image writing, packaging, and verify.
+# It is available on both Windows (Conda/Python install) and WSL.
+PY     := python3
+PIP    := $(PY) -m pip
+BUILD_PY := $(PY) -m build
 
-BUILD        := build
-OBJ_DIR      := $(BUILD)/obj
-OBJ_WIN_DIR  := $(BUILD)/obj-win
-BIN_DIR      := $(BUILD)/bin
-LIB_DIR      := $(BUILD)/lib
-TOOLS_DIR    := $(BUILD)
+# ============================================================
+# Build output directories
+# ============================================================
+BUILD    := build
+OBJ_DIR  := $(BUILD)/obj
+LIB_DIR  := $(BUILD)/lib
+BOOT_BIN := $(BUILD)/boot.bin
+DISK_IMG := mmuko-os.img
 
-BOOT_BIN      := $(BUILD)/boot.bin
-DISK_IMG      := mmuko-os.img
-STAGE2_BIN    := $(TOOLS_DIR)/mmuko-stage2-loader
-SOM_PACKER    := $(TOOLS_DIR)/mmuko-som-pack
-FW_SO         := $(LIB_DIR)/libnsigii_firmware.so
-FW_ARC        := $(LIB_DIR)/libnsigii_firmware.a
-FW_CPP_SO     := $(LIB_DIR)/libnsigii_firmware_cpp.so
-FW_DLL        := $(LIB_DIR)/nsigii_firmware.dll
-FW_DLL_IMPLIB := $(LIB_DIR)/libnsigii_firmware.dll.a
-FW_SOM        := $(LIB_DIR)/nsigii_firmware.som
+CODEGEN_SCRIPT := tools/mmuko_codegen/generate.py
+PSC_DIR := mmuko-boot/pseudocode
+PRIMARY_PSC := $(PSC_DIR)/mmuko-boot.psc
+CODEGEN_STAMP := $(BUILD)/mmuko_codegen.stamp
+GENERATED_BOOT_SRC := boot/mmuko_stage1_boot.asm
+GENERATED_STAGE2_C := kernel/mmuko_stage2_loader.c
+GENERATED_STAGE2_CPP := kernel/mmuko_stage2_bridge.cpp
+GENERATED_HEADER := include/mmuko_codegen.h
+GENERATED_CYTHON := python/mmuko_codegen.pxd python/mmuko_generated.pyx
 
-CFLAGS      := -std=c11 -Wall -Wextra -Wpedantic -fPIC -O2
-CXXFLAGS    := -std=c++17 -Wall -Wextra -Wpedantic -fPIC -O2
-WIN_CFLAGS  := -std=c11 -Wall -Wextra -Wpedantic -O2
-SO_LDFLAGS  := -shared -lm
-DLL_LDFLAGS := -shared -Wl,--out-implib,$(FW_DLL_IMPLIB) -lm
+# ============================================================
+# Compiler flags
+# ============================================================
+CFLAGS   := -std=c11 -Wall -Wextra -fPIC -O2
+CXXFLAGS := -std=c++17 -Wall -Wextra -fPIC -O2
+LDFLAGS  := -shared -lm
 
-C_SRCS      := heartfull_membrane.c bzy_mpda.c tripartite_discriminant.c
-C_OBJS      := $(addprefix $(OBJ_DIR)/,$(C_SRCS:.c=.o))
-WIN_C_OBJS  := $(addprefix $(OBJ_WIN_DIR)/,$(C_SRCS:.c=.o))
+# ============================================================
+# Source files (flat - all in current directory)
+# ============================================================
+C_SRCS  := heartfull_membrane.c bzy_mpda.c tripartite_discriminant.c $(GENERATED_STAGE2_C)
+C_OBJS  := $(addprefix $(OBJ_DIR)/,$(C_SRCS:.c=.o))
+CPP_SRCS := nsigii_cpp_wrapper.cpp $(GENERATED_STAGE2_CPP)
+CPP_OBJS := $(addprefix $(OBJ_DIR)/,$(CPP_SRCS:.cpp=.o))
+FW_LIB  := $(LIB_DIR)/libnsigii_firmware.so
+FW_ARC  := $(LIB_DIR)/libnsigii_firmware.a
+CPP_LIB := $(LIB_DIR)/libnsigii_firmware_cpp.so
 
-.PHONY: all dirs install-deps firmware firmware-so firmware-archive firmware-cpp \
-        firmware-dll firmware-som boot stage2 image run compositor run-compositor \
-        run-compositor-pass run-compositor-maybe verify clean help
-
-all: firmware-so firmware-archive firmware-cpp stage2 firmware-som boot image
+.PHONY: all
+all: codegen dirs firmware boot image
 	@echo ""
 	@echo "MMUKO-OS build complete."
-	@echo "  Boot sector  : $(BOOT_BIN)"
-	@echo "  Stage-2      : $(STAGE2_BIN)"
-	@echo "  Firmware .so : $(FW_SO)"
-	@echo "  Firmware .a  : $(FW_ARC)"
-	@echo "  C++ wrapper  : $(FW_CPP_SO)"
-	@echo "  Firmware .som: $(FW_SOM)"
-	@echo "  Disk image   : $(DISK_IMG)"
+	@echo "  Firmware : $(FW_LIB)"
+	@echo "  Stage-1  : $(STAGE1_BIN)"
+	@echo "  Stage-2  : $(STAGE2_BIN)"
+	@echo "  Image    : $(DISK_IMG)"
 	@echo ""
-	@echo "Optional targets: make firmware-dll, make compositor, make run"
+	@echo "  make cython-build   - build Python wheel + sdist"
+	@echo "  make cython-develop - install editable package"
+	@echo "  make run-ui         - run Python console compositor"
+	@echo "  make run            - boot in QEMU"
 
+
+# ============================================================
+# Code generation from canonical spec + pseudocode
+# ============================================================
+.PHONY: codegen
+codegen: dirs $(CODEGEN_STAMP)
+
+$(CODEGEN_STAMP): MMUKO-OS.txt $(CODEGEN_SCRIPT) $(PRIMARY_PSC) $(PSC_DIR)
+	@echo "[CODEGEN] Generating MMUKO-OS derived sources..."
+	$(PY) $(CODEGEN_SCRIPT) --root . --spec MMUKO-OS.txt --primary $(PRIMARY_PSC) --pseudocode-dir $(PSC_DIR)
+	@$(PY) -c "from pathlib import Path; Path('$(CODEGEN_STAMP)').write_text('generated\n', encoding='utf-8')"
+
+.PHONY: dirs
 dirs:
-	@$(PY) -c "import os; [os.makedirs(d, exist_ok=True) for d in ['$(OBJ_DIR)', '$(OBJ_WIN_DIR)', '$(BIN_DIR)', '$(LIB_DIR)']]"
+	@$(PY) -c "import os; [os.makedirs(d, exist_ok=True) for d in ['$(OBJ_DIR)', '$(LIB_DIR)', '$(BOOT_DIR)']]"
 
+.PHONY: install-deps
 install-deps:
 	@echo "[DEPS] Installing nasm and build-essential..."
 	sudo apt-get update -qq
 	sudo apt-get install -y nasm build-essential
 
-firmware: firmware-so firmware-archive
+.PHONY: firmware
+firmware: codegen dirs $(FW_LIB) $(FW_ARC)
+	@echo "[FIRMWARE] OK: $(FW_LIB)"
 
-firmware-so: dirs $(FW_SO)
-	@echo "[FIRMWARE] ELF shared object ready: $(FW_SO)"
-
-firmware-archive: dirs $(FW_ARC)
-	@echo "[FIRMWARE] Static archive ready: $(FW_ARC)"
-
-firmware-cpp: dirs $(FW_CPP_SO)
-	@echo "[FIRMWARE] C++ wrapper ready: $(FW_CPP_SO)"
-
-firmware-dll: dirs
-	@$(PY) -c "import shutil,sys; exe=shutil.which('$(MINGW_CC)'); print('[DLL] compiler:', exe or 'missing'); sys.exit(0 if exe else 1)"
-	@$(MAKE) $(FW_DLL)
-	@echo "[FIRMWARE] Windows DLL ready: $(FW_DLL)"
-
-firmware-som: dirs $(FW_SOM)
-	@echo "[FIRMWARE] MMUKO container ready: $(FW_SOM)"
-
-boot: dirs $(BOOT_BIN)
-
-stage2: dirs $(STAGE2_BIN)
-	@echo "[STAGE2] Reference loader ready: $(STAGE2_BIN)"
-
-$(OBJ_DIR)/%.o: %.c
+$(OBJ_DIR)/%.o: %.c | dirs
 	@echo "[CC] $<"
-	@$(CC) $(CFLAGS) -I. -c $< -o $@
+	@$(PY) -c "from pathlib import Path; Path('$@').parent.mkdir(parents=True, exist_ok=True)"
+	$(CC) $(CFLAGS) -I. -Iinclude -c $< -o $@
 
-$(OBJ_WIN_DIR)/%.o: %.c
-	@echo "[MINGW-CC] $<"
-	@$(MINGW_CC) $(WIN_CFLAGS) -I. -c $< -o $@
-
-$(FW_SO): $(C_OBJS)
+$(FW_LIB): $(C_OBJS) | dirs
 	@echo "[LD] $@"
 	@$(CC) $(SO_LDFLAGS) -o $@ $^
 
-$(FW_ARC): $(C_OBJS)
+$(FW_ARC): $(C_OBJS) | dirs
 	@echo "[AR] $@"
 	@$(AR) rcs $@ $^
 
-$(FW_CPP_SO): nsigii_cpp_wrapper.cpp $(C_OBJS)
+.PHONY: firmware-cpp
+firmware-cpp: codegen dirs $(CPP_LIB)
+
+$(CPP_LIB): $(CPP_OBJS) $(C_OBJS)
 	@echo "[CXX] $@"
-	@$(CXX) $(CXXFLAGS) $(SO_LDFLAGS) -I. -o $@ $^
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -I. -Iinclude -o $@ $^
 
-$(FW_DLL): $(WIN_C_OBJS)
-	@echo "[DLL] $@"
-	@$(MINGW_CC) $(DLL_LDFLAGS) -I. -o $@ $^
+$(OBJ_DIR)/%.o: %.cpp
+	@echo "[CXX obj] $<"
+	@$(PY) -c "from pathlib import Path; Path('$@').parent.mkdir(parents=True, exist_ok=True)"
+	$(CXX) $(CXXFLAGS) -I. -Iinclude -c $< -o $@
 
-$(SOM_PACKER): mmuko-boot/mmuko-som-pack.c mmuko-boot/mmuko_som.h
-	@echo "[CC] $@"
-	@$(CC) $(CFLAGS) -Immuko-boot -o $@ mmuko-boot/mmuko-som-pack.c
+.PHONY: boot
+boot: codegen dirs $(BOOT_BIN)
 
-$(STAGE2_BIN): mmuko-boot/stage2_loader.c mmuko-boot/mmuko_som.h
-	@echo "[CC] $@"
-	@$(CC) $(CFLAGS) -Immuko-boot -o $@ mmuko-boot/stage2_loader.c
+$(BOOT_BIN): $(GENERATED_BOOT_SRC)
+	@echo "[NASM] $(GENERATED_BOOT_SRC) -> $(BOOT_BIN)"
+	@$(PY) -c "import shutil,sys; nasm=shutil.which('nasm'); sys.exit(0) if nasm else (print('[ERROR] nasm not found.'), print('  WSL:     make install-deps'), print('  Windows: use pre-built boot.bin (already included)'), sys.exit(1))"
+	$(NASM) -f bin $(GENERATED_BOOT_SRC) -o $(BOOT_BIN)
+	@$(PY) -c "b=open('$(BOOT_BIN)','rb').read();assert len(b)==512,'size: '+str(len(b));sig=b[510]|(b[511]<<8);assert sig==0xAA55,'sig: '+hex(sig);print('[BOOT] '+str(len(b))+' bytes  sig=0x'+format(sig,'04X')+'  OK')"
 
-$(FW_SOM): $(FW_SO) $(SOM_PACKER)
-	@echo "[PACK] $@"
-	@$(SOM_PACKER) $(FW_SO) $@ elf-so
-
-$(BOOT_BIN): boot.asm
-	@echo "[NASM] boot.asm -> $(BOOT_BIN)"
-	@$(PY) -c "import shutil,sys; nasm=shutil.which('$(NASM)'); sys.exit(0 if nasm else 1)"
-	@$(NASM) -f bin boot.asm -o $(BOOT_BIN)
-	@$(PY) -c "b=open('$(BOOT_BIN)','rb').read();assert len(b)==512,'size: '+str(len(b));assert b[510:512]==b'\x55\xAA','bad signature';print('[BOOT] validated 512-byte boot sector with 0x55AA signature')"
-
+# ============================================================
+# Disk image (1.44 MB FAT12 - cross-platform Python write)
+# Uses boot.bin if present; falls back to pre-built boot.bin
+# ============================================================
+.PHONY: image
 image: $(DISK_IMG)
 
-$(DISK_IMG): $(BOOT_BIN)
-	@echo "[IMAGE] Writing $(DISK_IMG) (1.44 MB FAT12)..."
-	@$(PY) -c "boot=open('$(BOOT_BIN)','rb').read(); img=bytearray(b'\x00'*(512*2880)); img[:512]=boot; open('$(DISK_IMG)','wb').write(img); print('[IMAGE] wrote', len(img), 'bytes to $(DISK_IMG)')"
+$(DISK_IMG): $(STAGE1_BIN) $(STAGE2_BIN) | dirs
+	@echo "[IMAGE] Writing $(DISK_IMG) (1.44 MB FAT12 + raw stage2 payload)..."
+	@$(PY) -c "from pathlib import Path; stage1=Path('$(STAGE1_BIN)').read_bytes(); stage2=Path('$(STAGE2_BIN)').read_bytes(); img=bytearray(b'\0'*(512*2880)); img[:512]=stage1; img[512:512+len(stage2)]=stage2; Path('$(DISK_IMG)').write_bytes(img); print(f'[IMAGE] wrote {len(img)} bytes with stage2 payload {len(stage2)} bytes')"
 
+.PHONY: run
 run: $(DISK_IMG)
 	@echo "[QEMU] Booting MMUKO-OS..."
-	@qemu-system-x86_64 -drive format=raw,file=$(DISK_IMG) -m 32M || echo "[QEMU] Not found - https://www.qemu.org"
+	qemu-system-x86_64 -drive format=raw,file=$(DISK_IMG) -m 32M || echo "[QEMU] Not found - https://www.qemu.org"
 
-compositor: firmware-so
-	@$(PY) -c "import shutil,sys; d=shutil.which('$(DOTNET)'); sys.exit(0) if d else (print('[DOTNET] Not found - https://dot.net'), sys.exit(0))"
-	$(DOTNET) build mmuko-compositor.csproj -c Release --nologo -v quiet && echo "[DOTNET] Build complete." || echo "[DOTNET] Build failed - check errors above."
+# ============================================================
+# Python / Cython package
+# ============================================================
+.PHONY: cython-build
+cython-build: firmware
+	@echo "[PYTHON] Building sdist + wheel..."
+	$(PIP) install --quiet build Cython
+	$(BUILD_PY)
 
-run-compositor:
-	$(DOTNET) run --project mmuko-compositor.csproj -- --simulate-pass --tier1 yes --tier2 yes --w-actor yes
+.PHONY: cython-develop
+cython-develop: firmware
+	@echo "[PYTHON] Installing editable package..."
+	$(PIP) install --quiet -e .
 
-run-compositor-pass:
-	$(DOTNET) run --project mmuko-compositor.csproj -- --boot-passed true --tier1 yes --tier2 yes --w-actor yes
+.PHONY: run-ui
+run-ui: cython-develop
+	@echo "[UI] Running Python console compositor..."
+	PYTHONPATH=python $(PY) -m mmuko_os --tier1 yes --tier2 yes --w-actor yes
 
-run-compositor-maybe:
-	$(DOTNET) run --project mmuko-compositor.csproj -- --boot-passed true --tier1 maybe --tier2 maybe --w-actor maybe
+.PHONY: verify
+verify: boot
+	@echo ""
+	@echo "=== NSIGII Verification ==="
+	@echo ""
+	@echo "[1] Stage-1 boot sector"
+	@$(PY) -c "import struct; b=open('$(STAGE1_BIN)','rb').read(); assert len(b)==512; assert struct.unpack_from('<H',b,510)[0]==0xAA55; print('    stage1: 512 bytes / sig=0xAA55')"
+	@echo "[2] Stage-2 payload"
+	@$(PY) -c "b=open('$(STAGE2_BIN)','rb').read(); assert len(b)==$(STAGE2_TOTAL_BYTES); print('    stage2: '+str(len(b))+' bytes / sectors=$(STAGE2_TOTAL_SECTORS)')"
+	@echo "[3] Trinary alphabet"
+	@$(PY) -c "[print('    '+n+' = '+str(v)) for n,v in [('YES',1),('NO',0),('MAYBE',-1),('MAYBE_NOT',-2)]]"
+	@echo ""
+	@echo "=== NSIGII_VERIFIED ==="
 
-verify: firmware-so firmware-som boot stage2
-	@echo "=== MMUKO verification ==="
-	@$(PY) -c "import os,struct; b=open('$(BOOT_BIN)','rb').read(); assert len(b)==512; assert b[510:512]==b'\x55\xAA'; print('boot.bin OK')"
-	@$(STAGE2_BIN) $(FW_SOM)
-	@$(PY) -c "import ctypes; h=open('$(FW_SOM)','rb').read(64); print('som magic:', h[:4].decode())"
-
+.PHONY: clean
 clean:
-	@echo "[CLEAN] Removing build artifacts..."
-	@$(PY) -c "import os,shutil; shutil.rmtree('$(BUILD)', ignore_errors=True); [os.remove(p) for p in ['$(DISK_IMG)'] if os.path.exists(p)]"
+	@echo "[CLEAN] Removing generated artifacts ..."
+	@$(PY) -c "import shutil, pathlib; [shutil.rmtree(p, ignore_errors=True) for p in ['build', 'bin', 'obj', 'legacy/csharp-compositor/bin', 'legacy/csharp-compositor/obj']]; [pathlib.Path(p).unlink(missing_ok=True) for p in ['boot.bin', 'boot-stage2.bin', 'mmuko-os.img']]; print('[CLEAN] Done.')"
 
+.PHONY: help
 help:
 	@echo "MMUKO-OS / NSIGII Heartfull Firmware - Build System"
+	@echo "Primary workflow: Python/Cython bindings and console UI"
+	@echo "OBINexus Computing | Nnamdi Michael Okpala"
 	@echo ""
-	@echo "Named artifact targets:"
-	@echo "  make boot           -> $(BOOT_BIN)"
-	@echo "  make stage2         -> $(STAGE2_BIN)"
-	@echo "  make firmware-so    -> $(FW_SO)"
-	@echo "  make firmware-dll   -> $(FW_DLL) (requires $(MINGW_CC))"
-	@echo "  make firmware-som   -> $(FW_SOM)"
-	@echo "  make image          -> $(DISK_IMG)"
-	@echo "  make firmware-cpp   -> $(FW_CPP_SO)"
-	@echo "  make firmware       -> $(FW_SO) + $(FW_ARC)"
+	@echo "FIRST TIME SETUP (WSL/Ubuntu):"
+	@echo "  make install-deps       <- installs nasm + build-essential"
+	@echo "  make all                <- builds everything"
 	@echo ""
-	@echo "Container tooling:"
-	@echo "  $(SOM_PACKER) wraps ELF/DLL/raw payloads in the custom MSOM header"
-	@echo "  $(STAGE2_BIN) validates MSOM headers and payload CRC32"
+	@echo "WINDOWS (PowerShell / native make):"
+	@echo "  make firmware           <- GCC compiles fine via conda"
+	@echo "  make image              <- uses pre-built boot.bin"
+	@echo "  make cython-develop     <- install editable Python package"
+	@echo "  make run                <- QEMU boot"
+	@echo "  make run-ui             <- Python console compositor"
+	@echo "  boot: run from WSL (nasm not in conda path)"
+	@echo ""
+	@echo "ALL TARGETS:"
+	@echo "  make all                  firmware + boot + image"
+	@echo "  make install-deps         nasm + build-essential (WSL)"
+	@echo "  make firmware             C firmware .so + .a"
+	@echo "  make firmware-cpp         C++ wrapper .so"
+	@echo "  make boot                 boot/mmuko_stage1_boot.asm -> build/boot.bin (WSL)"
+	@echo "  make image                boot sector -> mmuko-os.img"
+	@echo "  make cython-build         build Python wheel + sdist"
+	@echo "  make cython-develop       install editable package"
+	@echo "  make run-ui               Python console compositor"
+	@echo "  make run                  QEMU boot"
+	@echo "  make verify               NSIGII checks"
+	@echo "  make clean                remove build/"
+	@echo ""
+	@echo "  make all            - build firmware, stage1, stage2, image"
+	@echo "  make boot           - assemble split boot chain"
+	@echo "  make image          - write stage1 + raw stage2 payload into build/mmuko-os.img"
+	@echo "  make run            - boot build/mmuko-os.img with QEMU"
+	@echo "  make compositor     - build the legacy C# compositor"
+	@echo "  make verify         - verify stage sizes and signatures"
+	@echo "  make clean          - remove generated artifacts and legacy .NET outputs"
