@@ -2,7 +2,8 @@
 # OBINexus R&D
 
 CC = gcc
-CFLAGS = -Wall -Wextra -std=c11 -O2 -lm
+CPPFLAGS = -I../include -DMMUKO_BOOT_DESKTOP_SIM
+CFLAGS = -Wall -Wextra -std=c11 -O2
 TARGET = mmuko-boot
 SRC = mmuko-boot.c
 
@@ -19,14 +20,12 @@ clean:
 run: $(TARGET)
 	./$(TARGET)
 
-debug: CFLAGS = -Wall -Wextra -std=c11 -g -O0 -lm -DDEBUG
+debug: CFLAGS = -Wall -Wextra -std=c11 -g -O0 -DDEBUG
 debug: $(TARGET)
 
-# Static analysis
 analyze:
 	cppcheck --enable=all --inconclusive $(SRC)
 
-# Format code
 format:
 	clang-format -i $(SRC)
 
