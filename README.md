@@ -1,4 +1,4 @@
-# MMUKO-OS — NSIGII Heartfull Firmware Compositor
+# MMUKO-OS — NSIGII Heartfull Firmware
 
 **OBINexus Computing | Nnamdi Michael Okpala**  
 **Version:** 0.1-DRAFT | 20 March 2026  
@@ -7,7 +7,7 @@
 
 ---
 
-## What this is
+## Boot architecture
 
 MMUKO-OS is a constitutional computing environment whose boot boundary stays in native NASM/C/C++ artifacts, while the higher-level compositor now runs through a Python/Cython package. The NSIGII Heartfull Firmware still performs the six-phase calibration and keeps the native ABI stable for the boot/runtime boundary; Cython is the orchestration layer above that native surface.
 
@@ -189,46 +189,26 @@ This project uses the **LTF (Linkable Then Format)** pipeline. Files are linked 
 
 ---
 
-## Trinary alphabet
+## Build and run
 
-The firmware operates on a **four-value trinary alphabet**, not the classical binary:
+### Build firmware + boot image
 
-| Symbol | Value | Meaning | Action |
-|--------|-------|---------|--------|
-| `YES` | `+1` | Needs met, contract honoured | Proceed |
-| `NO` | `0` | Needs violated, contract breached | ALERT |
-| `MAYBE` | `-1` | Needs uncertain, response delayed | Enzyme pathway |
-| `MAYBE_NOT` | `-2` | Deferred — do NOT handle for operator | System absorbs |
-
-### RIFT trinary composition rules
-
-```
-YES   * YES       = YES        (both confirmed)
-NO    * anything  = NO         (NO absorbs)
-MAYBE * MAYBE     = YES        (double negation resolves)
-MAYBE * YES       = MAYBE      (uncertainty persists)
-MAYBE_NOT * any   = MAYBE_NOT  (defer wins)
+```bash
+make all
 ```
 
-### Enzyme degradation — MAYBE states
+Artifacts are generated under `build/`:
 
-When `MAYBE` is encountered on a Kanban thread, an enzyme operation is applied:
+- `build/boot/stage1.bin`
+- `build/boot/stage2-loader.bin`
+- `build/boot/runtime.bin`
+- `build/boot/stage2.bin`
+- `build/mmuko-os.img`
 
-```
-ENZYME_CREATE  : MAYBE -> YES    (creates a resolved state)
-ENZYME_DESTROY : MAYBE -> NO     (destroys ambiguous state)
-ENZYME_BUILD   : MAYBE -> YES    (builds toward resolution)
-ENZYME_BREAK   : YES   -> MAYBE  (breaks apart certainty)
-ENZYME_RENEW   : *     -> MAYBE  (refreshes to pending)
-ENZYME_REPAIR  : NO    -> MAYBE  (patches violation back to pending)
-```
+### Verify boot artifacts
 
----
-
-## Byzantine discriminant — G = {U, V, W}
-
-The tripartite discriminant detects adversarial interference in the constitutional relationship between operator (U), institution (V), and third-party/attacker (W):
-
+```bash
+make verify
 ```
 
 That means:

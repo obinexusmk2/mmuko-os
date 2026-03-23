@@ -67,16 +67,13 @@ FW_LIB  := $(LIB_DIR)/libnsigii_firmware.so
 FW_ARC  := $(LIB_DIR)/libnsigii_firmware.a
 CPP_LIB := $(LIB_DIR)/libnsigii_firmware_cpp.so
 
-# ============================================================
-# Default target
-# ============================================================
 .PHONY: all
 all: codegen dirs firmware boot image
 	@echo ""
 	@echo "MMUKO-OS build complete."
 	@echo "  Firmware : $(FW_LIB)"
-	@echo "  Archive  : $(FW_ARC)"
-	@echo "  Boot     : $(BOOT_BIN)"
+	@echo "  Stage-1  : $(STAGE1_BIN)"
+	@echo "  Stage-2  : $(STAGE2_BIN)"
 	@echo "  Image    : $(DISK_IMG)"
 	@echo ""
 	@echo "  make cython-build   - build Python wheel + sdist"
@@ -96,49 +93,33 @@ $(CODEGEN_STAMP): MMUKO-OS.txt $(CODEGEN_SCRIPT) $(PRIMARY_PSC) $(PSC_DIR)
 	$(PY) $(CODEGEN_SCRIPT) --root . --spec MMUKO-OS.txt --primary $(PRIMARY_PSC) --pseudocode-dir $(PSC_DIR)
 	@$(PY) -c "from pathlib import Path; Path('$(CODEGEN_STAMP)').write_text('generated\n', encoding='utf-8')"
 
-# ============================================================
-# Create build directories using Python (cross-platform)
-# Avoids mkdir -p vs mkdir differences between Linux and Windows.
-# ============================================================
 .PHONY: dirs
 dirs:
-	@$(PY) -c "import os; [os.makedirs(d, exist_ok=True) for d in ['$(OBJ_DIR)', '$(LIB_DIR)']]"
+	@$(PY) -c "import os; [os.makedirs(d, exist_ok=True) for d in ['$(OBJ_DIR)', '$(LIB_DIR)', '$(BOOT_DIR)']]"
 
-# ============================================================
-# Install NASM + build tools (WSL / Ubuntu / Debian only)
-# Run once from WSL before running make boot
-# ============================================================
 .PHONY: install-deps
 install-deps:
 	@echo "[DEPS] Installing nasm and build-essential..."
-	@echo "[DEPS] This target runs only on WSL/Linux."
 	sudo apt-get update -qq
 	sudo apt-get install -y nasm build-essential
-	@echo "[DEPS] Done. Run: make boot"
 
-# ============================================================
-# C firmware - shared library + static archive
-# ============================================================
 .PHONY: firmware
 firmware: codegen dirs $(FW_LIB) $(FW_ARC)
 	@echo "[FIRMWARE] OK: $(FW_LIB)"
 
-$(OBJ_DIR)/%.o: %.c
+$(OBJ_DIR)/%.o: %.c | dirs
 	@echo "[CC] $<"
 	@$(PY) -c "from pathlib import Path; Path('$@').parent.mkdir(parents=True, exist_ok=True)"
 	$(CC) $(CFLAGS) -I. -Iinclude -c $< -o $@
 
-$(FW_LIB): $(C_OBJS)
+$(FW_LIB): $(C_OBJS) | dirs
 	@echo "[LD] $@"
 	$(CC) $(LDFLAGS) -o $@ $^
 
-$(FW_ARC): $(C_OBJS)
+$(FW_ARC): $(C_OBJS) | dirs
 	@echo "[AR] $@"
 	ar rcs $@ $^
 
-# ============================================================
-# C++ wrapper
-# ============================================================
 .PHONY: firmware-cpp
 firmware-cpp: codegen dirs $(CPP_LIB)
 
@@ -173,15 +154,10 @@ $(BOOT_BIN): $(GENERATED_BOOT_SRC)
 .PHONY: image
 image: $(DISK_IMG)
 
-# The image target depends on boot.bin being present in build/.
-# If nasm is unavailable (Windows), copy the pre-built one first.
-$(DISK_IMG):
-	@echo "[IMAGE] Writing $(DISK_IMG) (1.44 MB FAT12)..."
-	@$(PY) -c "import os, shutil; os.makedirs('$(BUILD)', exist_ok=True); src='$(BOOT_BIN)' if os.path.exists('$(BOOT_BIN)') else 'boot.bin'; assert os.path.exists(src), 'boot.bin not found - run: make boot (WSL) or copy boot.bin to build/'; boot=open(src,'rb').read(); assert len(boot)==512; img=bytearray(b'\x00'*512*2880); img[:512]=boot; open('$(DISK_IMG)','wb').write(img); print('[IMAGE] '+str(len(img))+' bytes -> $(DISK_IMG)  (boot from: '+src+')')"
+$(DISK_IMG): $(STAGE1_BIN) $(STAGE2_BIN) | dirs
+	@echo "[IMAGE] Writing $(DISK_IMG) (1.44 MB FAT12 + raw stage2 payload)..."
+	@$(PY) -c "from pathlib import Path; stage1=Path('$(STAGE1_BIN)').read_bytes(); stage2=Path('$(STAGE2_BIN)').read_bytes(); img=bytearray(b'\0'*(512*2880)); img[:512]=stage1; img[512:512+len(stage2)]=stage2; Path('$(DISK_IMG)').write_bytes(img); print(f'[IMAGE] wrote {len(img)} bytes with stage2 payload {len(stage2)} bytes')"
 
-# ============================================================
-# QEMU boot
-# ============================================================
 .PHONY: run
 run: $(DISK_IMG)
 	@echo "[QEMU] Booting MMUKO-OS..."
@@ -206,37 +182,25 @@ run-ui: cython-develop
 	@echo "[UI] Running Python console compositor..."
 	PYTHONPATH=python $(PY) -m mmuko_os --tier1 yes --tier2 yes --w-actor yes
 
-# ============================================================
-# NSIGII verification checks (python3 -c one-liners, no heredoc)
-# ============================================================
 .PHONY: verify
-verify:
+verify: boot
 	@echo ""
 	@echo "=== NSIGII Verification ==="
 	@echo ""
-	@echo "[1] Boot sector"
-	@$(PY) -c "import struct, os; src='$(BOOT_BIN)' if os.path.exists('$(BOOT_BIN)') else 'boot.bin'; b=open(src,'rb').read(); assert len(b)==512,'size: '+str(len(b)); sig=struct.unpack_from('<H',b,510)[0]; assert sig==0xAA55,'sig: '+hex(sig); vid=struct.unpack_from('<I',b,39)[0]; print('    File : '+src); print('    Size : '+str(len(b))+' bytes  OK'); print('    Sig  : 0x'+format(sig,'04X')+'  OK'); print('    VID  : 0x'+format(vid,'08X'))"
-	@echo ""
-	@echo "[2] Trinary alphabet"
+	@echo "[1] Stage-1 boot sector"
+	@$(PY) -c "import struct; b=open('$(STAGE1_BIN)','rb').read(); assert len(b)==512; assert struct.unpack_from('<H',b,510)[0]==0xAA55; print('    stage1: 512 bytes / sig=0xAA55')"
+	@echo "[2] Stage-2 payload"
+	@$(PY) -c "b=open('$(STAGE2_BIN)','rb').read(); assert len(b)==$(STAGE2_TOTAL_BYTES); print('    stage2: '+str(len(b))+' bytes / sectors=$(STAGE2_TOTAL_SECTORS)')"
+	@echo "[3] Trinary alphabet"
 	@$(PY) -c "[print('    '+n+' = '+str(v)) for n,v in [('YES',1),('NO',0),('MAYBE',-1),('MAYBE_NOT',-2)]]"
 	@echo ""
-	@echo "[3] Discriminant sweep  G={U,V,W}  Delta=b^2-4"
-	@$(PY) -c "[print('    U='+str(u)+' V='+str(v)+' W='+str(w)+'  Delta='+str((u+v+w)**2-4)+'  '+('STABLE' if (u+v+w)**2-4>0 else ('CRITICAL' if (u+v+w)**2-4==0 else 'FAULT'))) for u,v,w in [(1,1,1),(0,0,0),(-1,-1,-1),(1,-1,0),(1,0,-1)]]"
-	@echo ""
 	@echo "=== NSIGII_VERIFIED ==="
-	@echo ""
 
-# ============================================================
-# Clean
-# ============================================================
 .PHONY: clean
 clean:
-	@echo "[CLEAN] Removing $(BUILD)/ ..."
-	@$(PY) -c "import shutil,os; shutil.rmtree('$(BUILD)', ignore_errors=True); print('[CLEAN] Done.')"
+	@echo "[CLEAN] Removing generated artifacts ..."
+	@$(PY) -c "import shutil, pathlib; [shutil.rmtree(p, ignore_errors=True) for p in ['build', 'bin', 'obj', 'legacy/csharp-compositor/bin', 'legacy/csharp-compositor/obj']]; [pathlib.Path(p).unlink(missing_ok=True) for p in ['boot.bin', 'boot-stage2.bin', 'mmuko-os.img']]; print('[CLEAN] Done.')"
 
-# ============================================================
-# Help
-# ============================================================
 .PHONY: help
 help:
 	@echo ""
@@ -270,5 +234,10 @@ help:
 	@echo "  make verify               NSIGII checks"
 	@echo "  make clean                remove build/"
 	@echo ""
-	@echo "Trinary:  YES=1  NO=0  MAYBE=-1  MAYBE_NOT=-2"
-	@echo "Membrane: PASS=0xAA  HOLD=0xBB  ALERT=0xCC"
+	@echo "  make all            - build firmware, stage1, stage2, image"
+	@echo "  make boot           - assemble split boot chain"
+	@echo "  make image          - write stage1 + raw stage2 payload into build/mmuko-os.img"
+	@echo "  make run            - boot build/mmuko-os.img with QEMU"
+	@echo "  make compositor     - build the legacy C# compositor"
+	@echo "  make verify         - verify stage sizes and signatures"
+	@echo "  make clean          - remove generated artifacts and legacy .NET outputs"

@@ -4,11 +4,11 @@
 // Version: 0.1-DRAFT | 20 March 2026
 //
 // LTF (Linkable Then Executable) entry point.
-// This file is the C# compositor that loads AFTER boot.asm issues MEMBRANE_PASS.
+// This file is the C# compositor that loads AFTER boot/stage1.asm issues MEMBRANE_PASS.
 //
 // Pipeline:
-//   nasm -f bin boot.asm -o boot.bin
-//   → QEMU loads boot.bin → NSIGII 6-phase calibration
+//   make image
+//   → QEMU loads build/mmuko-os.img → NSIGII 6-phase calibration
 //   → PASS → OS kernel → C firmware library → dotnet run (this file)
 //
 // Usage:
@@ -67,7 +67,7 @@ namespace OBINexus.MMUKO
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.Error.WriteLine("\n[COMPOSITOR] BLOCKED — boot gate not passed.");
-                Console.Error.WriteLine("  Run: qemu-system-x86_64 -drive format=raw,file=mmuko-os.img");
+                Console.Error.WriteLine("  Run: qemu-system-x86_64 -drive format=raw,file=build/mmuko-os.img");
                 Console.Error.WriteLine("  Then re-launch compositor with: --boot-passed true");
                 Console.ResetColor();
                 return 1;
