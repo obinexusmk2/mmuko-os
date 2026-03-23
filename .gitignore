@@ -1,4 +1,5 @@
-build/mkmmukoimg
-build/mmuko-runtime.bin
-build/stage2.bin
-mmuko-os.img.tmp
+python/mmuko_os/_firmware.cpp
+python/mmuko_os/_firmware.*.so
+*.egg-info/
+build/lib/libnsigii_firmware_cpp.so
+python/mmuko_os/__pycache__/

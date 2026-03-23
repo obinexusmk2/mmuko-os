@@ -1,29 +1,32 @@
 # MMUKO stage-2 build helpers
 
-CC ?= gcc
-NASM ?= nasm
-CFLAGS ?= -std=c11 -Wall -Wextra -O2
+CC = gcc
+CPPFLAGS = -I../include -DMMUKO_BOOT_DESKTOP_SIM
+CFLAGS = -Wall -Wextra -std=c11 -O2
+TARGET = mmuko-boot
+SRC = mmuko-boot.c
 
-BUILD ?= ../build
-STAGE2_BIN ?= $(BUILD)/stage2.bin
-RUNTIME_BIN ?= $(BUILD)/mmuko-runtime.bin
-IMAGE_TOOL ?= $(BUILD)/mkmmukoimg
+.PHONY: all clean run debug generate-spec
 
 .PHONY: all clean
 
-all: $(STAGE2_BIN) $(RUNTIME_BIN) $(IMAGE_TOOL)
-
-$(STAGE2_BIN): stage2.asm | $(BUILD)
-	$(NASM) -f bin $< -o $@
-
-$(RUNTIME_BIN): runtime.asm | $(BUILD)
-	$(NASM) -f bin $< -o $@
-
-$(IMAGE_TOOL): mkimage.c image_layout.h | $(BUILD)
-	$(CC) $(CFLAGS) -o $@ mkimage.c
-
-$(BUILD):
-	mkdir -p $(BUILD)
+$(TARGET): $(SRC)
+	$(CC) $(CFLAGS) -o $(TARGET) $(SRC)
 
 clean:
-	rm -f $(STAGE2_BIN) $(RUNTIME_BIN) $(IMAGE_TOOL)
+	rm -f $(TARGET)
+
+run: $(TARGET)
+	./$(TARGET)
+
+debug: CFLAGS = -Wall -Wextra -std=c11 -g -O0 -DDEBUG
+debug: $(TARGET)
+
+analyze:
+	cppcheck --enable=all --inconclusive $(SRC)
+
+format:
+	clang-format -i $(SRC)
+
+generate-spec:
+	python3 generate_from_spec.py

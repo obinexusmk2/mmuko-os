@@ -1,5 +1,3 @@
-MMUKO-OS BOOT MEDIA SPECIFICATION
-=================================
 
 Status
 ------
@@ -51,3 +49,29 @@ Policy on "FAT64"
 ------------------
 If "FAT64" is meant to be a custom MMUKO format, it must be specified explicitly with its own boot sector, allocation structures, directory format, and validation rules.
 Until such a definition exists, the project should describe the boot media as a raw custom layout rather than a FAT variant.
+MMUKO-OS Canonical Specification
+
+Authoritative input
+-------------------
+This file is the authoritative textual input for the repository's generated MMUKO-OS artifacts. The code generation pipeline under `tools/mmuko_codegen/` must treat `MMUKO-OS.txt` as the canonical specification layer, with `mmuko-boot/pseudocode/mmuko-boot.psc` as the primary executable pseudocode source and the remaining `.psc` files in `mmuko-boot/pseudocode/` as supporting context.
+
+Normative source ordering
+-------------------------
+1. `MMUKO-OS.txt` — canonical, authoritative spec for generated outputs.
+2. `mmuko-boot/pseudocode/mmuko-boot.psc` — primary stage-1 and stage-2 behavioral pseudocode.
+3. Other `.psc` files in `mmuko-boot/pseudocode/` — supporting models, terminology, and subsystem context.
+4. Generated outputs under `boot/`, `kernel/`, `include/`, and `python/` — derived artifacts and never hand-edited sources of truth.
+
+Required generated outputs
+--------------------------
+The generator must emit:
+- a stage-1 bootloader source in `boot/`
+- a stage-2 loader or kernel source in `kernel/`
+- shared native interface declarations in `include/`
+- Cython bindings in `python/`
+
+Behavioral mapping
+------------------
+- `PHASE 0` through `PHASE 6` in `mmuko-boot.psc` define the boot handoff contract.
+- Constant and function declarations in the pseudocode define exported symbols and comments in generated native bindings.
+- Supporting pseudocode files are metadata inputs that should be tracked in generated manifests so implementers can audit provenance.
