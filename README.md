@@ -1,7 +1,7 @@
 # MMUKO-OS — NSIGII Heartfull Firmware Compositor
 
-**OBINexus Computing | Nnamdi Michael Okpala**
-**Version:** 0.1-DRAFT | 20 March 2026
+**OBINexus Computing | Nnamdi Michael Okpala**  
+**Version:** 0.1-DRAFT | 20 March 2026  
 **Status:** Active specification
 **Canonical spec:** `MMUKO-OS.txt` is the authoritative input for generated artifacts.
 
@@ -9,9 +9,7 @@
 
 ## What this is
 
-MMUKO-OS is a **constitutional computing environment** built on the principle that a computer should not boot until the operator's fundamental needs are verified. The NSIGII Heartfull Firmware is the pre-boot calibration layer that enforces this — it runs before any OS process, application, or UI loads.
-
-The firmware implements a **Maslow needs-gate**: Tier 1 (physiological) and Tier 2 (safety) must be satisfied or actively pending before computation proceeds. This is not a metaphor. It is a boot protocol.
+MMUKO-OS is a constitutional computing environment whose boot boundary stays in native NASM/C/C++ artifacts, while the higher-level compositor now runs through a Python/Cython package. The NSIGII Heartfull Firmware still performs the six-phase calibration and keeps the native ABI stable for the boot/runtime boundary; Cython is the orchestration layer above that native surface.
 
 ---
 
@@ -48,40 +46,29 @@ make -C mmuko-boot generate-spec
 make codegen
 nasm -f bin boot/mmuko_stage1_boot.asm -o boot.bin
 
-# Verify: should be exactly 512 bytes with 0xAA55 at offset 510
+```bash
+make firmware
+make firmware-cpp
 ```
 
-### 2. Write the disk image
+This preserves the native ABI in:
 
-```powershell
-# PowerShell — write boot sector to image
-$boot = [System.IO.File]::ReadAllBytes("boot.bin")
-$img  = [System.IO.File]::ReadAllBytes("mmuko-os.img")
-[System.Array]::Copy($boot, 0, $img, 0, 512)
-[System.IO.File]::WriteAllBytes("mmuko-os.img", $img)
+- `build/lib/libnsigii_firmware.so`
+- `build/lib/libnsigii_firmware.a`
+- `build/lib/libnsigii_firmware_cpp.so`
+
+### 2. Build the Python/Cython compositor
+
+```bash
+make compositor
 ```
 
-### 3. Boot in QEMU
+That installs the package in editable mode and builds `python/mmuko_os/_firmware.pyx` against the existing native sources.
 
-```powershell
-qemu-system-x86_64.exe -drive format=raw,file=mmuko-os.img
-```
+### 3. Run the compositor
 
-You should see:
-
-```
-MMUKO-OS NSIGII v0.1
-Y=1 N=0 M=-1
-[N]Need
-[S]Safe
-[I]Ident
-[G]Gov
-[I]Probe
-[I]Integ
-
-NSIGII_VERIFIED
-HR:PASS
-BOOT_OK
+```bash
+make run-compositor
 ```
 
 ### 4. Build the Python/Cython firmware package
@@ -95,7 +82,7 @@ python3 -m pip install build
 python3 -m build
 ```
 
-Or use the Makefile (Linux/WSL only):
+Additional runtime examples:
 
 ```bash
 make codegen        # regenerate boot/, kernel/, include/, python/ from the canonical spec + pseudocode
@@ -166,11 +153,9 @@ The repository now treats `MMUKO-OS.txt` as the **authoritative textual input** 
 | `boot.bin` | Binary | Pre-assembled boot sector (512 bytes). |
 | `mmuko-os.img` | Binary | Pre-imaged 1.44 MB FAT12 disk image. |
 
----
+The boot/runtime boundary continues to target native artifacts:
 
-## Architecture
-
-```
+```text
 Hardware / BIOS
       |
 boot/mmuko_stage1_boot.asm  (NASM, 16-bit, generated)
@@ -181,7 +166,8 @@ boot/mmuko_stage1_boot.asm  (NASM, 16-bit, generated)
   Phase I — Internal probe P_I (compose alpha x beta x gamma)
   Phase I — Integrity / delta  (discriminant >= 0 ?)
       |
-  MEMBRANE_PASS = 0xAA
+libnsigii_firmware.so / .a
+libnsigii_firmware_cpp.so
       |
 C firmware library (libnsigii_firmware.so / .a)
   heartfull_membrane.c    -- calibration engine
@@ -244,109 +230,30 @@ ENZYME_REPAIR  : NO    -> MAYBE  (patches violation back to pending)
 The tripartite discriminant detects adversarial interference in the constitutional relationship between operator (U), institution (V), and third-party/attacker (W):
 
 ```
-Delta = b^2 - 4ac
-  where b = U + V + W  (sum of trinary signals)
-        a = 1, c = 1   (unit constitutional constants)
 
-Delta > 0  -> STABLE   : two real roots, W is benign or absent
-Delta = 0  -> CRITICAL : W is present and creating pressure
-Delta < 0  -> FAULT    : W is actively disrupting U-V relationship
-```
+That means:
 
-**Examples:**
-
-| U | V | W | b | Delta | Region |
-|---|---|---|---|-------|--------|
-| +1 | +1 | +1 | +3 | +5 | STABLE |
-| -1 | -1 | -1 | -3 | +5 | STABLE (all MAYBE is not a fault) |
-| 0 | 0 | 0 | 0 | -4 | FAULT |
-| +1 | -1 | 0 | 0 | -4 | FAULT |
-
-Note: all-MAYBE (`b=-3`, `Delta=+5`) is **STABLE**, not a fault. MAYBE is the normal real-world state of an institution that has not yet responded. The system must handle it, not collapse it to failure.
+- `boot.asm` remains the pre-OS entry point.
+- the C ABI in `heartfull_firmware.h`, `bzy_mpda.h`, and `tripartite_discriminant.h` remains the stable firmware surface.
+- C++ helper exports from `nsigii_cpp_wrapper.cpp` remain available where the abstractions are still useful.
+- Python/Cython orchestrates the firmware state machine and developer-facing workflows without replacing the native boundary itself.
 
 ---
 
-## Maslow-Kanban three-track interface
+## Main build targets
 
-The firmware exposes its state to the user via three Kanban tracks:
-
-| Track | Maslow tiers | Condition |
-|-------|-------------|-----------|
-| **Track A** — Foundation | T1 (physiological) + T2 (safety) | Always active — PASS or HOLD |
-| **Track B** — Aspiration | T3–T5 (belonging, esteem, actualisation) | **Locked** until membrane issues PASS |
-| **Track W** — Adversarial | W-actor G={U,V,W} monitor | Always active |
-
-Track B is unconditionally locked until T1 and T2 are both satisfied. You cannot self-actualise (build OBINexus, pursue PhD, deploy CORN) while the firmware is returning HOLD or ALERT on food, water, or shelter.
-
----
-
-## Three-ring qubit compass
-
-The firmware's internal scanning mechanism uses three temporal frames:
-
-```
-Ring 1 (outer)  — THERE_AND_THEN  : theta = 0    (historical needs record)
-Ring 2 (middle) — HERE_AND_NOW    : theta = 120  (current scan)
-Ring 3 (inner)  — WHEN_AND_WHERE  : theta = 240  (predicted state)
-```
-
-Coherence is maximum when all three rings align (`delta_theta = 0`). Drift is the measure of how far apart they are.
-
----
-
-## Drift theorem
-
-Radial and angular drift between two tripolar scan vectors:
-
-```
-V(t) = (alpha, beta, gamma)         -- tripolar observation vector
-D(t) = dV(t)/dt                     -- drift vector
-
-Dr = ||V_t|| - ||V_{t-1}||          -- radial drift
-  Dr > 0 : needs diverging (resolving)
-  Dr < 0 : needs converging (approaching satisfaction)
-
-omega = d(theta)/dt                  -- angular drift
-  Weighted observation: W(t) = (2/3)*P(t) + (1/3)*P(t-1)
+```bash
+make all
+make firmware
+make firmware-cpp
+make compositor
+make run-compositor
+make verify
+make clean
 ```
 
 ---
 
-## NSIGII six-phase identifier
+## Legacy C# status
 
-| Position | Letter | NATO | Firmware role |
-|----------|--------|------|---------------|
-| 1 | N | November | Need-state initialisation |
-| 2 | S | Sierra | Safety scan |
-| 3 | I | India | Identity calibration (Uche/Obi/Eze tripolar) |
-| 4 | G | Golf/Gold | Governance layer (OHA/IWU/IJI) |
-| 5 | I | India | Internal probe (P_I activation) |
-| 6 | I | India | Integrity verification (discriminant check) |
-
----
-
-## Requirements
-
-| Component | Requirement |
-|-----------|-------------|
-| `boot.asm` | NASM 2.14+ |
-| `*.c` / `*.h` | GCC 9+ or Clang 10+ with C11 |
-| `nsigii_cpp_wrapper.cpp` | GCC 9+ or Clang 10+ with C++17 |
-| `*.cs` / `*.csproj` | .NET 8 SDK |
-| QEMU | qemu-system-x86_64 |
-| Makefile | GNU Make (Linux/WSL) |
-
----
-
-## Igbo ontological framework
-
-This system is grounded in the Igbo tripartite model of personhood and governance:
-
-- **Uche / Obi / Eze** — mind / heart / will (identity calibration, Phase I)
-- **OHA / IWU / IJI** — community / law / execution (governance layer, Phase G)
-
-These are not decorative labels. They are the structural basis for the tripolar pointer algebra (`alpha=WANT`, `beta=NEED`, `gamma=SHOULD`) and the three-ring qubit compass.
-
----
-
-*OBINexus Computing — Neurodivergent-First Constitutional Infrastructure*
+The historical C# compositor sources are retained in the repository as legacy reference material, but they are no longer part of the primary getting-started flow. The main documentation and Makefile path now target the Python/Cython compositor instead of `.csproj` / `dotnet` entry points.
