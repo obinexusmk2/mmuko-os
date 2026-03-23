@@ -132,12 +132,6 @@ $(OBJ_DIR)/%.o: %.cpp
 	@$(PY) -c "from pathlib import Path; Path('$@').parent.mkdir(parents=True, exist_ok=True)"
 	$(CXX) $(CXXFLAGS) -I. -Iinclude -c $< -o $@
 
-# ============================================================
-# NASM boot sector (WSL/Linux only)
-# Windows: NASM is not in the conda env path.
-# Use the pre-built boot.bin included in the download.
-# To rebuild: run from WSL after: make install-deps
-# ============================================================
 .PHONY: boot
 boot: codegen dirs $(BOOT_BIN)
 

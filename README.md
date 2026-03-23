@@ -5,13 +5,16 @@
 **Status:** Active specification
 **Canonical spec:** `MMUKO-OS.txt` is the authoritative input for generated artifacts.
 
----
+1. `boot.asm` is a **minimal stage-1 BIOS loader only**.
+2. `mmuko-boot/stage2.asm` is the **stage-2 loader**.
+3. `mmuko-boot/runtime.asm` is a sample **native MMUKO runtime image** with an explicit header.
+4. `mmuko-boot/mkimage.c` writes all three artifacts into `mmuko-os.img`.
 
 ## Boot architecture
 
 MMUKO-OS is a constitutional computing environment whose boot boundary stays in native NASM/C/C++ artifacts, while the higher-level compositor now runs through a Python/Cython package. The NSIGII Heartfull Firmware still performs the six-phase calibration and keeps the native ABI stable for the boot/runtime boundary; Cython is the orchestration layer above that native surface.
 
----
+### On-disk layout
 
 ## Canonical boot spec and regeneration
 
@@ -111,7 +114,7 @@ PYTHONPATH=python python3 -m mmuko_os --tier1 maybe --tier2 maybe --w-actor mayb
 PYTHONPATH=python python3 -m mmuko_os --tier1 no --tier2 maybe --w-actor maybe
 ```
 
----
+Validation rules used by stage-2:
 
 ## Canonical generator pipeline
 
@@ -183,11 +186,11 @@ Python/Cython package (mmuko_os)
   python/mmuko_os/ui.py        -- console compositor / demo UI
 ```
 
-### LTF — Linkable Then Executable
+### Stage-1 (`boot.asm`)
 
 This project uses the **LTF (Linkable Then Format)** pipeline. Files are linked before they are permitted to execute. The Python console compositor is now the primary user-facing workflow and only renders a Track B view after the native membrane reaches PASS. In production, the assembly writes `OUTCOME_PASS = 0xAA` to a shared memory location that user-space readers can check before loading higher-order interfaces.
 
----
+### Stage-2 (`mmuko-boot/stage2.asm`)
 
 ## Build and run
 

@@ -1,5 +1,4 @@
-# MMUKO OS Boot Makefile
-# OBINexus R&D
+# MMUKO stage-2 build helpers
 
 CC = gcc
 CPPFLAGS = -I../include -DMMUKO_BOOT_DESKTOP_SIM
@@ -9,7 +8,7 @@ SRC = mmuko-boot.c
 
 .PHONY: all clean run debug generate-spec
 
-all: $(TARGET)
+.PHONY: all clean
 
 $(TARGET): $(SRC)
 	$(CC) $(CFLAGS) -o $(TARGET) $(SRC)
