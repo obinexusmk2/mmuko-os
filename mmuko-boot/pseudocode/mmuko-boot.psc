@@ -21,6 +21,11 @@
 // ============================================================
 
 
+// IMPLEMENTATION MAP:
+//   Contract seed + keyboard bootstrap  -> boot.asm + include/boot_contract.h
+//   Portable Phases 0–6                 -> mmuko-boot/mmuko-boot.c
+//   Contract field reference            -> docs/boot_contract.md
+
 // ─────────────────────────────────────────────
 // CONSTANTS & COMPASS DIRECTION TABLE
 // ─────────────────────────────────────────────
@@ -157,7 +162,13 @@ FUNC rotate_bits(value: BYTE, n: INT) → BYTE:
 
 FUNC mmuko_boot() → BOOT_STATUS:
 
+    // PRE-BOOT CONTRACT / STAGE-1 HANDOFF
+    // Corresponds to: boot.asm + include/boot_contract.h
+    // Stage-1 captures keyboard bootstrap input and serializes it into the
+    // shared contract before entering this portable C stage.
+
     // PHASE 0: Vacuum Medium Initialization
+    // Corresponds to: mmuko-boot/mmuko-boot.c :: init_vacuum_medium()
     // Set the gravitational reference frame (no external forces)
     LOG "MMUKO PHASE 0: Initializing vacuum medium..."
     medium = { gravity: G_VACUUM, air: 0, water: 0 }
@@ -165,12 +176,14 @@ FUNC mmuko_boot() → BOOT_STATUS:
     // The lepton and hammer share the same fall = bits are equalized.
 
     // PHASE 1: Cubit Ring Initialization (per byte)
+    // Corresponds to: mmuko-boot/mmuko-boot.c :: phase1_cubit_init()
     LOG "MMUKO PHASE 1: Initializing cubit rings..."
     FOR each byte b IN memory_map:
         b.cubit_ring = init_cubit_ring(b.raw_value)
         b.superposition_state = lookup_superposition(b.base_index)
 
     // PHASE 2: Compass Alignment
+    // Corresponds to: mmuko-boot/mmuko-boot.c :: phase2_compass_alignment()
     // Every cubit must face a direction. No cubit may be directionless.
     // Directionless = locked state = boot failure.
     LOG "MMUKO PHASE 2: Compass alignment..."
@@ -181,6 +194,7 @@ FUNC mmuko_boot() → BOOT_STATUS:
             ABORT "Boot lock detected at cubit index " + c.index
 
     // PHASE 3: Superposition Entanglement
+    // Corresponds to: mmuko-boot/mmuko-boot.c :: phase3_superposition_entanglement()
     // Opposing compass pairs are entangled (NORTH↔SOUTH, EAST↔WEST, etc.)
     // They must resolve independently — not interfere constructively.
     LOG "MMUKO PHASE 3: Entangling superposition pairs..."
@@ -192,6 +206,7 @@ FUNC mmuko_boot() → BOOT_STATUS:
             LOG "Resolved interference at pair (" + c.index + ", " + partner.index + ")"
 
     // PHASE 4: Middle Alignment (Frame of Reference Lock-free Center)
+    // Corresponds to: mmuko-boot/mmuko-boot.c :: phase4_frame_centering()
     // The system must find its center without hard-locking it.
     // Center = byte index 6 (middle of 1–12 base index space).
     LOG "MMUKO PHASE 4: Frame of reference centering..."
@@ -201,6 +216,7 @@ FUNC mmuko_boot() → BOOT_STATUS:
     set_frame_of_reference(center_direction)
 
     // PHASE 5: Nonlinear Index Resolution
+    // Corresponds to: mmuko-boot/mmuko-boot.c :: phase5_nonlinear_resolution()
     // The system does not boot linearly (not 0→255).
     // It boots via the diamond table: resolving bases in superposition order.
     LOG "MMUKO PHASE 5: Nonlinear index resolution (diamond table)..."
@@ -210,6 +226,7 @@ FUNC mmuko_boot() → BOOT_STATUS:
         LOG "Base " + base + " resolved → " + lookup_superposition(base).primary
 
     // PHASE 6: Rotation Verification (No-Lock Confirmation)
+    // Corresponds to: mmuko-boot/mmuko-boot.c :: phase6_rotation_verification()
     // The system must be able to rotate 360° freely.
     // If any cubit cannot complete a full rotation → abort.
     LOG "MMUKO PHASE 6: Rotation freedom check..."
@@ -220,6 +237,7 @@ FUNC mmuko_boot() → BOOT_STATUS:
             ABORT "Rotation lock at cubit " + c.index
 
     // PHASE 7: Boot Complete
+    // Corresponds to: mmuko-boot/mmuko-boot.c :: mmuko_boot() completion + contract outcome writeback
     LOG "MMUKO BOOT COMPLETE — All cubits aligned, no lock detected."
     RETURN BOOT_OK
 

@@ -1,47 +1,60 @@
-; boot.asm - MMUKO-OS NSIGII Heartfull Firmware Ring Boot Sector
-; FAT12, 16-bit x86, 512 bytes exactly
-; OBINexus Computing | Nnamdi Michael Okpala | 20 March 2026
-; Build: nasm -f bin boot.asm -o boot.bin
-; Image: dd if=boot.bin of=mmuko-os.img bs=512 count=1
-; QEMU:  qemu-system-x86_64 -drive format=raw,file=mmuko-os.img
-; NSIGII Phases: N(Need) S(Safety) I(Ident) G(Gov) I(Probe) I(Integrity)
-; Trinary: YES=01h NO=00h MAYBE=FFh MAYBE_NOT=FEh
-; Membrane: PASS=AAh HOLD=BBh ALERT=CCh
+; MMUKO stage-1 boot sector with shared boot-contract serialization.
 
 BITS 16
-ORG  0x7C00
+ORG 0x7C00
 
-; FAT12 BPB
 jmp short start
 nop
-          db "MMUKOOS "   ; OEM (8)
-          dw 512          ; BytesPerSector
-          db 1            ; SectorsPerCluster
-          dw 1            ; ReservedSectors
-          db 2            ; NumberOfFATs
-          dw 224          ; RootEntries
-          dw 2880         ; TotalSectors16
-          db 0xF0         ; MediaDescriptor
-          dw 9            ; SectorsPerFAT
-          dw 18           ; SectorsPerTrack
-          dw 2            ; NumberOfHeads
-          dd 0            ; HiddenSectors
-          dd 0            ; TotalSectors32
-          db 0            ; DriveNumber
-          db 0            ; Reserved1
-          db 0x29         ; BootSignature
-          dd 0x4E534947   ; VolumeID "NSIG"
-          db "MMUKO-RING " ; VolumeLabel (11)
-          db "FAT12   "   ; FileSystemType (8)
+          db "MMUKOOS "
+          dw 512
+          db 1
+          dw 1
+          db 2
+          dw 224
+          dw 2880
+          db 0xF0
+          dw 9
+          dw 18
+          dw 2
+          dd 0
+          dd 0
+          db 0
+          db 0
+          db 0x29
+          dd 0x4E534947
+          db "MMUKO-RING "
+          db "FAT12   "
 
-; Constants
-T_YES  equ 0x01
-T_NO   equ 0x00
-T_MB   equ 0xFF
-T_MBN  equ 0xFE
+T_NO  equ 0x00
+T_MB  equ 0xFF
 O_PASS equ 0xAA
 O_HOLD equ 0xBB
 O_ALRT equ 0xCC
+
+CB   equ 0x0500
+CMAG equ 0x4D42
+CVER equ 0x0001
+CSIZ equ 52
+COF_FLAGS    equ 0x06
+COF_XFER     equ 0x08
+COF_OUTCOME  equ 0x09
+COF_PHASE    equ 0x0A
+COF_KEYLEN   equ 0x10
+COF_KEYCAP   equ 0x11
+COF_KEYSCAN  equ 0x12
+COF_KEYFLAGS equ 0x13
+COF_KEYBUF   equ 0x14
+
+BF_KEY_REQ equ 0x0001
+BF_KEY_OK  equ 0x0002
+BF_C_READY equ 0x0004
+BF_STAGE2  equ 0x0008
+BF_NSIGII  equ 0x0020
+
+TX_STAGE1 equ 1
+TX_KEYS   equ 2
+TX_STAGE2 equ 3
+TX_C      equ 4
 
 start:
     cli
@@ -53,132 +66,121 @@ start:
     sti
     mov ax, 0x07C0
     mov ds, ax
-    mov es, ax
     mov [drv], dl
 
-    ; clear screen
+    call clear_screen
+    call init_contract
+    mov si, msg_boot
+    call pr
+    call read_keyboard
+
+    mov word [es:CB + COF_FLAGS], BF_KEY_REQ | BF_C_READY | BF_STAGE2
+    cmp byte [es:CB + COF_KEYLEN], 0
+    je .phase_n
+    or word [es:CB + COF_FLAGS], BF_KEY_OK
+.phase_n:
+    mov byte [es:CB + COF_XFER], TX_STAGE2
+    mov byte [es:CB + COF_PHASE], 1
+    int 0x11
+    test ax, ax
+    jz fail
+
+    mov byte [es:CB + COF_PHASE], 2
+    int 0x12
+    mov byte [es:CB + COF_PHASE], 3
+    mov byte [es:CB + COF_PHASE], 4
+    mov byte [es:CB + COF_PHASE], 5
+    mov byte [es:CB + COF_PHASE], 6
+
+pass:
+    mov byte [oc], O_PASS
+    mov byte [es:CB + COF_OUTCOME], O_PASS
+    or word [es:CB + COF_FLAGS], BF_NSIGII
+    mov byte [es:CB + COF_XFER], TX_C
+    mov si, msg_pass
+    call pr
+    jmp hang
+
+fail:
+    mov byte [t1], T_NO
+    mov byte [oc], O_ALRT
+    mov byte [es:CB + COF_OUTCOME], O_ALRT
+    or word [es:CB + COF_FLAGS], BF_NSIGII
+    mov si, msg_fail
+    call pr
+    jmp hang
+
+clear_screen:
     mov ax, 0x0600
     mov bh, 0x07
     xor cx, cx
     mov dx, 0x184F
     int 0x10
-    mov ah, 0x02
     xor bh, bh
+    mov ah, 0x02
     xor dx, dx
     int 0x10
+    ret
 
-    ; init trinary state
-    mov byte [t1], T_MB
-    mov byte [t2], T_MB
-    mov byte [oc], O_HOLD
-    mov word [th], 0
+init_contract:
+    mov word [es:CB + 0x00], CMAG
+    mov word [es:CB + 0x02], CVER
+    mov word [es:CB + 0x04], CSIZ
+    mov word [es:CB + COF_FLAGS], BF_KEY_REQ
+    mov byte [es:CB + COF_XFER], TX_STAGE1
+    mov byte [es:CB + COF_OUTCOME], O_HOLD
+    mov byte [es:CB + COF_PHASE], 0
+    mov byte [es:CB + COF_KEYLEN], 0
+    mov byte [es:CB + COF_KEYCAP], 32
+    mov byte [es:CB + COF_KEYSCAN], 0
+    mov byte [es:CB + COF_KEYFLAGS], 0
+    ret
 
-    mov si, str_ban
-    call pr
-
-    ; Phase N: Need-state init
-    mov si, str_n
-    call pr
-    int 0x11
-    test ax, ax
-    jnz ph_s
-    mov byte [t1], T_NO
-    mov si, str_alrt
-    call pr
-    jmp hh
-
-ph_s:
-    ; Phase S: Safety scan
-    mov si, str_s
-    call pr
-    int 0x12
-    mov word [th], 120
-
-    ; Phase I: Identity
-    mov si, str_i1
-    call pr
-    mov word [th], 240
-
-    ; Phase G: Governance
-    mov si, str_g
-    call pr
-
-    ; Phase I2: Internal probe
-    mov si, str_i2
-    call pr
-    cmp byte [t1], T_NO
-    je  hh
-
-    ; Phase I3: Integrity / discriminant
-    mov si, str_i3
-    call pr
-    cmp byte [t1], T_NO
-    je  byz
-    cmp byte [t2], T_NO
-    je  byz
-    jmp gate
-
-byz:
-    mov si, str_byz
-    call pr
-    jmp hh
-
-gate:
-    cmp byte [t1], T_NO
-    je  do_alrt
-    cmp byte [t2], T_NO
-    je  do_alrt
-    mov byte [oc], O_PASS
-    mov si, str_pass
-    call pr
-    mov si, str_ok
-    call pr
-    jmp hang
-do_alrt:
-    mov byte [oc], O_ALRT
-    mov si, str_alrt
-    call pr
-hh:
-    mov si, str_hld
-    call pr
-hang:
-    hlt
-    jmp hang
-
-; print null-terminated string at DS:SI
-pr:
-    pusha
-.l: lodsb
-    test al, al
-    jz .d
+read_keyboard:
+    xor bx, bx
+.read:
+    xor ah, ah
+    int 0x16
+    cmp al, 13
+    je .done
+    cmp bx, 32
+    jae .read
+    mov [es:CB + COF_KEYSCAN], ah
+    mov [es:CB + COF_KEYBUF + bx], al
+    inc bx
+    mov [es:CB + COF_KEYLEN], bl
+    mov byte [es:CB + COF_KEYFLAGS], 1
     mov ah, 0x0E
     xor bh, bh
     mov bl, 0x0F
     int 0x10
-    jmp .l
-.d: popa
+    jmp .read
+.done:
+    mov byte [es:CB + COF_XFER], TX_KEYS
     ret
 
-; Variables
+pr:
+    lodsb
+    test al, al
+    jz .ret
+    mov ah, 0x0E
+    xor bh, bh
+    mov bl, 0x0F
+    int 0x10
+    jmp pr
+.ret:
+    ret
+
+hang:
+    hlt
+    jmp hang
+
 drv db 0
 t1  db T_MB
-t2  db T_MB
 oc  db O_HOLD
-th  dw 0
-
-; Strings
-str_ban  db 13,10,"MMUKO-OS NSIGII v0.1",13,10,"Y=1 N=0 M=-1",13,10,0
-str_n    db "[N]Need",13,10,0
-str_s    db "[S]Safe",13,10,0
-str_i1   db "[I]Ident",13,10,0
-str_g    db "[G]Gov",13,10,0
-str_i2   db "[I]Probe",13,10,0
-str_i3   db "[I]Integ",13,10,0
-str_pass db 13,10,"NSIGII_VERIFIED",13,10,"HR:PASS",13,10,0
-str_ok   db "BOOT_OK",13,10,0
-str_alrt db "ALERT",13,10,0
-str_byz  db "BYZ_FAULT",13,10,0
-str_hld  db "HELD-T1T2",13,10,0
+msg_boot db "MMUKO KEY>",0
+msg_pass db 13,10,"PASS",13,10,0
+msg_fail db 13,10,"ALERT",13,10,0
 
 times 510-($-$$) db 0
 dw 0xAA55
