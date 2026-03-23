@@ -5,6 +5,7 @@ CPPFLAGS = -I../include -DMMUKO_BOOT_DESKTOP_SIM
 CFLAGS = -Wall -Wextra -std=c11 -O2
 TARGET = mmuko-boot
 SRC = mmuko-boot.c
+HDR = mmuko_boot_contract.h
 
 .PHONY: all clean run debug generate-spec
 

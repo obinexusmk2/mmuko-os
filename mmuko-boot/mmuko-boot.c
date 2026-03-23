@@ -68,7 +68,7 @@ typedef struct {
 typedef struct {
     MMUKO_Byte *memory_map;
     size_t memory_size;
-    VacuumMedium medium;
+    double gravity;
     Direction frame_of_reference;
     bool boot_complete;
     mmuko_boot_contract_t *contract;
@@ -240,7 +240,6 @@ static uint8_t bit_shift_semantic(uint8_t value, ShiftOp op, int n)
         case ROTATE: return rotate_bits(value, n);
         default:     return value;
     }
-}
 
 static Direction resolve_direction_from_neighbors(MMUKO_Byte *byte, int cubit_index)
 {
