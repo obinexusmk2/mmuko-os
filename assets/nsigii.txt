@@ -1,0 +1,7 @@
+NSIGII boot asset bundle
+- Need
+- Safety
+- Identity
+- Governance
+- Probe
+- Integrity

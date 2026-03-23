@@ -1,4 +1,4 @@
-boot.asm           → boot.bin        → mmuko-os.img → QEMU (Prussian Blue + Amber Gold VGA)
+boot/mbr.asm + boot/vbr.asm + stage2 → build/mmuko-os.img → QEMU (Prussian Blue + Amber Gold VGA)
                                         │
 mmuko-boot.c       → build/mmuko-boot ──┤ (7-phase cubit alignment)
                                         │

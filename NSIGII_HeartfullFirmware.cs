@@ -4,11 +4,11 @@
 // Version: 0.1-DRAFT | 20 March 2026
 //
 // This compositor is a LINKABLE THEN EXECUTABLE (LTE) component.
-// It is NOT loaded until the assembly boot sector (boot.asm) issues MEMBRANE_PASS.
+// It is NOT loaded until the BIOS boot chain (MBR -> FAT16 VBR -> stage-2) issues MEMBRANE_PASS.
 // P/Invoke bridges to the C firmware library: libnsigii_firmware.so/.dll
 //
 // LTF Pipeline:
-//   boot.asm (NASM) → PASS → libnsigii_firmware.so → NSIGII_HeartfullFirmware.cs
+//   BIOS image builder → PASS → libnsigii_firmware.so → NSIGII_HeartfullFirmware.cs
 //   → .NET runtime → KanbanCompositor → UI (Track A / Track B)
 
 using System;
@@ -133,7 +133,7 @@ namespace OBINexus.MMUKO.NSIGII
 
         // =====================================================================
         // BOOT GATE — cannot construct compositor until assembly issues PASS
-        // In production: reads from shared memory / UEFI variable written by boot.asm
+        // In production: reads from shared memory written by the BIOS boot chain after stage-2 verification
         // =====================================================================
         public static HeartfullFirmware? Create(bool bootPassedFromAssembly)
         {
@@ -142,7 +142,7 @@ namespace OBINexus.MMUKO.NSIGII
                 if (!bootPassedFromAssembly)
                 {
                     Console.Error.WriteLine("[COMPOSITOR] Boot gate BLOCKED — membrane has not issued PASS.");
-                    Console.Error.WriteLine("             Run boot.asm via QEMU first.");
+                    Console.Error.WriteLine("             Boot the BIOS disk image in QEMU first.");
                     return null;
                 }
                 _bootPassed = true;
