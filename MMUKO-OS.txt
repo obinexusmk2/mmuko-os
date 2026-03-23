@@ -1,72 +1,26 @@
-MMUKO-OS Canonical Boot Specification
-Version: 0.2.0
-Status: canonical
-Source of truth: this document
+MMUKO-OS Canonical Specification
 
-[Boot Phases]
-1 | PHASE_NEED_STATE_INIT | N | Need-state initialization | Validate Tier 1 physiological inputs and seed the boot handoff with HOLD defaults.
-2 | PHASE_SAFETY_SCAN | S | Safety scan | Validate Tier 2 safety inputs and the minimum firmware safety envelope.
-3 | PHASE_IDENTITY_CALIBRATION | I | Identity calibration | Bind operator identity, temporal frame, and calibration context into the handoff record.
-4 | PHASE_GOVERNANCE_CHECK | G | Governance check | Confirm policy, provenance, and execution-authority constraints before loading the filesystem target.
-5 | PHASE_INTERNAL_PROBE | I | Internal probe | Probe NSIGII firmware health, memory map integrity, and runtime compatibility signals.
-6 | PHASE_INTEGRITY_VERIFICATION | I | Integrity verification | Verify discriminant, artifact manifest, and kernel entry constraints before handoff.
+Authoritative input
+-------------------
+This file is the authoritative textual input for the repository's generated MMUKO-OS artifacts. The code generation pipeline under `tools/mmuko_codegen/` must treat `MMUKO-OS.txt` as the canonical specification layer, with `mmuko-boot/pseudocode/mmuko-boot.psc` as the primary executable pseudocode source and the remaining `.psc` files in `mmuko-boot/pseudocode/` as supporting context.
 
-[Filesystem Target]
-layout = FAT12
-image_name = mmuko-os.img
-boot_sector = boot.asm
-boot_sector_bytes = 512
-boot_signature = 0xAA55
-root_artifact = /boot/mmuko.kernel
-fallback_artifact = /boot/mmuko-runtime.bin
-config_artifact = /boot/mmuko-boot.cfg
-manifest_artifact = /boot/mmuko-artifacts.json
-lookup_policy = first FAT12 root directory match, then fallback_artifact
+Normative source ordering
+-------------------------
+1. `MMUKO-OS.txt` — canonical, authoritative spec for generated outputs.
+2. `mmuko-boot/pseudocode/mmuko-boot.psc` — primary stage-1 and stage-2 behavioral pseudocode.
+3. Other `.psc` files in `mmuko-boot/pseudocode/` — supporting models, terminology, and subsystem context.
+4. Generated outputs under `boot/`, `kernel/`, `include/`, and `python/` — derived artifacts and never hand-edited sources of truth.
 
-[Kernel Handoff Contract]
-struct_name = MMUKO_BOOT_HANDOFF
-magic = MMKO
-revision = 0x0001
-firmware_id = NSIGII
-outcome_enum = MMUKO_BOOT_OUTCOME
-outcome_pass = PASS (0xAA)
-outcome_hold = HOLD (0xBB)
-outcome_alert = ALERT (0xCC)
-phase_enum = MMUKO_BOOT_PHASE
-phase_count = 6
-completed_phase_field = completed_phases
-last_phase_field = last_completed_phase
-filesystem_field = filesystem_target
-kernel_field = kernel_path
-manifest_field = artifact_manifest_path
-config_field = config_path
-entry_segment_field = kernel_entry_segment
-entry_offset_field = kernel_entry_offset
-flags_field = validation_flags
-checksum_field = handoff_checksum
-contract_rule = The bootloader must fully populate MMUKO_BOOT_HANDOFF before attempting kernel transfer.
-kernel_rule = The kernel must validate magic, revision, outcome PASS, completed_phases == 6, and handoff_checksum before executing runtime initialization.
+Required generated outputs
+--------------------------
+The generator must emit:
+- a stage-1 bootloader source in `boot/`
+- a stage-2 loader or kernel source in `kernel/`
+- shared native interface declarations in `include/`
+- Cython bindings in `python/`
 
-[NSIGII Firmware Requirements]
-fw_1 = Implement all six canonical phases using the exact phase identifiers listed above.
-fw_2 = Default the handoff outcome to HOLD until integrity verification promotes it to PASS.
-fw_3 = Abort with ALERT when Tier 1 or Tier 2 requirements resolve to NO.
-fw_4 = Persist the filesystem target, kernel artifact path, and manifest path in the handoff contract.
-fw_5 = Expose phase completion, outcome codes, and validation flags to native runtime consumers.
-fw_6 = Reject handoff if the kernel artifact or manifest cannot be resolved from the FAT12 target.
-fw_7 = Treat NSIGII firmware compatibility as a precondition for the kernel handoff contract.
-
-[Artifact Names]
-boot_asm = boot.asm
-boot_binary = boot.bin
-boot_image = mmuko-os.img
-spec_file = MMUKO-OS.txt
-pseudocode = mmuko-boot/pseudocode/mmuko-boot.psc
-boot_c = mmuko-boot/mmuko-boot.c
-spec_header = mmuko-boot/include/mmuko_boot_spec.h
-runtime_header = mmuko-boot/include/mmuko_runtime_interface.h
-generator = mmuko-boot/generate_from_spec.py
-manifest = /boot/mmuko-artifacts.json
-kernel = /boot/mmuko.kernel
-runtime_fallback = /boot/mmuko-runtime.bin
-config = /boot/mmuko-boot.cfg
+Behavioral mapping
+------------------
+- `PHASE 0` through `PHASE 6` in `mmuko-boot.psc` define the boot handoff contract.
+- Constant and function declarations in the pseudocode define exported symbols and comments in generated native bindings.
+- Supporting pseudocode files are metadata inputs that should be tracked in generated manifests so implementers can audit provenance.

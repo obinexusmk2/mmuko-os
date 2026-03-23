@@ -3,6 +3,7 @@
 **OBINexus Computing | Nnamdi Michael Okpala**
 **Version:** 0.1-DRAFT | 20 March 2026
 **Status:** Active specification
+**Canonical spec:** `MMUKO-OS.txt` is the authoritative input for generated artifacts.
 
 ---
 
@@ -43,8 +44,9 @@ make -C mmuko-boot generate-spec
 ### 1. Assemble the boot sector
 
 ```powershell
-# Windows (NASM must be installed: https://nasm.us)
-nasm -f bin boot.asm -o boot.bin
+# Generate the sources first, then assemble the generated stage-1 source
+make codegen
+nasm -f bin boot/mmuko_stage1_boot.asm -o boot.bin
 
 # Verify: should be exactly 512 bytes with 0xAA55 at offset 510
 ```
@@ -82,74 +84,85 @@ HR:PASS
 BOOT_OK
 ```
 
-### 4. Build the C firmware library (WSL or Linux)
+### 4. Build the Python/Cython firmware package
 
 ```bash
-# From the project directory
-mkdir -p build/obj build/lib
+# Install the package in editable mode for local development
+python3 -m pip install -e .
 
-gcc -std=c11 -Wall -fPIC -O2 -c heartfull_membrane.c   -o build/obj/heartfull_membrane.o
-gcc -std=c11 -Wall -fPIC -O2 -c bzy_mpda.c             -o build/obj/bzy_mpda.o
-gcc -std=c11 -Wall -fPIC -O2 -c tripartite_discriminant.c -o build/obj/tripartite_discriminant.o
-
-gcc -shared -o build/lib/libnsigii_firmware.so \
-    build/obj/heartfull_membrane.o \
-    build/obj/bzy_mpda.o \
-    build/obj/tripartite_discriminant.o -lm
-
-ar rcs build/lib/libnsigii_firmware.a \
-    build/obj/heartfull_membrane.o \
-    build/obj/bzy_mpda.o \
-    build/obj/tripartite_discriminant.o
+# Build source + wheel artifacts
+python3 -m pip install build
+python3 -m build
 ```
 
 Or use the Makefile (Linux/WSL only):
 
 ```bash
-make all            # build everything
-make boot           # assemble boot sector only
-make firmware       # build C shared library + archive
-make firmware-cpp   # build C++ wrapper
+make codegen        # regenerate boot/, kernel/, include/, python/ from the canonical spec + pseudocode
+make all            # run codegen, then build everything
+make boot           # assemble generated boot sector only
+make firmware       # build C shared library + archive (includes generated stage-2 loader)
+make firmware-cpp   # build C++ wrapper plus generated bridge
 make run            # boot with QEMU
 make verify         # run NSIGII verification checks
 make clean          # remove build artifacts
 ```
 
-### 5. Run the C# compositor
+### 5. Run the Python console compositor
 
-```powershell
-# Requires .NET 8 SDK: https://dot.net
+```bash
+# Editable install recommended so the compiled extension is importable
+make cython-develop
 
-# Development mode (no QEMU needed — simulates boot PASS)
-dotnet run --project mmuko-compositor.csproj -- --simulate-pass
-
-# Explicit states
-dotnet run --project mmuko-compositor.csproj -- --boot-passed true --tier1 yes --tier2 yes
+# Default console compositor run
+make run-ui
 
 # HOLD scenario (T1 pending)
-dotnet run --project mmuko-compositor.csproj -- --boot-passed true --tier1 maybe --tier2 maybe
+PYTHONPATH=python python3 -m mmuko_os --tier1 maybe --tier2 maybe --w-actor maybe
 
 # ALERT scenario (T1 violated)
-dotnet run --project mmuko-compositor.csproj -- --boot-passed true --tier1 no --tier2 maybe
+PYTHONPATH=python python3 -m mmuko_os --tier1 no --tier2 maybe --w-actor maybe
 ```
 
 ---
+
+## Canonical generator pipeline
+
+The repository now treats `MMUKO-OS.txt` as the **authoritative textual input** for generated artifacts. The generator under `tools/mmuko_codegen/` reads that canonical spec first, then consumes `mmuko-boot/pseudocode/mmuko-boot.psc` as the primary executable pseudocode, and finally scans the remaining `.psc` files in `mmuko-boot/pseudocode/` as supporting context. Generated artifacts are written to `boot/`, `kernel/`, `include/`, and `python/` before native build targets run.
+
+### Pseudocode-to-module mapping
+
+| Pseudocode section | Generated module | Language | Purpose |
+|---|---|---|---|
+| `PHASE 0`–`PHASE 6` in `mmuko-boot.psc` | `boot/mmuko_stage1_boot.asm` | NASM | Emits the stage-1 bootloader skeleton and boot-sector handoff comments. |
+| `PHASE 0`–`PHASE 6` in `mmuko-boot.psc` | `kernel/mmuko_stage2_loader.c` | C | Exposes the ordered phase table, spec summary, and pseudocode provenance for stage-2/native consumers. |
+| Parsed exported loader metadata from `mmuko-boot.psc` | `kernel/mmuko_stage2_bridge.cpp` | C++ | Wraps the generated C loader metadata for higher-level native integrations. |
+| Parsed interface symbols from the canonical spec and pseudocode | `include/mmuko_codegen.h` | C header | Defines the shared ABI used by generated native and Python bindings. |
+| Generated ABI bindings for the shared header | `python/mmuko_codegen.pxd`, `python/mmuko_generated.pyx` | Cython | Binds the generated loader metadata into Python-facing extension code. |
+| Supporting `.psc` documents in `mmuko-boot/pseudocode/` | `tools/mmuko_codegen/manifest.txt` | Text manifest | Records provenance for the pseudocode set consumed by generation. |
 
 ## File reference
 
 | File | Language | Role |
 |------|----------|------|
-| `boot.asm` | NASM x86-16 | FAT12 ring boot sector. Six-phase NSIGII calibration in assembly. Exactly 512 bytes. |
+| `MMUKO-OS.txt` | Text | Canonical spec and authoritative generator input. |
+| `tools/mmuko_codegen/generate.py` | Python | Generator that reads the canonical spec plus `.psc` inputs and emits boot/kernel/include/python artifacts. |
+| `boot/mmuko_stage1_boot.asm` | NASM x86-16 | Generated stage-1 bootloader source derived from the canonical spec and `mmuko-boot.psc`. |
+| `kernel/mmuko_stage2_loader.c` | C | Generated stage-2 loader metadata source. |
+| `kernel/mmuko_stage2_bridge.cpp` | C++17 | Generated native bridge around the stage-2 loader metadata. |
+| `include/mmuko_codegen.h` | C | Generated shared native interface for stage-2 consumers and bindings. |
+| `python/mmuko_codegen.pxd` / `python/mmuko_generated.pyx` | Cython | Generated Python bindings for the stage-2 metadata ABI. |
+| `boot.asm` | NASM x86-16 | Legacy hand-authored boot sector retained for reference. |
 | `heartfull_firmware.h` | C | All types: `TrinaryState`, `MembraneOutcome`, `PerspectiveMembrane`, `QubitCompass`, `MaslowNeedsState`, `EnzymeOp`, `KanbanTrack`. |
 | `heartfull_membrane.c` | C | Six-phase NSIGII calibrator. Trinary composition, enzyme degradation, compass rotation, drift theorem, membrane gate. |
 | `bzy_mpda.h` / `bzy_mpda.c` | C | Byzantine Maybe PDA — formal 5-tuple `M=(Q,Σ,Γ,δ,q₀,F)`, magnetic transition table, pushdown stack, LTCodec reverse-read. |
 | `tripartite_discriminant.h` / `.c` | C | `G={U,V,W}` discriminant `Δ=b²−4ac`, Byzantine fault detection, quadratic roots (BUILD/BREAK paths). |
-| `nsigii_cpp_wrapper.cpp` | C++17 | RAII wrappers: `Trinary` with `operator*`, `MembraneCalibrator`, `ByzantineChecker`, `MPDARunner`, `DriftMonitor`. C-linkage exports for P/Invoke. |
-| `NSIGII_HeartfullFirmware.cs` | C# | Compositor. Boot-gate enforced via `HeartfullFirmware.Create(bootPassed)`. Implements all six phases, RIFT trinary, enzymes, Kanban three-track, P/Invoke bridge. |
-| `NSIGII_HeartFeltFirmware.cs` | C# | UI layer. Refuses to construct if membrane is HOLD or ALERT. Renders Kanban board, discriminant panel, trinary state display. |
-| `Main.cs` | C# | LTE entry point. Parses args, runs NSIGII, demos trinary/enzyme/discriminant/drift. |
-| `mmuko-compositor.csproj` | MSBuild | .NET 8 project file. References native library via P/Invoke. |
-| `Makefile` | GNU Make | Full build orchestration for Linux/WSL. |
+| `nsigii_cpp_wrapper.cpp` | C++17 | Optional RAII wrappers: `Trinary`, `MembraneCalibrator`, `ByzantineChecker`, `MPDARunner`, `DriftMonitor`. |
+| `python/mmuko_os/firmware.pxd` | Cython | Declares exported enums, structs, and functions from the native firmware headers. |
+| `python/mmuko_os/firmware.pyx` | Cython | Wraps the native firmware, MPDA, and tripartite discriminant APIs for Python. |
+| `python/mmuko_os/ui.py` | Python | Console compositor for the Cython workflow; renders a lightweight Kanban-style status view. |
+| `pyproject.toml` / `setup.py` | Packaging | Setuptools/Cython build definition for `mmuko_os`. |
+| `Makefile` | GNU Make | Build orchestration for firmware, boot media, and the Python/Cython workflow. |
 | `boot.bin` | Binary | Pre-assembled boot sector (512 bytes). |
 | `mmuko-os.img` | Binary | Pre-imaged 1.44 MB FAT12 disk image. |
 
@@ -160,7 +173,7 @@ dotnet run --project mmuko-compositor.csproj -- --boot-passed true --tier1 no --
 ```
 Hardware / BIOS
       |
-boot.asm  (NASM, 16-bit)
+boot/mmuko_stage1_boot.asm  (NASM, 16-bit, generated)
   Phase N — Need-state init    (theta=0,   THERE_AND_THEN)
   Phase S — Safety scan        (theta=0,   T2 check)
   Phase I — Identity calib     (theta=120, HERE_AND_NOW)
@@ -176,17 +189,17 @@ C firmware library (libnsigii_firmware.so / .a)
   tripartite_discriminant.c -- G={U,V,W} fault detection
       |
 C++ wrapper (libnsigii_firmware_cpp.so)
-  nsigii_cpp_wrapper.cpp  -- RAII + DriftMonitor + C exports
+  nsigii_cpp_wrapper.cpp  -- optional RAII layer
       |
-C# compositor (.NET 8)
-  NSIGII_HeartfullFirmware.cs  -- firmware logic + P/Invoke
-  NSIGII_HeartFeltFirmware.cs  -- UI (loads only after PASS)
-  Main.cs                      -- LTE entry point
+Python/Cython package (mmuko_os)
+  python/mmuko_os/firmware.pxd -- C declarations for native firmware
+  python/mmuko_os/firmware.pyx -- compiled bindings for membrane/MPDA/discriminant
+  python/mmuko_os/ui.py        -- console compositor / demo UI
 ```
 
 ### LTF — Linkable Then Executable
 
-This project uses the **LTF (Linkable Then Format)** pipeline. Files are linked before they are permitted to execute. The C# compositor will not run until `HeartfullFirmware.Create(bootPassed: true)` is called — the boot gate is the precondition. In production, the assembly writes `OUTCOME_PASS = 0xAA` to a shared memory location that the compositor reads before constructing.
+This project uses the **LTF (Linkable Then Format)** pipeline. Files are linked before they are permitted to execute. The Python console compositor is now the primary user-facing workflow and only renders a Track B view after the native membrane reaches PASS. In production, the assembly writes `OUTCOME_PASS = 0xAA` to a shared memory location that user-space readers can check before loading higher-order interfaces.
 
 ---
 
