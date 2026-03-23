@@ -58,58 +58,51 @@ HR:PASS
 BOOT_OK
 ```
 
-### 4. Build the C firmware library (WSL or Linux)
+### 4. Build the Python/Cython firmware package
 
 ```bash
-# From the project directory
-mkdir -p build/obj build/lib
+# Install the package in editable mode for local development
+python3 -m pip install -e .
 
-gcc -std=c11 -Wall -fPIC -O2 -c heartfull_membrane.c   -o build/obj/heartfull_membrane.o
-gcc -std=c11 -Wall -fPIC -O2 -c bzy_mpda.c             -o build/obj/bzy_mpda.o
-gcc -std=c11 -Wall -fPIC -O2 -c tripartite_discriminant.c -o build/obj/tripartite_discriminant.o
-
-gcc -shared -o build/lib/libnsigii_firmware.so \
-    build/obj/heartfull_membrane.o \
-    build/obj/bzy_mpda.o \
-    build/obj/tripartite_discriminant.o -lm
-
-ar rcs build/lib/libnsigii_firmware.a \
-    build/obj/heartfull_membrane.o \
-    build/obj/bzy_mpda.o \
-    build/obj/tripartite_discriminant.o
+# Build source + wheel artifacts
+python3 -m pip install build
+python3 -m build
 ```
 
 Or use the Makefile (Linux/WSL only):
 
 ```bash
-make all            # build everything
-make boot           # assemble boot sector only
-make firmware       # build C shared library + archive
-make firmware-cpp   # build C++ wrapper
-make run            # boot with QEMU
-make verify         # run NSIGII verification checks
-make clean          # remove build artifacts
+make all             # build firmware + boot image
+make boot            # assemble boot sector only
+make firmware        # build C shared library + archive
+make firmware-cpp    # build optional C++ wrapper
+make cython-build    # build the Python wheel/sdist
+make cython-develop  # install editable Cython package
+make run-ui          # run the Python console UI
+make run             # boot with QEMU
+make verify          # run NSIGII verification checks
+make clean           # remove build artifacts
 ```
 
-### 5. Run the C# compositor
+### 5. Run the Python console compositor
 
-```powershell
-# Requires .NET 8 SDK: https://dot.net
+```bash
+# Editable install recommended so the compiled extension is importable
+make cython-develop
 
-# Development mode (no QEMU needed — simulates boot PASS)
-dotnet run --project mmuko-compositor.csproj -- --simulate-pass
-
-# Explicit states
-dotnet run --project mmuko-compositor.csproj -- --boot-passed true --tier1 yes --tier2 yes
+# Default console compositor run
+make run-ui
 
 # HOLD scenario (T1 pending)
-dotnet run --project mmuko-compositor.csproj -- --boot-passed true --tier1 maybe --tier2 maybe
+PYTHONPATH=python python3 -m mmuko_os --tier1 maybe --tier2 maybe --w-actor maybe
 
 # ALERT scenario (T1 violated)
-dotnet run --project mmuko-compositor.csproj -- --boot-passed true --tier1 no --tier2 maybe
+PYTHONPATH=python python3 -m mmuko_os --tier1 no --tier2 maybe --w-actor maybe
 ```
 
 ---
+
+> Legacy note: the earlier .NET compositor sources (`mmuko-compositor.csproj`, `Main.cs`, `NSIGII_HeartfullFirmware.cs`, and `NSIGII_HeartFeltFirmware.cs`) remain in the repository for reference but are no longer part of the primary build or README workflow.
 
 ## File reference
 
@@ -120,12 +113,12 @@ dotnet run --project mmuko-compositor.csproj -- --boot-passed true --tier1 no --
 | `heartfull_membrane.c` | C | Six-phase NSIGII calibrator. Trinary composition, enzyme degradation, compass rotation, drift theorem, membrane gate. |
 | `bzy_mpda.h` / `bzy_mpda.c` | C | Byzantine Maybe PDA — formal 5-tuple `M=(Q,Σ,Γ,δ,q₀,F)`, magnetic transition table, pushdown stack, LTCodec reverse-read. |
 | `tripartite_discriminant.h` / `.c` | C | `G={U,V,W}` discriminant `Δ=b²−4ac`, Byzantine fault detection, quadratic roots (BUILD/BREAK paths). |
-| `nsigii_cpp_wrapper.cpp` | C++17 | RAII wrappers: `Trinary` with `operator*`, `MembraneCalibrator`, `ByzantineChecker`, `MPDARunner`, `DriftMonitor`. C-linkage exports for P/Invoke. |
-| `NSIGII_HeartfullFirmware.cs` | C# | Compositor. Boot-gate enforced via `HeartfullFirmware.Create(bootPassed)`. Implements all six phases, RIFT trinary, enzymes, Kanban three-track, P/Invoke bridge. |
-| `NSIGII_HeartFeltFirmware.cs` | C# | UI layer. Refuses to construct if membrane is HOLD or ALERT. Renders Kanban board, discriminant panel, trinary state display. |
-| `Main.cs` | C# | LTE entry point. Parses args, runs NSIGII, demos trinary/enzyme/discriminant/drift. |
-| `mmuko-compositor.csproj` | MSBuild | .NET 8 project file. References native library via P/Invoke. |
-| `Makefile` | GNU Make | Full build orchestration for Linux/WSL. |
+| `nsigii_cpp_wrapper.cpp` | C++17 | Optional RAII wrappers: `Trinary`, `MembraneCalibrator`, `ByzantineChecker`, `MPDARunner`, `DriftMonitor`. |
+| `python/mmuko_os/firmware.pxd` | Cython | Declares exported enums, structs, and functions from the native firmware headers. |
+| `python/mmuko_os/firmware.pyx` | Cython | Wraps the native firmware, MPDA, and tripartite discriminant APIs for Python. |
+| `python/mmuko_os/ui.py` | Python | Console compositor for the Cython workflow; renders a lightweight Kanban-style status view. |
+| `pyproject.toml` / `setup.py` | Packaging | Setuptools/Cython build definition for `mmuko_os`. |
+| `Makefile` | GNU Make | Build orchestration for firmware, boot media, and the Python/Cython workflow. |
 | `boot.bin` | Binary | Pre-assembled boot sector (512 bytes). |
 | `mmuko-os.img` | Binary | Pre-imaged 1.44 MB FAT12 disk image. |
 
@@ -152,17 +145,17 @@ C firmware library (libnsigii_firmware.so / .a)
   tripartite_discriminant.c -- G={U,V,W} fault detection
       |
 C++ wrapper (libnsigii_firmware_cpp.so)
-  nsigii_cpp_wrapper.cpp  -- RAII + DriftMonitor + C exports
+  nsigii_cpp_wrapper.cpp  -- optional RAII layer
       |
-C# compositor (.NET 8)
-  NSIGII_HeartfullFirmware.cs  -- firmware logic + P/Invoke
-  NSIGII_HeartFeltFirmware.cs  -- UI (loads only after PASS)
-  Main.cs                      -- LTE entry point
+Python/Cython package (mmuko_os)
+  python/mmuko_os/firmware.pxd -- C declarations for native firmware
+  python/mmuko_os/firmware.pyx -- compiled bindings for membrane/MPDA/discriminant
+  python/mmuko_os/ui.py        -- console compositor / demo UI
 ```
 
 ### LTF — Linkable Then Executable
 
-This project uses the **LTF (Linkable Then Format)** pipeline. Files are linked before they are permitted to execute. The C# compositor will not run until `HeartfullFirmware.Create(bootPassed: true)` is called — the boot gate is the precondition. In production, the assembly writes `OUTCOME_PASS = 0xAA` to a shared memory location that the compositor reads before constructing.
+This project uses the **LTF (Linkable Then Format)** pipeline. Files are linked before they are permitted to execute. The Python console compositor is now the primary user-facing workflow and only renders a Track B view after the native membrane reaches PASS. In production, the assembly writes `OUTCOME_PASS = 0xAA` to a shared memory location that user-space readers can check before loading higher-order interfaces.
 
 ---
 
