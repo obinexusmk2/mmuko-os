@@ -114,11 +114,11 @@ $(OBJ_DIR)/%.o: %.c | dirs
 
 $(FW_LIB): $(C_OBJS) | dirs
 	@echo "[LD] $@"
-	$(CC) $(LDFLAGS) -o $@ $^
+	@$(CC) $(SO_LDFLAGS) -o $@ $^
 
 $(FW_ARC): $(C_OBJS) | dirs
 	@echo "[AR] $@"
-	ar rcs $@ $^
+	@$(AR) rcs $@ $^
 
 .PHONY: firmware-cpp
 firmware-cpp: codegen dirs $(CPP_LIB)
@@ -197,7 +197,6 @@ clean:
 
 .PHONY: help
 help:
-	@echo ""
 	@echo "MMUKO-OS / NSIGII Heartfull Firmware - Build System"
 	@echo "Primary workflow: Python/Cython bindings and console UI"
 	@echo "OBINexus Computing | Nnamdi Michael Okpala"

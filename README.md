@@ -131,6 +131,61 @@ The repository now treats `MMUKO-OS.txt` as the **authoritative textual input** 
 | Generated ABI bindings for the shared header | `python/mmuko_codegen.pxd`, `python/mmuko_generated.pyx` | Cython | Binds the generated loader metadata into Python-facing extension code. |
 | Supporting `.psc` documents in `mmuko-boot/pseudocode/` | `tools/mmuko_codegen/manifest.txt` | Text manifest | Records provenance for the pseudocode set consumed by generation. |
 
+## Build-spec
+
+The repository now treats each build output as a named artifact with a documented purpose and binary format. Targets are intentionally explicit so a caller can request one artifact at a time instead of inferring output names from a generic `make all`.
+
+| Artifact | Make target | Output | Purpose | Format |
+|---|---|---|---|---|
+| Boot sector binary | `make boot` | `build/boot.bin` | BIOS-visible stage-1 boot block placed at LBA 0 of the image. | Raw x86 boot sector, exactly 512 bytes, with `0x55AA` at offsets `0x1FE..0x1FF`. |
+| Stage-2 loader | `make stage2` | `build/mmuko-stage2-loader` | Reference loader/parser that validates `.som` containers before payload dispatch. | Native host executable built from `mmuko-boot/stage2_loader.c`. |
+| Native firmware library | `make firmware-so` | `build/lib/libnsigii_firmware.so` | Canonical shared library for Linux/WSL and the .NET compositor. | Real ELF shared object (`ET_DYN`). |
+| Optional C++ wrapper | `make firmware-cpp` | `build/lib/libnsigii_firmware_cpp.so` | RAII and higher-level C++ façade around the C firmware ABI. | Real ELF shared object (`ET_DYN`). |
+| Windows DLL output | `make firmware-dll` | `build/lib/nsigii_firmware.dll` | Native Windows build for P/Invoke and PE/COFF consumers. | Real PE32+ DLL produced with MinGW; not a renamed `.so`. |
+| MMUKO `.som` container | `make firmware-som` | `build/lib/nsigii_firmware.som` | Custom magnetic-memory-model transport/container for a payload plus MMUKO metadata. | Custom `MSOM` binary container defined in `mmuko-boot/mmuko_som.h`; not an alias for `.so` or `.dll`. |
+| Disk image | `make image` | `mmuko-os.img` | Bootable image with the stage-1 sector installed at offset 0. | Raw 1.44 MB floppy image. |
+
+### `.som` container format
+
+`build/lib/nsigii_firmware.som` is a real container format. It stores a fixed 64-byte header followed by an opaque payload. The payload may be an ELF shared object, a PE/COFF DLL, or a raw binary blob; the loader must use the header metadata rather than guessing from the filename extension.
+
+#### Header definition
+
+The canonical header layout is defined in `mmuko-boot/mmuko_som.h` as `MMUKO_SomHeader`. All integer fields are little-endian. The fixed header size is 64 bytes.
+
+| Offset | Size | Field | Meaning |
+|---|---:|---|---|
+| `0x00` | 4 | `magic` | ASCII `MSOM`. |
+| `0x04` | 2 | `version_major` | Format major version, currently `1`. |
+| `0x06` | 2 | `version_minor` | Format minor version, currently `0`. |
+| `0x08` | 4 | `header_size` | Header length in bytes, currently `64`. |
+| `0x0C` | 4 | `total_size` | Entire file size in bytes. |
+| `0x10` | 4 | `payload_offset` | First payload byte; currently `64`. |
+| `0x14` | 4 | `payload_size` | Payload byte count. |
+| `0x18` | 4 | `flags` | MMUKO container flags. |
+| `0x1C` | 2 | `target_machine` | Machine identifier such as `0x003E` for x86_64. |
+| `0x1E` | 2 | `payload_format` | `1` = ELF `.so`, `2` = PE `.dll`, `3` = raw binary. |
+| `0x20` | 2 | `entry_kind` | `1` = dlopen-style library, `2` = bootstrap, `3` = stage-2 image. |
+| `0x22` | 2 | `reserved0` | Reserved; must be zero. |
+| `0x24` | 8 | `preferred_load_addr` | Optional load-address hint. |
+| `0x2C` | 4 | `required_alignment` | Required payload alignment; power of two. |
+| `0x30` | 4 | `checksum_crc32` | CRC32 of the payload bytes only. |
+| `0x34` | 8 | `abi_tag` | ABI tag, currently `NSIGII\0\0`. |
+| `0x3C` | 4 | `reserved1` | Reserved; must be zero. |
+| `0x40` | n | payload | Wrapped artifact bytes. |
+
+#### Loader expectations
+
+A compliant stage-2 loader must:
+
+1. read the first 64 bytes into `MMUKO_SomHeader`;
+2. reject the container if the magic, header size, payload range, alignment, or ABI tag is invalid;
+3. compute CRC32 over the payload and compare it to `checksum_crc32`;
+4. branch on `payload_format` instead of reusing `.so`/`.dll` semantics implicitly;
+5. honor `entry_kind` when deciding whether the payload should be loaded as a dynamic library, executed as a bootstrap image, or handed to another loader stage.
+
+The reference implementation for those checks is `mmuko-boot/stage2_loader.c`, and the packer that emits the container is `mmuko-boot/mmuko-som-pack.c`.
+
 ## File reference
 
 | File | Language | Role |

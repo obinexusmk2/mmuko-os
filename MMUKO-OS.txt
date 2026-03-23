@@ -1,4 +1,105 @@
 
+This text companion mirrors the build-spec section in README.md so that the
+artifact contract is available in a plain-text form for packers, boot tooling,
+and release notes.
+
+Build-spec
+----------
+
+Artifacts
+~~~~~~~~~
+
+1. boot sector binary
+   - Target: `make boot`
+   - Output: `build/boot.bin`
+   - Purpose: BIOS-visible first-stage boot block for the MMUKO-OS disk image.
+   - Format: raw x86 real-mode boot sector, exactly 512 bytes, with the boot
+     signature `0x55 0xAA` at offsets `0x1FE..0x1FF`.
+
+2. stage-2 loader
+   - Target: `make stage2`
+   - Output: `build/mmuko-stage2-loader`
+   - Purpose: reference loader/parser for `.som` payloads after the boot sector
+     hands off control to a richer execution environment.
+   - Format: native host executable built from `mmuko-boot/stage2_loader.c`.
+     It validates the `.som` header, checks CRC32, and prints the loader action
+     expected for the wrapped payload.
+
+3. native firmware library
+   - Target: `make firmware-so`
+   - Output: `build/lib/libnsigii_firmware.so`
+   - Purpose: canonical NSIGII firmware implementation consumed by the
+     compositor through the platform shared-library loader.
+   - Format: ELF shared object (`ET_DYN`), not a renamed custom file.
+
+4. optional C++ wrapper
+   - Target: `make firmware-cpp`
+   - Output: `build/lib/libnsigii_firmware_cpp.so`
+   - Purpose: RAII and C++ convenience wrapper around the C firmware ABI.
+   - Format: ELF shared object (`ET_DYN`) linked against the same native code.
+
+5. Windows DLL output
+   - Target: `make firmware-dll`
+   - Output: `build/lib/nsigii_firmware.dll`
+   - Purpose: native Windows build for P/Invoke or other PE/COFF consumers.
+   - Format: real PE32+ DLL, produced only with a MinGW cross-compiler. The
+     target must not be treated as a renamed `.so`.
+
+6. MMUKO `.som` magnetic-memory-model container
+   - Target: `make firmware-som`
+   - Output: `build/lib/nsigii_firmware.som`
+   - Purpose: custom transport/container format for firmware payloads that need
+     explicit MMUKO metadata before a stage-2 loader decides how to map them.
+   - Format: custom binary container defined by `mmuko-boot/mmuko_som.h`; it is
+     not an alias for `.so` or `.dll`.
+
+7. disk image
+   - Target: `make image`
+   - Output: `mmuko-os.img`
+   - Purpose: bootable 1.44 MB image with `build/boot.bin` installed at sector 0.
+   - Format: raw floppy image.
+
+Exact `.som` binary layout (little-endian)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Header size is fixed at 64 bytes.
+
+- `0x00..0x03` `magic[4]`             = ASCII `MSOM`
+- `0x04..0x05` `version_major`        = `1`
+- `0x06..0x07` `version_minor`        = `0`
+- `0x08..0x0B` `header_size`          = `64`
+- `0x0C..0x0F` `total_size`           = header + payload bytes
+- `0x10..0x13` `payload_offset`       = first payload byte, currently `64`
+- `0x14..0x17` `payload_size`         = payload byte count
+- `0x18..0x1B` `flags`                = MMUKO container flags
+- `0x1C..0x1D` `target_machine`       = e.g. `0x003E` for x86_64
+- `0x1E..0x1F` `payload_format`       = `1` ELF `.so`, `2` PE `.dll`, `3` raw binary
+- `0x20..0x21` `entry_kind`           = `1` dlopen-style library, `2` bootstrap, `3` stage-2 program
+- `0x22..0x23` `reserved0`            = must be zero
+- `0x24..0x2B` `preferred_load_addr`  = optional load-address hint
+- `0x2C..0x2F` `required_alignment`   = power-of-two alignment requirement
+- `0x30..0x33` `checksum_crc32`       = CRC32 of payload bytes only
+- `0x34..0x3B` `abi_tag[8]`           = `NSIGII\0\0`
+- `0x3C..0x3F` `reserved1`            = must be zero
+- `0x40..`     payload                = raw wrapped payload bytes
+
+Loader expectations
+~~~~~~~~~~~~~~~~~~~
+
+A compliant MMUKO stage-2 loader must:
+
+1. read the first 64 bytes into `MMUKO_SomHeader`;
+2. reject the file if `magic != "MSOM"`, `header_size != 64`, the payload range
+   overflows the file, or reserved fields are non-zero where required by policy;
+3. verify that `required_alignment` is a non-zero power of two;
+4. calculate CRC32 over the payload and compare it to `checksum_crc32`;
+5. branch on `payload_format`:
+   - `1` -> load as an ELF shared object;
+   - `2` -> load as a PE/COFF DLL;
+   - `3` -> treat as a raw binary blob with an out-of-band bootstrap contract;
+6. honor `entry_kind` when deciding whether to `dlopen`/`LoadLibrary`, jump to
+   a bootstrap entry, or treat the payload as another stage.
+
 Status
 ------
 The BIOS boot path uses a custom raw reserved-sector layout.
