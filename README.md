@@ -1,315 +1,124 @@
-# MMUKO-OS — NSIGII Heartfull Firmware Compositor
+# MMUKO-OS — NSIGII Heartfull Firmware
 
-**OBINexus Computing | Nnamdi Michael Okpala**
-**Version:** 0.1-DRAFT | 20 March 2026
-**Status:** Active specification
-
----
-
-## What this is
-
-MMUKO-OS is a **constitutional computing environment** built on the principle that a computer should not boot until the operator's fundamental needs are verified. The NSIGII Heartfull Firmware is the pre-boot calibration layer that enforces this — it runs before any OS process, application, or UI loads.
-
-The firmware implements a **Maslow needs-gate**: Tier 1 (physiological) and Tier 2 (safety) must be satisfied or actively pending before computation proceeds. This is not a metaphor. It is a boot protocol.
+**OBINexus Computing | Nnamdi Michael Okpala**  
+**Version:** 0.3-DRAFT | 23 March 2026
 
 ---
 
-## Quick start
+## Boot architecture
 
-### 1. Assemble the boot sector
+The BIOS boot path is split so the first sector stays minimal and auditable:
 
-```powershell
-# Windows (NASM must be installed: https://nasm.us)
-nasm -f bin boot.asm -o boot.bin
+1. **`boot/stage1.asm`** — 512-byte BIOS/FAT12 entry sector.
+2. **`boot/stage2.asm`** — stage-2 loader at `0000:8000`.
+3. **`kernel/runtime.asm`** — firmware runtime entry at `0000:8200`.
 
-# Verify: should be exactly 512 bytes with 0xAA55 at offset 510
-```
+Stage-1 only performs BPB setup, real-mode setup, handoff-contract initialization, BIOS disk reset/read, and stage-2 transfer. Any future filesystem parsing belongs in stage-2, not in the BIOS entry sector.
 
-### 2. Write the disk image
+---
 
-```powershell
-# PowerShell — write boot sector to image
-$boot = [System.IO.File]::ReadAllBytes("boot.bin")
-$img  = [System.IO.File]::ReadAllBytes("mmuko-os.img")
-[System.Array]::Copy($boot, 0, $img, 0, 512)
-[System.IO.File]::WriteAllBytes("mmuko-os.img", $img)
-```
+## Handoff contract
 
-### 3. Boot in QEMU
+Stage-1 publishes a fixed handoff contract at **`0000:0600`** before transferring control.
 
-```powershell
-qemu-system-x86_64.exe -drive format=raw,file=mmuko-os.img
-```
+### Load addresses
 
-You should see:
+- **Stage-1 entry:** `0000:7C00`
+- **Stage-2 loader:** `0000:8000`
+- **Runtime entry:** `0000:8200`
+- **NSIGII state block:** `0000:0680`
+- **Memory map table:** `0000:06C0`
 
-```
-MMUKO-OS NSIGII v0.1
-Y=1 N=0 M=-1
-[N]Need
-[S]Safe
-[I]Ident
-[G]Gov
-[I]Probe
-[I]Integ
+### Contract contents
 
-NSIGII_VERIFIED
-HR:PASS
-BOOT_OK
-```
+The contract preserves:
 
-### 4. Build the C firmware library (WSL or Linux)
+- BIOS boot drive from `DL`
+- stage-2 segment:offset
+- runtime segment:offset
+- stage-2 sector count
+- NSIGII membrane outcome
+- tier-1 / tier-2 trinary state
+- BIOS conventional memory size
+- last BIOS disk error
+- pointers to the state block and memory map table
+
+### Low-memory map
+
+| Region | Address | Size | Purpose |
+|---|---:|---:|---|
+| Boot contract | `0000:0600` | `0x40` | Stage-1 → stage-2/runtime handoff |
+| NSIGII state block | `0000:0680` | `0x40` | Membrane + tier state |
+| Memory map table | `0000:06C0` | `4 x 8` bytes | Published stage-owned regions |
+| Stage-1 sector | `0000:7C00` | `0x200` | BIOS entry sector |
+| Stage-2 loader | `0000:8000` | `0x200` | Loader / ontological init |
+| Runtime | `0000:8200` | variable | Firmware runtime |
+
+---
+
+## Repository layout
+
+| Path | Role |
+|---|---|
+| `boot/stage1.asm` | Minimal 512-byte BIOS entry sector. |
+| `boot/stage2.asm` | Stage-2 loader and NSIGII interface initialization. |
+| `boot/contract.inc` | Shared constants for the boot handoff contract. |
+| `kernel/runtime.asm` | First real firmware runtime entry. |
+| `legacy/csharp-compositor/` | Archived C# compositor project kept outside the active boot path. |
+| `Makefile` | Source-first build orchestration for firmware, boot stages, and image generation. |
+
+---
+
+## Build and run
+
+### Build firmware + boot image
 
 ```bash
-# From the project directory
-mkdir -p build/obj build/lib
-
-gcc -std=c11 -Wall -fPIC -O2 -c heartfull_membrane.c   -o build/obj/heartfull_membrane.o
-gcc -std=c11 -Wall -fPIC -O2 -c bzy_mpda.c             -o build/obj/bzy_mpda.o
-gcc -std=c11 -Wall -fPIC -O2 -c tripartite_discriminant.c -o build/obj/tripartite_discriminant.o
-
-gcc -shared -o build/lib/libnsigii_firmware.so \
-    build/obj/heartfull_membrane.o \
-    build/obj/bzy_mpda.o \
-    build/obj/tripartite_discriminant.o -lm
-
-ar rcs build/lib/libnsigii_firmware.a \
-    build/obj/heartfull_membrane.o \
-    build/obj/bzy_mpda.o \
-    build/obj/tripartite_discriminant.o
+make all
 ```
 
-Or use the Makefile (Linux/WSL only):
+Artifacts are generated under `build/`:
+
+- `build/boot/stage1.bin`
+- `build/boot/stage2-loader.bin`
+- `build/boot/runtime.bin`
+- `build/boot/stage2.bin`
+- `build/mmuko-os.img`
+
+### Verify boot artifacts
 
 ```bash
-make all            # build everything
-make boot           # assemble boot sector only
-make firmware       # build C shared library + archive
-make firmware-cpp   # build C++ wrapper
-make run            # boot with QEMU
-make verify         # run NSIGII verification checks
-make clean          # remove build artifacts
+make verify
 ```
 
-### 5. Run the C# compositor
+### Boot in QEMU
 
-```powershell
-# Requires .NET 8 SDK: https://dot.net
-
-# Development mode (no QEMU needed — simulates boot PASS)
-dotnet run --project mmuko-compositor.csproj -- --simulate-pass
-
-# Explicit states
-dotnet run --project mmuko-compositor.csproj -- --boot-passed true --tier1 yes --tier2 yes
-
-# HOLD scenario (T1 pending)
-dotnet run --project mmuko-compositor.csproj -- --boot-passed true --tier1 maybe --tier2 maybe
-
-# ALERT scenario (T1 violated)
-dotnet run --project mmuko-compositor.csproj -- --boot-passed true --tier1 no --tier2 maybe
+```bash
+make run
 ```
+
+### Build the legacy C# compositor
+
+```bash
+make compositor
+```
+
+The compositor project now lives at `legacy/csharp-compositor/mmuko-compositor.csproj`.
 
 ---
 
-## File reference
+## Cleaning generated files
 
-| File | Language | Role |
-|------|----------|------|
-| `boot.asm` | NASM x86-16 | FAT12 ring boot sector. Six-phase NSIGII calibration in assembly. Exactly 512 bytes. |
-| `heartfull_firmware.h` | C | All types: `TrinaryState`, `MembraneOutcome`, `PerspectiveMembrane`, `QubitCompass`, `MaslowNeedsState`, `EnzymeOp`, `KanbanTrack`. |
-| `heartfull_membrane.c` | C | Six-phase NSIGII calibrator. Trinary composition, enzyme degradation, compass rotation, drift theorem, membrane gate. |
-| `bzy_mpda.h` / `bzy_mpda.c` | C | Byzantine Maybe PDA — formal 5-tuple `M=(Q,Σ,Γ,δ,q₀,F)`, magnetic transition table, pushdown stack, LTCodec reverse-read. |
-| `tripartite_discriminant.h` / `.c` | C | `G={U,V,W}` discriminant `Δ=b²−4ac`, Byzantine fault detection, quadratic roots (BUILD/BREAK paths). |
-| `nsigii_cpp_wrapper.cpp` | C++17 | RAII wrappers: `Trinary` with `operator*`, `MembraneCalibrator`, `ByzantineChecker`, `MPDARunner`, `DriftMonitor`. C-linkage exports for P/Invoke. |
-| `NSIGII_HeartfullFirmware.cs` | C# | Compositor. Boot-gate enforced via `HeartfullFirmware.Create(bootPassed)`. Implements all six phases, RIFT trinary, enzymes, Kanban three-track, P/Invoke bridge. |
-| `NSIGII_HeartFeltFirmware.cs` | C# | UI layer. Refuses to construct if membrane is HOLD or ALERT. Renders Kanban board, discriminant panel, trinary state display. |
-| `Main.cs` | C# | LTE entry point. Parses args, runs NSIGII, demos trinary/enzyme/discriminant/drift. |
-| `mmuko-compositor.csproj` | MSBuild | .NET 8 project file. References native library via P/Invoke. |
-| `Makefile` | GNU Make | Full build orchestration for Linux/WSL. |
-| `boot.bin` | Binary | Pre-assembled boot sector (512 bytes). |
-| `mmuko-os.img` | Binary | Pre-imaged 1.44 MB FAT12 disk image. |
+```bash
+make clean
+```
+
+`make clean` removes generated boot/image artifacts under `build/`, legacy .NET `bin/` / `obj/` folders, and old root-level boot/image leftovers from earlier revisions.
 
 ---
 
-## Architecture
+## Notes
 
-```
-Hardware / BIOS
-      |
-boot.asm  (NASM, 16-bit)
-  Phase N — Need-state init    (theta=0,   THERE_AND_THEN)
-  Phase S — Safety scan        (theta=0,   T2 check)
-  Phase I — Identity calib     (theta=120, HERE_AND_NOW)
-  Phase G — Governance check   (theta=240, WHEN_AND_WHERE)
-  Phase I — Internal probe P_I (compose alpha x beta x gamma)
-  Phase I — Integrity / delta  (discriminant >= 0 ?)
-      |
-  MEMBRANE_PASS = 0xAA
-      |
-C firmware library (libnsigii_firmware.so / .a)
-  heartfull_membrane.c    -- calibration engine
-  bzy_mpda.c              -- Byzantine Maybe pushdown automaton
-  tripartite_discriminant.c -- G={U,V,W} fault detection
-      |
-C++ wrapper (libnsigii_firmware_cpp.so)
-  nsigii_cpp_wrapper.cpp  -- RAII + DriftMonitor + C exports
-      |
-C# compositor (.NET 8)
-  NSIGII_HeartfullFirmware.cs  -- firmware logic + P/Invoke
-  NSIGII_HeartFeltFirmware.cs  -- UI (loads only after PASS)
-  Main.cs                      -- LTE entry point
-```
-
-### LTF — Linkable Then Executable
-
-This project uses the **LTF (Linkable Then Format)** pipeline. Files are linked before they are permitted to execute. The C# compositor will not run until `HeartfullFirmware.Create(bootPassed: true)` is called — the boot gate is the precondition. In production, the assembly writes `OUTCOME_PASS = 0xAA` to a shared memory location that the compositor reads before constructing.
-
----
-
-## Trinary alphabet
-
-The firmware operates on a **four-value trinary alphabet**, not the classical binary:
-
-| Symbol | Value | Meaning | Action |
-|--------|-------|---------|--------|
-| `YES` | `+1` | Needs met, contract honoured | Proceed |
-| `NO` | `0` | Needs violated, contract breached | ALERT |
-| `MAYBE` | `-1` | Needs uncertain, response delayed | Enzyme pathway |
-| `MAYBE_NOT` | `-2` | Deferred — do NOT handle for operator | System absorbs |
-
-### RIFT trinary composition rules
-
-```
-YES   * YES       = YES        (both confirmed)
-NO    * anything  = NO         (NO absorbs)
-MAYBE * MAYBE     = YES        (double negation resolves)
-MAYBE * YES       = MAYBE      (uncertainty persists)
-MAYBE_NOT * any   = MAYBE_NOT  (defer wins)
-```
-
-### Enzyme degradation — MAYBE states
-
-When `MAYBE` is encountered on a Kanban thread, an enzyme operation is applied:
-
-```
-ENZYME_CREATE  : MAYBE -> YES    (creates a resolved state)
-ENZYME_DESTROY : MAYBE -> NO     (destroys ambiguous state)
-ENZYME_BUILD   : MAYBE -> YES    (builds toward resolution)
-ENZYME_BREAK   : YES   -> MAYBE  (breaks apart certainty)
-ENZYME_RENEW   : *     -> MAYBE  (refreshes to pending)
-ENZYME_REPAIR  : NO    -> MAYBE  (patches violation back to pending)
-```
-
----
-
-## Byzantine discriminant — G = {U, V, W}
-
-The tripartite discriminant detects adversarial interference in the constitutional relationship between operator (U), institution (V), and third-party/attacker (W):
-
-```
-Delta = b^2 - 4ac
-  where b = U + V + W  (sum of trinary signals)
-        a = 1, c = 1   (unit constitutional constants)
-
-Delta > 0  -> STABLE   : two real roots, W is benign or absent
-Delta = 0  -> CRITICAL : W is present and creating pressure
-Delta < 0  -> FAULT    : W is actively disrupting U-V relationship
-```
-
-**Examples:**
-
-| U | V | W | b | Delta | Region |
-|---|---|---|---|-------|--------|
-| +1 | +1 | +1 | +3 | +5 | STABLE |
-| -1 | -1 | -1 | -3 | +5 | STABLE (all MAYBE is not a fault) |
-| 0 | 0 | 0 | 0 | -4 | FAULT |
-| +1 | -1 | 0 | 0 | -4 | FAULT |
-
-Note: all-MAYBE (`b=-3`, `Delta=+5`) is **STABLE**, not a fault. MAYBE is the normal real-world state of an institution that has not yet responded. The system must handle it, not collapse it to failure.
-
----
-
-## Maslow-Kanban three-track interface
-
-The firmware exposes its state to the user via three Kanban tracks:
-
-| Track | Maslow tiers | Condition |
-|-------|-------------|-----------|
-| **Track A** — Foundation | T1 (physiological) + T2 (safety) | Always active — PASS or HOLD |
-| **Track B** — Aspiration | T3–T5 (belonging, esteem, actualisation) | **Locked** until membrane issues PASS |
-| **Track W** — Adversarial | W-actor G={U,V,W} monitor | Always active |
-
-Track B is unconditionally locked until T1 and T2 are both satisfied. You cannot self-actualise (build OBINexus, pursue PhD, deploy CORN) while the firmware is returning HOLD or ALERT on food, water, or shelter.
-
----
-
-## Three-ring qubit compass
-
-The firmware's internal scanning mechanism uses three temporal frames:
-
-```
-Ring 1 (outer)  — THERE_AND_THEN  : theta = 0    (historical needs record)
-Ring 2 (middle) — HERE_AND_NOW    : theta = 120  (current scan)
-Ring 3 (inner)  — WHEN_AND_WHERE  : theta = 240  (predicted state)
-```
-
-Coherence is maximum when all three rings align (`delta_theta = 0`). Drift is the measure of how far apart they are.
-
----
-
-## Drift theorem
-
-Radial and angular drift between two tripolar scan vectors:
-
-```
-V(t) = (alpha, beta, gamma)         -- tripolar observation vector
-D(t) = dV(t)/dt                     -- drift vector
-
-Dr = ||V_t|| - ||V_{t-1}||          -- radial drift
-  Dr > 0 : needs diverging (resolving)
-  Dr < 0 : needs converging (approaching satisfaction)
-
-omega = d(theta)/dt                  -- angular drift
-  Weighted observation: W(t) = (2/3)*P(t) + (1/3)*P(t-1)
-```
-
----
-
-## NSIGII six-phase identifier
-
-| Position | Letter | NATO | Firmware role |
-|----------|--------|------|---------------|
-| 1 | N | November | Need-state initialisation |
-| 2 | S | Sierra | Safety scan |
-| 3 | I | India | Identity calibration (Uche/Obi/Eze tripolar) |
-| 4 | G | Golf/Gold | Governance layer (OHA/IWU/IJI) |
-| 5 | I | India | Internal probe (P_I activation) |
-| 6 | I | India | Integrity verification (discriminant check) |
-
----
-
-## Requirements
-
-| Component | Requirement |
-|-----------|-------------|
-| `boot.asm` | NASM 2.14+ |
-| `*.c` / `*.h` | GCC 9+ or Clang 10+ with C11 |
-| `nsigii_cpp_wrapper.cpp` | GCC 9+ or Clang 10+ with C++17 |
-| `*.cs` / `*.csproj` | .NET 8 SDK |
-| QEMU | qemu-system-x86_64 |
-| Makefile | GNU Make (Linux/WSL) |
-
----
-
-## Igbo ontological framework
-
-This system is grounded in the Igbo tripartite model of personhood and governance:
-
-- **Uche / Obi / Eze** — mind / heart / will (identity calibration, Phase I)
-- **OHA / IWU / IJI** — community / law / execution (governance layer, Phase G)
-
-These are not decorative labels. They are the structural basis for the tripolar pointer algebra (`alpha=WANT`, `beta=NEED`, `gamma=SHOULD`) and the three-ring qubit compass.
-
----
-
-*OBINexus Computing — Neurodivergent-First Constitutional Infrastructure*
+- The boot image currently uses **raw contiguous sector loading** for stage-2.
+- If file-based loading is added later, FAT parsing should live in **stage-2**, not stage-1.
+- `boot.asm` remains as a compatibility include that simply pulls in `boot/stage1.asm`.

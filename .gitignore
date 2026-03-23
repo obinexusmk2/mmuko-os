@@ -1,0 +1,8 @@
+/build/
+/bin/
+/obj/
+/boot.bin
+/boot-stage2.bin
+/mmuko-os.img
+/legacy/csharp-compositor/bin/
+/legacy/csharp-compositor/obj/

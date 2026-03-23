@@ -1,4 +1,4 @@
-boot.asm           → boot.bin        → mmuko-os.img → QEMU (Prussian Blue + Amber Gold VGA)
+boot/stage1.asm    → build/mmuko-os.img → QEMU (Prussian Blue + Amber Gold VGA)
                                         │
 mmuko-boot.c       → build/mmuko-boot ──┤ (7-phase cubit alignment)
                                         │
@@ -10,8 +10,8 @@ mmuko-boot.c       → build/mmuko-boot ──┤ (7-phase cubit alignment)
                     │                           │
               make run-pipeline           make flash
                     │                           │
-           mmuko-compositor.csproj    nsigii-firmware-ui.csproj
-           (console compositor)       (Terminal.Gui mouse UI)
+           legacy/csharp-compositor   nsigii-firmware-ui.csproj
+           (archived console app)     (Terminal.Gui mouse UI)
                     │                           │
               NSIGII 6-phase              NSIGII 6-phase
               calibration                 + Maslow Triangle
