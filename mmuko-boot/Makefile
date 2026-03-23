@@ -1,19 +1,18 @@
-# MMUKO OS Boot Makefile
-# OBINexus R&D
+# MMUKO stage-2 build helpers
 
 CC = gcc
+CPPFLAGS = -I../include -DMMUKO_BOOT_DESKTOP_SIM
 CFLAGS = -Wall -Wextra -std=c11 -O2
-LDFLAGS = -lm
 TARGET = mmuko-boot
 SRC = mmuko-boot.c
 HDR = mmuko_boot_contract.h
 
-.PHONY: all clean run debug analyze format
+.PHONY: all clean run debug generate-spec
 
-all: $(TARGET)
+.PHONY: all clean
 
-$(TARGET): $(SRC) $(HDR)
-	$(CC) $(CFLAGS) -o $(TARGET) $(SRC) $(LDFLAGS)
+$(TARGET): $(SRC)
+	$(CC) $(CFLAGS) -o $(TARGET) $(SRC)
 
 clean:
 	rm -f $(TARGET)
@@ -28,4 +27,7 @@ analyze:
 	cppcheck --enable=all --inconclusive $(SRC)
 
 format:
-	clang-format -i $(SRC) $(HDR)
+	clang-format -i $(SRC)
+
+generate-spec:
+	python3 generate_from_spec.py

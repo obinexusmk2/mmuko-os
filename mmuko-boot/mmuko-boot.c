@@ -1,31 +1,25 @@
 // ============================================================
-// MMUKO-BOOT.C — MMUKO OS Boot Contract Runtime
+// MMUKO-BOOT.C — Portable MMUKO boot core and desktop simulator
 // Project: OBINexus / OBIELF R&D
-// Author: OBINexus Research Division
-// Version: 0.2-contract-runtime
 // ============================================================
-//
-// This runtime consumes the shared boot contract defined in
-// mmuko_boot_contract.h. The intent is that boot.asm populates the
-// contract at MMUKO_BOOT_CONTRACT_PHYS_ADDR and hands execution to a
-// richer runtime that continues the same phase identifiers and status
-// codes instead of inventing a separate demo-only ABI.
-// ============================================================
+
+#include "boot_contract.h"
 
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
-#include "mmuko_boot_contract.h"
+#ifdef MMUKO_BOOT_DESKTOP_SIM
+#include <stdio.h>
+#endif
 
-#define MMUKO_VERSION "0.2-contract-runtime"
-#define MMUKO_CONTRACT_FLAG_NEEDS_VALID  0x0001u
-#define MMUKO_CONTRACT_FLAG_RUNTIME_OWNS 0x0002u
-#define MMUKO_CONTRACT_FLAG_ROTATION_OK  0x0004u
-
+#define PI 3.14159265358979
+#define MMUKO_VERSION "0.2-portable"
 #define G_VACUUM 9.8
+#define G_LEPTON (G_VACUUM / 10.0)
+#define G_MUON   (G_LEPTON / 10.0)
+#define G_DEEP   (G_MUON / 10.0)
 
 typedef enum {
     N, NE, E, SE, S, SW, W, NW, UNDEFINED_DIR
@@ -35,9 +29,22 @@ typedef enum {
     UP, DOWN, CHARM, STRANGE, LEFT, RIGHT
 } State;
 
+typedef enum {
+    RSHIFT, LSHIFT, ROTATE
+} ShiftOp;
+
+typedef enum {
+    BOOT_OK,
+    BOOT_LOCK_DETECTED,
+    BOOT_ROTATION_LOCK,
+    BOOT_UNDEFINED_DIRECTION,
+    BOOT_FAILED
+} BootStatus;
+
 typedef struct {
     int index;
     uint8_t value;
+    double spin;
     Direction direction;
     State state;
     bool superposed;
@@ -53,12 +60,20 @@ typedef struct {
 } MMUKO_Byte;
 
 typedef struct {
+    double gravity;
+    double air;
+    double water;
+} VacuumMedium;
+
+typedef struct {
     MMUKO_Byte *memory_map;
     size_t memory_size;
     double gravity;
     Direction frame_of_reference;
-    mmuko_boot_contract_record *contract;
-} MMUKO_Runtime;
+    bool boot_complete;
+    mmuko_boot_contract_t *contract;
+    uint8_t current_phase;
+} MMUKO_System;
 
 typedef struct {
     int base;
@@ -69,46 +84,30 @@ typedef struct {
 static const SuperpositionEntry superposition_table[] = {
     {12, S, N},
     {10, SE, N},
-    {8, E, W},
-    {6, SW, E},
-    {4, W, E},
-    {2, NE, W},
-    {1, N, S}
+    {8,  E, W},
+    {6,  SW, E},
+    {4,  W, E},
+    {2,  NE, W},
+    {1,  N, S}
 };
+
+#define SUPERPOSITION_TABLE_SIZE (sizeof(superposition_table) / sizeof(superposition_table[0]))
 
 static const char *direction_names[] = {
     "NORTH", "NORTHEAST", "EAST", "SOUTHEAST",
     "SOUTH", "SOUTHWEST", "WEST", "NORTHWEST", "UNDEFINED"
 };
 
+static const char *state_names[] = {
+    "UP", "DOWN", "CHARM", "STRANGE", "LEFT", "RIGHT"
+};
+
+static const double spin_values[] = {
+    PI / 4.0, PI / 3.0, PI / 2.0, PI,
+    PI * 2.0, PI / 2.0, PI / 3.0, PI / 4.0
+};
+
 static const int entangled_pairs[] = {7, 6, 5, -1, -1, 2, 1, 0};
-
-static const char *mmuko_phase_name(mmuko_boot_phase_id phase)
-{
-    switch (phase) {
-        case MMUKO_BOOT_PHASE_PREPARE: return "PREPARE";
-        case MMUKO_BOOT_PHASE_N: return "N";
-        case MMUKO_BOOT_PHASE_S: return "S";
-        case MMUKO_BOOT_PHASE_I_IDENT: return "I_IDENT";
-        case MMUKO_BOOT_PHASE_G: return "G";
-        case MMUKO_BOOT_PHASE_I_PROBE: return "I_PROBE";
-        case MMUKO_BOOT_PHASE_I_INTEG: return "I_INTEG";
-        case MMUKO_BOOT_PHASE_HANDOFF: return "HANDOFF";
-        case MMUKO_BOOT_PHASE_COMPLETE: return "COMPLETE";
-        default: return "UNKNOWN";
-    }
-}
-
-static const char *mmuko_status_name(mmuko_boot_status status)
-{
-    switch (status) {
-        case MMUKO_BOOT_STATUS_HOLD: return "HOLD";
-        case MMUKO_BOOT_STATUS_PASS: return "PASS";
-        case MMUKO_BOOT_STATUS_ALERT: return "ALERT";
-        case MMUKO_BOOT_STATUS_FAULT: return "FAULT";
-        default: return "UNKNOWN";
-    }
-}
 
 static const char *direction_to_string(Direction dir)
 {
@@ -116,6 +115,44 @@ static const char *direction_to_string(Direction dir)
         return direction_names[dir];
     }
     return "INVALID";
+}
+
+static const char *state_to_string(State state)
+{
+    if (state >= 0 && state <= RIGHT) {
+        return state_names[state];
+    }
+    return "INVALID";
+}
+
+static void mmuko_contract_mark_phase(MMUKO_System *sys, uint8_t phase)
+{
+    sys->current_phase = phase;
+    if (sys->contract) {
+        sys->contract->membrane_phase = phase;
+    }
+}
+
+static void mmuko_contract_mark_outcome(MMUKO_System *sys,
+                                        mmuko_membrane_outcome_t outcome,
+                                        mmuko_transfer_state_t transfer)
+{
+    if (!sys->contract) {
+        return;
+    }
+
+    sys->contract->membrane_outcome = (uint8_t)outcome;
+    sys->contract->transfer_state = (uint8_t)transfer;
+    sys->contract->boot_flags |= MMUKO_BOOT_FLAG_NSIGII_READY;
+}
+
+static VacuumMedium init_vacuum_medium(void)
+{
+    return (VacuumMedium){
+        .gravity = G_VACUUM,
+        .air = 0.0,
+        .water = 0.0
+    };
 }
 
 static State resolve_state(int index, uint8_t byte_val)
@@ -129,12 +166,53 @@ static State resolve_state(int index, uint8_t byte_val)
     return DOWN;
 }
 
+static void init_cubit_ring(MMUKO_Byte *byte)
+{
+    static const Direction directions[] = {N, NE, E, SE, S, SW, W, NW};
+
+    for (int i = 0; i < 8; i++) {
+        Cubit *cubit = &byte->cubit_ring[i];
+        cubit->index = i;
+        cubit->value = (uint8_t)((byte->raw_value >> i) & 1u);
+        cubit->spin = spin_values[i];
+        cubit->direction = directions[i];
+        cubit->state = resolve_state(i, byte->raw_value);
+        cubit->entangled_with = entangled_pairs[i];
+        cubit->superposed = entangled_pairs[i] != -1;
+    }
+}
+
+static int round_to_even_base(int base)
+{
+    static const int valid_bases[] = {12, 10, 8, 6, 4, 2, 1};
+    int nearest = valid_bases[0];
+    int min_diff = base > valid_bases[0] ? base - valid_bases[0] : valid_bases[0] - base;
+
+    for (size_t i = 1; i < sizeof(valid_bases) / sizeof(valid_bases[0]); i++) {
+        int candidate = valid_bases[i];
+        int diff = base > candidate ? base - candidate : candidate - base;
+        if (diff < min_diff) {
+            min_diff = diff;
+            nearest = candidate;
+        }
+    }
+
+    return nearest;
+}
+
 static void lookup_superposition(int base, Direction *primary, Direction *secondary)
 {
-    size_t table_size = sizeof(superposition_table) / sizeof(superposition_table[0]);
-
-    for (size_t i = 0; i < table_size; ++i) {
+    for (size_t i = 0; i < SUPERPOSITION_TABLE_SIZE; i++) {
         if (superposition_table[i].base == base) {
+            *primary = superposition_table[i].primary;
+            *secondary = superposition_table[i].secondary;
+            return;
+        }
+    }
+
+    int nearest = round_to_even_base(base);
+    for (size_t i = 0; i < SUPERPOSITION_TABLE_SIZE; i++) {
+        if (superposition_table[i].base == nearest) {
             *primary = superposition_table[i].primary;
             *secondary = superposition_table[i].secondary;
             return;
@@ -154,307 +232,348 @@ static uint8_t rotate_bits(uint8_t value, int n)
     return (uint8_t)(((value >> n) | (value << (8 - n))) & 0xFFu);
 }
 
-static void contract_set_status(mmuko_boot_contract_record *contract,
-                                mmuko_boot_status status,
-                                uint8_t reason)
+static uint8_t bit_shift_semantic(uint8_t value, ShiftOp op, int n)
 {
-    contract->status = (uint8_t)status;
-    contract->status_reason = reason;
-    mmuko_boot_contract_finalize(contract);
-}
-
-static void contract_enter_phase(mmuko_boot_contract_record *contract,
-                                 mmuko_boot_phase_id phase)
-{
-    contract->stage.last_phase = contract->stage.current_phase;
-    contract->stage.current_phase = (uint16_t)phase;
-    mmuko_boot_contract_finalize(contract);
-}
-
-static void init_cubit_ring(MMUKO_Byte *byte)
-{
-    static const Direction directions[] = {N, NE, E, SE, S, SW, W, NW};
-
-    for (int i = 0; i < 8; ++i) {
-        Cubit *cubit = &byte->cubit_ring[i];
-        cubit->index = i;
-        cubit->value = (uint8_t)((byte->raw_value >> i) & 1u);
-        cubit->direction = directions[i];
-        cubit->state = resolve_state(i, byte->raw_value);
-        cubit->entangled_with = entangled_pairs[i];
-        cubit->superposed = (entangled_pairs[i] != -1);
-    }
-}
-
-static MMUKO_Runtime *mmuko_runtime_create(mmuko_boot_contract_record *contract)
-{
-    MMUKO_Runtime *runtime = calloc(1, sizeof(*runtime));
-    if (!runtime) {
-        return NULL;
+    switch (op) {
+        case RSHIFT: return (uint8_t)(value >> n);
+        case LSHIFT: return (uint8_t)(value << n);
+        case ROTATE: return rotate_bits(value, n);
+        default:     return value;
     }
 
-    runtime->memory_size = contract->layout.memory_bytes == 0 ? 16u : contract->layout.memory_bytes;
-    runtime->memory_map = calloc(runtime->memory_size, sizeof(*runtime->memory_map));
-    if (!runtime->memory_map) {
-        free(runtime);
-        return NULL;
-    }
-
-    runtime->gravity = G_VACUUM;
-    runtime->frame_of_reference = N;
-    runtime->contract = contract;
-
-    for (size_t i = 0; i < runtime->memory_size; ++i) {
-        runtime->memory_map[i].raw_value = (uint8_t)(0x2Au + (uint8_t)(i * 17u));
-    }
-
-    return runtime;
-}
-
-static void mmuko_runtime_destroy(MMUKO_Runtime *runtime)
+static Direction resolve_direction_from_neighbors(MMUKO_Byte *byte, int cubit_index)
 {
-    if (!runtime) {
-        return;
-    }
+    int dir_count[8] = {0};
+    int max_count = 0;
+    Direction max_dir = N;
 
-    free(runtime->memory_map);
-    free(runtime);
-}
+    for (int delta = -1; delta <= 1; delta++) {
+        if (delta == 0) {
+            continue;
+        }
 
-static mmuko_boot_status phase_prepare(MMUKO_Runtime *runtime)
-{
-    mmuko_boot_contract_record *contract = runtime->contract;
+        int neighbor_idx = (cubit_index + delta + 8) % 8;
+        Direction neighbor_dir = byte->cubit_ring[neighbor_idx].direction;
+        if (neighbor_dir == UNDEFINED_DIR) {
+            continue;
+        }
 
-    contract_enter_phase(contract, MMUKO_BOOT_PHASE_PREPARE);
-    printf("[CONTRACT] magic=0x%08X signature=0x%08X stage=%u current=%s\n",
-           contract->magic,
-           contract->signature,
-           contract->stage.stage_id,
-           mmuko_phase_name((mmuko_boot_phase_id)contract->stage.current_phase));
-
-    if (!mmuko_boot_contract_is_valid(contract)) {
-        puts("[CONTRACT] invalid handoff record");
-        contract_set_status(contract, MMUKO_BOOT_STATUS_FAULT, 0xE1u);
-        return MMUKO_BOOT_STATUS_FAULT;
-    }
-
-    if (contract->need_state.tripwire != 0u) {
-        puts("[PHASE 0] tripwire present in handoff");
-        contract_set_status(contract, MMUKO_BOOT_STATUS_ALERT, 0x21u);
-        return MMUKO_BOOT_STATUS_ALERT;
-    }
-
-    contract->stage.flags |= MMUKO_CONTRACT_FLAG_NEEDS_VALID | MMUKO_CONTRACT_FLAG_RUNTIME_OWNS;
-    mmuko_boot_contract_finalize(contract);
-    printf("[PHASE 0] Vacuum medium initialized: G=%.4f\n", runtime->gravity);
-    return MMUKO_BOOT_STATUS_HOLD;
-}
-
-static mmuko_boot_status phase1_cubit_init(MMUKO_Runtime *runtime)
-{
-    contract_enter_phase(runtime->contract, MMUKO_BOOT_PHASE_N);
-    printf("[PHASE 1/N] Initializing %zu cubit rings from handoff layout\n", runtime->memory_size);
-
-    for (size_t i = 0; i < runtime->memory_size; ++i) {
-        MMUKO_Byte *byte = &runtime->memory_map[i];
-        byte->base_index = (int)((byte->raw_value % 12u) + 1u);
-        init_cubit_ring(byte);
-        lookup_superposition(byte->base_index,
-                             &byte->primary_superposition,
-                             &byte->secondary_superposition);
-    }
-
-    return MMUKO_BOOT_STATUS_HOLD;
-}
-
-static mmuko_boot_status phase2_compass_alignment(MMUKO_Runtime *runtime)
-{
-    contract_enter_phase(runtime->contract, MMUKO_BOOT_PHASE_S);
-    puts("[PHASE 2/S] Compass alignment");
-
-    for (size_t b = 0; b < runtime->memory_size; ++b) {
-        for (int i = 0; i < 8; ++i) {
-            if (runtime->memory_map[b].cubit_ring[i].direction == UNDEFINED_DIR) {
-                contract_set_status(runtime->contract, MMUKO_BOOT_STATUS_FAULT, 0x31u);
-                return MMUKO_BOOT_STATUS_FAULT;
-            }
+        dir_count[neighbor_dir]++;
+        if (dir_count[neighbor_dir] > max_count) {
+            max_count = dir_count[neighbor_dir];
+            max_dir = neighbor_dir;
         }
     }
 
-    return MMUKO_BOOT_STATUS_HOLD;
+    return max_count == 0 ? N : max_dir;
 }
 
 static State flip_state(State state)
 {
     switch (state) {
-        case UP: return DOWN;
-        case DOWN: return UP;
-        case CHARM: return STRANGE;
+        case UP:      return DOWN;
+        case DOWN:    return UP;
+        case CHARM:   return STRANGE;
         case STRANGE: return CHARM;
-        case LEFT: return RIGHT;
-        case RIGHT: return LEFT;
-        default: return state;
+        case LEFT:    return RIGHT;
+        case RIGHT:   return LEFT;
+        default:      return state;
     }
 }
 
-static mmuko_boot_status phase3_superposition_entanglement(MMUKO_Runtime *runtime)
+static Cubit *get_cubit_from_byte(MMUKO_Byte *byte, int index)
 {
-    contract_enter_phase(runtime->contract, MMUKO_BOOT_PHASE_I_IDENT);
-    puts("[PHASE 3/I_IDENT] Resolving entangled cubits");
+    if (index < 0 || index >= 8) {
+        return NULL;
+    }
+    return &byte->cubit_ring[index];
+}
 
-    for (size_t b = 0; b < runtime->memory_size; ++b) {
-        MMUKO_Byte *byte = &runtime->memory_map[b];
-        for (int i = 0; i < 8; ++i) {
+static int get_middle_base(void)
+{
+    return 12 / 2;
+}
+
+static void set_frame_of_reference(MMUKO_System *sys, Direction center_dir)
+{
+    sys->frame_of_reference = center_dir;
+}
+
+static uint8_t seed_raw_value_from_contract(const mmuko_boot_contract_t *contract, size_t index)
+{
+    uint8_t seeded = (uint8_t)(index * 17u + 42u);
+
+    if (!contract) {
+        return seeded;
+    }
+
+    seeded ^= (uint8_t)(contract->boot_flags & 0xFFu);
+    seeded ^= contract->membrane_outcome;
+
+    if (contract->keyboard.length > 0) {
+        seeded ^= (uint8_t)contract->keyboard.bytes[index % contract->keyboard.length];
+    }
+
+    return bit_shift_semantic(seeded, ROTATE, (int)(index % 8u));
+}
+
+static void mmuko_seed_memory_map(MMUKO_System *sys)
+{
+    for (size_t i = 0; i < sys->memory_size; i++) {
+        sys->memory_map[i].raw_value = seed_raw_value_from_contract(sys->contract, i);
+    }
+}
+
+static void mmuko_boot_bind_contract(MMUKO_System *sys,
+                                     mmuko_boot_contract_t *contract,
+                                     mmuko_transfer_state_t mode)
+{
+    sys->contract = contract;
+    sys->current_phase = 0;
+
+    if (!contract) {
+        return;
+    }
+
+    if (contract->magic != MMUKO_BOOT_CONTRACT_MAGIC ||
+        contract->total_size != sizeof(mmuko_boot_contract_t)) {
+        mmuko_boot_contract_reset(contract);
+    }
+
+    contract->transfer_state = (uint8_t)mode;
+    contract->boot_flags |= MMUKO_BOOT_FLAG_NATIVE_C_READY;
+    contract->membrane_outcome = MMUKO_MEMBRANE_HOLD;
+}
+
+static void mmuko_system_init(MMUKO_System *sys,
+                              MMUKO_Byte *storage,
+                              size_t memory_size,
+                              mmuko_boot_contract_t *contract,
+                              mmuko_transfer_state_t mode)
+{
+    memset(sys, 0, sizeof(*sys));
+    sys->memory_map = storage;
+    sys->memory_size = memory_size;
+    sys->frame_of_reference = N;
+    mmuko_boot_bind_contract(sys, contract, mode);
+    mmuko_seed_memory_map(sys);
+}
+
+static BootStatus phase1_cubit_init(MMUKO_System *sys)
+{
+    mmuko_contract_mark_phase(sys, 1);
+
+    for (size_t i = 0; i < sys->memory_size; i++) {
+        uint8_t value = sys->memory_map[i].raw_value;
+        sys->memory_map[i].base_index = (value % 12) + 1;
+        init_cubit_ring(&sys->memory_map[i]);
+        lookup_superposition(sys->memory_map[i].base_index,
+                             &sys->memory_map[i].primary_superposition,
+                             &sys->memory_map[i].secondary_superposition);
+    }
+
+    return BOOT_OK;
+}
+
+static BootStatus phase2_compass_alignment(MMUKO_System *sys)
+{
+    mmuko_contract_mark_phase(sys, 2);
+
+    for (size_t b = 0; b < sys->memory_size; b++) {
+        MMUKO_Byte *byte = &sys->memory_map[b];
+        for (int i = 0; i < 8; i++) {
             Cubit *cubit = &byte->cubit_ring[i];
-            if (cubit->superposed && cubit->entangled_with >= 0) {
-                Cubit *partner = &byte->cubit_ring[cubit->entangled_with];
-                if (cubit->state == partner->state) {
-                    partner->state = flip_state(partner->state);
-                }
+            if (cubit->direction != UNDEFINED_DIR) {
+                continue;
+            }
+
+            cubit->direction = resolve_direction_from_neighbors(byte, i);
+            if (cubit->direction == UNDEFINED_DIR) {
+                mmuko_contract_mark_outcome(sys, MMUKO_MEMBRANE_ALERT, MMUKO_TRANSFER_NATIVE_C_ENTRY);
+                return BOOT_LOCK_DETECTED;
             }
         }
     }
 
-    return MMUKO_BOOT_STATUS_HOLD;
+    return BOOT_OK;
 }
 
-static mmuko_boot_status phase4_frame_centering(MMUKO_Runtime *runtime)
+static BootStatus phase3_superposition_entanglement(MMUKO_System *sys)
 {
-    contract_enter_phase(runtime->contract, MMUKO_BOOT_PHASE_G);
-    lookup_superposition(6, &runtime->frame_of_reference, &runtime->memory_map[0].secondary_superposition);
-    printf("[PHASE 4/G] Frame of reference set to %s\n",
-           direction_to_string(runtime->frame_of_reference));
-    return MMUKO_BOOT_STATUS_HOLD;
+    mmuko_contract_mark_phase(sys, 3);
+
+    for (size_t b = 0; b < sys->memory_size; b++) {
+        MMUKO_Byte *byte = &sys->memory_map[b];
+        for (int i = 0; i < 8; i++) {
+            Cubit *cubit = &byte->cubit_ring[i];
+            if (!cubit->superposed || cubit->entangled_with == -1) {
+                continue;
+            }
+
+            Cubit *partner = get_cubit_from_byte(byte, cubit->entangled_with);
+            if (partner && cubit->state == partner->state) {
+                partner->state = flip_state(partner->state);
+            }
+        }
+    }
+
+    return BOOT_OK;
 }
 
-static mmuko_boot_status phase5_probe(MMUKO_Runtime *runtime)
+static BootStatus phase4_frame_centering(MMUKO_System *sys)
+{
+    mmuko_contract_mark_phase(sys, 4);
+
+    Direction primary;
+    Direction secondary;
+    lookup_superposition(get_middle_base(), &primary, &secondary);
+    set_frame_of_reference(sys, primary);
+
+    for (size_t b = 0; b < sys->memory_size; b++) {
+        sys->memory_map[b].primary_superposition = primary;
+        sys->memory_map[b].secondary_superposition = secondary;
+    }
+
+    return BOOT_OK;
+}
+
+static void resolve_base_state(MMUKO_System *sys, int base)
+{
+    Direction primary;
+    Direction secondary;
+    lookup_superposition(base, &primary, &secondary);
+
+    for (size_t i = 0; i < sys->memory_size; i++) {
+        if (sys->memory_map[i].base_index == base) {
+            sys->memory_map[i].primary_superposition = primary;
+            sys->memory_map[i].secondary_superposition = secondary;
+        }
+    }
+}
+
+static BootStatus phase5_nonlinear_resolution(MMUKO_System *sys)
 {
     static const int boot_order[] = {12, 6, 8, 4, 10, 2, 1};
-    contract_enter_phase(runtime->contract, MMUKO_BOOT_PHASE_I_PROBE);
-    puts("[PHASE 5/I_PROBE] Nonlinear index resolution");
 
-    for (size_t i = 0; i < sizeof(boot_order) / sizeof(boot_order[0]); ++i) {
-        Direction primary;
-        Direction secondary;
-        lookup_superposition(boot_order[i], &primary, &secondary);
-        printf("  base %d -> %s/%s\n",
-               boot_order[i],
-               direction_to_string(primary),
-               direction_to_string(secondary));
+    mmuko_contract_mark_phase(sys, 5);
+    for (size_t i = 0; i < sizeof(boot_order) / sizeof(boot_order[0]); i++) {
+        resolve_base_state(sys, boot_order[i]);
     }
 
-    if (runtime->contract->need_state.tier1 == 0u || runtime->contract->need_state.tier2 == 0u) {
-        contract_set_status(runtime->contract, MMUKO_BOOT_STATUS_HOLD, 0x41u);
-        return MMUKO_BOOT_STATUS_HOLD;
-    }
-
-    return MMUKO_BOOT_STATUS_PASS;
+    return BOOT_OK;
 }
 
-static mmuko_boot_status phase6_integrity(MMUKO_Runtime *runtime)
+static BootStatus phase6_rotation_verification(MMUKO_System *sys)
 {
-    contract_enter_phase(runtime->contract, MMUKO_BOOT_PHASE_I_INTEG);
-    puts("[PHASE 6/I_INTEG] Rotation freedom check");
+    mmuko_contract_mark_phase(sys, 6);
 
-    for (size_t b = 0; b < runtime->memory_size; ++b) {
-        for (int i = 0; i < 8; ++i) {
-            uint8_t original = runtime->memory_map[b].cubit_ring[i].value;
-            uint8_t rotated = rotate_bits(rotate_bits(original, 4), 4);
-            if (rotated != original) {
-                contract_set_status(runtime->contract, MMUKO_BOOT_STATUS_FAULT, 0x61u);
-                return MMUKO_BOOT_STATUS_FAULT;
+    for (size_t b = 0; b < sys->memory_size; b++) {
+        MMUKO_Byte *byte = &sys->memory_map[b];
+        for (int i = 0; i < 8; i++) {
+            uint8_t original = byte->cubit_ring[i].value;
+            uint8_t test_val = rotate_bits(original, 4);
+            test_val = rotate_bits(test_val, 4);
+            if (test_val != original) {
+                mmuko_contract_mark_outcome(sys, MMUKO_MEMBRANE_ALERT, MMUKO_TRANSFER_NATIVE_C_ENTRY);
+                return BOOT_ROTATION_LOCK;
             }
         }
     }
 
-    runtime->contract->stage.flags |= MMUKO_CONTRACT_FLAG_ROTATION_OK;
-    mmuko_boot_contract_finalize(runtime->contract);
-    return MMUKO_BOOT_STATUS_PASS;
+    return BOOT_OK;
 }
 
-static mmuko_boot_status mmuko_boot(MMUKO_Runtime *runtime)
+static BootStatus mmuko_boot(MMUKO_System *sys)
 {
-    mmuko_boot_status status = phase_prepare(runtime);
-    if (status == MMUKO_BOOT_STATUS_ALERT || status == MMUKO_BOOT_STATUS_FAULT) return status;
+    BootStatus status;
 
-    status = phase1_cubit_init(runtime);
-    if (status == MMUKO_BOOT_STATUS_FAULT) return status;
+    mmuko_contract_mark_phase(sys, 0);
+    sys->medium = init_vacuum_medium();
 
-    status = phase2_compass_alignment(runtime);
-    if (status == MMUKO_BOOT_STATUS_FAULT) return status;
+    status = phase1_cubit_init(sys);
+    if (status != BOOT_OK) return status;
+    status = phase2_compass_alignment(sys);
+    if (status != BOOT_OK) return status;
+    status = phase3_superposition_entanglement(sys);
+    if (status != BOOT_OK) return status;
+    status = phase4_frame_centering(sys);
+    if (status != BOOT_OK) return status;
+    status = phase5_nonlinear_resolution(sys);
+    if (status != BOOT_OK) return status;
+    status = phase6_rotation_verification(sys);
+    if (status != BOOT_OK) return status;
 
-    status = phase3_superposition_entanglement(runtime);
-    if (status == MMUKO_BOOT_STATUS_FAULT) return status;
+    sys->boot_complete = true;
+    mmuko_contract_mark_phase(sys, 7);
+    mmuko_contract_mark_outcome(sys, MMUKO_MEMBRANE_PASS, MMUKO_TRANSFER_KERNEL_ENTRY);
+    return BOOT_OK;
+}
 
-    status = phase4_frame_centering(runtime);
-    if (status == MMUKO_BOOT_STATUS_FAULT) return status;
-
-    status = phase5_probe(runtime);
-    if (status != MMUKO_BOOT_STATUS_PASS) {
-        contract_enter_phase(runtime->contract, MMUKO_BOOT_PHASE_HANDOFF);
-        contract_set_status(runtime->contract, status, 0x51u);
-        return status;
+#ifdef MMUKO_BOOT_DESKTOP_SIM
+static void mmuko_print_cubit_state(const MMUKO_System *sys, size_t byte_idx, int cubit_idx)
+{
+    if (byte_idx >= sys->memory_size || cubit_idx < 0 || cubit_idx >= 8) {
+        return;
     }
 
-    status = phase6_integrity(runtime);
-    if (status != MMUKO_BOOT_STATUS_PASS) return status;
-
-    contract_enter_phase(runtime->contract, MMUKO_BOOT_PHASE_HANDOFF);
-    contract_set_status(runtime->contract, MMUKO_BOOT_STATUS_PASS, 0x70u);
-    contract_enter_phase(runtime->contract, MMUKO_BOOT_PHASE_COMPLETE);
-    runtime->contract->stage.stage_id = MMUKO_BOOT_RUNTIME_ID;
-    contract_set_status(runtime->contract, MMUKO_BOOT_STATUS_PASS, 0x7Fu);
-    return MMUKO_BOOT_STATUS_PASS;
+    const Cubit *cubit = &sys->memory_map[byte_idx].cubit_ring[cubit_idx];
+    printf("Byte[%zu].Cubit[%d]: val=%u dir=%s state=%s spin=%.4f super=%s ent=%d\n",
+           byte_idx,
+           cubit_idx,
+           cubit->value,
+           direction_to_string(cubit->direction),
+           state_to_string(cubit->state),
+           cubit->spin,
+           cubit->superposed ? "YES" : "NO",
+           cubit->entangled_with);
 }
 
-static void seed_demo_contract(mmuko_boot_contract_record *contract)
+int main(int argc, char **argv)
 {
-    memset(contract, 0, sizeof(*contract));
-    contract->magic = MMUKO_BOOT_CONTRACT_MAGIC;
-    contract->signature = MMUKO_BOOT_CONTRACT_SIGNATURE;
-    contract->stage.version = MMUKO_BOOT_CONTRACT_VERSION;
-    contract->stage.stage_id = MMUKO_BOOT_STAGE2_ID;
-    contract->stage.current_phase = MMUKO_BOOT_PHASE_N;
-    contract->stage.last_phase = MMUKO_BOOT_PHASE_PREPARE;
-    contract->need_state.tier1 = 1u;
-    contract->need_state.tier2 = 1u;
-    contract->need_state.tripwire = 0u;
-    contract->need_state.threshold = 240u;
-    contract->need_state.discriminant_hint = 1u;
-    contract->layout.memory_base = MMUKO_BOOT_CONTRACT_PHYS_ADDR;
-    contract->layout.memory_bytes = 16u;
-    contract->layout.entry_offset = 0x7C00u;
-    contract->layout.payload_bytes = 16u;
-    contract->status = MMUKO_BOOT_STATUS_HOLD;
-    contract->status_reason = 0x10u;
-    mmuko_boot_contract_finalize(contract);
-}
+    mmuko_boot_contract_t contract;
+    MMUKO_System sys;
+    MMUKO_Byte memory[16];
 
-int main(void)
-{
-    mmuko_boot_contract_record contract;
-    seed_demo_contract(&contract);
+    mmuko_boot_contract_reset(&contract);
+    contract.boot_flags = MMUKO_BOOT_FLAG_STAGE2_MODE | MMUKO_BOOT_FLAG_NATIVE_C_READY;
+    contract.transfer_state = MMUKO_TRANSFER_STAGE2_READY;
 
-    printf("MMUKO OS Boot Contract Runtime v%s\n", MMUKO_VERSION);
-    printf("Using shared contract at 0x%04X:%04X (%u bytes)\n\n",
-           MMUKO_BOOT_CONTRACT_SEGMENT,
-           MMUKO_BOOT_CONTRACT_OFFSET,
-           (unsigned)sizeof(contract));
+    if (argc > 1) {
+        if (mmuko_keyboard_buffer_copy_text(&contract.keyboard, argv[1]) > 0) {
+            contract.boot_flags |= MMUKO_BOOT_FLAG_KEYBOARD_REQUIRED | MMUKO_BOOT_FLAG_KEYBOARD_PRESENT;
+        }
+    }
 
-    MMUKO_Runtime *runtime = mmuko_runtime_create(&contract);
-    if (!runtime) {
-        fputs("Failed to create MMUKO runtime\n", stderr);
+    mmuko_system_init(&sys, memory, sizeof(memory) / sizeof(memory[0]), &contract, MMUKO_TRANSFER_STAGE2_READY);
+
+    printf("MMUKO OS Boot Loader (%s)\n", MMUKO_VERSION);
+    printf("Contract @ 0x%04X, keyboard bytes=%u\n\n",
+           MMUKO_BOOT_CONTRACT_ADDR,
+           contract.keyboard.length);
+
+    BootStatus status = mmuko_boot(&sys);
+    if (status != BOOT_OK) {
+        printf("BOOT FAILED: status=%d phase=%u outcome=0x%02X\n",
+               status,
+               contract.membrane_phase,
+               contract.membrane_outcome);
         return 1;
     }
 
-    mmuko_boot_status status = mmuko_boot(runtime);
-    printf("\n[RESULT] status=%s reason=0x%02X phase=%s frame=%s checksum=0x%02X\n",
-           mmuko_status_name(status),
-           contract.status_reason,
-           mmuko_phase_name((mmuko_boot_phase_id)contract.stage.current_phase),
-           direction_to_string(runtime->frame_of_reference),
-           contract.checksum);
-
-    mmuko_runtime_destroy(runtime);
-    return status == MMUKO_BOOT_STATUS_PASS ? 0 : 1;
+    printf("BOOT COMPLETE\n");
+    printf("Transfer state=%u frame=%s outcome=0x%02X\n",
+           contract.transfer_state,
+           direction_to_string(sys.frame_of_reference),
+           contract.membrane_outcome);
+    printf("Gravity medium: G=%.4f (lepton=%.4f, muon=%.4f, deep=%.4f)\n",
+           G_VACUUM, G_LEPTON, G_MUON, G_DEEP);
+    mmuko_print_cubit_state(&sys, 0, 0);
+    mmuko_print_cubit_state(&sys, 0, 2);
+    mmuko_print_cubit_state(&sys, 5, 5);
+    return 0;
 }
+#endif
+
+// ============================================================
+// END OF MMUKO-BOOT.C
+// ============================================================
