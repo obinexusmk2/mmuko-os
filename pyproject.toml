@@ -16,6 +16,7 @@ classifiers = [
   "Programming Language :: C",
   "Programming Language :: Cython",
   "Operating System :: POSIX :: Linux",
+  "Operating System :: Microsoft :: Windows",
 ]
 
 [tool.setuptools]

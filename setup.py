@@ -1,5 +1,8 @@
+import sys
 from setuptools import Extension, setup
 from Cython.Build import cythonize
+
+_libraries = ["m"] if sys.platform != "win32" else []
 
 extensions = [
     Extension(
@@ -11,8 +14,21 @@ extensions = [
             "tripartite_discriminant.c",
         ],
         include_dirs=["."],
-        libraries=["m"],
-    )
+        libraries=_libraries,
+    ),
+    Extension(
+        name="mmuko_os._firmware",
+        sources=[
+            "python/mmuko_os/_firmware.pyx",
+            "heartfull_membrane.c",
+            "bzy_mpda.c",
+            "tripartite_discriminant.c",
+            "nsigii_cpp_wrapper.cpp",
+        ],
+        include_dirs=["."],
+        libraries=_libraries,
+        language="c++",
+    ),
 ]
 
 setup(

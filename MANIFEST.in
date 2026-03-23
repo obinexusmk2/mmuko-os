@@ -1,4 +1,4 @@
 include README.md
-include heartfull_firmware.h bzy_mpda.h tripartite_discriminant.h
-include heartfull_membrane.c bzy_mpda.c tripartite_discriminant.c
+include heartfull_firmware.h bzy_mpda.h tripartite_discriminant.h nsigii_cpp_wrapper.h
+include heartfull_membrane.c bzy_mpda.c tripartite_discriminant.c nsigii_cpp_wrapper.cpp
 recursive-include python/mmuko_os *.py *.pyx *.pxd
