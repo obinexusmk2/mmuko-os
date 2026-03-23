@@ -22,6 +22,10 @@
 
 #include "heartfull_firmware.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* =========================================================================
  * TRIPARTITE STATE — three-actor configuration
  * U = user / citizen / operator
@@ -80,5 +84,9 @@ bool tripartite_roots(const TripartiteState *tri, double *root_pos, double *root
 
 /* Run full constitutional check: returns DISC_STABLE, CRITICAL, or FAULT */
 DiscriminantRegion tripartite_check(TrinaryState u, TrinaryState v, TrinaryState w);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* TRIPARTITE_DISCRIMINANT_H */

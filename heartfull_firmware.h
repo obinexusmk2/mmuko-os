@@ -16,6 +16,10 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* =========================================================================
  * TRINARY STATE ALPHABET  Σ = {YES, NO, MAYBE, MAYBE_NOT}
  * YES       =  1  → needs met, contract honoured
@@ -171,5 +175,9 @@ bool nsigii_run_phase(PerspectiveMembrane *m, NSIGIIPhase phase);
 
 /* Drift theorem: compute radial drift between two need vectors */
 double drift_radial(const TripointerScan *v_prev, const TripointerScan *v_curr);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* HEARTFULL_FIRMWARE_H */

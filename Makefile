@@ -11,9 +11,9 @@
 #   make firmware-cpp      compile C++ wrapper
 #   make boot              assemble boot.asm -> build/boot.bin
 #   make image             write boot sector into mmuko-os.img
-#   make compositor        dotnet build (needs .NET 8 SDK)
+#   make compositor        build the Python/Cython compositor package
 #   make run               boot with QEMU
-#   make run-compositor    C# compositor dev boot-gate bypass (PASS path)
+#   make run-compositor    run the Python/Cython compositor (dev PASS path)
 #   make verify            NSIGII verification checks
 #   make clean             remove build/ directory
 
@@ -23,7 +23,6 @@
 CC     := gcc
 CXX    := g++
 NASM   := nasm
-DOTNET := dotnet
 # python3 is used for cross-platform mkdir, image writing, and verify.
 # It is available on both Windows (Conda/Python install) and WSL.
 PY     := python3
@@ -66,7 +65,7 @@ all: dirs firmware boot image
 	@echo "  Image    : $(DISK_IMG)"
 	@echo ""
 	@echo "  make run            - boot in QEMU"
-	@echo "  make run-compositor - run C# compositor (dev PASS bypass)"
+	@echo "  make run-compositor - run Python/Cython compositor (dev PASS path)"
 
 # ============================================================
 # Create build directories using Python (cross-platform)
@@ -158,28 +157,27 @@ run: $(DISK_IMG)
 	qemu-system-x86_64 -drive format=raw,file=$(DISK_IMG) -m 32M || echo "[QEMU] Not found - https://www.qemu.org"
 
 # ============================================================
-# C# compositor
+# Python/Cython compositor
 # ============================================================
 .PHONY: compositor
-compositor: firmware
-	@echo "[DOTNET] Building C# compositor..."
-	@$(PY) -c "import shutil,sys; d=shutil.which('dotnet'); sys.exit(0) if d else (print('[DOTNET] Not found - https://dot.net'), sys.exit(0))"
-	$(DOTNET) build mmuko-compositor.csproj -c Release --nologo -v quiet && echo "[DOTNET] Build complete." || echo "[DOTNET] Build failed - check errors above."
+compositor: firmware firmware-cpp
+	@echo "[CYTHON] Building Python/Cython compositor..."
+	$(PY) -m pip install -e .
 
 .PHONY: run-compositor
-run-compositor:
+run-compositor: compositor
 	@echo "[COMPOSITOR] dev boot-gate bypass with explicit PASS inputs..."
-	$(DOTNET) run --project mmuko-compositor.csproj -- --simulate-pass --tier1 yes --tier2 yes --w-actor yes
+	PYTHONPATH=python $(PY) -m mmuko_os --simulate-pass --tier1 yes --tier2 yes --w-actor yes
 
 .PHONY: run-compositor-pass
-run-compositor-pass:
+run-compositor-pass: compositor
 	@echo "[COMPOSITOR] explicit PASS path (boot-passed + T1/T2/W = yes)..."
-	$(DOTNET) run --project mmuko-compositor.csproj -- --boot-passed true --tier1 yes --tier2 yes --w-actor yes
+	PYTHONPATH=python $(PY) -m mmuko_os --boot-passed true --tier1 yes --tier2 yes --w-actor yes
 
 .PHONY: run-compositor-maybe
-run-compositor-maybe:
+run-compositor-maybe: compositor
 	@echo "[COMPOSITOR] diagnostic HOLD path (boot-passed + unresolved inputs)..."
-	$(DOTNET) run --project mmuko-compositor.csproj -- --boot-passed true --tier1 maybe --tier2 maybe --w-actor maybe
+	PYTHONPATH=python $(PY) -m mmuko_os --boot-passed true --tier1 maybe --tier2 maybe --w-actor maybe
 
 # ============================================================
 # NSIGII verification checks (python3 -c one-liners, no heredoc)
