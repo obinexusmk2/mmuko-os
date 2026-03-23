@@ -1,5 +1,4 @@
 MMUKO-OS Canonical Specification
-================================
 
 Authoritative input
 -------------------

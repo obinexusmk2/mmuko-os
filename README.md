@@ -15,6 +15,30 @@ The firmware implements a **Maslow needs-gate**: Tier 1 (physiological) and Tier
 
 ---
 
+## Canonical boot spec and regeneration
+
+`MMUKO-OS.txt` is the canonical MMUKO-OS boot specification and the source of truth for the boot phases, filesystem target, kernel handoff contract, NSIGII firmware requirements, and artifact names. Implementers should update the spec first, then regenerate derived files instead of hand-editing generated outputs.
+
+### Regenerate derived boot files
+
+```bash
+python3 mmuko-boot/generate_from_spec.py
+```
+
+This generator emits:
+
+- `mmuko-boot/generated/boot.asm` — canonical assembly skeleton for the boot sector.
+- `mmuko-boot/generated/mmuko-boot.c` — canonical C implementation skeleton aligned to the same phase order.
+- `mmuko-boot/include/mmuko_boot_spec.h` — native boot handoff definitions and constants.
+- `mmuko-boot/include/mmuko_runtime_interface.h` — native runtime entry contract helpers.
+- `mmuko-boot/generated/spec-validation.json` — machine-readable validation output derived from the canonical spec.
+
+You can also run:
+
+```bash
+make -C mmuko-boot generate-spec
+```
+
 ## Quick start
 
 ### 1. Assemble the boot sector
