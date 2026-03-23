@@ -1,0 +1,53 @@
+MMUKO-OS BOOT MEDIA SPECIFICATION
+=================================
+
+Status
+------
+The BIOS boot path uses a custom raw reserved-sector layout.
+It is not FAT12, FAT32, or a defined "FAT64" format.
+
+Design Decision
+---------------
+For the current image, compatibility with off-the-shelf FAT parsers is less important than a clear and deterministic BIOS boot chain.
+Therefore the disk layout is raw and fixed-position:
+
+  LBA 0     : stage-1 boot sector (boot.asm)
+  LBA 1-16  : stage-2 loader (mmuko-boot/stage2.asm)
+  LBA 17-48 : native MMUKO runtime image (mmuko-boot/runtime.asm)
+  LBA 49+   : reserved
+
+Sector size is 512 bytes.
+The image size remains 1.44 MiB (2880 sectors) so it still boots conveniently in QEMU as a floppy-style raw disk.
+
+Runtime Header
+--------------
+The runtime image begins with this packed header:
+
+  uint32_t magic;        // 'MMKR'
+  uint32_t signature;    // 'NSIG'
+  uint16_t version;      // 1
+  uint16_t header_size;  // bytes
+  uint32_t image_size;   // bytes
+  uint32_t entry_offset; // offset from runtime base
+  uint32_t load_address; // expected physical load address
+  uint32_t reserved;     // zero
+
+Current constants:
+
+  magic        = 0x4D4D4B52 ('MMKR')
+  signature    = 0x4E534947 ('NSIG')
+  version      = 1
+  load_address = 0x00010000
+
+Boot Behavior
+-------------
+1. BIOS loads stage-1 to 0x0000:0x7C00.
+2. Stage-1 loads stage-2 from reserved sectors into 0x00008000.
+3. Stage-2 loads the runtime image into 0x00010000.
+4. Stage-2 validates the runtime header.
+5. Stage-2 enables protected mode and jumps to load_address + entry_offset.
+
+Policy on "FAT64"
+------------------
+If "FAT64" is meant to be a custom MMUKO format, it must be specified explicitly with its own boot sector, allocation structures, directory format, and validation rules.
+Until such a definition exists, the project should describe the boot media as a raw custom layout rather than a FAT variant.

@@ -1,31 +1,29 @@
-# MMUKO OS Boot Makefile
-# OBINexus R&D
+# MMUKO stage-2 build helpers
 
-CC = gcc
-CFLAGS = -Wall -Wextra -std=c11 -O2 -lm
-TARGET = mmuko-boot
-SRC = mmuko-boot.c
+CC ?= gcc
+NASM ?= nasm
+CFLAGS ?= -std=c11 -Wall -Wextra -O2
 
-.PHONY: all clean run debug
+BUILD ?= ../build
+STAGE2_BIN ?= $(BUILD)/stage2.bin
+RUNTIME_BIN ?= $(BUILD)/mmuko-runtime.bin
+IMAGE_TOOL ?= $(BUILD)/mkmmukoimg
 
-all: $(TARGET)
+.PHONY: all clean
 
-$(TARGET): $(SRC)
-        $(CC) $(CFLAGS) -o $(TARGET) $(SRC)
+all: $(STAGE2_BIN) $(RUNTIME_BIN) $(IMAGE_TOOL)
+
+$(STAGE2_BIN): stage2.asm | $(BUILD)
+	$(NASM) -f bin $< -o $@
+
+$(RUNTIME_BIN): runtime.asm | $(BUILD)
+	$(NASM) -f bin $< -o $@
+
+$(IMAGE_TOOL): mkimage.c image_layout.h | $(BUILD)
+	$(CC) $(CFLAGS) -o $@ mkimage.c
+
+$(BUILD):
+	mkdir -p $(BUILD)
 
 clean:
-        rm -f $(TARGET)
-
-run: $(TARGET)
-        ./$(TARGET)
-
-debug: CFLAGS = -Wall -Wextra -std=c11 -g -O0 -lm -DDEBUG
-debug: $(TARGET)
-
-# Static analysis
-analyze:
-        cppcheck --enable=all --inconclusive $(SRC)
-
-# Format code
-format:
-        clang-format -i $(SRC)
+	rm -f $(STAGE2_BIN) $(RUNTIME_BIN) $(IMAGE_TOOL)

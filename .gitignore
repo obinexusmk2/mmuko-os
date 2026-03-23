@@ -1,0 +1,4 @@
+build/mkmmukoimg
+build/mmuko-runtime.bin
+build/stage2.bin
+mmuko-os.img.tmp
