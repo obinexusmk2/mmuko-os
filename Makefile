@@ -43,9 +43,9 @@ DISK_IMG := mmuko-os.img
 # Boot chain binaries (stage-1 = generated boot sector, stage-2 = NASM loader)
 STAGE1_BIN           := $(BUILD)/boot.bin
 STAGE2_BIN           := $(BUILD)/mmuko-os.bin
-STAGE2_SECTORS       := 1
+STAGE2_SECTORS       := 16
 STAGE2_TOTAL_SECTORS := $(STAGE2_SECTORS)
-STAGE2_TOTAL_BYTES   := 512
+STAGE2_TOTAL_BYTES   := 8192
 
 CODEGEN_SCRIPT := tools/mmuko_codegen/generate.py
 PSC_DIR := pseudocode
@@ -56,13 +56,6 @@ GENERATED_STAGE2_C := kernel/mmuko_stage2_loader.c
 GENERATED_STAGE2_CPP := kernel/mmuko_stage2_bridge.cpp
 GENERATED_HEADER := include/mmuko_codegen.h
 GENERATED_CYTHON := python/mmuko_codegen.pxd python/mmuko_generated.pyx
-
-SCRIPTS_DIR := scripts
-ENSURE_DIRS := $(SCRIPTS_DIR)/ensure_dirs.py
-CHECK_NASM := $(SCRIPTS_DIR)/check_nasm.py
-CHECK_BOOT := $(SCRIPTS_DIR)/validate_boot_sector.py
-CHECK_STAGE2 := $(SCRIPTS_DIR)/check_stage2_size.py
-BUILD_IMAGE := $(SCRIPTS_DIR)/build_disk_image.py
 
 # ============================================================
 # Compiler flags
@@ -110,7 +103,7 @@ $(CODEGEN_STAMP): MMUKO-OS.txt $(CODEGEN_SCRIPT) $(PRIMARY_PSC) $(PSC_DIR)
 
 .PHONY: dirs
 dirs:
-	@$(PY) $(ENSURE_DIRS) $(OBJ_DIR) $(LIB_DIR) $(BOOT_DIR) $(BUILD)
+	@$(PY) -c "import os; [os.makedirs(d, exist_ok=True) for d in ['$(OBJ_DIR)', '$(LIB_DIR)', '$(BOOT_DIR)', '$(BUILD)']]"
 
 .PHONY: install-deps
 install-deps:
@@ -152,15 +145,16 @@ boot: codegen dirs $(BOOT_BIN)
 
 $(BOOT_BIN): $(GENERATED_BOOT_SRC)
 	@echo "[NASM] $(GENERATED_BOOT_SRC) -> $(BOOT_BIN)"
-	@$(PY) $(CHECK_NASM)
+	$(PY) scripts/check_tool.py nasm --hint "Install nasm via: make install-deps"
 	$(NASM) -f bin $(GENERATED_BOOT_SRC) -o $(BOOT_BIN)
-	@$(PY) $(CHECK_BOOT) --path $(BOOT_BIN)
+	@$(PY) -c "b=open('$(BOOT_BIN)','rb').read();assert len(b)==512,'size: '+str(len(b));sig=b[510]|(b[511]<<8);assert sig==0xAA55,'sig: '+hex(sig);print('[BOOT] '+str(len(b))+' bytes  sig=0x'+format(sig,'04X')+'  OK')"
 
 $(STAGE2_BIN): boot/stage2.asm | dirs
-	@echo "[NASM] boot/stage2.asm -> $(STAGE2_BIN) (mmuko-os kernel payload)"
-	@$(PY) $(CHECK_NASM)
+	@echo "[NASM] boot/stage2.asm -> $(STAGE2_BIN)"
+	$(PY) scripts/check_tool.py nasm --hint "Install nasm via: make install-deps"
 	$(NASM) -f bin boot/stage2.asm -o $(STAGE2_BIN)
-	@$(PY) $(CHECK_STAGE2) --path $(STAGE2_BIN) --expected $(STAGE2_TOTAL_BYTES)
+	$(PY) scripts/pad_binary.py $(STAGE2_BIN) --size $(STAGE2_TOTAL_BYTES)
+	@$(PY) -c "b=open('$(STAGE2_BIN)','rb').read(); print('[STAGE2] '+str(len(b))+' bytes / sectors='+str(len(b)//512)+'  OK')"
 
 # ============================================================
 # Disk image (1.44 MB FAT12 - cross-platform Python write)
@@ -171,7 +165,7 @@ image: $(DISK_IMG)
 
 $(DISK_IMG): $(STAGE1_BIN) $(STAGE2_BIN) | dirs
 	@echo "[IMAGE] Writing $(DISK_IMG) (1.44 MB FAT12 + raw stage2 payload)..."
-	@$(PY) $(BUILD_IMAGE) --stage1 $(STAGE1_BIN) --stage2 $(STAGE2_BIN) --output $(DISK_IMG)
+	$(PY) scripts/build_disk_image.py --stage1 $(STAGE1_BIN) --stage2 $(STAGE2_BIN) --output $(DISK_IMG)
 
 .PHONY: run
 run: $(DISK_IMG)
@@ -214,7 +208,7 @@ verify: boot
 .PHONY: clean
 clean:
 	@echo "[CLEAN] Removing generated artifacts ..."
-	@$(PY) -c "import shutil, pathlib; [shutil.rmtree(p, ignore_errors=True) for p in ['build', 'bin', 'obj', 'legacy/csharp-compositor/bin', 'legacy/csharp-compositor/obj']]; [pathlib.Path(p).unlink(missing_ok=True) for p in ['boot.bin', 'boot-stage2.bin', 'mmuko-os.img']]; print('[CLEAN] Done.')"
+	@$(PY) -c "import shutil, pathlib; [shutil.rmtree(p, ignore_errors=True) for p in ['build', 'bin', 'obj', 'legacy/csharp-compositor/bin', 'legacy/csharp-compositor/obj']]; [pathlib.Path(p).unlink(missing_ok=True) for p in ['boot.bin', 'boot-stage2.bin', 'mmuko-os.img', '$(STAGE2_BIN)']]; print('[CLEAN] Done.')"
 
 .PHONY: help
 help:
