@@ -134,13 +134,13 @@ dirs:
 # ============================================================
 codegen: dirs $(CODEGEN_STAMP)
 
-$(CODEGEN_STAMP): MMUKO-OS.txt $(PRIMARY_PSC)
+$(CODEGEN_STAMP): $(PRIMARY_PSC)
 	@echo "[CODEGEN] Generating MMUKO-OS derived sources..."
-	@if [ -f "$(CODEGEN_SCRIPT)" ]; then \
+	@if [ -f "MMUKO-OS.txt" ] && [ -f "$(CODEGEN_SCRIPT)" ]; then \
 		$(PY) $(CODEGEN_SCRIPT) --root . --spec MMUKO-OS.txt \
 			--primary $(PRIMARY_PSC) --pseudocode-dir $(PSC_DIR) 2>/dev/null || true; \
 	else \
-		echo "[CODEGEN] generate.py not found — using existing sources"; \
+		echo "[CODEGEN] MMUKO-OS.txt or generate.py not found — using existing sources"; \
 	fi
 	@touch $(CODEGEN_STAMP)
 
