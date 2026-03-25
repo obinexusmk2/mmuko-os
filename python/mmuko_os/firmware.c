@@ -8,11 +8,11 @@
             "heartfull_firmware.h",
             "tripartite_discriminant.h"
         ],
-        "extra_compile_args": [
-            "/wd4244"
-        ],
         "include_dirs": [
             "."
+        ],
+        "libraries": [
+            "m"
         ],
         "name": "mmuko_os.firmware",
         "sources": [
