@@ -34,6 +34,13 @@ typedef enum {
     MMUKO_TRANSFER_KERNEL_ENTRY   = 5
 } mmuko_transfer_state_t;
 
+typedef enum {
+    MMUKO_RING_0_KERNEL  = 0,  /* Boot chain + runtime (EM: magnetic/compile-time) */
+    MMUKO_RING_1_DRIVER  = 1,  /* BIOS firmware interface (SpinPair, Mosaic, RTC) */
+    MMUKO_RING_2_SERVICE = 2,  /* Membrane + MPDA + discriminant layer */
+    MMUKO_RING_3_USER    = 3   /* Python/Cython UI + applications */
+} mmuko_ring_level_t;
+
 typedef struct {
     uint8_t length;
     uint8_t capacity;
@@ -50,7 +57,7 @@ typedef struct {
     uint8_t transfer_state;
     uint8_t membrane_outcome;
     uint8_t membrane_phase;
-    uint8_t reserved0;
+    uint8_t ring_level;          /* mmuko_ring_level_t — current protection ring */
     uint16_t native_entry_offset;
     uint16_t native_entry_segment;
     mmuko_keyboard_buffer_t keyboard;
@@ -64,7 +71,7 @@ enum {
     MMUKO_CONTRACT_OFF_TRANSFER_STATE       = 0x08,
     MMUKO_CONTRACT_OFF_MEMBRANE_OUTCOME     = 0x09,
     MMUKO_CONTRACT_OFF_MEMBRANE_PHASE       = 0x0A,
-    MMUKO_CONTRACT_OFF_RESERVED0            = 0x0B,
+    MMUKO_CONTRACT_OFF_RING_LEVEL           = 0x0B,
     MMUKO_CONTRACT_OFF_NATIVE_ENTRY_OFFSET  = 0x0C,
     MMUKO_CONTRACT_OFF_NATIVE_ENTRY_SEGMENT = 0x0E,
     MMUKO_CONTRACT_OFF_KEYBOARD_LENGTH      = 0x10,
@@ -90,6 +97,7 @@ static inline void mmuko_boot_contract_reset(mmuko_boot_contract_t *contract)
         .transfer_state = MMUKO_TRANSFER_RESET,
         .membrane_outcome = MMUKO_MEMBRANE_HOLD,
         .membrane_phase = 0,
+        .ring_level = MMUKO_RING_0_KERNEL,
         .native_entry_offset = 0,
         .native_entry_segment = 0,
         .keyboard = {

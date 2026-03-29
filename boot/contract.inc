@@ -35,6 +35,11 @@ CONTRACT_STATE_PTR_OFF  equ 0x14
 CONTRACT_MEM_KB_OFF     equ 0x16
 CONTRACT_LAST_ERR_OFF   equ 0x18
 CONTRACT_MEMBRANE_OFF   equ 0x19
+CONTRACT_RING_LEVEL_OFF equ 0x0B    ; protection ring level (was reserved0)
+RING_0_KERNEL           equ 0x00
+RING_1_DRIVER           equ 0x01
+RING_2_SERVICE          equ 0x02
+RING_3_USER             equ 0x03
 CONTRACT_TIER1_OFF      equ 0x1A
 CONTRACT_TIER2_OFF      equ 0x1B
 CONTRACT_MEMMAP_PTR_OFF equ 0x1C

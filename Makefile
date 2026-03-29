@@ -42,10 +42,32 @@ PIP    := $(PY) -m pip
 BUILD_PY := $(PY) -m build
 
 # ============================================================
+# Platform detection (Windows / macOS / Linux)
+# ============================================================
+UNAME_S  := $(shell uname -s 2>/dev/null || echo Windows)
+UNAME_M  := $(shell uname -m 2>/dev/null || echo x86_64)
+PLAT_TAG := $(UNAME_S)-$(UNAME_M)
+
+ifeq ($(UNAME_S),Darwin)
+    SO_EXT     := .dylib
+    SO_LDFLAGS := -dynamiclib
+    LDFLAGS    := -dynamiclib
+    NASM       := $(shell command -v nasm 2>/dev/null || echo nasm)
+else ifeq ($(findstring MINGW,$(UNAME_S)),MINGW)
+    SO_EXT     := .dll
+    SO_LDFLAGS := -shared
+    LDFLAGS    := -shared
+else
+    SO_EXT     := .so
+    SO_LDFLAGS := -shared -lm
+    LDFLAGS    := -shared -lm
+endif
+
+# ============================================================
 # Build output directories
 # ============================================================
 BUILD    := build
-OBJ_DIR  := $(BUILD)/obj
+OBJ_DIR  := $(BUILD)/obj/$(PLAT_TAG)
 LIB_DIR  := $(BUILD)/lib
 BOOT_DIR := $(BUILD)
 
@@ -71,6 +93,7 @@ PSC_DIR          := pseudocode
 PSC_BOOT_DIR     := mmuko-boot/pseudocode
 PRIMARY_PSC      := $(PSC_DIR)/mmuko-boot.psc
 CODEGEN_STAMP    := $(BUILD)/mmuko_codegen.stamp
+SPEC_FILE        := $(wildcard pseudocode/MMUKO-OS.txt)
 
 # Generated source paths
 GENERATED_BOOT_SRC   := boot/mmuko_stage1_boot.asm
@@ -84,8 +107,7 @@ GENERATED_CYTHON     := python/mmuko_codegen.pxd python/mmuko_generated.pyx
 # ============================================================
 CFLAGS    := -std=c11 -Wall -Wextra -fPIC -O2
 CXXFLAGS  := -std=c++17 -Wall -Wextra -fPIC -O2
-SO_LDFLAGS := -shared -lm
-LDFLAGS   := -shared -lm
+# SO_LDFLAGS and LDFLAGS set by platform detection above
 
 # ============================================================
 # Source files
@@ -94,15 +116,15 @@ C_SRCS   := heartfull_membrane.c bzy_mpda.c tripartite_discriminant.c
 C_OBJS   := $(addprefix $(OBJ_DIR)/,$(C_SRCS:.c=.o))
 CPP_SRCS := nsigii_cpp_wrapper.cpp
 CPP_OBJS := $(addprefix $(OBJ_DIR)/,$(CPP_SRCS:.cpp=.o))
-FW_LIB   := $(LIB_DIR)/libnsigii_firmware.so
+FW_LIB   := $(LIB_DIR)/libnsigii_firmware$(SO_EXT)
 FW_ARC   := $(LIB_DIR)/libnsigii_firmware.a
-CPP_LIB  := $(LIB_DIR)/libnsigii_firmware_cpp.so
+CPP_LIB  := $(LIB_DIR)/libnsigii_firmware_cpp$(SO_EXT)
 
 # ============================================================
 # BIOS firmware + Phase 1 UI (new)
 # ============================================================
 BIOS_C_OBJ    := $(OBJ_DIR)/firmware/bios_interface.o
-BIOS_LIB      := $(LIB_DIR)/libbios_firmware.so
+BIOS_LIB      := $(LIB_DIR)/libbios_firmware$(SO_EXT)
 BIOS_ARC      := $(LIB_DIR)/libbios_firmware.a
 BIOS_CPP_OBJ  := $(OBJ_DIR)/firmware/bios_interface_cpp.o
 UI_C_OBJ      := $(OBJ_DIR)/ui/phase1_ui.o
@@ -118,7 +140,7 @@ FLAT_OS_BIN   := $(BUILD)/os_flat.bin
 # ============================================================
 .PHONY: all dirs install-deps firmware firmware-cpp bios-firmware bios-firmware-cpp \
         phase1-ui flat-bin qemu-flat boot image run \
-        cython-build cython-develop run-ui verify tree clean help codegen
+        cython-build cython-develop run-ui verify tree clean help codegen ring
 
 # ============================================================
 # Default: build everything
@@ -142,23 +164,21 @@ all: dirs codegen firmware firmware-cpp bios-firmware phase1-ui boot image flat-
 # Directory creation (must run before everything else)
 # ============================================================
 dirs:
-	@mkdir -p $(OBJ_DIR) $(LIB_DIR) $(BUILD)
-	@mkdir -p $(OBJ_DIR)/kernel
-	@mkdir -p $(OBJ_DIR)/firmware
-	@mkdir -p $(OBJ_DIR)/ui
+	@$(PY) scripts/ensure_dirs.py $(OBJ_DIR) $(LIB_DIR) $(BUILD) \
+		$(OBJ_DIR)/kernel $(OBJ_DIR)/firmware $(OBJ_DIR)/ui
 
 # ============================================================
 # Code generation from canonical spec + pseudocode
 # ============================================================
 codegen: dirs $(CODEGEN_STAMP)
 
-$(CODEGEN_STAMP): MMUKO-OS.txt $(PRIMARY_PSC)
+$(CODEGEN_STAMP): $(SPEC_FILE) $(wildcard $(PRIMARY_PSC))
 	@echo "[CODEGEN] Generating MMUKO-OS derived sources..."
-	@if [ -f "$(CODEGEN_SCRIPT)" ]; then \
-		$(PY) $(CODEGEN_SCRIPT) --root . --spec MMUKO-OS.txt \
+	@if [ -f "$(CODEGEN_SCRIPT)" ] && [ -n "$(SPEC_FILE)" ]; then \
+		$(PY) $(CODEGEN_SCRIPT) --root . --spec $(SPEC_FILE) \
 			--primary $(PRIMARY_PSC) --pseudocode-dir $(PSC_DIR) 2>/dev/null || true; \
 	else \
-		echo "[CODEGEN] generate.py not found — using existing sources"; \
+		echo "[CODEGEN] spec or generate.py not found — using existing sources"; \
 	fi
 	@touch $(CODEGEN_STAMP)
 
@@ -308,6 +328,37 @@ print('    enzyme: CREATE/DESTROY BUILD/BREAK REPAIR/RENEW')"
 	@echo "=== NSIGII_VERIFIED ==="
 
 # ============================================================
+# Protection Ring Verification
+# ============================================================
+ring: firmware bios-firmware
+	@echo ""
+	@echo "=== MMUKO-OS Protection Ring Verification ==="
+	@echo "=== Electromagnetic Computation Model      ==="
+	@echo ""
+	@echo "Ring 0 (Kernel):  boot/ kernel/ → $(STAGE1_BIN) $(STAGE2_BIN) $(RUNTIME_BIN)"
+	@echo "Ring 1 (Driver):  firmware/bios_interface → $(BIOS_LIB)"
+	@echo "Ring 2 (Service): heartfull_membrane bzy_mpda tripartite_disc → $(FW_LIB)"
+	@echo "Ring 3 (User):    python/ ui/ → applications"
+	@echo ""
+	@$(PY) -c "\
+	from pathlib import Path; \
+	ring0=all(Path(f).exists() for f in ['$(STAGE1_BIN)','$(STAGE2_BIN)','$(RUNTIME_BIN)']); \
+	ring1=Path('$(BIOS_LIB)').exists(); \
+	ring2=Path('$(FW_LIB)').exists(); \
+	print('Ring 0 (Kernel):  '+('PASS' if ring0 else 'MISSING - run: make boot')); \
+	print('Ring 1 (Driver):  '+('PASS' if ring1 else 'MISSING - run: make bios-firmware')); \
+	print('Ring 2 (Service): '+('PASS' if ring2 else 'MISSING - run: make firmware')); \
+	print('Ring 3 (User):    AVAILABLE (Python runtime)'); \
+	print(); \
+	print('EM duality (stateless double-compile):'); \
+	print('  Electric (runtime):  stage1 -> stage2 -> runtime -> kernel'); \
+	print('  Magnetic (linking):  .c -> .o -> $(SO_EXT)/.a -> linked image'); \
+	print('  Ring transition:     NSIGII 6-phase gate (membrane PASS/HOLD/ALERT)'); \
+	ok=ring0 and ring1 and ring2; \
+	print(); \
+	print('=== RING MODEL: '+('VERIFIED' if ok else 'INCOMPLETE')+' ===')"
+
+# ============================================================
 # Filesystem driver tree (root/trunk/branch/leaves)
 # ============================================================
 tree:
@@ -318,8 +369,9 @@ tree:
 # ============================================================
 clean:
 	@echo "[CLEAN] Removing generated artifacts..."
-	@rm -rf build/ bin/ obj/
-	@rm -f mmuko-os.img
+	@$(PY) -c "import shutil,pathlib; \
+	[shutil.rmtree(str(d),ignore_errors=True) for d in [pathlib.Path('build'),pathlib.Path('bin'),pathlib.Path('obj')]]; \
+	pathlib.Path('mmuko-os.img').unlink(missing_ok=True)"
 	@echo "[CLEAN] Done."
 
 # ============================================================
@@ -351,6 +403,7 @@ help:
 	@echo "  make run-ui               Python console compositor"
 	@echo "  make run                  boot mmuko-os.img in QEMU"
 	@echo "  make verify               NSIGII verification checks"
+	@echo "  make ring                 protection ring model verification"
 	@echo "  make tree                 display filesystem driver tree"
 	@echo "  make clean                remove build/"
 

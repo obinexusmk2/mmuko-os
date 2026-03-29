@@ -36,6 +36,12 @@ start:
     call print_hex16
     call newline
 
+    mov al, [CONTRACT_BASE + CONTRACT_RING_LEVEL_OFF]
+    mov si, msg_ring
+    call print_string
+    call print_hex8
+    call newline
+
     mov si, msg_ready
     call print_string
 .halt:
@@ -99,4 +105,5 @@ msg_runtime  db 13,10, "[runtime] firmware entry", 13,10, 0
 msg_drive    db "boot drive dl=0x", 0
 msg_membrane db "membrane=0x", 0
 msg_memory   db "bios mem kb=0x", 0
+msg_ring     db "ring level=0x", 0
 msg_ready    db "runtime ready; handoff contract preserved", 13,10, 0

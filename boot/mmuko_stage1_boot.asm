@@ -1,8 +1,8 @@
 ; -----------------------------------------------------------------------------
 ; Generated file. Do not edit by hand.
-; Authoritative input: C:/Users/OBINexus/Projects/mmuko-os/MMUKO-OS.txt
-; Primary pseudocode: C:/Users/OBINexus/Projects/mmuko-os/pseudocode/mmuko-boot.psc
-; Supporting pseudocode count: 24
+; Authoritative input: pseudocode/MMUKO-OS.txt
+; Primary pseudocode: pseudocode/mmuko-boot.psc
+; Supporting pseudocode count: 25
 ; Parsed ENUM types: MMUKO_BOOT_OUTCOME, MMUKO_BOOT_PHASE
 ; Parsed STRUCT types: MMUKO_BOOT_HANDOFF
 ; Boot contract: MMKO magic, 6 phases, outcome PASS=0xAA

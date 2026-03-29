@@ -1,6 +1,6 @@
         /* Generated file. Do not edit by hand.
-         * Authoritative input: C:/Users/OBINexus/Projects/mmuko-os/MMUKO-OS.txt
-         * Primary pseudocode: C:/Users/OBINexus/Projects/mmuko-os/pseudocode/mmuko-boot.psc
+         * Authoritative input: pseudocode/MMUKO-OS.txt
+         * Primary pseudocode: pseudocode/mmuko-boot.psc
          * Parsed ENUMs: MMUKO_BOOT_OUTCOME, MMUKO_BOOT_PHASE
          * Parsed STRUCTs: MMUKO_BOOT_HANDOFF
          */
