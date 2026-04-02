@@ -1,0 +1,20 @@
+boot/stage1.asm    → build/mmuko-os.img → QEMU (Prussian Blue + Amber Gold VGA)
+                                        │
+mmuko-boot.c       → build/mmuko-boot ──┤ (7-phase cubit alignment)
+                                        │
+                                     BOOT_OK?
+                                   /          \
+                                 YES           NO → BLOCKED
+                                  │
+                    ┌─────────────┴─────────────┐
+                    │                           │
+              make run-pipeline           make flash
+                    │                           │
+           legacy/csharp-compositor   nsigii-firmware-ui.csproj
+           (archived console app)     (Terminal.Gui mouse UI)
+                    │                           │
+              NSIGII 6-phase              NSIGII 6-phase
+              calibration                 + Maslow Triangle
+                    │                     + Kanban Board
+              MEMBRANE                    + G={U,V,W} Graph
+              PASS / HOLD / ALERT         + Interactive Buttons

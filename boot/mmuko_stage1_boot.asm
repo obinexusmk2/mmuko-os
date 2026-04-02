@@ -1,8 +1,14 @@
 ; -----------------------------------------------------------------------------
 ; Generated file. Do not edit by hand.
+<<<<<<< HEAD
 ; Authoritative input: MMUKO-OS.txt
 ; Primary pseudocode: pseudocode/mmuko-boot.psc
 ; Supporting pseudocode count: 26
+=======
+; Authoritative input: pseudocode/MMUKO-OS.txt
+; Primary pseudocode: pseudocode/mmuko-boot.psc
+; Supporting pseudocode count: 25
+>>>>>>> 87ae7ecdbcb6bce4c98cef97219e0ed08854e7c7
 ; Parsed ENUM types: MMUKO_BOOT_OUTCOME, MMUKO_BOOT_PHASE
 ; Parsed STRUCT types: MMUKO_BOOT_HANDOFF
 ; Boot contract: MMKO magic, 6 phases, outcome PASS=0xAA

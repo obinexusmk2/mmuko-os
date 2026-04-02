@@ -1,5 +1,9 @@
         /* Generated file. Do not edit by hand.
+<<<<<<< HEAD
          * Authoritative input: MMUKO-OS.txt
+=======
+         * Authoritative input: pseudocode/MMUKO-OS.txt
+>>>>>>> 87ae7ecdbcb6bce4c98cef97219e0ed08854e7c7
          * Primary pseudocode: pseudocode/mmuko-boot.psc
          * Parsed ENUMs: MMUKO_BOOT_OUTCOME, MMUKO_BOOT_PHASE
          * Parsed STRUCTs: MMUKO_BOOT_HANDOFF

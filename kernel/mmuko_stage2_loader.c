@@ -1,5 +1,9 @@
         /* Generated file. Do not edit by hand.
+<<<<<<< HEAD
          * Authoritative input: MMUKO-OS.txt
+=======
+         * Authoritative input: pseudocode/MMUKO-OS.txt
+>>>>>>> 87ae7ecdbcb6bce4c98cef97219e0ed08854e7c7
          * Primary pseudocode: pseudocode/mmuko-boot.psc
          * Parsed functions from main boot pseudocode:
          *   - complete_phase
@@ -28,7 +32,10 @@
         static const char *MMUKO_PSEUDOCODE_SOURCES[] = {
             "pseudocode/Asymetric Symetric Drone Delivery.psc :: supporting pseudocode context",
     "pseudocode/Bipartite Order and Chaos — Key Separation of Concern Crypto.psc :: supporting pseudocode context",
+<<<<<<< HEAD
     "pseudocode/CPU_Scheduling_Pseudocode.psc :: supporting pseudocode context",
+=======
+>>>>>>> 87ae7ecdbcb6bce4c98cef97219e0ed08854e7c7
     "pseudocode/Electronic Magnetic RRR.psc :: supporting pseudocode context",
     "pseudocode/Electronic Magnetic State Machine Duailty Modelling.psc :: supporting pseudocode context",
     "pseudocode/Filter-Flash CISCO Interdepency _22March26.psc :: supporting pseudocode context",
@@ -63,7 +70,11 @@
         }
 
         const char *mmuko_stage2_boot_summary(void) {
+<<<<<<< HEAD
             return " This text companion mirrors the build-spec section in README.md so that the artifact contract is available in a plain-text form for packers, boot tooling, and release notes.  Build-spec";
+=======
+            return "// ============================================================ // NSIGII BIPOLAR SEQUENCE // Bipartite Order and Chaos — Key Separation of Concern Crypto // OBINexus / MMUKO-OS Extension — Phase 15 // Derived from: \"NSIGII BiPolar Sequence via Bipartite Order //               and Chaos\" — 30 January 2026, 05:38 AM";
+>>>>>>> 87ae7ecdbcb6bce4c98cef97219e0ed08854e7c7
         }
 
         size_t mmuko_pseudocode_source_count(void) {

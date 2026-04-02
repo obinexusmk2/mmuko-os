@@ -1,5 +1,9 @@
 // Generated file. Do not edit by hand.
+<<<<<<< HEAD
 // Authoritative input: MMUKO-OS.txt
+=======
+// Authoritative input: pseudocode/MMUKO-OS.txt
+>>>>>>> 87ae7ecdbcb6bce4c98cef97219e0ed08854e7c7
 // Primary pseudocode: pseudocode/mmuko-boot.psc
 #include "mmuko_codegen.h"
 
@@ -19,7 +23,11 @@ std::vector<std::string> pseudocode_sources() {
 
 std::string stage2_report() {
     std::ostringstream report;
+<<<<<<< HEAD
     report << "Authoritative input: MMUKO-OS.txt\n";
+=======
+    report << "Authoritative input: pseudocode/MMUKO-OS.txt\n";
+>>>>>>> 87ae7ecdbcb6bce4c98cef97219e0ed08854e7c7
     report << "Primary pseudocode: pseudocode/mmuko-boot.psc\n";
     report << "Phase count: " << mmuko_stage2_phase_count() << "\n";
 

@@ -1,5 +1,9 @@
 # Generated file. Do not edit by hand.
+<<<<<<< HEAD
 # Authoritative input: MMUKO-OS.txt
+=======
+# Authoritative input: pseudocode/MMUKO-OS.txt
+>>>>>>> 87ae7ecdbcb6bce4c98cef97219e0ed08854e7c7
 # distutils: language = c
 from libc.string cimport strlen
 cimport mmuko_codegen

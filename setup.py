@@ -9,6 +9,20 @@ _c_extra   = ["/wd4244"] if sys.platform == "win32" else []
 _cxx_extra = ["/wd4244", "/std:c++17"] if sys.platform == "win32" else ["-std=c++17"]
 
 extensions = [
+    # ----------------------------------------------------------------
+    # bios_firmware: BIOS RTC + SpinPair + MosaicMemory bindings
+    # Sources: bios_firmware.pyx + firmware/bios_interface.c
+    # ----------------------------------------------------------------
+    Extension(
+        name="mmuko_os.bios_firmware",
+        sources=[
+            "python/mmuko_os/bios_firmware.pyx",
+            "firmware/bios_interface.c",
+        ],
+        include_dirs=[".", "firmware"],
+        libraries=_libraries,
+        extra_compile_args=_c_extra,
+    ),
     Extension(
         name="mmuko_os.firmware",
         sources=[

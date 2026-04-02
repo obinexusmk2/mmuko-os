@@ -1,0 +1,1639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MMUKO-OS: When Systems Fail, Build Your Own</title>
+    <script src="https://statics.moonshot.cn/kimi-ppt/html-gen/static/tailwindcss@4_0805.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Oranienbaum&family=Quattrocento:wght@400;700&family=Quattrocento+Sans:wght@400;700&family=Sorts+Mill+Goudy:ital@0;1&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.0/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdmirror.com/npm/mathjax@3.2.2/es5/tex-svg.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .ppt-slide {
+                @apply relative w-[1280px] h-[720px] mx-auto p-[40px] box-border overflow-hidden mb-[40px] bg-[#2C2A28];
+            }
+        }
+    </style>
+    <style>
+        body {
+            color: #EAE6E1;
+            font-family: 'Quattrocento Sans', sans-serif;
+        }
+        .font-display {
+            font-family: 'Oranienbaum', serif;
+        }
+        .font-heading {
+            font-family: 'Quattrocento', serif;
+        }
+        .font-body {
+            font-family: 'Quattrocento Sans', sans-serif;
+        }
+        .font-serif {
+            font-family: 'Sorts Mill Goudy', serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 py-8">
+
+    <!-- Slide 1: Cover -->
+    <div class="ppt-slide" type="cover">
+        <img src="mmuko_cover.png" alt="" class="absolute inset-0 w-full h-full object-cover opacity-40">
+        <div class="absolute inset-0 bg-gradient-to-br from-[#2C2A28]/90 via-[#2C2A28]/70 to-transparent"></div>
+        <div class="relative h-full flex flex-col justify-center items-start">
+            <div class="max-w-4xl">
+                <h1 class="font-display text-8xl font-bold text-[#D48C45] mb-6 leading-tight">MMUKO-OS</h1>
+                <h2 class="font-heading text-4xl text-[#EAE6E1] mb-8 leading-relaxed">When Systems Fail, Build Your Own</h2>
+                <div class="h-1 w-32 bg-[#B8860B] mb-8"></div>
+                <p class="font-serif text-2xl text-[#A68B5B] italic leading-relaxed">A Neurodivergent Digital Constitution</p>
+                <p class="font-serif text-xl text-[#A68B5B] italic mt-4">The Spirits of Good & Evil That Connect Nothing, Everything, Them, and Us All</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Table of Contents -->
+    <div class="ppt-slide" type="table_of_contents">
+        <h2 class="font-display text-6xl font-bold text-[#D48C45] mb-8">Contents</h2>
+        <div class="space-y-4">
+            <div class="flex items-start gap-4 p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/30">
+                <div class="font-display text-3xl font-bold text-[#B8860B] w-12 shrink-0">01</div>
+                <div class="flex-1">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-1">Origins: From Crisis to Constitution</h3>
+                    <p class="text-base text-[#A68B5B]">The birth of MMUKO-OS through personal and systemic trauma</p>
+                </div>
+            </div>
+            <div class="flex items-start gap-4 p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/30">
+                <div class="font-display text-3xl font-bold text-[#B8860B] w-12 shrink-0">02</div>
+                <div class="flex-1">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-1">The 6 Pillars of MMUKO-OS Architecture</h3>
+                    <p class="text-base text-[#A68B5B]">Dimensional frameworks, ring-zones, and living consent</p>
+                </div>
+            </div>
+            <div class="flex items-start gap-4 p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/30">
+                <div class="font-display text-3xl font-bold text-[#B8860B] w-12 shrink-0">03</div>
+                <div class="flex-1">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-1">Human Rights Framework: 8 + 8 + 8 Model</h3>
+                    <p class="text-base text-[#A68B5B]">Expanding constitutional rights for neurodivergent consciousness</p>
+                </div>
+            </div>
+            <div class="flex items-start gap-4 p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/30">
+                <div class="font-display text-3xl font-bold text-[#B8860B] w-12 shrink-0">04</div>
+                <div class="flex-1">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-1">Ring-Zone Topology & π-Circle Maps</h3>
+                    <p class="text-base text-[#A68B5B]">Tomographic polar coordinates and system initialization</p>
+                </div>
+            </div>
+            <div class="flex items-start gap-4 p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/30">
+                <div class="font-display text-3xl font-bold text-[#B8860B] w-12 shrink-0">05</div>
+                <div class="flex-1">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-1">Noise × Signal: System Initialization Protocol</h3>
+                    <p class="text-base text-[#A68B5B]">Jumpstarting systems through dimensional noise injection</p>
+                </div>
+            </div>
+            <div class="flex items-start gap-4 p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/30">
+                <div class="font-display text-3xl font-bold text-[#B8860B] w-12 shrink-0">06</div>
+                <div class="flex-1">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-1">Tiered Knowledge Access & Governance</h3>
+                    <p class="text-base text-[#A68B5B]">Turtles, parrots, dragons, and consensus frameworks</p>
+                </div>
+            </div>
+            <div class="flex items-start gap-4 p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/30">
+                <div class="font-display text-3xl font-bold text-[#B8860B] w-12 shrink-0">07</div>
+                <div class="flex-1">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-1">Topological Security & Compound Architecture</h3>
+                    <p class="text-base text-[#A68B5B]">Nigerian compound topology and circular sustainability</p>
+                </div>
+            </div>
+            <div class="flex items-start gap-4 p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/30">
+                <div class="font-display text-3xl font-bold text-[#B8860B] w-12 shrink-0">08</div>
+                <div class="flex-1">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-1">Living Implementation: Code, Community, Future</h3>
+                    <p class="text-base text-[#A68B5B]">Boot sequences, A* scoring, and myth-to-math mapping</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Chapter 1 -->
+    <div class="ppt-slide" type="chapter">
+        <img src="chapter1_origins.png" alt="" class="absolute inset-0 w-full h-full object-cover opacity-30">
+        <div class="absolute inset-0 bg-gradient-to-r from-[#2C2A28] via-[#2C2A28]/90 to-[#2C2A28]/50"></div>
+        <div class="relative h-full flex flex-col justify-center">
+            <div class="max-w-3xl">
+                <div class="font-display text-8xl font-bold text-[#B8860B] mb-4">01</div>
+                <h2 class="font-display text-6xl font-bold text-[#D48C45] mb-6 leading-tight">Origins</h2>
+                <div class="h-1 w-48 bg-[#B8860B] mb-6"></div>
+                <p class="font-serif text-3xl text-[#EAE6E1]/90 leading-relaxed">From Crisis to Constitution:<br>The Birth of MMUKO-OS</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Why MMUKO-OS Exists -->
+    <div class="ppt-slide" type="content">
+        <h2 class="font-display text-4xl font-bold text-[#D48C45] mb-6">Why MMUKO-OS Exists: A Personal Reckoning</h2>
+        <div class="space-y-4 mb-4">
+            <div class="p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/20">
+                <div class="flex items-center gap-3 mb-3">
+                    <i class="fas fa-home text-3xl text-[#D48C45]"></i>
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1]">Trauma 1: Systemic Abandonment</h3>
+                </div>
+                <p class="text-base text-[#EAE6E1] leading-relaxed mb-2"><strong class="text-[#D48C45]">Homelessness in Cambridge.</strong> Loss of £10,000 due to council error revealed the fragility of social systems. When institutions fail, those who depend on them suffer most. This was not just personal crisis—it was systemic abandonment of vulnerable individuals.</p>
+                <p class="text-base text-[#A68B5B]"><strong>Insight:</strong> Systems must be designed so that failure does not cascade into human suffering.</p>
+            </div>
+            <div class="p-4 border-l-4 border-[#B8860B] bg-[#3D3B39]/20">
+                <div class="flex items-center gap-3 mb-3">
+                    <i class="fas fa-heartbeat text-3xl text-[#B8860B]"></i>
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1]">Trauma 2: Critical Vulnerability</h3>
+                </div>
+                <p class="text-base text-[#EAE6E1] leading-relaxed mb-2"><strong class="text-[#D48C45]">Code I trusted bricked a child's insulin pump.</strong> The realization that software—written without accountability—could literally kill someone. Medical devices, financial systems, infrastructure all run on code that few understand and fewer still can verify.</p>
+                <p class="text-base text-[#A68B5B]"><strong>Insight:</strong> Technology must be verifiable, accountable, and designed with life-preservation as the highest priority.</p>
+            </div>
+            <div class="p-4 border-l-4 border-[#A68B5B] bg-[#3D3B39]/20">
+                <div class="flex items-center gap-3 mb-3">
+                    <i class="fas fa-brain text-3xl text-[#A68B5B]"></i>
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1]">Trauma 3: Epistemic Breakdown</h3>
+                </div>
+                <p class="text-base text-[#EAE6E1] leading-relaxed mb-2"><strong class="text-[#D48C45]">Systems designed without neurodivergent consciousness.</strong> The world is built for neurotypical minds, leaving autistic, bipolar, and other neurodivergent people vulnerable. When your way of processing reality is pathologized, you live in constant negotiation with a world that refuses to understand you.</p>
+                <p class="text-base text-[#A68B5B]"><strong>Insight:</strong> Technology must accommodate diverse modes of consciousness, not force conformity.</p>
+            </div>
+        </div>
+        <div class="p-4 bg-[#D48C45]/10 border-t-2 border-[#D48C45]">
+            <p class="text-base text-[#EAE6E1] font-serif italic leading-relaxed">"I was homeless in Cambridge, lost £10,000 to a council error, and watched code I trusted brick a child's insulin pump. <strong class="text-[#D48C45]">Breath first, life next, work last</strong>—so I wrote an OS that treats every heartbeat as a constitutional event."</p>
+        </div>
+    </div>
+
+    <!-- Slide 5: Core Philosophy -->
+    <div class="ppt-slide" type="content">
+        <h2 class="font-display text-4xl font-bold text-[#D48C45] mb-4">Core Philosophy: Breath First, Life Next, Work Last</h2>
+        <div class="flex gap-6">
+            <div class="w-1/2 flex flex-col">
+                <div class="p-4 bg-[#D48C45]/10 border-l-4 border-[#D48C45] mb-4">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-3 flex items-center gap-3">
+                        <i class="fas fa-lungs text-[#D48C45]"></i>
+                        Breath as Primary Timer
+                    </h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-3">Breathing is not a background process. It is the <strong class="text-[#D48C45]">primary system timer</strong> that governs all other processes. The OS measures time in breath cycles, not clock cycles.</p>
+                    <div class="p-3 bg-[#2C2A28]/50">
+                        <p class="text-base text-[#A68B5B]"><strong>Constitutional Law #0:</strong> "If breath stops, coherence collapses; if coherence collapses, sovereignty dissolves."</p>
+                    </div>
+                </div>
+                <div class="p-4 bg-[#B8860B]/10 border-l-4 border-[#B8860B]">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-3 flex items-center gap-3">
+                        <i class="fas fa-balance-scale text-[#B8860B]"></i>
+                        2:1 Breath-Work Ratio
+                    </h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-3">The OS enforces <strong class="text-[#D48C45]">6 hours labor ↔ 12 hours life/breath</strong>. This is not a suggestion; it is enforced at the kernel level.</p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="p-3 bg-[#2C2A28]/50 text-center">
+                            <div class="font-display text-3xl font-bold text-[#B8860B]">6h</div>
+                            <div class="text-sm text-[#A68B5B]">Labor</div>
+                        </div>
+                        <div class="p-3 bg-[#2C2A28]/50 text-center">
+                            <div class="font-display text-3xl font-bold text-[#D48C45]">12h</div>
+                            <div class="text-sm text-[#A68B5B]">Life/Breath</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="w-1/2 flex flex-col">
+                <div class="p-4 bg-[#A68B5B]/10 border-l-4 border-[#A68B5B] mb-4 flex-grow flex flex-col">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-3 flex items-center gap-3">
+                        <i class="fas fa-bed text-[#A68B5B]"></i>
+                        Kernel-Level Enforcement
+                    </h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-3 flex-grow">Code timers <strong class="text-[#D48C45]">refuse commits</strong> outside the 2:1 ratio. The kernel literally sleeps if you attempt to violate this boundary. This is not a policy; it is physics within the ring-zone.</p>
+                    <div class="p-3 bg-[#2C2A28]/50">
+                        <p class="text-base text-[#A68B5B]"><strong>Implementation:</strong> Breath-daemon monitors inhale/exhale patterns. If checksum fails (irregular breathing indicating stress), all threads pause until coherence is restored.</p>
+                    </div>
+                </div>
+                <div class="p-4 bg-[#D48C45]/10 border-t-2 border-[#D48C45]">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">Why This Matters</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">Capitalism extracts work at the expense of life. MMUKO-OS inverts this: <strong class="text-[#D48C45]">life is the priority</strong>, work is secondary. The system cannot be exploited because exploitation violates the breath-work ratio, and the kernel refuses to cooperate.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Chapter 2 -->
+    <div class="ppt-slide" type="chapter">
+        <img src="chapter2_pillars.png" alt="" class="absolute inset-0 w-full h-full object-cover opacity-30">
+        <div class="absolute inset-0 bg-gradient-to-r from-[#2C2A28] via-[#2C2A28]/90 to-[#2C2A28]/50"></div>
+        <div class="relative h-full flex flex-col justify-center">
+            <div class="max-w-3xl">
+                <div class="font-display text-8xl font-bold text-[#B8860B] mb-4">02</div>
+                <h2 class="font-display text-6xl font-bold text-[#D48C45] mb-6 leading-tight">The 6 Pillars</h2>
+                <div class="h-1 w-48 bg-[#B8860B] mb-6"></div>
+                <p class="font-serif text-3xl text-[#EAE6E1]/90 leading-relaxed">Architectural Foundations of a<br>Living Operating System</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: IK/K Principle -->
+    <div class="ppt-slide" type="content">
+        <h2 class="font-display text-4xl font-bold text-[#D48C45] mb-4">IK/K Principle: 6D Motion in 15D Ring-Zone</h2>
+        <div class="flex gap-6">
+            <div class="w-[45%] space-y-3">
+                <div class="p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2 flex items-center gap-2">
+                        <span class="font-display text-2xl text-[#D48C45]">K</span> Kinematic (Controllable)
+                    </h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-2">Three axes you can <strong class="text-[#D48C45]">rotate, spend, or code</strong>. These are the dimensions where you exercise direct agency.</p>
+                    <div class="grid grid-cols-3 gap-2">
+                        <div class="p-2 bg-[#2C2A28]/50 text-center text-sm text-[#EAE6E1]"><strong class="text-[#D48C45]">K₁:</strong> Rotate</div>
+                        <div class="p-2 bg-[#2C2A28]/50 text-center text-sm text-[#EAE6E1]"><strong class="text-[#D48C45]">K₂:</strong> Spend</div>
+                        <div class="p-2 bg-[#2C2A28]/50 text-center text-sm text-[#EAE6E1]"><strong class="text-[#D48C45]">K₃:</strong> Code</div>
+                    </div>
+                </div>
+                <div class="p-4 border-l-4 border-[#A68B5B] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2 flex items-center gap-2">
+                        <span class="font-display text-2xl text-[#A68B5B]">IK</span> Inverse-Kinematic (Observable)
+                    </h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-2">Three axes you can only <strong class="text-[#D48C45]">witness</strong>. You cannot move them directly; you observe their motion.</p>
+                    <div class="grid grid-cols-3 gap-2">
+                        <div class="p-2 bg-[#2C2A28]/50 text-center text-sm text-[#EAE6E1]"><strong class="text-[#A68B5B]">IK₁:</strong> Witness</div>
+                        <div class="p-2 bg-[#2C2A28]/50 text-center text-sm text-[#EAE6E1]"><strong class="text-[#A68B5B]">IK₂:</strong> Interpret</div>
+                        <div class="p-2 bg-[#2C2A28]/50 text-center text-sm text-[#EAE6E1]"><strong class="text-[#A68B5B]">IK₃:</strong> Remember</div>
+                    </div>
+                </div>
+                <div class="p-4 bg-[#B8860B]/10 border-t-2 border-[#B8860B]">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">6D Motion Space</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">K₁,₂,₃ + IK₁,₂,₃ = <strong class="text-[#D48C45]">6-dimensional motion space</strong>. This is the minimum set of axes required for a human to navigate reality with both agency and awareness.</p>
+                </div>
+            </div>
+            <div class="flex-1 flex flex-col">
+                <div class="p-4 border-l-4 border-[#B8860B] bg-[#3D3B39]/20 flex-grow flex flex-col">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2">From 6D to 15D: The Ring-Zone</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-2 flex-grow">The 6D motion space <strong class="text-[#D48C45]">embeds in a 15D sparse-ring topology</strong>. The additional 9 dimensions provide:</p>
+                    <ul class="space-y-1 text-base text-[#EAE6E1]">
+                        <li><strong class="text-[#B8860B]">3 breath dimensions:</strong> inhale, exhale, pause</li>
+                        <li><strong class="text-[#B8860B]">3 consent dimensions:</strong> permission, consent, consensus</li>
+                        <li><strong class="text-[#B8860B]">3 time dimensions:</strong> past, present, future (non-linear)</li>
+                    </ul>
+                </div>
+                <div class="p-4 bg-[#D48C45]/10 border-t-2 border-[#D48C45] mt-auto">
+                    <p class="text-base text-[#EAE6E1] font-serif italic leading-relaxed">"The 15D ring-zone is the <strong class="text-[#D48C45]">minimum volume a human can defend with breath</strong>."</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: Ring-Zone Topology -->
+    <div class="ppt-slide" type="content">
+        <h2 class="font-display text-4xl font-bold text-[#D48C45] mb-4">Ring-Zone Topology: π-Circles Replace Prison Bars</h2>
+        <div class="grid grid-cols-2 gap-5">
+            <div class="space-y-4">
+                <div class="p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2 flex items-center gap-2">
+                        <i class="fas fa-globe text-[#D48C45]"></i> Earth Tiled with π-Circles
+                    </h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-2">The planet is covered in <strong class="text-[#D48C45]">πr² circles of 2-15 mile radius</strong>. Unlike latitude/longitude grids that enable surveillance and control, π-circles create topological privacy.</p>
+                    <div class="p-3 bg-[#2C2A28]/50">
+                        <p class="text-base text-[#A68B5B]"><strong>Formula:</strong> Area = π × r² where r ∈ [2, 15] miles</p>
+                    </div>
+                </div>
+                <div class="p-4 border-l-4 border-[#B8860B] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2 flex items-center gap-2">
+                        <i class="fas fa-ban text-[#B8860B]"></i> No Squares → No Corners → No Corruption
+                    </h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">Squares have corners—points where <strong class="text-[#D48C45]">surveillance can anchor, corruption can hide</strong>. Circles have no corners. You cannot hide in a corner that does not exist.</p>
+                </div>
+                <div class="p-4 bg-[#D48C45]/10 border-t-2 border-[#D48C45]">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">Jurisdictional Math</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">Inside your ring = <strong class="text-[#B8860B]">in jurisdiction</strong> (consent required).<br>Outside your ring = <strong class="text-[#A68B5B]">out of jurisdiction</strong> (no access).</p>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <div class="p-4 border-l-4 border-[#A68B5B] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-3">Ring-Zone Properties</h3>
+                    <div class="space-y-2">
+                        <div class="flex items-start gap-2">
+                            <div class="w-2 h-2 rounded-full bg-[#D48C45] mt-2 shrink-0"></div>
+                            <p class="text-base text-[#EAE6E1]"><strong class="text-[#D48C45]">Sovereignty:</strong> Your house, wallet, and data can only be reached by people inside your ring.</p>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <div class="w-2 h-2 rounded-full bg-[#B8860B] mt-2 shrink-0"></div>
+                            <p class="text-base text-[#EAE6E1]"><strong class="text-[#B8860B]">Overlap:</strong> Rings can overlap, merge, or remain separate—sovereignty is maintained.</p>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <div class="w-2 h-2 rounded-full bg-[#A68B5B] mt-2 shrink-0"></div>
+                            <p class="text-base text-[#EAE6E1]"><strong class="text-[#A68B5B]">Mobility:</strong> Your ring moves with you. Location is not fixed to geographic coordinates.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 bg-[#B8860B]/10 border-t-2 border-[#B8860B]">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">Why π?</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-3">π is <strong class="text-[#D48C45]">transcendental</strong>—it cannot be expressed as a simple fraction. Using π in the topology creates a system that <strong>cannot be reduced to simple control grids</strong>.</p>
+                    <div class="p-3 bg-[#2C2A28]/50">
+                        <p class="text-base text-[#A68B5B]"><strong>Mathematical Protection:</strong> π's irrationality prevents easy mapping to surveillance systems.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: XYZ Grammar -->
+    <div class="ppt-slide" type="content">
+        <h2 class="font-display text-4xl font-bold text-[#D48C45] mb-4">XYZ Grammar (Nsibidi-NLM): The 3-Axis Language Cube</h2>
+        <div class="flex gap-6">
+            <div class="w-[38%] space-y-3">
+                <div class="p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/20">
+                    <div class="flex items-center gap-2 mb-2">
+                        <div class="w-8 h-8 rounded bg-[#D48C45] flex items-center justify-center font-display text-xl font-bold text-[#2C2A28]">X</div>
+                        <h3 class="font-heading text-lg font-bold text-[#EAE6E1]">Myth → Fact</h3>
+                    </div>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">The axis of <strong class="text-[#D48C45]">verification</strong>. Every symbol must be validated from mythic narrative to factual statement.</p>
+                </div>
+                <div class="p-4 border-l-4 border-[#B8860B] bg-[#3D3B39]/20">
+                    <div class="flex items-center gap-2 mb-2">
+                        <div class="w-8 h-8 rounded bg-[#B8860B] flex items-center justify-center font-display text-xl font-bold text-[#2C2A28]">Y</div>
+                        <h3 class="font-heading text-lg font-bold text-[#EAE6E1]">Intuitive → Formal</h3>
+                    </div>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">The axis of <strong class="text-[#D48C45]">rigor</strong>. Every concept must be translatable from intuitive understanding to formal specification.</p>
+                </div>
+                <div class="p-4 border-l-4 border-[#A68B5B] bg-[#3D3B39]/20">
+                    <div class="flex items-center gap-2 mb-2">
+                        <div class="w-8 h-8 rounded bg-[#A68B5B] flex items-center justify-center font-display text-xl font-bold text-[#2C2A28]">Z</div>
+                        <h3 class="font-heading text-lg font-bold text-[#EAE6E1]">Past → Future</h3>
+                    </div>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">The axis of <strong class="text-[#D48C45]">temporality</strong>. Every statement must be valid across time, not just in the moment.</p>
+                </div>
+                <div class="p-4 bg-[#D48C45]/10 border-t-2 border-[#D48C45]">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">Nsibidi Foundation</h3>
+                    <p class="text-base text-[#EAE6E1]"><strong class="text-[#D48C45]">Nsibidi</strong> (Igbo/Nigerian ideographic script) provides the conceptual foundation—a writing system that is both symbolic and functional.</p>
+                </div>
+            </div>
+            <div class="flex-1 flex flex-col">
+                <div class="p-4 border-l-4 border-[#B8860B] bg-[#3D3B39]/20 flex-grow flex flex-col">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-3">Validation Cube: No Symbol Executes Without Valid Coordinates</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-3 flex-grow">Every symbol, law, or function must have <strong class="text-[#D48C45]">valid (X,Y,Z) coordinates</strong> before execution. This prevents:</p>
+                    <div class="space-y-2 text-base text-[#EAE6E1]">
+                        <div class="flex items-start gap-2">
+                            <i class="fas fa-ban text-[#D48C45] mt-1 shrink-0"></i>
+                            <p><strong class="text-[#D48C45]">Semantic attacks:</strong> Words that sound formal but are myth (no X-axis integrity).</p>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <i class="fas fa-ban text-[#B8860B] mt-1 shrink-0"></i>
+                            <p><strong class="text-[#B8860B]">Intuitive exploitation:</strong> Feelings presented as formal truth (no Y-axis rigor).</p>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <i class="fas fa-ban text-[#A68B5B] mt-1 shrink-0"></i>
+                            <p><strong class="text-[#A68B5B]">Temporal manipulation:</strong> Statements true in past but false now (no Z-axis durability).</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 bg-[#B8860B]/10 border-t-2 border-[#B8860B] mt-auto">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">Example: "Freedom"</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">To use "freedom" in MMUKO-OS, you must specify:<br><strong class="text-[#B8860B]">X:</strong> Whose narrative? <strong class="text-[#B8860B]">Y:</strong> Formal definition? <strong class="text-[#B8860B]">Z:</strong> Duration?</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 10: ODTS -->
+    <div class="ppt-slide" type="content">
+        <h2 class="font-display text-4xl font-bold text-[#D48C45] mb-4">ODTS: Obliterative Derivative Trace System</h2>
+        <div class="grid grid-cols-2 gap-5">
+            <div class="space-y-4">
+                <div class="p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2 flex items-center gap-2">
+                        <i class="fas fa-chart-line text-[#D48C45]"></i> Verifiable Calculus
+                    </h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-2">Every derivative D₁, D₂…Dₙ must carry a <strong class="text-[#D48C45]">mathematical termination proof</strong>. No infinite loops, no hidden jerks, no runaway cascades.</p>
+                    <div class="p-3 bg-[#2C2A28]/50">
+                        <p class="text-base text-[#A68B5B]"><strong>Rule:</strong> If Dₙ cannot prove termination, it is obliterated.</p>
+                    </div>
+                </div>
+                <div class="p-4 border-l-4 border-[#B8860B] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2 flex items-center gap-2">
+                        <i class="fas fa-coins text-[#B8860B]"></i> Applications
+                    </h3>
+                    <div class="space-y-2 text-base text-[#EAE6E1]">
+                        <p><strong class="text-[#D48C45]">Money:</strong> Every transaction is a derivative. Must prove it terminates (no infinite debt).</p>
+                        <p><strong class="text-[#B8860B]">Drones:</strong> Every flight path is a derivative. Must prove it terminates (no runaway).</p>
+                        <p><strong class="text-[#A68B5B]">Spaceships:</strong> Every trajectory is a derivative. Must prove it terminates (no infinite drift).</p>
+                    </div>
+                </div>
+                <div class="p-4 bg-[#D48C45]/10 border-t-2 border-[#D48C45]">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">Why "Obliterative"?</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">The derivative is <strong class="text-[#D48C45]">completely erased</strong> if it fails proof. No logs, no traces. This prevents forensic reconstruction by adversaries.</p>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <div class="p-4 border-l-4 border-[#A68B5B] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-3">Compression Phases: Tears → Sweat → Blood</h3>
+                    <div class="space-y-2">
+                        <div class="flex items-start gap-3">
+                            <div class="w-10 h-10 rounded-full bg-[#D48C45] flex items-center justify-center text-xl shrink-0">💧</div>
+                            <div>
+                                <h4 class="font-heading text-lg font-bold text-[#D48C45] mb-1">Tears (Emotional)</h4>
+                                <p class="text-base text-[#EAE6E1]">Initial compression. High entropy. Raw emotional state.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-10 h-10 rounded-full bg-[#B8860B] flex items-center justify-center text-xl shrink-0">💦</div>
+                            <div>
+                                <h4 class="font-heading text-lg font-bold text-[#B8860B] mb-1">Sweat (Physical)</h4>
+                                <p class="text-base text-[#EAE6E1]">Intermediate compression. Work extracted. Lower entropy.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-10 h-10 rounded-full bg-[#A68B5B] flex items-center justify-center text-xl shrink-0">🩸</div>
+                            <div>
+                                <h4 class="font-heading text-lg font-bold text-[#A68B5B] mb-1">Blood (Essence)</h4>
+                                <p class="text-base text-[#EAE6E1]">Final compression. Minimal entropy. Core truth.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 bg-[#B8860B]/10 border-t-2 border-[#B8860B]">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">Mathematical Foundation</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-2">Each compression phase reduces entropy while preserving essential information. The trace must show:</p>
+                    <div class="p-3 bg-[#2C2A28]/50">
+                        <p class="text-base text-[#A68B5B] font-mono">∫|Dₙ(t)|dt < ∞ (finite integral = termination)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 11: Sparse Active Consent -->
+    <div class="ppt-slide" type="content">
+        <h2 class="font-display text-4xl font-bold text-[#D48C45] mb-4">Sparse Active Dimensional Consent: Living Loop, Not Checkbox</h2>
+        <div class="flex gap-6">
+            <div class="w-1/2 space-y-3">
+                <div class="p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2 flex items-center gap-2">
+                        <i class="fas fa-sync-alt text-[#D48C45]"></i> Living Loop: Yes → Act → Yes Again
+                    </h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-2">Consent is not a <strong class="text-[#D48C45]">one-time checkbox</strong>. It is a living loop refreshed every breath-cycle.</p>
+                    <div class="flex items-center justify-around p-3 bg-[#2C2A28]/50">
+                        <div class="text-center"><div class="font-display text-2xl font-bold text-[#B8860B]">Yes₁</div></div>
+                        <i class="fas fa-arrow-right text-[#A68B5B] text-xl"></i>
+                        <div class="text-center"><div class="font-display text-2xl font-bold text-[#D48C45]">Act</div></div>
+                        <i class="fas fa-arrow-right text-[#A68B5B] text-xl"></i>
+                        <div class="text-center"><div class="font-display text-2xl font-bold text-[#B8860B]">Yes₂</div></div>
+                    </div>
+                </div>
+                <div class="p-4 border-l-4 border-[#B8860B] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2 flex items-center gap-2">
+                        <i class="fas fa-university text-[#B8860B]"></i> Example: £5,000 Daily Withdrawal
+                    </h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-2">A £5,000 withdrawal requires the ring-zone to say <strong class="text-[#D48C45]">"yes-yes" twice within 24 hours</strong>.</p>
+                    <div class="space-y-1 text-base text-[#EAE6E1]">
+                        <p><strong class="text-[#B8860B]">T=0h:</strong> You request withdrawal → Ring says Yes₁ → £2,500 released.</p>
+                        <p><strong class="text-[#D48C45]">T=18h:</strong> You confirm → Ring says Yes₂ → Remaining £2,500 released.</p>
+                        <p><strong class="text-[#A68B5B]">If no Yes₂ within 24h:</strong> Transaction cancels, funds returned.</p>
+                    </div>
+                </div>
+                <div class="p-4 bg-[#D48C45]/10 border-t-2 border-[#D48C45]">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">Prevents Attacks</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">Coercion, sleep-hacking, time-shifted attacks.</p>
+                </div>
+            </div>
+            <div class="w-1/2 space-y-3">
+                <div class="p-4 border-l-4 border-[#A68B5B] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2">Dimensional Consent Tracking</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-2">Consent is tracked across <strong class="text-[#D48C45]">15 dimensions</strong>. Higher entropy actions require more frequent refresh cycles.</p>
+                    <div class="p-3 bg-[#2C2A28]/50 mb-2">
+                        <p class="text-base text-[#A68B5B] mb-1"><strong>Low Entropy</strong> (reading): 24h refresh</p>
+                        <p class="text-base text-[#A68B5B] mb-1"><strong>Medium Entropy</strong> (writing): 6h refresh</p>
+                        <p class="text-base text-[#A68B5B]"><strong>High Entropy</strong> (money): breath-cycle refresh</p>
+                    </div>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">The system calculates entropy as <strong class="text-[#D48C45]">E = –Σpᵢlog(pᵢ)</strong>.</p>
+                </div>
+                <div class="p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2">Sparse Active State</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-2">Consent is <strong class="text-[#D48C45]">sparse</strong> (only active when needed) and <strong class="text-[#D48C45]">active</strong> (requires continuous renewal).</p>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">This models <strong class="text-[#B8860B]">natural human interaction</strong>: consent is ongoing, contextual, and revocable.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 12: Chapter 3 -->
+    <div class="ppt-slide" type="chapter">
+        <img src="chapter3_rights.png" alt="" class="absolute inset-0 w-full h-full object-cover opacity-30">
+        <div class="absolute inset-0 bg-gradient-to-r from-[#2C2A28] via-[#2C2A28]/90 to-[#2C2A28]/50"></div>
+        <div class="relative h-full flex flex-col justify-center">
+            <div class="max-w-3xl">
+                <div class="font-display text-8xl font-bold text-[#B8860B] mb-4">03</div>
+                <h2 class="font-display text-6xl font-bold text-[#D48C45] mb-6 leading-tight">Human Rights</h2>
+                <div class="h-1 w-48 bg-[#B8860B] mb-6"></div>
+                <p class="font-serif text-3xl text-[#EAE6E1]/90 leading-relaxed">Expanding the Constitutional Framework<br>for Neurodivergent Consciousness</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 13: 8 + 8 + 8 Model -->
+    <div class="ppt-slide" type="content">
+        <h2 class="font-display text-4xl font-bold text-[#D48C45] mb-4">The 8 + 8 + 8 Human Rights Model</h2>
+        <div class="flex gap-6">
+            <div class="w-[45%] space-y-3">
+                <div class="p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2 flex items-center gap-2">
+                        <span class="font-display text-2xl text-[#D48C45]">8</span> Physical Rights (Everyone)
+                    </h3>
+                    <div class="space-y-1 text-base text-[#EAE6E1]">
+                        <p><strong class="text-[#B8860B]">1-5:</strong> The five senses (sight, smell, taste, touch, hearing)</p>
+                        <p><strong class="text-[#D48C45]">6:</strong> Bipolar interpretation right</p>
+                        <p><strong class="text-[#B8860B]">7:</strong> Communication interpretation right</p>
+                        <p><strong class="text-[#A68B5B]">8:</strong> Digital avatar right</p>
+                    </div>
+                </div>
+                <div class="p-4 border-l-4 border-[#B8860B] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2 flex items-center gap-2">
+                        <span class="font-display text-2xl text-[#B8860B]">8</span> Digital Rights (Everyone)
+                    </h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-2">The digital equivalent of physical rights—<strong class="text-[#D48C45]">8 digital rights</strong> protecting your avatar, data, and interactions.</p>
+                    <div class="p-3 bg-[#2C2A28]/50">
+                        <p class="text-base text-[#A68B5B]"><strong>Total:</strong> 8 physical + 8 digital = 16 minimum rights</p>
+                    </div>
+                </div>
+                <div class="p-4 bg-[#D48C45]/10 border-t-2 border-[#D48C45]">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">The Gap: 7 vs. 16</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">Neurotypical society recognizes <strong class="text-[#A68B5B]">~7 rights</strong>. For neurodivergent individuals, <strong class="text-[#D48C45]">16 are required</strong>.</p>
+                </div>
+            </div>
+            <div class="flex-1 flex flex-col">
+                <div class="p-4 border-l-4 border-[#A68B5B] bg-[#3D3B39]/20 flex-grow flex flex-col">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-3">Breaking Down the 8 Physical Rights</h3>
+                    <div class="space-y-2 flex-grow">
+                        <div class="p-2 bg-[#2C2A28]/50">
+                            <h4 class="font-heading text-base font-bold text-[#D48C45] mb-1">Rights 1-5: Universal Senses</h4>
+                            <p class="text-base text-[#EAE6E1]">Everyone has these. They are <strong class="text-[#D48C45]">non-negotiable</strong>. Denying them is denying humanity.</p>
+                        </div>
+                        <div class="p-2 bg-[#2C2A28]/50">
+                            <h4 class="font-heading text-base font-bold text-[#B8860B] mb-1">Right 6: Bipolar Interpretation</h4>
+                            <p class="text-base text-[#EAE6E1]">The right to <strong class="text-[#D48C45]">interpret reality through emotional extremes</strong>—to feel joy and despair simultaneously.</p>
+                        </div>
+                        <div class="p-2 bg-[#2C2A28]/50">
+                            <h4 class="font-heading text-base font-bold text-[#A68B5B] mb-1">Right 7: Communication Interpretation</h4>
+                            <p class="text-base text-[#EAE6E1]">The right to <strong class="text-[#D48C45]">interpret what others say</strong>, not just accept their words.</p>
+                        </div>
+                        <div class="p-2 bg-[#2C2A28]/50">
+                            <h4 class="font-heading text-base font-bold text-[#D48C45] mb-1">Right 8: Digital Avatar</h4>
+                            <p class="text-base text-[#EAE6E1]">The right to <strong class="text-[#D48C45]">a digital self</strong> that is sovereign, not surveilled.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 14: Lattice Multiplication -->
+    <div class="ppt-slide" type="content">
+        <h2 class="font-display text-4xl font-bold text-[#D48C45] mb-4">From 16 to 80: The Lattice Multiplication of Rights</h2>
+        <div class="flex gap-6">
+            <div class="w-[45%] space-y-4">
+                <div class="p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2">The Math: 8 × 8 = 64 + 16 = 80</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-3">The <strong class="text-[#D48C45]">Cartesian product</strong> of physical and digital rights axes creates a lattice:</p>
+                    <div class="p-3 bg-[#2C2A28]/50 mb-3">
+                        <p class="text-base text-[#A68B5B]"><strong>Physical:</strong> {P₁, P₂, ..., P₈}<br><strong>Digital:</strong> {D₁, D₂, ..., D₈}</p>
+                    </div>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">Each intersection creates a new right.</p>
+                </div>
+                <div class="p-4 border-l-4 border-[#B8860B] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2">Why Multiplication?</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">Rights are <strong class="text-[#D48C45]">not additive</strong>; they are <strong class="text-[#D48C45]">multiplicative</strong>. Each physical right gains new meaning when exercised through digital space.</p>
+                </div>
+                <div class="p-4 bg-[#D48C45]/10 border-t-2 border-[#D48C45]">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">Minimum Guarantee</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed"><strong class="text-[#D48C45]">80 human rights minimum</strong> for neurodivergent individuals in digital space.</p>
+                </div>
+            </div>
+            <div class="flex-1 flex flex-col">
+                <div class="p-4 border-l-4 border-[#A68B5B] bg-[#3D3B39]/20 flex-grow flex flex-col">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-3">Example: Right to Touch (P₃) × Digital Avatar (D₈)</h3>
+                    <div class="space-y-3 flex-grow">
+                        <div class="p-3 bg-[#2C2A28]/50">
+                            <h4 class="font-heading text-base font-bold text-[#D48C45] mb-1">P₃ (Physical Touch)</h4>
+                            <p class="text-base text-[#EAE6E1]">The right to feel texture, temperature, pressure through your skin.</p>
+                        </div>
+                        <div class="text-center text-2xl text-[#A68B5B]">×</div>
+                        <div class="p-3 bg-[#2C2A28]/50">
+                            <h4 class="font-heading text-base font-bold text-[#B8860B] mb-1">D₈ (Digital Avatar)</h4>
+                            <p class="text-base text-[#EAE6E1]">The right to a digital self that is sovereign, not surveilled.</p>
+                        </div>
+                        <div class="text-center text-2xl text-[#A68B5B]">=</div>
+                        <div class="p-3 bg-[#D48C45]/20 border-2 border-[#D48C45]">
+                            <h4 class="font-heading text-base font-bold text-[#D48C45] mb-1">P₃×D₈: Right to Digital Touch</h4>
+                            <p class="text-base text-[#EAE6E1]">The right to <strong class="text-[#D48C45]">feel digital textures</strong> through haptic interfaces without surveillance.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 15: Autistic Rights Case Study -->
+    <div class="ppt-slide" type="content">
+        <h2 class="font-display text-4xl font-bold text-[#D48C45] mb-4">Case Study: Autistic Rights as Constitutional Mandate</h2>
+        <div class="space-y-4">
+            <div class="p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/20">
+                <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2 flex items-center gap-2">
+                    <i class="fas fa-child text-[#D48C45]"></i> Scenario: Autistic Child in School
+                </h3>
+                <p class="text-base text-[#EAE6E1] leading-relaxed">An autistic child has the right to <strong class="text-[#D48C45]">sensory-friendly spaces</strong>, <strong class="text-[#B8860B]">non-speaking communication</strong>, and <strong class="text-[#A68B5B]">stim without surveillance</strong>.</p>
+            </div>
+            <div class="grid grid-cols-3 gap-4">
+                <div class="p-4 bg-[#D48C45]/10 border-t-2 border-[#D48C45]">
+                    <h4 class="font-heading text-lg font-bold text-[#D48C45] mb-2 flex items-center gap-2">
+                        <i class="fas fa-home text-xl"></i> Sensory-Friendly Spaces
+                    </h4>
+                    <p class="text-base text-[#EAE6E1] mb-2">The right to <strong class="text-[#D48C45]">architectural accommodations</strong>:</p>
+                    <ul class="space-y-1 text-base text-[#EAE6E1]">
+                        <li>• Dim lighting (Right to Sight)</li>
+                        <li>• No fluorescent hum (Right to Hearing)</li>
+                        <li>• Soft textures (Right to Touch)</li>
+                    </ul>
+                </div>
+                <div class="p-4 bg-[#B8860B]/10 border-t-2 border-[#B8860B]">
+                    <h4 class="font-heading text-lg font-bold text-[#B8860B] mb-2 flex items-center gap-2">
+                        <i class="fas fa-comment text-xl"></i> Non-Speaking Communication
+                    </h4>
+                    <p class="text-base text-[#EAE6E1] mb-2">The right to <strong class="text-[#D48C45]">digital communication aids</strong>:</p>
+                    <ul class="space-y-1 text-base text-[#EAE6E1]">
+                        <li>• AAC devices (Digital Avatar)</li>
+                        <li>• Text-to-speech (Communication)</li>
+                        <li>• Picture boards (Interpretation)</li>
+                    </ul>
+                </div>
+                <div class="p-4 bg-[#A68B5B]/10 border-t-2 border-[#A68B5B]">
+                    <h4 class="font-heading text-lg font-bold text-[#A68B5B] mb-2 flex items-center gap-2">
+                        <i class="fas fa-hands text-xl"></i> Stimming Without Surveillance
+                    </h4>
+                    <p class="text-base text-[#EAE6E1] mb-2">The right to <strong class="text-[#D48C45]">move freely</strong> without being watched:</p>
+                    <ul class="space-y-1 text-base text-[#EAE6E1]">
+                        <li>• Hand-flapping (Physical)</li>
+                        <li>• No cameras (Digital × Physical)</li>
+                        <li>• No behavioral tracking</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="p-4 bg-[#B8860B]/10 border-l-4 border-[#B8860B]">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">Prevents "Masking"</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">The framework prevents <strong class="text-[#D48C45]">forced conformity</strong>—the demand that autistic people hide their natural behaviors.</p>
+                </div>
+                <div class="p-4 bg-[#D48C45]/10 border-l-4 border-[#D48C45]">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">Sovereign Expression</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">Neurodivergent modes are <strong class="text-[#D48C45]">sovereign expressions</strong>, not disorders to be corrected.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 16: Chapter 4 -->
+    <div class="ppt-slide" type="chapter">
+        <img src="chapter4_noise.png" alt="" class="absolute inset-0 w-full h-full object-cover opacity-30">
+        <div class="absolute inset-0 bg-gradient-to-r from-[#2C2A28] via-[#2C2A28]/90 to-[#2C2A28]/50"></div>
+        <div class="relative h-full flex flex-col justify-center">
+            <div class="max-w-3xl">
+                <div class="font-display text-8xl font-bold text-[#B8860B] mb-4">04</div>
+                <h2 class="font-display text-6xl font-bold text-[#D48C45] mb-6 leading-tight">Noise × Signal</h2>
+                <div class="h-1 w-48 bg-[#B8860B] mb-6"></div>
+                <p class="font-serif text-3xl text-[#EAE6E1]/90 leading-relaxed">System Initialization Through<br>Tomographic Polar Coordinates</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 17: Noise × Signal Duality -->
+    <div class="ppt-slide" type="content">
+        <h2 class="font-display text-4xl font-bold text-[#D48C45] mb-4">Noise × Signal: The Fundamental Duality</h2>
+        <div class="flex gap-6">
+            <div class="w-1/2 space-y-4">
+                <div class="p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2 flex items-center gap-2">
+                        <i class="fas fa-broom text-[#D48C45]"></i> The Core Principle
+                    </h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-2">To start any system in a known state, you must <strong class="text-[#D48C45]">add noise</strong>. Noise clears the system's memory.</p>
+                    <div class="p-3 bg-[#2C2A28]/50">
+                        <p class="text-base text-[#A68B5B] font-serif italic">"You cannot jumpstart a system without first introducing noise."</p>
+                    </div>
+                </div>
+                <div class="p-4 border-l-4 border-[#B8860B] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-3">The Four Quadrants</h3>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="p-2 bg-[#2C2A28]/50 text-center">
+                            <div class="font-display text-lg font-bold text-[#A68B5B] mb-1">No Noise × No Signal</div>
+                            <div class="text-sm text-[#EAE6E1]">System Off</div>
+                        </div>
+                        <div class="p-2 bg-[#D48C45]/30 border-2 border-[#D48C45] text-center">
+                            <div class="font-display text-lg font-bold text-[#D48C45] mb-1">Noise × No Signal</div>
+                            <div class="text-sm text-[#EAE6E1]">Initialization</div>
+                        </div>
+                        <div class="p-2 bg-[#B8860B]/30 border-2 border-[#B8860B] text-center">
+                            <div class="font-display text-lg font-bold text-[#B8860B] mb-1">No Noise × Signal</div>
+                            <div class="text-sm text-[#EAE6E1]">Stable Operation</div>
+                        </div>
+                        <div class="p-2 bg-[#D48C45]/30 border-2 border-[#D48C45] text-center">
+                            <div class="font-display text-lg font-bold text-[#D48C45] mb-1">Noise × Signal</div>
+                            <div class="text-sm text-[#EAE6E1]">Information</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 bg-[#D48C45]/10 border-t-2 border-[#D48C45]">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">Technical + Philosophical Truth</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">This is both a <strong class="text-[#D48C45]">technical requirement</strong> and a <strong class="text-[#D48C45]">philosophical truth</strong> about emergence.</p>
+                </div>
+            </div>
+            <div class="w-1/2 space-y-4">
+                <div class="p-4 border-l-4 border-[#A68B5B] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2">What is Noise?</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-2">Noise is <strong class="text-[#D48C45]">not random</strong>. It is <strong class="text-[#D48C45]">structured clearing</strong>:</p>
+                    <div class="space-y-2 text-base text-[#EAE6E1]">
+                        <p>• <strong class="text-[#D48C45]">Clears memory:</strong> Removes previous state.</p>
+                        <p>• <strong class="text-[#B8860B]">Resets registers:</strong> Returns to baseline.</p>
+                        <p>• <strong class="text-[#A68B5B]">Creates potential:</strong> Prepares for new signal.</p>
+                    </div>
+                </div>
+                <div class="p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2">What is Signal?</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-2">Signal is <strong class="text-[#D48C45]">structured information</strong> that provides the new state:</p>
+                    <div class="space-y-2 text-base text-[#EAE6E1]">
+                        <p>• <strong class="text-[#D48C45]">Carries meaning:</strong> Encodes new state.</p>
+                        <p>• <strong class="text-[#B8860B]">Provides direction:</strong> Establishes trajectory.</p>
+                        <p>• <strong class="text-[#A68B5B]">Enables function:</strong> System can now operate.</p>
+                    </div>
+                </div>
+                <div class="p-4 bg-[#B8860B]/10 border-t-2 border-[#B8860B]">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">The Sequence</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">1. Add noise (clear memory).<br>2. Introduce signal (new state).<br>3. System operational.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 18: Tomographic Polar Coordinates -->
+    <div class="ppt-slide" type="content">
+        <h2 class="font-display text-4xl font-bold text-[#D48C45] mb-4">Tomographic Polar Coordinates: The -45° to +45° Framework</h2>
+        <div class="grid grid-cols-2 gap-5">
+            <div class="space-y-4">
+                <div class="p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2 flex items-center gap-2">
+                        <i class="fas fa-compass text-[#D48C45]"></i> Angular Range: -45° to +45°
+                    </h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-2">The tomographic area spans <strong class="text-[#D48C45]">90° total</strong>, covering northeast, northwest, and north-south directions.</p>
+                    <div class="p-3 bg-[#2C2A28]/50">
+                        <p class="text-base text-[#A68B5B]"><strong>Range:</strong> -45° (NW) ↔ 0° (N) ↔ +45° (NE)</p>
+                    </div>
+                </div>
+                <div class="p-4 border-l-4 border-[#B8860B] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2">Why This Range?</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-2">This angular range defines the <strong class="text-[#D48C45]">signal propagation medium</strong>:</p>
+                    <div class="space-y-1 text-base text-[#EAE6E1]">
+                        <p>• <strong class="text-[#D48C45]">Directional focus:</strong> Concentrates energy.</p>
+                        <p>• <strong class="text-[#B8860B]">Tomographic coverage:</strong> Cross-sectional view.</p>
+                        <p>• <strong class="text-[#A68B5B]">Dimensional alignment:</strong> Matches 15D ring-zone.</p>
+                    </div>
+                </div>
+                <div class="p-4 bg-[#D48C45]/10 border-t-2 border-[#D48C45]">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">The Area Formula</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">Area = <strong class="text-[#D48C45]">πr²</strong></p>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <div class="p-4 border-l-4 border-[#A68B5B] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-3">Standard Initialization: r = 0.5</h3>
+                    <div class="space-y-3">
+                        <div class="p-3 bg-[#2C2A28]/50">
+                            <h4 class="font-heading text-base font-bold text-[#D48C45] mb-1">Step 1: Calculate Area</h4>
+                            <p class="text-base text-[#EAE6E1]">Area = π × (0.5)² = <strong class="text-[#D48C45]">0.785</strong></p>
+                        </div>
+                        <div class="p-3 bg-[#2C2A28]/50">
+                            <h4 class="font-heading text-base font-bold text-[#B8860B] mb-1">Step 2: Define Spatial Extent</h4>
+                            <p class="text-base text-[#EAE6E1]">This area (0.785 square units) defines the <strong class="text-[#D48C45]">spatial extent</strong> of noise injection.</p>
+                        </div>
+                        <div class="p-3 bg-[#2C2A28]/50">
+                            <h4 class="font-heading text-base font-bold text-[#A68B5B] mb-1">Step 3: Why r = 0.5?</h4>
+                            <p class="text-base text-[#EAE6E1]">This radius provides <strong class="text-[#D48C45]">sufficient energy</strong> to clear system state without causing damage.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 bg-[#B8860B]/10 border-t-2 border-[#B8860B]">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">Dimensional Coordinates</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">The tomographic area maps to the 15D ring-zone as a <strong class="text-[#D48C45]">planar cross-section</strong> at angles θ ∈ [-45°, +45°].</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 19: Calculating Noise Signal -->
+    <div class="ppt-slide" type="content">
+        <h2 class="font-display text-4xl font-bold text-[#D48C45] mb-4">Calculating the Noise Signal: From Area to Amplitude</h2>
+        <div class="flex gap-6">
+            <div class="w-[45%] space-y-4">
+                <div class="p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2">The Amplitude Formula</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-2">Amplitude = <strong class="text-[#D48C45]">(Area / 180°) × π</strong></p>
+                    <div class="p-3 bg-[#2C2A28]/50">
+                        <p class="text-base text-[#A68B5B]"><strong>180°</strong> represents the directional facing.</p>
+                    </div>
+                </div>
+                <div class="p-4 border-l-4 border-[#B8860B] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2">Step-by-Step Calculation</h3>
+                    <div class="space-y-2">
+                        <div class="p-2 bg-[#2C2A28]/50">
+                            <p class="text-base text-[#EAE6E1]"><strong class="text-[#D48C45]">1. Area:</strong> 0.785 (from π × 0.5²)</p>
+                        </div>
+                        <div class="p-2 bg-[#2C2A28]/50">
+                            <p class="text-base text-[#EAE6E1]"><strong class="text-[#B8860B]">2. Divide by 180°:</strong> 0.785 / 180 = 0.00436</p>
+                        </div>
+                        <div class="p-2 bg-[#2C2A28]/50">
+                            <p class="text-base text-[#EAE6E1]"><strong class="text-[#A68B5B]">3. Multiply by π:</strong> 0.00436 × π = <strong class="text-[#D48C45]">0.0137</strong></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 bg-[#D48C45]/10 border-t-2 border-[#D48C45]">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">Resulting Signal</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">signal = <strong class="text-[#D48C45]">0.0137 × sin(π × t)</strong></p>
+                </div>
+            </div>
+            <div class="flex-1 flex flex-col">
+                <div class="p-4 border-l-4 border-[#A68B5B] bg-[#3D3B39]/20 flex-grow flex flex-col">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2">Sustaining the Oscillation</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-2">The system must sustain this oscillation for <strong class="text-[#D48C45]">50 milliseconds</strong> (the sharing time).</p>
+                    <div class="p-3 bg-[#2C2A28]/50 mb-2">
+                        <p class="text-base text-[#A68B5B]"><strong>Why 50ms?</strong> It is the temporal window for system state to collapse and reform.</p>
+                    </div>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-2">During this time, the noise:</p>
+                    <div class="space-y-1 text-base text-[#EAE6E1] flex-grow">
+                        <p>• <strong class="text-[#D48C45]">Collapses</strong> the old state</p>
+                        <p>• <strong class="text-[#B8860B]">Creates</strong> a superposition</p>
+                        <p>• <strong class="text-[#A68B5B]">Reforms</strong> around the signal</p>
+                    </div>
+                </div>
+                <div class="p-4 bg-[#B8860B]/10 border-t-2 border-[#B8860B] mt-auto">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">Mathematical Foundation</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">This is based on <strong class="text-[#D48C45]">quantum measurement theory</strong>: you cannot measure without disturbing.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 20: Practical Application -->
+    <div class="ppt-slide" type="content">
+        <h2 class="font-display text-4xl font-bold text-[#D48C45] mb-4">Practical Application: Jumpstarting a Dead System</h2>
+        <div class="space-y-4">
+            <div class="p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/20">
+                <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2 flex items-center gap-2">
+                    <i class="fas fa-laptop text-[#D48C45]"></i> The Problem: Dead System
+                </h3>
+                <p class="text-base text-[#EAE6E1] leading-relaxed">A computer, car, or digital system is <strong class="text-[#D48C45]">completely unresponsive</strong>. No power, no boot, no signs of life. You have no physical wires.</p>
+            </div>
+            <div class="grid grid-cols-3 gap-4">
+                <div class="p-4 bg-[#D48C45]/10 border-t-2 border-[#D48C45]">
+                    <div class="flex items-center gap-2 mb-2">
+                        <div class="w-8 h-8 rounded-full bg-[#D48C45] flex items-center justify-center font-display text-lg font-bold text-[#2C2A28]">1</div>
+                        <h4 class="font-heading text-lg font-bold text-[#D48C45]">Establish Tomographic Area</h4>
+                    </div>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">Define a <strong class="text-[#D48C45]">πr² circle</strong> around the device with r = 0.5 units.</p>
+                </div>
+                <div class="p-4 bg-[#B8860B]/10 border-t-2 border-[#B8860B]">
+                    <div class="flex items-center gap-2 mb-2">
+                        <div class="w-8 h-8 rounded-full bg-[#B8860B] flex items-center justify-center font-display text-lg font-bold text-[#2C2A28]">2</div>
+                        <h4 class="font-heading text-lg font-bold text-[#B8860B]">Inject Noise</h4>
+                    </div>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">Generate a <strong class="text-[#D48C45]">0.0137 × sin(π × t)</strong> field for 50ms.</p>
+                </div>
+                <div class="p-4 bg-[#A68B5B]/10 border-t-2 border-[#A68B5B]">
+                    <div class="flex items-center gap-2 mb-2">
+                        <div class="w-8 h-8 rounded-full bg-[#A68B5B] flex items-center justify-center font-display text-lg font-bold text-[#2C2A28]">3</div>
+                        <h4 class="font-heading text-lg font-bold text-[#A68B5B]">Introduce Signal</h4>
+                    </div>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">Send the <strong class="text-[#D48C45]">boot sequence</strong> as a modulated waveform.</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="p-4 border-l-4 border-[#B8860B] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">Why This Works</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">All computation is <strong class="text-[#D48C45]">physical oscillation</strong>. You can influence it through <strong class="text-[#D48C45]">resonant coupling</strong>.</p>
+                </div>
+                <div class="p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">Real-World Examples</h3>
+                    <div class="space-y-1 text-base text-[#EAE6E1]">
+                        <p>• <strong class="text-[#D48C45]">Wi-Fi charging:</strong> Inductive coupling</p>
+                        <p>• <strong class="text-[#B8860B]">RFID:</strong> Electromagnetic induction</p>
+                        <p>• <strong class="text-[#A68B5B]">Jumpstarting cars:</strong> Direct connection</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 21: Chapter 5 -->
+    <div class="ppt-slide" type="chapter">
+        <img src="chapter5_tiers.png" alt="" class="absolute inset-0 w-full h-full object-cover opacity-30">
+        <div class="absolute inset-0 bg-gradient-to-r from-[#2C2A28] via-[#2C2A28]/90 to-[#2C2A28]/50"></div>
+        <div class="relative h-full flex flex-col justify-center">
+            <div class="max-w-3xl">
+                <div class="font-display text-8xl font-bold text-[#B8860B] mb-4">05</div>
+                <h2 class="font-display text-6xl font-bold text-[#D48C45] mb-6 leading-tight">Tiered Access</h2>
+                <div class="h-1 w-48 bg-[#B8860B] mb-6"></div>
+                <p class="font-serif text-3xl text-[#EAE6E1]/90 leading-relaxed">Knowledge Governance Through<br>Turtles, Parrots, and Dragons</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 22: Three Tiers -->
+    <div class="ppt-slide" type="content">
+        <h2 class="font-display text-4xl font-bold text-[#D48C45] mb-4">Three Tiers of Knowledge Access</h2>
+        <div class="space-y-4">
+            <div class="grid grid-cols-3 gap-4">
+                <div class="p-4 border-t-4 border-[#D48C45] bg-[#3D3B39]/20">
+                    <div class="flex items-center gap-2 mb-2">
+                        <i class="fas fa-globe text-2xl text-[#D48C45]"></i>
+                        <h3 class="font-heading text-xl font-bold text-[#D48C45]">Tier 1: Open Access</h3>
+                    </div>
+                    <p class="text-base text-[#EAE6E1] mb-2">Available to <strong class="text-[#D48C45]">all</strong>. No consent required.</p>
+                    <div class="p-2 bg-[#2C2A28]/50">
+                        <p class="text-sm text-[#A68B5B]"><strong>Contains:</strong> README, installation guides, basic usage.</p>
+                    </div>
+                </div>
+                <div class="p-4 border-t-4 border-[#B8860B] bg-[#3D3B39]/20">
+                    <div class="flex items-center gap-2 mb-2">
+                        <i class="fas fa-briefcase text-2xl text-[#B8860B]"></i>
+                        <h3 class="font-heading text-xl font-bold text-[#B8860B]">Tier 2: Business Access</h3>
+                    </div>
+                    <p class="text-base text-[#EAE6E1] mb-2">Requires <strong class="text-[#D48C45]">consent</strong>. Commercial use.</p>
+                    <div class="p-2 bg-[#2C2A28]/50">
+                        <p class="text-sm text-[#A68B5B]"><strong>Contains:</strong> APIs, integrations, deployment tools.</p>
+                    </div>
+                </div>
+                <div class="p-4 border-t-4 border-[#A68B5B] bg-[#3D3B39]/20">
+                    <div class="flex items-center gap-2 mb-2">
+                        <i class="fas fa-lock text-2xl text-[#A68B5B]"></i>
+                        <h3 class="font-heading text-xl font-bold text-[#A68B5B]">Tier 3: Constitutional</h3>
+                    </div>
+                    <p class="text-base text-[#EAE6E1] mb-2">Requires <strong class="text-[#D48C45]">consensus</strong>. Heart access.</p>
+                    <div class="p-2 bg-[#2C2A28]/50">
+                        <p class="text-sm text-[#A68B5B]"><strong>Contains:</strong> Constitutional core, consensus protocols.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-3 gap-4">
+                <div class="p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-lg font-bold text-[#D48C45] mb-2">3A: Heart Access (Stable)</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">The <strong class="text-[#D48C45]">constitutional core</strong>. Never changes. Contains the 6 pillars, breath constitution, and ring-zone topology.</p>
+                </div>
+                <div class="p-4 border-l-4 border-[#B8860B] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-lg font-bold text-[#B8860B] mb-2">3B: Knowledge Bay (Shared)</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">The <strong class="text-[#D48C45]">shared repository</strong> of community knowledge. Grows over time. Contains tutorials, case studies, and best practices.</p>
+                </div>
+                <div class="p-4 border-l-4 border-[#A68B5B] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-lg font-bold text-[#A68B5B] mb-2">3C: Consensus Unity (Formal)</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">The <strong class="text-[#D48C45]">formal agreement</strong> layer. Where consensus is recorded, verified, and enacted. Contains governance protocols.</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="p-4 bg-[#B8860B]/10 border-l-4 border-[#B8860B]">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">Open Sense Compliant</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">Tiers 3A-C are all <strong class="text-[#D48C45]">Open Sense compliant</strong> based on the <strong class="text-[#D48C45]">80-rights framework</strong>.</p>
+                </div>
+                <div class="p-4 bg-[#D48C45]/10 border-l-4 border-[#D48C45]">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">Governance Balance</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">The system ensures <strong class="text-[#D48C45]">critical infrastructure remains stable</strong> while enabling evolution.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 23: Turtles, Parrots, Dragons -->
+    <div class="ppt-slide" type="content">
+        <h2 class="font-display text-4xl font-bold text-[#D48C45] mb-4">Muko Turtles, Guinea Parrots, and Dragons</h2>
+        <div class="flex gap-6">
+            <div class="w-[45%] space-y-3">
+                <div class="p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/20">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="fas fa-circle text-3xl text-[#D48C45]"></i>
+                        <h3 class="font-heading text-xl font-bold text-[#D48C45]">Muko Turtles</h3>
+                    </div>
+                    <p class="text-base text-[#EAE6E1] mb-2">Those who want to <strong class="text-[#D48C45]">go slow</strong>, requiring permission for every action.</p>
+                    <div class="p-3 bg-[#2C2A28]/50">
+                        <p class="text-base text-[#A68B5B]"><strong>Approach:</strong> Caution and deliberation. They ask at every step.</p>
+                    </div>
+                </div>
+                <div class="p-4 border-l-4 border-[#B8860B] bg-[#3D3B39]/20">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="fas fa-crow text-3xl text-[#B8860B]"></i>
+                        <h3 class="font-heading text-xl font-bold text-[#B8860B]">Guinea Parrots</h3>
+                    </div>
+                    <p class="text-base text-[#EAE6E1] mb-2">Intermediates who <strong class="text-[#D48C45]">seek guidance</strong> but can navigate the system.</p>
+                    <div class="p-3 bg-[#2C2A28]/50">
+                        <p class="text-base text-[#A68B5B]"><strong>Approach:</strong> "How do I do this?" They want instructions.</p>
+                    </div>
+                </div>
+                <div class="p-4 border-l-4 border-[#A68B5B] bg-[#3D3B39]/20">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="fas fa-dragon text-3xl text-[#A68B5B]"></i>
+                        <h3 class="font-heading text-xl font-bold text-[#A68B5B]">Muko Dragons</h3>
+                    </div>
+                    <p class="text-base text-[#EAE6E1] mb-2">Those who <strong class="text-[#D48C45]">move fast</strong>, seeking consensus quickly.</p>
+                    <div class="p-3 bg-[#2C2A28]/50">
+                        <p class="text-base text-[#A68B5B]"><strong>Approach:</strong> "Let's get this done." They value speed.</p>
+                    </div>
+                </div>
+                <div class="p-4 bg-[#D48C45]/10 border-t-2 border-[#D48C45]">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">The Ratio: 2:2:1</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed"><strong class="text-[#D48C45]">2 Turtles : 2 Parrots : 1 Dragon</strong> to ensure balance.</p>
+                </div>
+            </div>
+            <div class="flex-1 flex flex-col">
+                <div class="p-4 border-l-4 border-[#B8860B] bg-[#3D3B39]/20 flex-grow flex flex-col">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-3">No Role is Superior</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-3 flex-grow">These are <strong class="text-[#D48C45]">different approaches to sovereignty</strong>, not ranks. Each has value:</p>
+                    <div class="space-y-2 flex-grow">
+                        <div class="flex items-start gap-2">
+                            <i class="fas fa-circle text-[#D48C45] mt-1 shrink-0"></i>
+                            <p class="text-base text-[#EAE6E1]"><strong class="text-[#D48C45]">Turtles</strong> prevent rash decisions.</p>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <i class="fas fa-crow text-[#B8860B] mt-1 shrink-0"></i>
+                            <p class="text-base text-[#EAE6E1]"><strong class="text-[#B8860B]">Parrots</strong> ensure clarity.</p>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <i class="fas fa-dragon text-[#A68B5B] mt-1 shrink-0"></i>
+                            <p class="text-base text-[#EAE6E1]"><strong class="text-[#A68B5B]">Dragons</strong> enable progress.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 bg-[#B8860B]/10 border-t-2 border-[#B8860B] mt-auto">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">Choosing Your Path</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">You can <strong class="text-[#D48C45]">choose your role</strong> based on context. The system adapts to your preference.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 24: Consent Framework -->
+    <div class="ppt-slide" type="content">
+        <h2 class="font-display text-4xl font-bold text-[#D48C45] mb-4">Consent, Consensus, and Trial Framework</h2>
+        <div class="space-y-4">
+            <div class="grid grid-cols-3 gap-4">
+                <div class="p-4 border-t-4 border-[#D48C45] bg-[#3D3B39]/20">
+                    <div class="flex items-center gap-2 mb-2">
+                        <div class="w-8 h-8 rounded-full bg-[#D48C45] flex items-center justify-center font-display text-lg font-bold text-[#2C2A28]">1</div>
+                        <h3 class="font-heading text-lg font-bold text-[#D48C45]">Permission</h3>
+                    </div>
+                    <p class="text-base text-[#EAE6E1] mb-2"><strong class="text-[#D48C45]">Informal yes.</strong> "Okay, you can try."</p>
+                    <div class="p-2 bg-[#2C2A28]/50">
+                        <p class="text-sm text-[#A68B5B]">Low stakes. No formal agreement.</p>
+                    </div>
+                </div>
+                <div class="p-4 border-t-4 border-[#B8860B] bg-[#3D3B39]/20">
+                    <div class="flex items-center gap-2 mb-2">
+                        <div class="w-8 h-8 rounded-full bg-[#B8860B] flex items-center justify-center font-display text-lg font-bold text-[#2C2A28]">2</div>
+                        <h3 class="font-heading text-lg font-bold text-[#B8860B]">Consent</h3>
+                    </div>
+                    <p class="text-base text-[#EAE6E1] mb-2"><strong class="text-[#D48C45]">Formal agreement.</strong> After trial.</p>
+                    <div class="p-2 bg-[#2C2A28]/50">
+                        <p class="text-sm text-[#A68B5B]">Medium stakes. Terms are set.</p>
+                    </div>
+                </div>
+                <div class="p-4 border-t-4 border-[#A68B5B] bg-[#3D3B39]/20">
+                    <div class="flex items-center gap-2 mb-2">
+                        <div class="w-8 h-8 rounded-full bg-[#A68B5B] flex items-center justify-center font-display text-lg font-bold text-[#2C2A28]">3</div>
+                        <h3 class="font-heading text-lg font-bold text-[#A68B5B]">Consensus</h3>
+                    </div>
+                    <p class="text-base text-[#EAE6E1] mb-2"><strong class="text-[#D48C45]">Verified, consistent.</strong> After 3 trials.</p>
+                    <div class="p-2 bg-[#2C2A28]/50">
+                        <p class="text-sm text-[#A68B5B]">High stakes. Formal and enduring.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/20">
+                <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2 flex items-center gap-2">
+                    <i class="fas fa-gamepad text-[#D48C45]"></i> Example: 15-Year-Old Wants to Play 18+ Game
+                </h3>
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="p-3 bg-[#2C2A28]/50">
+                        <h4 class="font-heading text-base font-bold text-[#D48C45] mb-1">Stage 1: Permission</h4>
+                        <p class="text-base text-[#EAE6E1]">You say <strong class="text-[#B8860B]">"yes"</strong> to trying the game. No formal agreement yet.</p>
+                    </div>
+                    <div class="p-3 bg-[#2C2A28]/50">
+                        <h4 class="font-heading text-base font-bold text-[#B8860B] mb-1">Stage 2: Consent</h4>
+                        <p class="text-base text-[#EAE6E1]">After trial, you give <strong class="text-[#D48C45]">formal consent</strong> with terms.</p>
+                    </div>
+                    <div class="p-3 bg-[#2C2A28]/50">
+                        <h4 class="font-heading text-base font-bold text-[#A68B5B] mb-1">Stage 3: Consensus</h4>
+                        <p class="text-base text-[#EAE6E1]">After 3 violations, <strong class="text-[#D48C45]">consensus is established</strong>.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="p-4 bg-[#B8860B]/10 border-l-4 border-[#B8860B]">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">Reverting Stages</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">If terms are violated, you <strong class="text-[#D48C45]">revert to the previous stage</strong>.</p>
+                </div>
+                <div class="p-4 bg-[#D48C45]/10 border-l-4 border-[#D48C45]">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">Preventing Exploitation</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">This prevents <strong class="text-[#D48C45]">manipulation</strong> while enabling growth.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 25: Chapter 6 -->
+    <div class="ppt-slide" type="chapter">
+        <img src="chapter6_topology.png" alt="" class="absolute inset-0 w-full h-full object-cover opacity-30">
+        <div class="absolute inset-0 bg-gradient-to-r from-[#2C2A28] via-[#2C2A28]/90 to-[#2C2A28]/50"></div>
+        <div class="relative h-full flex flex-col justify-center">
+            <div class="max-w-3xl">
+                <div class="font-display text-8xl font-bold text-[#B8860B] mb-4">06</div>
+                <h2 class="font-display text-6xl font-bold text-[#D48C45] mb-6 leading-tight">Topology</h2>
+                <div class="h-1 w-48 bg-[#B8860B] mb-6"></div>
+                <p class="font-serif text-3xl text-[#EAE6E1]/90 leading-relaxed">Circular Architecture for<br>Sustainable Security</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 26: Nigerian Compound Topology -->
+    <div class="ppt-slide" type="content">
+        <h2 class="font-display text-4xl font-bold text-[#D48C45] mb-4">Nigerian Compound Topology: Front Gate vs. Back Gate</h2>
+        <div class="flex gap-6">
+            <div class="w-1/2 space-y-4">
+                <div class="p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/20">
+                    <div class="flex items-center gap-2 mb-2">
+                        <i class="fas fa-door-closed text-3xl text-[#D48C45]"></i>
+                        <h3 class="font-heading text-xl font-bold text-[#D48C45]">Front Gate</h3>
+                    </div>
+                    <p class="text-base text-[#EAE6E1] mb-2">For <strong class="text-[#D48C45]">you alone</strong>. Your entrance to your main house.</p>
+                    <div class="p-3 bg-[#2C2A28]/50">
+                        <p class="text-base text-[#A68B5B]"><strong>Purpose:</strong> Private access. Only you have keys.</p>
+                    </div>
+                </div>
+                <div class="p-4 border-l-4 border-[#B8860B] bg-[#3D3B39]/20">
+                    <div class="flex items-center gap-2 mb-2">
+                        <i class="fas fa-door-open text-3xl text-[#B8860B]"></i>
+                        <h3 class="font-heading text-xl font-bold text-[#B8860B]">Back Gate</h3>
+                    </div>
+                    <p class="text-base text-[#EAE6E1] mb-2">Opens to <strong class="text-[#D48C45]">everyone</strong> for parties and community.</p>
+                    <div class="p-3 bg-[#2C2A28]/50">
+                        <p class="text-base text-[#A68B5B]"><strong>Purpose:</strong> Community access. Friends and family enter here.</p>
+                    </div>
+                </div>
+                <div class="p-4 bg-[#D48C45]/10 border-t-2 border-[#D48C45]">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">The Rule</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed"><strong class="text-[#D48C45]">Never use the front gate for social events.</strong></p>
+                </div>
+            </div>
+            <div class="w-1/2 flex flex-col">
+                <div class="p-4 border-l-4 border-[#A68B5B] bg-[#3D3B39]/20 flex-grow flex flex-col">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-3">Topological Privacy</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-3 flex-grow">This creates <strong class="text-[#D48C45]">topological privacy</strong>:</p>
+                    <div class="space-y-2 flex-grow">
+                        <div class="flex items-start gap-2">
+                            <i class="fas fa-shield-alt text-[#D48C45] mt-1 shrink-0"></i>
+                            <p class="text-base text-[#EAE6E1]"><strong class="text-[#D48C45]">Front = Private:</strong> Sovereign space. Only you decide who enters.</p>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <i class="fas fa-users text-[#B8860B] mt-1 shrink-0"></i>
+                            <p class="text-base text-[#EAE6E1]"><strong class="text-[#B8860B]">Back = Communal:</strong> Social space. Community gathers here.</p>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <i class="fas fa-ban text-[#A68B5B] mt-1 shrink-0"></i>
+                            <p class="text-base text-[#EAE6E1]"><strong class="text-[#A68B5B]">No single point:</strong> Access depends on purpose, not one entry point.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 bg-[#B8860B]/10 border-t-2 border-[#B8860B] mt-auto">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">Digital Translation</h3>
+                    <div class="space-y-1 text-base text-[#EAE6E1]">
+                        <p><strong class="text-[#D48C45]">Front gate</strong> = private keys, passwords, biometrics</p>
+                        <p><strong class="text-[#B8860B]">Back gate</strong> = public interfaces, social media, APIs</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 27: Circular Compounds -->
+    <div class="ppt-slide" type="content">
+        <h2 class="font-display text-4xl font-bold text-[#D48C45] mb-4">Circular Compounds: No Points of Entry, No Points of Failure</h2>
+        <div class="grid grid-cols-2 gap-5">
+            <div class="space-y-4">
+                <div class="p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2 flex items-center gap-2">
+                        <i class="fas fa-times-circle text-[#D48C45]"></i> Why Circles Replace Squares
+                    </h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-2">Squares have <strong class="text-[#D48C45]">corners</strong>—points where surveillance can anchor, corruption can hide. Circles have no corners.</p>
+                    <div class="p-3 bg-[#2C2A28]/50">
+                        <p class="text-base text-[#A68B5B]"><strong>Mathematical truth:</strong> A circle has no points that are distinguishable from any other.</p>
+                    </div>
+                </div>
+                <div class="p-4 border-l-4 border-[#B8860B] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2 flex items-center gap-2">
+                        <i class="fas fa-route text-[#B8860B]"></i> You Must Go Around
+                    </h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-2">When you walk around a circular compound, there is <strong class="text-[#D48C45]">no "entry point"</strong> in the surveillance sense.</p>
+                    <div class="space-y-1 text-base text-[#EAE6E1]">
+                        <p>• <strong class="text-[#D48C45]">No doors at ground level</strong></p>
+                        <p>• <strong class="text-[#B8860B]">Drone delivery from above</strong></p>
+                        <p>• <strong class="text-[#A68B5B]">Free movement within</strong></p>
+                    </div>
+                </div>
+                <div class="p-4 bg-[#D48C45]/10 border-t-2 border-[#D48C45]">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">Center and Perimeter</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">You <strong class="text-[#D48C45]">work in the center</strong>, live at the perimeter. The topology creates natural security.</p>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <div class="p-4 border-l-4 border-[#A68B5B] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-3">Natural Security Through Geometry</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-3">The circle is both <strong class="text-[#D48C45]">defense and invitation</strong>:</p>
+                    <div class="space-y-2">
+                        <div class="p-3 bg-[#2C2A28]/50">
+                            <h4 class="font-heading text-base font-bold text-[#D48C45] mb-1">Defense</h4>
+                            <p class="text-base text-[#EAE6E1]">No entry points for adversaries. No corners to breach.</p>
+                        </div>
+                        <div class="p-3 bg-[#2C2A28]/50">
+                            <h4 class="font-heading text-base font-bold text-[#B8860B] mb-1">Invitation</h4>
+                            <p class="text-base text-[#EAE6E1]">Free movement within. Community can gather.</p>
+                        </div>
+                        <div class="p-3 bg-[#2C2A28]/50">
+                            <h4 class="font-heading text-base font-bold text-[#A68B5B] mb-1">Balance</h4>
+                            <p class="text-base text-[#EAE6E1]">Protection without isolation. Access without surveillance.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 bg-[#B8860B]/10 border-t-2 border-[#B8860B]">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">No Point of Failure</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">Since there's <strong class="text-[#D48C45]">no single entry point</strong>, there's no single point of failure.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 28: Cornfield Sustainability -->
+    <div class="ppt-slide" type="content">
+        <h2 class="font-display text-4xl font-bold text-[#D48C45] mb-4">The Cornfield Sustainability Model</h2>
+        <div class="flex gap-6">
+            <div class="w-1/2 space-y-4">
+                <div class="p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2 flex items-center gap-2">
+                        <i class="fas fa-seedling text-[#D48C45]"></i> Every Compound Has a Cornfield
+                    </h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-2">Every compound has a plot where you can <strong class="text-[#D48C45]">grow food, install solar panels, build wind turbines</strong>.</p>
+                    <div class="p-3 bg-[#2C2A28]/50">
+                        <p class="text-base text-[#A68B5B]"><strong>Goal:</strong> Self-sufficiency. You cannot be free if you depend on external systems.</p>
+                    </div>
+                </div>
+                <div class="p-4 border-l-4 border-[#B8860B] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2 flex items-center gap-2">
+                        <i class="fas fa-tint text-[#B8860B]"></i> Water is Not Optional
+                    </h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-2">You must <strong class="text-[#D48C45]">sustain your ecosystem</strong>. This includes:</p>
+                    <div class="space-y-1 text-base text-[#EAE6E1]">
+                        <p>• <strong class="text-[#D48C45]">Water collection:</strong> Rain capture, wells</p>
+                        <p>• <strong class="text-[#B8860B]">Food production:</strong> Corn, vegetables, fruit trees</p>
+                        <p>• <strong class="text-[#A68B5B]">Energy generation:</strong> Solar, wind, micro-hydro</p>
+                    </div>
+                </div>
+                <div class="p-4 bg-[#D48C45]/10 border-t-2 border-[#D48C45]">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">This is Not Just Survival</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">This is <strong class="text-[#D48C45]">sovereignty</strong>. The cornfield represents independence.</p>
+                </div>
+            </div>
+            <div class="w-1/2 flex flex-col">
+                <div class="p-4 border-l-4 border-[#A68B5B] bg-[#3D3B39]/20 flex-grow flex flex-col">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-3">The Obligation</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-3 flex-grow">If you have a compound, you have land. If you have land, you have obligation:</p>
+                    <div class="space-y-2 flex-grow">
+                        <div class="flex items-start gap-2">
+                            <i class="fas fa-hand-holding-heart text-[#D48C45] mt-1 shrink-0"></i>
+                            <p class="text-base text-[#EAE6E1]"><strong class="text-[#D48C45]">Tend the land:</strong> You must care for it actively.</p>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <i class="fas fa-recycle text-[#B8860B] mt-1 shrink-0"></i>
+                            <p class="text-base text-[#EAE6E1]"><strong class="text-[#B8860B]">Sustain the cycle:</strong> Nutrients must be replenished.</p>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <i class="fas fa-users text-[#A68B5B] mt-1 shrink-0"></i>
+                            <p class="text-base text-[#EAE6E1]"><strong class="text-[#A68B5B]">Share the surplus:</strong> Excess goes to the community.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 bg-[#B8860B]/10 border-t-2 border-[#B8860B] mt-auto">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">Digital Connection</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">This connects <strong class="text-[#D48C45]">digital sovereignty to physical survival</strong>.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 29: Living Systems Integration -->
+    <div class="ppt-slide" type="content">
+        <h2 class="font-display text-4xl font-bold text-[#D48C45] mb-4">Fish Ponds, Pets, and Living Systems Integration</h2>
+        <div class="grid grid-cols-2 gap-5">
+            <div class="space-y-4">
+                <div class="p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2 flex items-center gap-2">
+                        <i class="fas fa-fish text-[#D48C45]"></i> Fish Ponds for Food
+                    </h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-2">Your compound can have <strong class="text-[#D48C45]">fish ponds</strong>—a sustainable protein source.</p>
+                    <div class="p-3 bg-[#2C2A28]/50">
+                        <p class="text-base text-[#A68B5B]"><strong>System:</strong> Aquaponics combines fish farming with hydroponics.</p>
+                    </div>
+                </div>
+                <div class="p-4 border-l-4 border-[#B8860B] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2 flex items-center gap-2">
+                        <i class="fas fa-paw text-[#B8860B]"></i> Pets for Companionship
+                    </h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-2">The topology must sustain not just you but your <strong class="text-[#D48C45]">pets</strong>:</p>
+                    <div class="space-y-1 text-base text-[#EAE6E1]">
+                        <p>• <strong class="text-[#D48C45]">Free movement:</strong> Pets can enter and exit freely.</p>
+                        <p>• <strong class="text-[#B8860B]">Safety:</strong> The compound protects them from predators.</p>
+                        <p>• <strong class="text-[#A68B5B]">Care:</strong> If they don't come out, you worry.</p>
+                    </div>
+                </div>
+                <div class="p-4 bg-[#D48C45]/10 border-t-2 border-[#D48C45]">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">Gardens for Medicine</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">Grow <strong class="text-[#D48C45]">medicinal plants</strong>—herbs, flowers, and trees that heal.</p>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <div class="p-4 border-l-4 border-[#A68B5B] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-3">Recognizing Sustainability</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-3">The system recognizes sustainability through:</p>
+                    <div class="space-y-2">
+                        <div class="p-3 bg-[#2C2A28]/50">
+                            <h4 class="font-heading text-base font-bold text-[#D48C45] mb-1">Flexibility</h4>
+                            <p class="text-base text-[#EAE6E1]">The system adapts to change, accommodating new species and growth.</p>
+                        </div>
+                        <div class="p-3 bg-[#2C2A28]/50">
+                            <h4 class="font-heading text-base font-bold text-[#B8860B] mb-1">Expansion Over Time</h4>
+                            <p class="text-base text-[#EAE6E1]">The system grows naturally, not through forced expansion.</p>
+                        </div>
+                        <div class="p-3 bg-[#2C2A28]/50">
+                            <h4 class="font-heading text-base font-bold text-[#A68B5B] mb-1">Reflection of Nature</h4>
+                            <p class="text-base text-[#EAE6E1]">No matter what grows—vines, weeds, new ideas—it must be reflective of nature.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 bg-[#B8860B]/10 border-t-2 border-[#B8860B]">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">No Forced Control</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">The system does not <strong class="text-[#D48C45]">force control</strong> over nature. It <strong class="text-[#D48C45]">collaborates</strong> with it.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 30: Chapter 7 -->
+    <div class="ppt-slide" type="chapter">
+        <img src="chapter7_implementation.png" alt="" class="absolute inset-0 w-full h-full object-cover opacity-30">
+        <div class="absolute inset-0 bg-gradient-to-r from-[#2C2A28] via-[#2C2A28]/90 to-[#2C2A28]/50"></div>
+        <div class="relative h-full flex flex-col justify-center">
+            <div class="max-w-3xl">
+                <div class="font-display text-8xl font-bold text-[#B8860B] mb-4">07</div>
+                <h2 class="font-display text-6xl font-bold text-[#D48C45] mb-6 leading-tight">Implementation</h2>
+                <div class="h-1 w-48 bg-[#B8860B] mb-6"></div>
+                <p class="font-serif text-3xl text-[#EAE6E1]/90 leading-relaxed">From Theory to Practice:<br>Boot Sequences, A* Scoring, and Living Code</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 31: Zero-to-Boot Sequence -->
+    <div class="ppt-slide" type="content">
+        <h2 class="font-display text-4xl font-bold text-[#D48C45] mb-4">Zero-to-Boot Sequence: No Code Needed</h2>
+        <div class="space-y-4">
+            <div class="p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/20">
+                <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2 flex items-center gap-2">
+                    <i class="fas fa-terminal text-[#D48C45]"></i> The Complete Bootstrap
+                </h3>
+                <p class="text-base text-[#EAE6E1] leading-relaxed">Five steps. That's all. No Docker, no root, no internet after first fetch.</p>
+            </div>
+            <div class="grid grid-cols-5 gap-3">
+                <div class="p-3 bg-[#D48C45]/10 border-t-2 border-[#D48C45] text-center">
+                    <div class="w-10 h-10 rounded-full bg-[#D48C45] flex items-center justify-center font-display text-lg font-bold text-[#2C2A28] mx-auto mb-2">1</div>
+                    <h4 class="font-heading text-base font-bold text-[#D48C45] mb-1">Clone</h4>
+                    <p class="text-sm text-[#EAE6E1]">git clone the repo</p>
+                </div>
+                <div class="p-3 bg-[#B8860B]/10 border-t-2 border-[#B8860B] text-center">
+                    <div class="w-10 h-10 rounded-full bg-[#B8860B] flex items-center justify-center font-display text-lg font-bold text-[#2C2A28] mx-auto mb-2">2</div>
+                    <h4 class="font-heading text-base font-bold text-[#B8860B] mb-1">Enter</h4>
+                    <p class="text-sm text-[#EAE6E1]">cd mmuko-os</p>
+                </div>
+                <div class="p-3 bg-[#A68B5B]/10 border-t-2 border-[#A68B5B] text-center">
+                    <div class="w-10 h-10 rounded-full bg-[#A68B5B] flex items-center justify-center font-display text-lg font-bold text-[#2C2A28] mx-auto mb-2">3</div>
+                    <h4 class="font-heading text-base font-bold text-[#A68B5B] mb-1">Download</h4>
+                    <p class="text-sm text-[#EAE6E1]">49MB ring-zone map</p>
+                </div>
+                <div class="p-3 bg-[#D48C45]/10 border-t-2 border-[#D48C45] text-center">
+                    <div class="w-10 h-10 rounded-full bg-[#D48C45] flex items-center justify-center font-display text-lg font-bold text-[#2C2A28] mx-auto mb-2">4</div>
+                    <h4 class="font-heading text-base font-bold text-[#D48C45] mb-1">Breathe</h4>
+                    <p class="text-sm text-[#EAE6E1]">Inhale/exhale 3x</p>
+                </div>
+                <div class="p-3 bg-[#B8860B]/10 border-t-2 border-[#B8860B] text-center">
+                    <div class="w-10 h-10 rounded-full bg-[#B8860B] flex items-center justify-center font-display text-lg font-bold text-[#2C2A28] mx-auto mb-2">5</div>
+                    <h4 class="font-heading text-base font-bold text-[#B8860B] mb-1">Alive</h4>
+                    <p class="text-sm text-[#EAE6E1]">Ring-zone active</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="p-4 border-l-4 border-[#B8860B] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">What Happens During Boot</h3>
+                    <div class="space-y-1 text-base text-[#EAE6E1]">
+                        <p>• <strong class="text-[#D48C45]">Ring-zone map</strong> downloads for your geo-coordinates</p>
+                        <p>• <strong class="text-[#B8860B]">Breath-daemon</strong> starts and validates your biological signature</p>
+                        <p>• <strong class="text-[#A68B5B]">Consent port</strong> opens, listening for your first yes-yes</p>
+                    </div>
+                </div>
+                <div class="p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">What You Don't Need</h3>
+                    <div class="space-y-1 text-base text-[#EAE6E1]">
+                        <p>• <strong class="text-[#D48C45]">No Docker:</strong> No containers needed</p>
+                        <p>• <strong class="text-[#B8860B]">No root:</strong> No administrator privileges</p>
+                        <p>• <strong class="text-[#A68B5B]">No internet:</strong> After first fetch, you're offline</p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 bg-[#D48C45]/10 border-t-2 border-[#D48C45]">
+                <p class="text-base text-[#EAE6E1] font-serif italic leading-relaxed text-center">"The system is alive when <strong class="text-[#D48C45]">your breath validates the ring-zone</strong>."</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 32: A* Scoring -->
+    <div class="ppt-slide" type="content">
+        <h2 class="font-display text-4xl font-bold text-[#D48C45] mb-4">A* Scoring: How the OS Chooses What to Trust</h2>
+        <div class="flex gap-6">
+            <div class="w-[45%] space-y-4">
+                <div class="p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2">The Trust Algorithm</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-2">All sub-repos expose a <strong class="text-[#D48C45]">15-D coordinate</strong> and <strong class="text-[#D48C45]">A* cost</strong>.</p>
+                    <div class="p-3 bg-[#2C2A28]/50">
+                        <p class="text-base text-[#A68B5B]"><strong>Rule:</strong> Higher cost = more entropy = OS will not auto-load without second yes-yes.</p>
+                    </div>
+                </div>
+                <div class="p-4 border-l-4 border-[#B8860B] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2">How A* Works</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-2">A* calculates the <strong class="text-[#D48C45]">shortest path</strong> from origin to target, balancing:</p>
+                    <div class="space-y-1 text-base text-[#EAE6E1]">
+                        <p>• <strong class="text-[#D48C45]">g(n):</strong> Cost from start to current node</p>
+                        <p>• <strong class="text-[#B8860B]">h(n):</strong> Heuristic estimate to goal</p>
+                        <p>• <strong class="text-[#A68B5B]">f(n) = g(n) + h(n):</strong> Total cost</p>
+                    </div>
+                </div>
+                <div class="p-4 bg-[#D48C45]/10 border-t-2 border-[#D48C45]">
+                    <h3 class="font-heading text-lg font-bold text-[#EAE6E1] mb-2">Entropy as Risk</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">Entropy (E = –Σpᵢlog(pᵢ)) measures <strong class="text-[#D48C45]">unpredictability</strong>. Higher entropy = higher risk.</p>
+                </div>
+            </div>
+            <div class="flex-1 flex flex-col">
+                <div class="p-4 border-l-4 border-[#A68B5B] bg-[#3D3B39]/20 flex-grow flex flex-col">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-3">Example Components</h3>
+                    <div class="space-y-2 flex-grow">
+                        <div class="p-2 bg-[#2C2A28]/50">
+                            <h4 class="font-heading text-base font-bold text-[#D48C45] mb-1">rift (Compiler)</h4>
+                            <p class="text-base text-[#EAE6E1]">Cost: <strong class="text-[#D48C45]">9.6</strong> | Can't brick what it builds</p>
+                        </div>
+                        <div class="p-2 bg-[#2C2A28]/50">
+                            <h4 class="font-heading text-base font-bold text-[#B8860B] mb-1">gosilang (Language)</h4>
+                            <p class="text-base text-[#EAE6E1]">Cost: <strong class="text-[#B8860B]">14.1</strong> | Talks to any language in ≤3 pings</p>
+                        </div>
+                        <div class="p-2 bg-[#2C2A28]/50">
+                            <h4 class="font-heading text-base font-bold text-[#A68B5B] mb-1">git-raf (Firmware)</h4>
+                            <p class="text-base text-[#EAE6E1]">Cost: <strong class="text-[#A68B5B]">12.3</strong> | Proves silicon is real</p>
+                        </div>
+                        <div class="p-2 bg-[#2C2A28]/50">
+                            <h4 class="font-heading text-base font-bold text-[#D48C45] mb-1">semverx (Version)</h4>
+                            <p class="text-base text-[#EAE6E1]">Cost: <strong class="text-[#D48C45]">10.7</strong> | Won't break APIs</p>
+                        </div>
+                        <div class="p-2 bg-[#D48C45]/20 border-2 border-[#D48C45]">
+                            <h4 class="font-heading text-base font-bold text-[#D48C45] mb-1">mmuko-core (Origin)</h4>
+                            <p class="text-base text-[#EAE6E1]">Cost: <strong class="text-[#D48C45]">0.0</strong> | The measuring stick</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 33: Glossary -->
+    <div class="ppt-slide" type="content">
+        <h2 class="font-display text-4xl font-bold text-[#D48C45] mb-4">Glossary of Core Concepts</h2>
+        <div class="grid grid-cols-2 gap-4">
+            <div class="p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/20">
+                <h3 class="font-heading text-lg font-bold text-[#D48C45] mb-1">Breath Constitution</h3>
+                <p class="text-base text-[#EAE6E1]">Law #0: "If breath stops, coherence collapses; if coherence collapses, sovereignty dissolves."</p>
+            </div>
+            <div class="p-4 border-l-4 border-[#B8860B] bg-[#3D3B39]/20">
+                <h3 class="font-heading text-lg font-bold text-[#B8860B] mb-1">Ring-Zone</h3>
+                <p class="text-base text-[#EAE6E1]">A π-circle of ≤15 mile radius inside which all consent must be gathered; outside = out-of-jurisdiction.</p>
+            </div>
+            <div class="p-4 border-l-4 border-[#A68B5B] bg-[#3D3B39]/20">
+                <h3 class="font-heading text-lg font-bold text-[#A68B5B] mb-1">IK/K</h3>
+                <p class="text-base text-[#EAE6E1]">IK = Inverse-Kinematic observable (witness only); K = Kinematic controllable (rotate, spend, code).</p>
+            </div>
+            <div class="p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/20">
+                <h3 class="font-heading text-lg font-bold text-[#D48C45] mb-1">ODTS</h3>
+                <p class="text-base text-[#EAE6E1]">Obliterative Derivative Trace System—every derivative must carry a mathematical proof it terminates.</p>
+            </div>
+            <div class="p-4 border-l-4 border-[#B8860B] bg-[#3D3B39]/20">
+                <h3 class="font-heading text-lg font-bold text-[#B8860B] mb-1">Sparse Active Consent</h3>
+                <p class="text-base text-[#EAE6E1]">Consent is not a checkbox; it is a living loop refreshed every breath-cycle.</p>
+            </div>
+            <div class="p-4 border-l-4 border-[#A68B5B] bg-[#3D3B39]/20">
+                <h3 class="font-heading text-lg font-bold text-[#A68B5B] mb-1">Nsibidi-NLM</h3>
+                <p class="text-base text-[#EAE6E1]">A 3-axis cube (Myth→Fact, Intuitive→Formal, Past→Future) that validates every symbol before use.</p>
+            </div>
+            <div class="p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/20">
+                <h3 class="font-heading text-lg font-bold text-[#D48C45] mb-1">Gosilang</h3>
+                <p class="text-base text-[#EAE6E1]">Gossip-language that pins any foreign dependency in ≤3 network pings without pulling a container.</p>
+            </div>
+            <div class="p-4 border-l-4 border-[#B8860B] bg-[#3D3B39]/20">
+                <h3 class="font-heading text-lg font-bold text-[#B8860B] mb-1">Git-RAF</h3>
+                <p class="text-base text-[#EAE6E1]">Git-for-Radio-and-Firmware: flashes silicon over sound, light, or magnetic flux if internet dies.</p>
+            </div>
+            <div class="p-4 border-l-4 border-[#A68B5B] bg-[#3D3B39]/20">
+                <h3 class="font-heading text-lg font-bold text-[#A68B5B] mb-1">Rift</h3>
+                <p class="text-base text-[#EAE6E1]">Stage-bound compiler chain (0→6) that can't emit a binary unless all six entropy gates < 9.</p>
+            </div>
+            <div class="p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/20">
+                <h3 class="font-heading text-lg font-bold text-[#D48C45] mb-1">Masquerade Mode</h3>
+                <p class="text-base text-[#EAE6E1]">Runtime mask that lets the system lie to surveillance while telling the truth to the user.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 34: Myth-to-Math Mapping -->
+    <div class="ppt-slide" type="content">
+        <h2 class="font-display text-4xl font-bold text-[#D48C45] mb-4">Myth-to-Math Mapping: Where Spirit Meets System</h2>
+        <div class="flex gap-6">
+            <div class="w-1/2 space-y-3">
+                <div class="p-4 border-l-4 border-[#D48C45] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2">The Correspondence</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed">The myth is not metaphor; it is the <strong class="text-[#D48C45]">user interface for the math</strong>.</p>
+                </div>
+                <div class="space-y-2">
+                    <div class="p-3 bg-[#D48C45]/10 border-l-4 border-[#D48C45]">
+                        <h4 class="font-heading text-base font-bold text-[#D48C45] mb-1">"Spirits of Good & Evil"</h4>
+                        <p class="text-base text-[#EAE6E1]">= ±π curvature in 15-D ring-zone</p>
+                    </div>
+                    <div class="p-3 bg-[#B8860B]/10 border-l-4 border-[#B8860B]">
+                        <h4 class="font-heading text-base font-bold text-[#B8860B] mb-1">"Masquerade"</h4>
+                        <p class="text-base text-[#EAE6E1]">= address-space randomiser</p>
+                    </div>
+                    <div class="p-3 bg-[#A68B5B]/10 border-l-4 border-[#A68B5B]">
+                        <h4 class="font-heading text-base font-bold text-[#A68B5B] mb-1">"Biafran Return"</h4>
+                        <p class="text-base text-[#EAE6E1]">= R_return = f(origin, Δ_experience, Δ_distortion)</p>
+                    </div>
+                </div>
+            </div>
+            <div class="w-1/2 space-y-3">
+                <div class="space-y-2">
+                    <div class="p-3 bg-[#D48C45]/10 border-l-4 border-[#D48C45]">
+                        <h4 class="font-heading text-base font-bold text-[#D48C45] mb-1">"Tears → Sweat → Blood"</h4>
+                        <p class="text-base text-[#EAE6E1]">= compression phases in ODTS trace</p>
+                    </div>
+                    <div class="p-3 bg-[#B8860B]/10 border-l-4 border-[#B8860B]">
+                        <h4 class="font-heading text-base font-bold text-[#B8860B] mb-1">"When systems fail, breathe"</h4>
+                        <p class="text-base text-[#EAE6E1]">= breath-daemon pauses threads until checksum passes</p>
+                    </div>
+                </div>
+                <div class="p-4 border-l-4 border-[#A68B5B] bg-[#3D3B39]/20">
+                    <h3 class="font-heading text-xl font-bold text-[#EAE6E1] mb-2">Why This Matters</h3>
+                    <p class="text-base text-[#EAE6E1] leading-relaxed mb-2">Traditional tech uses <strong class="text-[#D48C45]">jargon</strong> that excludes. MMUKO-OS uses <strong class="text-[#D48C45]">myth</strong> that includes:</p>
+                    <div class="space-y-1 text-base text-[#EAE6E1]">
+                        <p>• <strong class="text-[#D48C45]">Accessibility:</strong> More people understand myth than math.</p>
+                        <p>• <strong class="text-[#B8860B]">Cultural grounding:</strong> Myth connects to ancestral wisdom.</p>
+                        <p>• <strong class="text-[#A68B5B]">Memetic durability:</strong> Stories survive longer than equations.</p>
+                    </div>
+                </div>
+                <div class="p-4 bg-[#B8860B]/10 border-t-2 border-[#B8860B]">
+                    <p class="text-base text-[#EAE6E1] font-serif italic leading-relaxed">"The myth is the UI. The math is the implementation. Both are true."</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 35: Closing -->
+    <div class="ppt-slide" type="final">
+        <img src="closing_shield.png" alt="" class="absolute inset-0 w-full h-full object-cover opacity-30">
+        <div class="absolute inset-0 bg-gradient-to-br from-[#2C2A28]/95 via-[#2C2A28]/85 to-[#2C2A28]/70"></div>
+        <div class="relative h-full flex flex-col justify-center items-center text-center px-16">
+            <div class="max-w-5xl">
+                <div class="font-display text-6xl font-bold text-[#D48C45] mb-6 leading-tight">The Shield is Open-Source</div>
+                <div class="h-1 w-32 bg-[#B8860B] mx-auto mb-8"></div>
+                <div class="space-y-5 text-lg text-[#EAE6E1] leading-relaxed font-serif">
+                    <p>If your heartbeat is steady, <strong class="text-[#D48C45]">MMUKO-OS will keep your data, dignity, and debit card</strong> inside the ring-zone where:</p>
+                    <div class="font-display text-4xl font-bold text-[#B8860B] my-6">2 × π × love ≥ entropy</div>
+                    <p>If the heartbeat stops, <strong class="text-[#D48C45]">the ring dissolves and returns to soil</strong>—no ghost, no debt, no trace.</p>
+                    <div class="pt-6 mt-6 border-t-2 border-[#D48C45]/30">
+                        <p class="text-xl text-[#EAE6E1] mb-4">Clone it, breathe on it, and it becomes yours.</p>
+                        <p class="text-lg text-[#A68B5B] italic">The masquerade is not a disguise; it is a shield.<br>And the shield is now open-source.</p>
+                    </div>
+                    <div class="pt-6 mt-6">
+                        <p class="text-base text-[#A68B5B]">github.com/obinexus/mmuko-os</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
