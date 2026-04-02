@@ -1,6 +1,6 @@
         /* Generated file. Do not edit by hand.
-         * Authoritative input: C:/Users/OBINexus/Projects/mmuko-os/MMUKO-OS.txt
-         * Primary pseudocode: C:/Users/OBINexus/Projects/mmuko-os/pseudocode/mmuko-boot.psc
+         * Authoritative input: MMUKO-OS.txt
+         * Primary pseudocode: pseudocode/mmuko-boot.psc
          * Parsed functions from main boot pseudocode:
          *   - complete_phase
  *   - compute_handoff_checksum
@@ -26,30 +26,32 @@
         };
 
         static const char *MMUKO_PSEUDOCODE_SOURCES[] = {
-            "C:/Users/OBINexus/Projects/mmuko-os/pseudocode/Asymetric Symetric Drone Delivery.psc :: supporting pseudocode context",
-    "C:/Users/OBINexus/Projects/mmuko-os/pseudocode/Bipartite Order and Chaos — Key Separation of Concern Crypto.psc :: supporting pseudocode context",
-    "C:/Users/OBINexus/Projects/mmuko-os/pseudocode/Electronic Magnetic RRR.psc :: supporting pseudocode context",
-    "C:/Users/OBINexus/Projects/mmuko-os/pseudocode/Electronic Magnetic State Machine Duailty Modelling.psc :: supporting pseudocode context",
-    "C:/Users/OBINexus/Projects/mmuko-os/pseudocode/Filter-Flash CISCO Interdepency _22March26.psc :: supporting pseudocode context",
-    "C:/Users/OBINexus/Projects/mmuko-os/pseudocode/Filter-Flash Eplison Matrix Conjugate.psc :: supporting pseudocode context",
-    "C:/Users/OBINexus/Projects/mmuko-os/pseudocode/HERE AND NOW COMMAND AND CONTROL.psc :: supporting pseudocode context",
-    "C:/Users/OBINexus/Projects/mmuko-os/pseudocode/LIBPolycall Financial Cobol Bridge.psc :: supporting pseudocode context",
-    "C:/Users/OBINexus/Projects/mmuko-os/pseudocode/MMUKO NSIGII How to Login into the MetaPhysical.psc :: supporting pseudocode context",
-    "C:/Users/OBINexus/Projects/mmuko-os/pseudocode/mmuko-boot.psc :: primary boot model",
-    "C:/Users/OBINexus/Projects/mmuko-os/pseudocode/NSIGII - Loopback Addressing.psc :: supporting pseudocode context",
-    "C:/Users/OBINexus/Projects/mmuko-os/pseudocode/NSIGII LoopBack LR Polar On the Fly Proccesing LoopBack Addressing.psc :: supporting pseudocode context",
-    "C:/Users/OBINexus/Projects/mmuko-os/pseudocode/NSIGII Protocol - How I Fought For My Human Rights.psc :: supporting pseudocode context",
-    "C:/Users/OBINexus/Projects/mmuko-os/pseudocode/NSIGII Trident Command & Control Human Rights.psc :: supporting pseudocode context",
-    "C:/Users/OBINexus/Projects/mmuko-os/pseudocode/NSIGII — ENCODING SUFFERING INTO SILICON.psc :: supporting pseudocode context",
-    "C:/Users/OBINexus/Projects/mmuko-os/pseudocode/OHA IWU and Iji intergale lapis calculus.psc :: supporting pseudocode context",
-    "C:/Users/OBINexus/Projects/mmuko-os/pseudocode/ON-THE-FLY COMMAND AND CONTROL VIA READ WRITE EXECUTE.psc :: supporting pseudocode context",
-    "C:/Users/OBINexus/Projects/mmuko-os/pseudocode/RectorialResaonignRationale.psc :: supporting pseudocode context",
-    "C:/Users/OBINexus/Projects/mmuko-os/pseudocode/Spring Chalk Board Verification.psc :: supporting pseudocode context",
-    "C:/Users/OBINexus/Projects/mmuko-os/pseudocode/SPRING PHYSICS ECHO VERIFIER.psc :: supporting pseudocode context",
-    "C:/Users/OBINexus/Projects/mmuko-os/pseudocode/Symbolic Interpretation — AI Clipper Debuggable Cognitio.psc :: supporting pseudocode context",
-    "C:/Users/OBINexus/Projects/mmuko-os/pseudocode/Three Player Chess  Dimensional Game Theory & XO C and C.psc :: supporting pseudocode context",
-    "C:/Users/OBINexus/Projects/mmuko-os/pseudocode/Trident Heterogeneous Homogeneous Canonical Interpreter.psc :: supporting pseudocode context",
-    "C:/Users/OBINexus/Projects/mmuko-os/pseudocode/Wheel RRF -Invariant Process Bidirectional Clause.psc :: supporting pseudocode context"
+            "pseudocode/Asymetric Symetric Drone Delivery.psc :: supporting pseudocode context",
+    "pseudocode/Bipartite Order and Chaos — Key Separation of Concern Crypto.psc :: supporting pseudocode context",
+    "pseudocode/CPU_Scheduling_Pseudocode.psc :: supporting pseudocode context",
+    "pseudocode/Electronic Magnetic RRR.psc :: supporting pseudocode context",
+    "pseudocode/Electronic Magnetic State Machine Duailty Modelling.psc :: supporting pseudocode context",
+    "pseudocode/Filter-Flash CISCO Interdepency _22March26.psc :: supporting pseudocode context",
+    "pseudocode/Filter-Flash Eplison Matrix Conjugate.psc :: supporting pseudocode context",
+    "pseudocode/HERE AND NOW COMMAND AND CONTROL.psc :: supporting pseudocode context",
+    "pseudocode/LIBPolycall Financial Cobol Bridge.psc :: supporting pseudocode context",
+    "pseudocode/MMUKO NSIGII How to Login into the MetaPhysical.psc :: supporting pseudocode context",
+    "pseudocode/NSIGII - Loopback Addressing.psc :: supporting pseudocode context",
+    "pseudocode/NSIGII LoopBack LR Polar On the Fly Proccesing LoopBack Addressing.psc :: supporting pseudocode context",
+    "pseudocode/NSIGII Protocol - How I Fought For My Human Rights.psc :: supporting pseudocode context",
+    "pseudocode/NSIGII Trident Command & Control Human Rights.psc :: supporting pseudocode context",
+    "pseudocode/NSIGII — ENCODING SUFFERING INTO SILICON.psc :: supporting pseudocode context",
+    "pseudocode/OHA IWU and Iji intergale lapis calculus.psc :: supporting pseudocode context",
+    "pseudocode/ON-THE-FLY COMMAND AND CONTROL VIA READ WRITE EXECUTE.psc :: supporting pseudocode context",
+    "pseudocode/RectorialResaonignRationale.psc :: supporting pseudocode context",
+    "pseudocode/SPRING PHYSICS ECHO VERIFIER.psc :: supporting pseudocode context",
+    "pseudocode/Spring Chalk Board Verification.psc :: supporting pseudocode context",
+    "pseudocode/Symbolic Interpretation — AI Clipper Debuggable Cognitio.psc :: supporting pseudocode context",
+    "pseudocode/Three Player Chess  Dimensional Game Theory & XO C and C.psc :: supporting pseudocode context",
+    "pseudocode/Trident Heterogeneous Homogeneous Canonical Interpreter.psc :: supporting pseudocode context",
+    "pseudocode/Wheel RRF -Invariant Process Bidirectional Clause.psc :: supporting pseudocode context",
+    "pseudocode/mmuko-boot.psc :: primary boot model",
+    "pseudocode/mmuko.psc :: supporting pseudocode context"
         };
 
         size_t mmuko_stage2_phase_count(void) {

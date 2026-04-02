@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "3aWo7H7yJvE=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\OBINexus\\Projects\\mmuko-os\\legacy\\csharp-compositor\\mmuko-compositor.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\OBINexus\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.25\\microsoft.netcore.app.ref.8.0.25.nupkg.sha512",
+    "C:\\Users\\OBINexus\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.25\\microsoft.windowsdesktop.app.ref.8.0.25.nupkg.sha512",
+    "C:\\Users\\OBINexus\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.25\\microsoft.aspnetcore.app.ref.8.0.25.nupkg.sha512",
+    "C:\\Users\\OBINexus\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\8.0.25\\microsoft.netcore.app.host.win-x64.8.0.25.nupkg.sha512"
+  ],
+  "logs": []
+}

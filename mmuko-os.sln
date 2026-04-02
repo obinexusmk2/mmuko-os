@@ -1,0 +1,32 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "legacy", "legacy", "{871BE218-8F83-E3CD-0B70-B1CC1745EA7C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "csharp-compositor", "csharp-compositor", "{BA0B83A5-087D-E91A-8E30-196BFD4407B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mmuko-compositor", "legacy\csharp-compositor\mmuko-compositor.csproj", "{C3DACC93-2ECA-6C72-F215-53F24AFD233C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C3DACC93-2ECA-6C72-F215-53F24AFD233C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3DACC93-2ECA-6C72-F215-53F24AFD233C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3DACC93-2ECA-6C72-F215-53F24AFD233C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3DACC93-2ECA-6C72-F215-53F24AFD233C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BA0B83A5-087D-E91A-8E30-196BFD4407B5} = {871BE218-8F83-E3CD-0B70-B1CC1745EA7C}
+		{C3DACC93-2ECA-6C72-F215-53F24AFD233C} = {BA0B83A5-087D-E91A-8E30-196BFD4407B5}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1A8776C4-1591-4132-9AEA-6D613ADC70CB}
+	EndGlobalSection
+EndGlobal
