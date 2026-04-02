@@ -1,6 +1,10 @@
 // Generated file. Do not edit by hand.
 <<<<<<< HEAD
+<<<<<<< HEAD
 // Authoritative input: MMUKO-OS.txt
+=======
+// Authoritative input: pseudocode/MMUKO-OS.txt
+>>>>>>> 87ae7ecdbcb6bce4c98cef97219e0ed08854e7c7
 =======
 // Authoritative input: pseudocode/MMUKO-OS.txt
 >>>>>>> 87ae7ecdbcb6bce4c98cef97219e0ed08854e7c7
@@ -24,7 +28,11 @@ std::vector<std::string> pseudocode_sources() {
 std::string stage2_report() {
     std::ostringstream report;
 <<<<<<< HEAD
+<<<<<<< HEAD
     report << "Authoritative input: MMUKO-OS.txt\n";
+=======
+    report << "Authoritative input: pseudocode/MMUKO-OS.txt\n";
+>>>>>>> 87ae7ecdbcb6bce4c98cef97219e0ed08854e7c7
 =======
     report << "Authoritative input: pseudocode/MMUKO-OS.txt\n";
 >>>>>>> 87ae7ecdbcb6bce4c98cef97219e0ed08854e7c7

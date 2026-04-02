@@ -1,6 +1,10 @@
 # MMUKO code generation manifest
 <<<<<<< HEAD
+<<<<<<< HEAD
 authoritative_input=MMUKO-OS.txt
+=======
+authoritative_input=pseudocode/MMUKO-OS.txt
+>>>>>>> 87ae7ecdbcb6bce4c98cef97219e0ed08854e7c7
 =======
 authoritative_input=pseudocode/MMUKO-OS.txt
 >>>>>>> 87ae7ecdbcb6bce4c98cef97219e0ed08854e7c7
@@ -12,7 +16,11 @@ generated_header=include/mmuko_codegen.h
 generated_cython_pxd=python/mmuko_codegen.pxd
 generated_cython_pyx=python/mmuko_generated.pyx
 <<<<<<< HEAD
+<<<<<<< HEAD
 pseudocode_sources=26
+=======
+pseudocode_sources=25
+>>>>>>> 87ae7ecdbcb6bce4c98cef97219e0ed08854e7c7
 =======
 pseudocode_sources=25
 >>>>>>> 87ae7ecdbcb6bce4c98cef97219e0ed08854e7c7
