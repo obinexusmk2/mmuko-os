@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Makefile - MMUKO-OS / NSIGII Heartfull Firmware
 # OBINexus Computing | Nnamdi Michael Okpala | 24 March 2026
 #
@@ -488,3 +489,412 @@ qemu-flat: $(FLAT_OS_BIN)
 	@echo "[QEMU] Booting flat binary $(FLAT_OS_BIN) ..."
 	qemu-system-i386 -drive format=raw,file=$(FLAT_OS_BIN) -m 4M \
 		|| echo "[QEMU] Not found — install qemu-system-x86 first"
+=======
+# Makefile - MMUKO-OS / NSIGII Heartfull Firmware
+# OBINexus Computing | Nnamdi Michael Okpala | 24 March 2026
+#
+# Works on: WSL/Linux (make) and Windows native (make from Git Bash/MSYS2).
+#
+# Boot chain:
+#   stage-1  (boot/mmuko_stage1_boot.asm) → build/boot.bin     (512 bytes, 0xAA55)
+#   stage-2  (boot/stage2.asm)            → build/mmuko-os.bin  (kernel payload)
+#   runtime  (kernel/runtime.asm)         → build/runtime.bin   (firmware entry)
+#   image    stage1 + stage2 + runtime    → build/mmuko-os.img  (1.44 MB FAT12)
+#
+# REPL subsystem (mmuko-repl / RIFT shell):
+#   repl/src/rtrie.c      → Red-Black Trie path store
+#   repl/src/consensus.c  → Execution-permission consensus state machine
+#   repl/src/rift_repl.c  → Interactive RIFT shell
+#   repl/repl_main.c      → Standalone entry point  → build/mmukocycle
+#   All three src objects also archived into build/lib/libmmuko_repl.a
+#
+# Enzyme model strategy:
+#   MAYBE → YES / NO
+#   CREATE / DESTROY  (phase init / phase teardown)
+#   BUILD  / BREAK    (sector assembly / disassembly)
+#   REPAIR / RENEW    (kernel panic recovery / hot-reload)
+#
+# Targets:
+#   make all               build firmware + boot + image + repl
+#   make install-deps      install nasm in WSL/Ubuntu (run once)
+#   make firmware          compile C firmware -> .so + .a
+#   make firmware-cpp      compile C++ wrapper
+#   make boot              assemble split boot chain (stage1 + stage2 + runtime)
+#   make image             write boot sectors into build/mmuko-os.img
+#   make repl              build RIFT REPL library + mmukocycle executable
+#   make run-repl          run the RIFT interactive shell
+#   make cython-build      build Python wheel + sdist
+#   make cython-develop    install editable Cython package
+#   make run-ui            run Python console compositor
+#   make run               boot with QEMU
+#   make verify            NSIGII verification checks
+#   make tree              display filesystem driver tree
+#   make clean             remove build/ directory
+
+# ============================================================
+# Platform detection (Windows native vs WSL/Linux)
+# ============================================================
+ifeq ($(OS),Windows_NT)
+    EXE      := .exe
+    PY       := python
+    RMRF     := cmd /c if exist build rmdir /s /q build & if exist bin rmdir /s /q bin & if exist obj rmdir /s /q obj
+    RMIMG    := cmd /c if exist mmuko-os.img del /f mmuko-os.img
+else
+    EXE      :=
+    PY       := python3
+    RMRF     := rm -rf build/ bin/ obj/
+    RMIMG    := rm -f mmuko-os.img
+endif
+
+# ============================================================
+# Toolchain
+# ============================================================
+CC     := gcc
+CXX    := g++
+NASM   := nasm
+AR     := ar
+PIP    := $(PY) -m pip
+BUILD_PY := $(PY) -m build
+
+# ============================================================
+# Build output directories
+# ============================================================
+BUILD    := build
+OBJ_DIR  := $(BUILD)/obj
+LIB_DIR  := $(BUILD)/lib
+BOOT_DIR := $(BUILD)
+
+# Boot chain binaries
+STAGE1_BIN       := $(BUILD)/boot.bin
+STAGE2_BIN       := $(BUILD)/mmuko-os.bin
+RUNTIME_BIN      := $(BUILD)/runtime.bin
+DISK_IMG         := $(BUILD)/mmuko-os.img
+
+# Stage-2 sector budget (16 sectors × 512 = 8192 bytes max)
+STAGE2_SECTORS       := 16
+STAGE2_TOTAL_SECTORS := $(STAGE2_SECTORS)
+STAGE2_TOTAL_BYTES   := 8192
+
+# Runtime sector budget (12 sectors × 512 = 6144 bytes max)
+RUNTIME_SECTORS      := 12
+
+# ============================================================
+# REPL (mmuko-repl / RIFT shell) — integrated from mmuko-repl-main
+# ============================================================
+REPL_DIR      := repl
+REPL_SRC_DIR  := $(REPL_DIR)/src
+REPL_INC_DIR  := $(REPL_DIR)/include
+REPL_SRCS     := $(REPL_SRC_DIR)/rtrie.c \
+                 $(REPL_SRC_DIR)/consensus.c \
+                 $(REPL_SRC_DIR)/rift_repl.c
+REPL_OBJS     := $(addprefix $(OBJ_DIR)/repl/,$(notdir $(REPL_SRCS:.c=.o)))
+REPL_MAIN     := $(REPL_DIR)/repl_main.c
+REPL_MAIN_OBJ := $(OBJ_DIR)/repl/repl_main.o
+REPL_LIB      := $(LIB_DIR)/libmmuko_repl.a
+MMUKOCYCLE    := $(BUILD)/mmukocycle$(EXE)
+REPL_CFLAGS   := $(CFLAGS) -Iinclude -I$(REPL_INC_DIR)
+
+# Codegen paths — pseudocode lives in two places:
+#   pseudocode/           (canonical .psc collection)
+#   mmuko-boot/pseudocode (boot-specific subset, mirrors primary .psc)
+CODEGEN_SCRIPT   := tools/mmuko_codegen/generate.py
+PSC_DIR          := pseudocode
+PSC_BOOT_DIR     := mmuko-boot/pseudocode
+PRIMARY_PSC      := $(PSC_DIR)/mmuko-boot.psc
+CODEGEN_STAMP    := $(BUILD)/mmuko_codegen.stamp
+
+# Generated source paths
+GENERATED_BOOT_SRC   := boot/mmuko_stage1_boot.asm
+GENERATED_STAGE2_C   := kernel/mmuko_stage2_loader.c
+GENERATED_STAGE2_CPP := kernel/mmuko_stage2_bridge.cpp
+GENERATED_HEADER     := include/mmuko_codegen.h
+GENERATED_CYTHON     := python/mmuko_codegen.pxd python/mmuko_generated.pyx
+
+# ============================================================
+# Compiler flags
+# ============================================================
+CFLAGS    := -std=c11 -Wall -Wextra -fPIC -O2
+CXXFLAGS  := -std=c++17 -Wall -Wextra -fPIC -O2
+SO_LDFLAGS := -shared -lm
+LDFLAGS   := -shared -lm
+
+# ============================================================
+# Source files
+# ============================================================
+C_SRCS   := heartfull_membrane.c bzy_mpda.c tripartite_discriminant.c
+C_OBJS   := $(addprefix $(OBJ_DIR)/,$(C_SRCS:.c=.o))
+CPP_SRCS := nsigii_cpp_wrapper.cpp
+CPP_OBJS := $(addprefix $(OBJ_DIR)/,$(CPP_SRCS:.cpp=.o))
+FW_LIB   := $(LIB_DIR)/libnsigii_firmware.so
+FW_ARC   := $(LIB_DIR)/libnsigii_firmware.a
+CPP_LIB  := $(LIB_DIR)/libnsigii_firmware_cpp.so
+
+# ============================================================
+# Phony targets
+# ============================================================
+.PHONY: all dirs install-deps firmware firmware-cpp boot image run repl run-repl \
+        cython-build cython-develop run-ui verify tree clean help codegen
+
+# ============================================================
+# Default: build everything
+# ============================================================
+all: dirs codegen firmware boot image repl
+	@echo ""
+	@echo "======================================="
+	@echo " MMUKO-OS build complete (enzyme: OK)"
+	@echo "======================================="
+	@echo "  Stage-1  : $(STAGE1_BIN)  (boot sector)"
+	@echo "  Stage-2  : $(STAGE2_BIN)  (mmuko-os kernel)"
+	@echo "  Runtime  : $(RUNTIME_BIN) (firmware entry)"
+	@echo "  Firmware : $(FW_LIB)"
+	@echo "  Image    : $(DISK_IMG)"
+	@echo "  REPL lib : $(REPL_LIB)"
+	@echo "  REPL exe : $(MMUKOCYCLE)"
+	@echo ""
+	@echo "  make run       - boot in QEMU"
+	@echo "  make run-repl  - launch MMUKO interactive shell"
+	@echo "  make verify    - NSIGII checks"
+	@echo "  make tree      - display driver tree"
+
+# ============================================================
+# Directory creation (must run before everything else)
+# ============================================================
+dirs:
+	@$(PY) -c "import os; [os.makedirs(d, exist_ok=True) for d in ['$(OBJ_DIR)','$(LIB_DIR)','$(BUILD)','$(OBJ_DIR)/kernel','$(OBJ_DIR)/repl']]"
+
+# ============================================================
+# Code generation from canonical spec + pseudocode
+# ============================================================
+codegen: dirs $(CODEGEN_STAMP)
+
+$(CODEGEN_STAMP): $(PRIMARY_PSC)
+	@echo "[CODEGEN] Generating MMUKO-OS derived sources..."
+	@if [ -f "MMUKO-OS.txt" ] && [ -f "$(CODEGEN_SCRIPT)" ]; then \
+		$(PY) $(CODEGEN_SCRIPT) --root . --spec MMUKO-OS.txt \
+			--primary $(PRIMARY_PSC) --pseudocode-dir $(PSC_DIR) 2>/dev/null || true; \
+	else \
+		echo "[CODEGEN] MMUKO-OS.txt or generate.py not found — using existing sources"; \
+	fi
+	@touch $(CODEGEN_STAMP)
+
+# ============================================================
+# Dependencies
+# ============================================================
+install-deps:
+	@echo "[DEPS] Installing nasm, gcc, qemu..."
+	sudo apt-get update -qq
+	sudo apt-get install -y nasm build-essential qemu-system-x86
+
+# ============================================================
+# Firmware (C shared library + static archive)
+# ============================================================
+firmware: dirs $(FW_LIB) $(FW_ARC)
+	@echo "[FIRMWARE] OK: $(FW_LIB) $(FW_ARC)"
+
+$(OBJ_DIR)/%.o: %.c | dirs
+	@echo "[CC] $<"
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -I. -Iinclude -c $< -o $@
+
+$(FW_LIB): $(C_OBJS) | dirs
+	@echo "[LD] $@"
+	$(CC) $(SO_LDFLAGS) -o $@ $^
+
+$(FW_ARC): $(C_OBJS) | dirs
+	@echo "[AR] $@"
+	$(AR) rcs $@ $^
+
+# ============================================================
+# Firmware C++ wrapper
+# ============================================================
+firmware-cpp: dirs $(CPP_LIB)
+
+$(CPP_LIB): $(CPP_OBJS) $(C_OBJS)
+	@echo "[CXX] $@"
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -I. -Iinclude -o $@ $^
+
+$(OBJ_DIR)/%.o: %.cpp | dirs
+	@echo "[CXX obj] $<"
+	@mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) -I. -Iinclude -c $< -o $@
+
+# ============================================================
+# Boot chain assembly (NASM with Python fallback)
+# ============================================================
+boot: dirs
+	@if command -v $(NASM) >/dev/null 2>&1; then \
+		echo "[NASM] Assembling boot chain with nasm..."; \
+		$(NASM) -f bin $(GENERATED_BOOT_SRC) -o $(STAGE1_BIN); \
+		$(NASM) -f bin boot/stage2.asm -o $(STAGE2_BIN); \
+		$(NASM) -f bin kernel/runtime.asm -o $(RUNTIME_BIN); \
+	else \
+		echo "[PYTHON] nasm not found — using Python fallback assembler"; \
+		$(PY) scripts/assemble_boot.py --build-dir $(BUILD); \
+	fi
+	@$(PY) -c "\
+import struct; \
+b=open('$(STAGE1_BIN)','rb').read(); \
+assert len(b)==512,'stage1 size: '+str(len(b)); \
+sig=struct.unpack_from('<H',b,510)[0]; \
+assert sig==0xAA55,'sig: '+hex(sig); \
+print('[BOOT] stage1='+str(len(b))+'B sig=0xAA55 OK'); \
+s2=open('$(STAGE2_BIN)','rb').read(); \
+print('[BOOT] stage2='+str(len(s2))+'B (mmuko-os) OK'); \
+rt=open('$(RUNTIME_BIN)','rb').read(); \
+print('[BOOT] runtime='+str(len(rt))+'B OK')"
+
+# ============================================================
+# Disk image (1.44 MB FAT12 — stage1 + stage2 + runtime)
+# ============================================================
+.FORCE:
+image: $(DISK_IMG)
+
+$(DISK_IMG): .FORCE | dirs
+	@echo "[IMAGE] Writing $(DISK_IMG) (1.44 MB FAT12 + kernel payload)..."
+	@$(PY) -c "\
+from pathlib import Path; \
+stage1 = Path('$(STAGE1_BIN)').read_bytes(); \
+stage2 = Path('$(STAGE2_BIN)').read_bytes(); \
+runtime = Path('$(RUNTIME_BIN)').read_bytes(); \
+img = bytearray(b'\x00' * (512 * 2880)); \
+img[:512] = stage1; \
+img[512:512+len(stage2)] = stage2; \
+img[512+len(stage2):512+len(stage2)+len(runtime)] = runtime; \
+Path('$(DISK_IMG)').write_bytes(img); \
+print(f'[IMAGE] wrote {len(img)} bytes  stage2={len(stage2)}B  runtime={len(runtime)}B')"
+
+# ============================================================
+# REPL — RIFT shell library + standalone mmukocycle binary
+# ============================================================
+repl: dirs $(REPL_LIB) $(MMUKOCYCLE)
+	@echo "[REPL] OK: $(REPL_LIB)  $(MMUKOCYCLE)"
+
+# Compile each repl source into build/obj/repl/
+$(OBJ_DIR)/repl/%.o: $(REPL_SRC_DIR)/%.c | dirs
+	@echo "[REPL CC] $<"
+	$(CC) $(REPL_CFLAGS) -c $< -o $@
+
+# Static archive: libmmuko_repl.a
+$(REPL_LIB): $(REPL_OBJS) | dirs
+	@echo "[REPL AR] $@"
+	$(AR) rcs $@ $^
+
+# Compile the standalone entry point
+$(REPL_MAIN_OBJ): $(REPL_MAIN) | dirs
+	@echo "[REPL CC] $<"
+	$(CC) $(REPL_CFLAGS) -c $< -o $@
+
+# Link mmukocycle executable (repl_main + libmmuko_repl.a)
+$(MMUKOCYCLE): $(REPL_MAIN_OBJ) $(REPL_LIB) | dirs
+	@echo "[REPL LD] $@"
+	$(CC) -o $@ $(REPL_MAIN_OBJ) $(REPL_LIB)
+
+# Run the RIFT interactive shell
+run-repl: $(MMUKOCYCLE)
+	@echo "[MMUKO] Launching MMUKO shell..."
+	$(MMUKOCYCLE)
+
+# ============================================================
+# QEMU boot (explicit format=raw suppresses the warning)
+# ============================================================
+run: $(DISK_IMG)
+	@echo "[QEMU] Booting MMUKO-OS..."
+	qemu-system-x86_64 -drive format=raw,file=$(DISK_IMG) -m 32M \
+		|| echo "[QEMU] Not found - https://www.qemu.org"
+
+# ============================================================
+# Python / Cython package
+# ============================================================
+cython-build: firmware
+	@echo "[PYTHON] Building sdist + wheel..."
+	$(PIP) install --quiet build Cython
+	$(BUILD_PY)
+
+cython-develop: firmware
+	@echo "[PYTHON] Installing editable package..."
+	$(PIP) install --quiet -e .
+
+run-ui: cython-develop
+	@echo "[UI] Running Python console compositor..."
+	PYTHONPATH=python $(PY) -m mmuko_os --tier1 yes --tier2 yes --w-actor yes
+
+# ============================================================
+# NSIGII Verification
+# ============================================================
+verify: boot
+	@echo ""
+	@echo "=== NSIGII Verification ==="
+	@echo ""
+	@echo "[1] Stage-1 boot sector"
+	@$(PY) -c "\
+import struct; \
+b=open('$(STAGE1_BIN)','rb').read(); \
+assert len(b)==512; \
+assert struct.unpack_from('<H',b,510)[0]==0xAA55; \
+print('    stage1: 512 bytes / sig=0xAA55  PASS')"
+	@echo "[2] Stage-2 kernel payload (mmuko-os.bin)"
+	@$(PY) -c "\
+b=open('$(STAGE2_BIN)','rb').read(); \
+print('    stage2: '+str(len(b))+' bytes  PASS')"
+	@echo "[3] Runtime firmware entry"
+	@$(PY) -c "\
+b=open('$(RUNTIME_BIN)','rb').read(); \
+print('    runtime: '+str(len(b))+' bytes  PASS')"
+	@echo "[4] Disk image"
+	@$(PY) -c "\
+b=open('$(DISK_IMG)','rb').read(); \
+assert len(b)==512*2880; \
+print('    image: '+str(len(b))+' bytes (1.44 MB)  PASS')"
+	@echo "[5] Enzyme trinary alphabet"
+	@$(PY) -c "\
+vals=[('YES',1),('NO',0),('MAYBE',-1),('MAYBE_NOT',-2)]; \
+[print('    '+n+' = '+str(v)) for n,v in vals]; \
+print('    enzyme: CREATE/DESTROY BUILD/BREAK REPAIR/RENEW')"
+	@echo ""
+	@echo "=== NSIGII_VERIFIED ==="
+
+# ============================================================
+# Filesystem driver tree (root/trunk/branch/leaves)
+# ============================================================
+tree:
+	@$(PY) scripts/tree_display.py
+
+# ============================================================
+# Clean
+# ============================================================
+clean:
+	@echo "[CLEAN] Removing generated artifacts..."
+	@$(RMRF)
+	@$(RMIMG)
+	@echo "[CLEAN] Done."
+	@echo "  (REPL objects cleaned with build/)"
+
+# ============================================================
+# Help
+# ============================================================
+help:
+	@echo "MMUKO-OS / NSIGII Heartfull Firmware - Build System"
+	@echo "OBINexus Computing | Nnamdi Michael Okpala"
+	@echo "Enzyme Model: CREATE/DESTROY | BUILD/BREAK | REPAIR/RENEW"
+	@echo ""
+	@echo "FIRST TIME SETUP (WSL/Ubuntu):"
+	@echo "  make install-deps       <- installs nasm + build-essential + qemu"
+	@echo "  make all                <- builds everything"
+	@echo ""
+	@echo "ALL TARGETS:"
+	@echo "  make all                  firmware + boot + image + repl"
+	@echo "  make install-deps         nasm + build-essential (WSL)"
+	@echo "  make firmware             C firmware .so + .a"
+	@echo "  make firmware-cpp         C++ wrapper .so"
+	@echo "  make boot                 stage1 + stage2 (mmuko-os.bin) + runtime"
+	@echo "  make image                write sectors into build/mmuko-os.img"
+	@echo "  make repl                 build RIFT REPL (libmmuko_repl.a + mmukocycle)"
+	@echo "  make run-repl             launch RIFT interactive shell"
+	@echo "  make cython-build         build Python wheel + sdist"
+	@echo "  make cython-develop       install editable package"
+	@echo "  make run-ui               Python console compositor"
+	@echo "  make run                  boot in QEMU"
+	@echo "  make verify               NSIGII verification checks"
+	@echo "  make tree                 display filesystem driver tree"
+	@echo "  make clean                remove build/"
+>>>>>>> dev
