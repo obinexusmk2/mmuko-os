@@ -9,6 +9,13 @@
 #   runtime  (kernel/runtime.asm)         → build/runtime.bin   (firmware entry)
 #   image    stage1 + stage2 + runtime    → build/mmuko-os.img  (1.44 MB FAT12)
 #
+# REPL subsystem (mmuko-repl / RIFT shell):
+#   repl/src/rtrie.c      → Red-Black Trie path store
+#   repl/src/consensus.c  → Execution-permission consensus state machine
+#   repl/src/rift_repl.c  → Interactive RIFT shell
+#   repl/repl_main.c      → Standalone entry point  → build/mmukocycle
+#   All three src objects also archived into build/lib/libmmuko_repl.a
+#
 # Enzyme model strategy:
 #   MAYBE → YES / NO
 #   CREATE / DESTROY  (phase init / phase teardown)
@@ -16,12 +23,14 @@
 #   REPAIR / RENEW    (kernel panic recovery / hot-reload)
 #
 # Targets:
-#   make all               build firmware + boot + image
+#   make all               build firmware + boot + image + repl
 #   make install-deps      install nasm in WSL/Ubuntu (run once)
 #   make firmware          compile C firmware -> .so + .a
 #   make firmware-cpp      compile C++ wrapper
 #   make boot              assemble split boot chain (stage1 + stage2 + runtime)
 #   make image             write boot sectors into build/mmuko-os.img
+#   make repl              build RIFT REPL library + mmukocycle executable
+#   make run-repl          run the RIFT interactive shell
 #   make cython-build      build Python wheel + sdist
 #   make cython-develop    install editable Cython package
 #   make run-ui            run Python console compositor
@@ -31,13 +40,27 @@
 #   make clean             remove build/ directory
 
 # ============================================================
+# Platform detection (Windows native vs WSL/Linux)
+# ============================================================
+ifeq ($(OS),Windows_NT)
+    EXE      := .exe
+    PY       := python
+    RMRF     := cmd /c if exist build rmdir /s /q build & if exist bin rmdir /s /q bin & if exist obj rmdir /s /q obj
+    RMIMG    := cmd /c if exist mmuko-os.img del /f mmuko-os.img
+else
+    EXE      :=
+    PY       := python3
+    RMRF     := rm -rf build/ bin/ obj/
+    RMIMG    := rm -f mmuko-os.img
+endif
+
+# ============================================================
 # Toolchain
 # ============================================================
 CC     := gcc
 CXX    := g++
 NASM   := nasm
 AR     := ar
-PY     := python3
 PIP    := $(PY) -m pip
 BUILD_PY := $(PY) -m build
 
@@ -62,6 +85,22 @@ STAGE2_TOTAL_BYTES   := 8192
 
 # Runtime sector budget (12 sectors × 512 = 6144 bytes max)
 RUNTIME_SECTORS      := 12
+
+# ============================================================
+# REPL (mmuko-repl / RIFT shell) — integrated from mmuko-repl-main
+# ============================================================
+REPL_DIR      := repl
+REPL_SRC_DIR  := $(REPL_DIR)/src
+REPL_INC_DIR  := $(REPL_DIR)/include
+REPL_SRCS     := $(REPL_SRC_DIR)/rtrie.c \
+                 $(REPL_SRC_DIR)/consensus.c \
+                 $(REPL_SRC_DIR)/rift_repl.c
+REPL_OBJS     := $(addprefix $(OBJ_DIR)/repl/,$(notdir $(REPL_SRCS:.c=.o)))
+REPL_MAIN     := $(REPL_DIR)/repl_main.c
+REPL_MAIN_OBJ := $(OBJ_DIR)/repl/repl_main.o
+REPL_LIB      := $(LIB_DIR)/libmmuko_repl.a
+MMUKOCYCLE    := $(BUILD)/mmukocycle$(EXE)
+REPL_CFLAGS   := $(CFLAGS) -Iinclude -I$(REPL_INC_DIR)
 
 # Codegen paths — pseudocode lives in two places:
 #   pseudocode/           (canonical .psc collection)
@@ -101,13 +140,13 @@ CPP_LIB  := $(LIB_DIR)/libnsigii_firmware_cpp.so
 # ============================================================
 # Phony targets
 # ============================================================
-.PHONY: all dirs install-deps firmware firmware-cpp boot image run \
+.PHONY: all dirs install-deps firmware firmware-cpp boot image run repl run-repl \
         cython-build cython-develop run-ui verify tree clean help codegen
 
 # ============================================================
 # Default: build everything
 # ============================================================
-all: dirs codegen firmware boot image
+all: dirs codegen firmware boot image repl
 	@echo ""
 	@echo "======================================="
 	@echo " MMUKO-OS build complete (enzyme: OK)"
@@ -117,17 +156,19 @@ all: dirs codegen firmware boot image
 	@echo "  Runtime  : $(RUNTIME_BIN) (firmware entry)"
 	@echo "  Firmware : $(FW_LIB)"
 	@echo "  Image    : $(DISK_IMG)"
+	@echo "  REPL lib : $(REPL_LIB)"
+	@echo "  REPL exe : $(MMUKOCYCLE)"
 	@echo ""
-	@echo "  make run      - boot in QEMU"
-	@echo "  make verify   - NSIGII checks"
-	@echo "  make tree     - display driver tree"
+	@echo "  make run       - boot in QEMU"
+	@echo "  make run-repl  - launch MMUKO interactive shell"
+	@echo "  make verify    - NSIGII checks"
+	@echo "  make tree      - display driver tree"
 
 # ============================================================
 # Directory creation (must run before everything else)
 # ============================================================
 dirs:
-	@mkdir -p $(OBJ_DIR) $(LIB_DIR) $(BUILD)
-	@mkdir -p $(OBJ_DIR)/kernel
+	@$(PY) -c "import os; [os.makedirs(d, exist_ok=True) for d in ['$(OBJ_DIR)','$(LIB_DIR)','$(BUILD)','$(OBJ_DIR)/kernel','$(OBJ_DIR)/repl']]"
 
 # ============================================================
 # Code generation from canonical spec + pseudocode
@@ -231,6 +272,37 @@ Path('$(DISK_IMG)').write_bytes(img); \
 print(f'[IMAGE] wrote {len(img)} bytes  stage2={len(stage2)}B  runtime={len(runtime)}B')"
 
 # ============================================================
+# REPL — RIFT shell library + standalone mmukocycle binary
+# ============================================================
+repl: dirs $(REPL_LIB) $(MMUKOCYCLE)
+	@echo "[REPL] OK: $(REPL_LIB)  $(MMUKOCYCLE)"
+
+# Compile each repl source into build/obj/repl/
+$(OBJ_DIR)/repl/%.o: $(REPL_SRC_DIR)/%.c | dirs
+	@echo "[REPL CC] $<"
+	$(CC) $(REPL_CFLAGS) -c $< -o $@
+
+# Static archive: libmmuko_repl.a
+$(REPL_LIB): $(REPL_OBJS) | dirs
+	@echo "[REPL AR] $@"
+	$(AR) rcs $@ $^
+
+# Compile the standalone entry point
+$(REPL_MAIN_OBJ): $(REPL_MAIN) | dirs
+	@echo "[REPL CC] $<"
+	$(CC) $(REPL_CFLAGS) -c $< -o $@
+
+# Link mmukocycle executable (repl_main + libmmuko_repl.a)
+$(MMUKOCYCLE): $(REPL_MAIN_OBJ) $(REPL_LIB) | dirs
+	@echo "[REPL LD] $@"
+	$(CC) -o $@ $(REPL_MAIN_OBJ) $(REPL_LIB)
+
+# Run the RIFT interactive shell
+run-repl: $(MMUKOCYCLE)
+	@echo "[MMUKO] Launching MMUKO shell..."
+	$(MMUKOCYCLE)
+
+# ============================================================
 # QEMU boot (explicit format=raw suppresses the warning)
 # ============================================================
 run: $(DISK_IMG)
@@ -300,9 +372,10 @@ tree:
 # ============================================================
 clean:
 	@echo "[CLEAN] Removing generated artifacts..."
-	@rm -rf build/ bin/ obj/
-	@rm -f mmuko-os.img
+	@$(RMRF)
+	@$(RMIMG)
 	@echo "[CLEAN] Done."
+	@echo "  (REPL objects cleaned with build/)"
 
 # ============================================================
 # Help
@@ -317,12 +390,14 @@ help:
 	@echo "  make all                <- builds everything"
 	@echo ""
 	@echo "ALL TARGETS:"
-	@echo "  make all                  firmware + boot + image"
+	@echo "  make all                  firmware + boot + image + repl"
 	@echo "  make install-deps         nasm + build-essential (WSL)"
 	@echo "  make firmware             C firmware .so + .a"
 	@echo "  make firmware-cpp         C++ wrapper .so"
 	@echo "  make boot                 stage1 + stage2 (mmuko-os.bin) + runtime"
 	@echo "  make image                write sectors into build/mmuko-os.img"
+	@echo "  make repl                 build RIFT REPL (libmmuko_repl.a + mmukocycle)"
+	@echo "  make run-repl             launch RIFT interactive shell"
 	@echo "  make cython-build         build Python wheel + sdist"
 	@echo "  make cython-develop       install editable package"
 	@echo "  make run-ui               Python console compositor"
