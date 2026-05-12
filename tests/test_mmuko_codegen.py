@@ -30,6 +30,8 @@ FUNC mmuko_boot() -> MMUKO_BOOT_HANDOFF:
     complete_phase(handoff, PHASE_SAFETY_SCAN, 0x00000002)
 
     // Phase 3 — PHASE_IDENTITY_CALIBRATION
+    BIND operator_identity INTO handoff
+    BIND temporal_frame INTO handoff
     complete_phase(handoff, PHASE_IDENTITY_CALIBRATION, 0x00000004)
 
     // Phase 4 — PHASE_GOVERNANCE_CHECK
@@ -69,19 +71,44 @@ class CodegenParserTests(unittest.TestCase):
         self.assertIn("helper", codegen._parse_functions(PSC_TEXT))
         self.assertEqual(len(codegen._parse_requires(PSC_TEXT)), 9)
 
-    def test_phase_requires_are_grouped_by_phase_blocks(self):
-        phases = codegen._parse_boot_phase_requires(PSC_TEXT)
+    def test_phase_blocks_are_structured_from_mmuko_boot(self):
+        phases = codegen._parse_phase_blocks(PSC_TEXT)
         self.assertEqual(len(phases), 6)
-        self.assertEqual(phases[0], ("PHASE_NEED_STATE_INIT", "0x00000001", ["tier1_state != NO"]))
-        self.assertEqual(phases[2], ("PHASE_IDENTITY_CALIBRATION", "0x00000004", []))
+        self.assertEqual(phases[0].phase_number, 1)
+        self.assertEqual(phases[0].enum_name, "PHASE_NEED_STATE_INIT")
+        self.assertEqual(phases[0].requirements, ["tier1_state != NO"])
+        self.assertEqual(phases[0].binds, [])
+        self.assertEqual(phases[0].completion_flag, "0x00000001")
         self.assertEqual(
-            phases[3],
-            (
-                "PHASE_GOVERNANCE_CHECK",
-                "0x00000008",
-                ["execution_policy == VERIFIED", "provenance_chain == VERIFIED", "filesystem_target == RAW_FIXED_SECTOR:mmuko-os.img:LBA0_STAGE1:LBA1_16_STAGE2:LBA17_48_RUNTIME"],
-            ),
+            phases[1].requirements,
+            ["tier2_state != NO", "nsigii_minimum_safety_envelope == TRUE"],
         )
+        self.assertEqual(phases[2].requirements, [])
+        self.assertEqual(phases[2].binds, ["operator_identity", "temporal_frame"])
+
+    def test_kernel_entry_requirements_are_not_assigned_to_phase_runners(self):
+        phases = codegen._parse_phase_blocks(PSC_TEXT)
+        phase_requirements = [req for phase in phases for req in phase.requirements]
+        self.assertNotIn('handoff.magic == "MMUKO"', phase_requirements)
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "mmuko-boot" / "pseudocode").mkdir(parents=True)
+            (root / "tools" / "mmuko_codegen").mkdir(parents=True)
+            (root / "MMUKO-OS.txt").write_text("spec\n", encoding="utf-8")
+            primary = root / "mmuko-boot" / "pseudocode" / "mmuko-boot.psc"
+            primary.write_text(PSC_TEXT, encoding="utf-8")
+
+            codegen.generate(
+                root,
+                Path("MMUKO-OS.txt"),
+                Path("mmuko-boot/pseudocode/mmuko-boot.psc"),
+                Path("mmuko-boot/pseudocode"),
+            )
+
+            loader = (root / "kernel" / "mmuko_stage2_loader.c").read_text(encoding="utf-8")
+            phase_runner_section = loader.split("int mmuko_verify_entry_contract", 1)[0]
+            self.assertNotIn('REQUIRE handoff.magic == "MMUKO"', phase_runner_section)
 
     def test_manifest_paths_are_repo_relative_and_generated_from_psc_dir(self):
         with tempfile.TemporaryDirectory() as tmp:
