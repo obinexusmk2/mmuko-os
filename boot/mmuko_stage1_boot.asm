@@ -1,23 +1,11 @@
 ; -----------------------------------------------------------------------------
 ; Generated file. Do not edit by hand.
-<<<<<<< HEAD
-<<<<<<< HEAD
 ; Authoritative input: MMUKO-OS.txt
-; Primary pseudocode: pseudocode/mmuko-boot.psc
-; Supporting pseudocode count: 26
-=======
-; Authoritative input: pseudocode/MMUKO-OS.txt
-; Primary pseudocode: pseudocode/mmuko-boot.psc
-; Supporting pseudocode count: 25
->>>>>>> 87ae7ecdbcb6bce4c98cef97219e0ed08854e7c7
-=======
-; Authoritative input: pseudocode/MMUKO-OS.txt
-; Primary pseudocode: pseudocode/mmuko-boot.psc
-; Supporting pseudocode count: 25
->>>>>>> 87ae7ecdbcb6bce4c98cef97219e0ed08854e7c7
+; Primary pseudocode: mmuko-boot/pseudocode/mmuko-boot.psc
+; Supporting pseudocode count: 1
 ; Parsed ENUM types: MMUKO_BOOT_OUTCOME, MMUKO_BOOT_PHASE
 ; Parsed STRUCT types: MMUKO_BOOT_HANDOFF
-; Boot contract: MMKO magic, 6 phases, outcome PASS=0xAA
+; Boot contract: MMUKO magic, 6 phases, outcome PASS=0xAA
 ; -----------------------------------------------------------------------------
 ; Key generated phases:
 ;   PHASE 0 - Vacuum Medium Initialization
@@ -33,25 +21,13 @@ ORG  0x7C00
 
 jmp short start
 nop
-db "MMUKOGEN"
-dw 512
-db 1
-dw 1
-db 2
-dw 224
-dw 2880
-db 0xF0
-dw 9
-dw 18
-dw 2
-dd 0
-dd 0
-db 0
-db 0
-db 0x29
-dd 0x4D4D554B
-db "MMUKO-GEN  "
-db "FAT12   "
+
+; Raw fixed-sector MMUKO boot layout; intentionally no FAT BPB/OEM metadata.
+mmuko_layout_magic db "MMUKORAW"
+mmuko_stage2_lba   dw 1
+mmuko_stage2_count dw 16
+mmuko_runtime_lba  dw 17
+mmuko_runtime_count dw 32
 
 start:
     cli

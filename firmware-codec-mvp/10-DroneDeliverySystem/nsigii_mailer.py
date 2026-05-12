@@ -1,6 +1,6 @@
 """
 NSIGII Python Mailer — Magnetic Message Protocol
-================================================
+------------------------------------------------
 OBINexus Computing | Nnamdi Okpala | 21 February 2026
 
 Sends a .nsigii artifact (linkable-then-executable codec) via SMTP.
@@ -234,7 +234,7 @@ def build_email(metadata: dict,
 
     body = f"""
 NSIGII HUMAN RIGHTS PROTOCOL — MAGNETIC MESSAGE
-================================================
+------------------------------------------------
 Message ID      : {metadata['message_id']}
 Sender Pole     : {metadata['pole']}  (Channel 0 – Transmitter)
 State           : {metadata['state']}

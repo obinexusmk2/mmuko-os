@@ -1,14 +1,6 @@
         /* Generated file. Do not edit by hand.
-<<<<<<< HEAD
-<<<<<<< HEAD
          * Authoritative input: MMUKO-OS.txt
-=======
-         * Authoritative input: pseudocode/MMUKO-OS.txt
->>>>>>> 87ae7ecdbcb6bce4c98cef97219e0ed08854e7c7
-=======
-         * Authoritative input: pseudocode/MMUKO-OS.txt
->>>>>>> 87ae7ecdbcb6bce4c98cef97219e0ed08854e7c7
-         * Primary pseudocode: pseudocode/mmuko-boot.psc
+         * Primary pseudocode: mmuko-boot/pseudocode/mmuko-boot.psc
          * Parsed ENUMs: MMUKO_BOOT_OUTCOME, MMUKO_BOOT_PHASE
          * Parsed STRUCTs: MMUKO_BOOT_HANDOFF
          */
@@ -40,7 +32,7 @@ typedef enum {
 
         /* --- Structs parsed from mmuko-boot.psc --- */
         typedef struct {
-    char magic[4];
+    char magic[5];
     uint16_t revision;
     char firmware_id[6];
     uint32_t outcome;
