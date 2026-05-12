@@ -71,6 +71,23 @@ class CodegenParserTests(unittest.TestCase):
         self.assertIn("helper", codegen._parse_functions(PSC_TEXT))
         self.assertEqual(len(codegen._parse_requires(PSC_TEXT)), 9)
 
+
+    def test_boot_phase_enum_declares_none_sentinel(self):
+        primary_text = Path("mmuko-boot/pseudocode/mmuko-boot.psc").read_text(encoding="utf-8")
+        enums = dict(codegen._parse_enums(primary_text))
+
+        self.assertIn("MMUKO_BOOT_PHASE", enums)
+        self.assertIn(("PHASE_NONE", "0"), enums["MMUKO_BOOT_PHASE"])
+
+    def test_struct_emission_preserves_enum_typed_fields(self):
+        emitted = codegen._emit_c_struct(
+            "MMUKO_BOOT_HANDOFF",
+            [("last_completed_phase", "MMUKO_BOOT_PHASE", "PHASE_NONE")],
+            {"MMUKO_BOOT_PHASE"},
+        )
+
+        self.assertIn("MMUKO_BOOT_PHASE last_completed_phase;", emitted)
+
     def test_phase_blocks_are_structured_from_mmuko_boot(self):
         phases = codegen._parse_phase_blocks(PSC_TEXT)
         self.assertEqual(len(phases), 6)
