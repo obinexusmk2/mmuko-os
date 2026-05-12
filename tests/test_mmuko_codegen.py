@@ -110,6 +110,34 @@ class CodegenParserTests(unittest.TestCase):
             phase_runner_section = loader.split("int mmuko_verify_entry_contract", 1)[0]
             self.assertNotIn('REQUIRE handoff.magic == "MMUKO"', phase_runner_section)
 
+    def test_repo_rel_normalizes_absolute_and_relative_inputs(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            spec = root / "MMUKO-OS.txt"
+            primary = root / "mmuko-boot" / "pseudocode" / "mmuko-boot.psc"
+            primary.parent.mkdir(parents=True)
+            spec.write_text("spec\n", encoding="utf-8")
+            primary.write_text(PSC_TEXT, encoding="utf-8")
+
+            self.assertEqual(codegen._repo_rel(root, spec), "MMUKO-OS.txt")
+            self.assertEqual(codegen._repo_rel(root, Path("MMUKO-OS.txt")), "MMUKO-OS.txt")
+            self.assertEqual(
+                codegen._repo_rel(root, primary),
+                "mmuko-boot/pseudocode/mmuko-boot.psc",
+            )
+            self.assertEqual(
+                codegen._repo_rel(root, Path("mmuko-boot/pseudocode/mmuko-boot.psc")),
+                "mmuko-boot/pseudocode/mmuko-boot.psc",
+            )
+            self.assertEqual(
+                codegen._support_manifest(
+                    [Path("mmuko-boot/pseudocode/mmuko-boot.psc")],
+                    primary,
+                    root,
+                ),
+                ["mmuko-boot/pseudocode/mmuko-boot.psc :: primary boot model"],
+            )
+
     def test_manifest_paths_are_repo_relative_and_generated_from_psc_dir(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

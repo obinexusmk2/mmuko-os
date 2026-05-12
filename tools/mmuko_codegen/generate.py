@@ -171,26 +171,27 @@ def _write(path: Path, content: str) -> None:
 
 def _resolve_input(root: Path, path: Path) -> Path:
     """Resolve CLI input paths relative to the repository root."""
-    return path if path.is_absolute() else root / path
+    return path.resolve() if path.is_absolute() else (root / path).resolve()
 
 
-def _repo_relative(path: Path, root: Path) -> str:
+def _repo_rel(root: Path, path: Path) -> str:
     """Return a deterministic POSIX repo-relative path when possible."""
+    root_resolved = root.resolve()
+    path_resolved = path.resolve() if path.is_absolute() else (root_resolved / path).resolve()
     try:
-        return path.resolve().relative_to(root.resolve()).as_posix()
+        return path_resolved.relative_to(root_resolved).as_posix()
     except ValueError:
-        return path.as_posix()
+        return path_resolved.as_posix()
 
 
 def _support_manifest(paths: list[Path], primary: Path, root: Path) -> list[str]:
     manifest: list[str] = []
-    primary_resolved = primary.resolve()
-    for path in sorted(paths, key=lambda item: _repo_relative(item, root)):
-        role = "primary boot model" if path.resolve() == primary_resolved else "supporting pseudocode context"
-        manifest.append(f"{_repo_relative(path, root)} :: {role}")
+    primary_resolved = _resolve_input(root, primary)
+    for path in sorted(paths, key=lambda item: _repo_rel(root, item)):
+        path_resolved = _resolve_input(root, path)
+        role = "primary boot model" if path_resolved == primary_resolved else "supporting pseudocode context"
+        manifest.append(f"{_repo_rel(root, path)} :: {role}")
     return manifest
-
-
 
 
 def _parse_handoff_checksum_fields(text: str) -> list[str]:
@@ -509,15 +510,15 @@ def generate(root: Path, spec_path: Path, primary: Path, pseudocode_dir: Path) -
     primary_file = _resolve_input(root, primary)
     pseudocode_path = _resolve_input(root, pseudocode_dir)
 
-    psc_files = sorted(pseudocode_path.glob("*.psc"), key=lambda item: _repo_relative(item, root))
+    psc_files = sorted(pseudocode_path.glob("*.psc"), key=lambda item: _repo_rel(root, item))
     if primary_file.resolve() not in {path.resolve() for path in psc_files}:
         raise SystemExit(f"Primary pseudocode file not found in {pseudocode_path}: {primary_file}")
 
     primary_text = primary_file.read_text(encoding="utf-8")
     spec_text = spec_file.read_text(encoding="utf-8")
 
-    spec_display = _repo_relative(spec_file, root)
-    primary_display = _repo_relative(primary_file, root)
+    spec_display = _repo_rel(root, spec_file)
+    primary_display = _repo_rel(root, primary_file)
     _validate_boot_filesystem_contract(spec_text, primary_text, primary_display)
 
     parsed_functions = _parse_functions(primary_text)
