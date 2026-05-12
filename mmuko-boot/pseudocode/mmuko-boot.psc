@@ -24,7 +24,7 @@ STRUCT MMUKO_BOOT_HANDOFF:
     outcome              : MMUKO_BOOT_OUTCOME = HOLD
     completed_phases     : UINT8     = 0
     last_completed_phase : MMUKO_BOOT_PHASE = 0
-    filesystem_target    : STRING    = "FAT12:mmuko-os.img"
+    filesystem_target    : STRING    = "RAW_FIXED_SECTOR:mmuko-os.img:LBA0_STAGE1:LBA1_16_STAGE2:LBA17_48_RUNTIME"
     kernel_path          : STRING    = "/boot/mmuko.kernel"
     artifact_manifest_path : STRING  = "/boot/mmuko-artifacts.json"
     config_path          : STRING    = "/boot/mmuko-boot.cfg"
@@ -73,7 +73,7 @@ FUNC mmuko_boot() -> MMUKO_BOOT_HANDOFF:
     // Phase 4 — PHASE_GOVERNANCE_CHECK
     REQUIRE execution_policy == VERIFIED
     REQUIRE provenance_chain == VERIFIED
-    REQUIRE filesystem_target == FAT12:mmuko-os.img
+    REQUIRE filesystem_target == RAW_FIXED_SECTOR:mmuko-os.img:LBA0_STAGE1:LBA1_16_STAGE2:LBA17_48_RUNTIME
     complete_phase(handoff, PHASE_GOVERNANCE_CHECK, 0x00000008)
 
     // Phase 5 — PHASE_INTERNAL_PROBE

@@ -181,13 +181,40 @@ def _support_manifest(paths: list[Path], primary: Path, root: Path) -> list[str]
 
 
 
-def _require_comment_text(expr: str) -> str:
-    """Represent a PSC REQUIRE without preserving deprecated filesystem labels."""
-    if "filesystem_target" in expr and re.search(r"FAT(?:12|32|64)", expr):
-        return (
-            "filesystem_target uses canonical raw fixed-sector layout per "
-            "MMUKO-OS.txt; PSC file/path target is ambiguous"
+def _spec_declares_raw_boot_path(spec_text: str) -> bool:
+    """Return True when the canonical spec declares a raw fixed-sector BIOS path."""
+    normalized = " ".join(spec_text.lower().split())
+    return (
+        "raw" in normalized
+        and "fixed" in normalized
+        and "lba 0" in normalized
+        and "lba 1-16" in normalized
+        and "not fat12" in normalized
+    )
+
+
+def _validate_boot_filesystem_contract(spec_text: str, primary_text: str, primary_display: str) -> None:
+    """Reject FAT-oriented boot pseudocode when the spec declares the raw layout."""
+    if not _spec_declares_raw_boot_path(spec_text):
+        return
+
+    fat_matches = [
+        line.strip()
+        for line in primary_text.splitlines()
+        if "filesystem_target" in line and re.search(r"FAT(?:12|32|64)", line)
+    ]
+    if fat_matches:
+        details = "; ".join(fat_matches)
+        raise SystemExit(
+            f"{primary_display} conflicts with MMUKO-OS.txt: canonical BIOS boot "
+            f"path is the raw fixed-sector layout (LBA 0 stage-1, LBA 1-16 "
+            f"stage-2, LBA 17-48 runtime), but FAT-oriented filesystem_target "
+            f"pseudocode was found: {details}"
         )
+
+
+def _require_comment_text(expr: str) -> str:
+    """Represent a PSC REQUIRE expression for generated comments."""
     return expr
 
 def _parse_boot_phase_requires(text: str) -> list[tuple[str, str, list[str]]]:
@@ -289,6 +316,7 @@ def generate(root: Path, spec_path: Path, primary: Path, pseudocode_dir: Path) -
 
     spec_display = _repo_relative(spec_file, root)
     primary_display = _repo_relative(primary_file, root)
+    _validate_boot_filesystem_contract(spec_text, primary_text, primary_display)
 
     parsed_functions = _parse_functions(primary_text)
     parsed_constants = _parse_constants(primary_text)
@@ -371,12 +399,14 @@ def generate(root: Path, spec_path: Path, primary: Path, pseudocode_dir: Path) -
         jmp short start
         nop
 
-        ; Raw fixed-sector MMUKO boot layout; intentionally no FAT BPB/OEM metadata.
-        mmuko_layout_magic db "MMUKORAW"
-        mmuko_stage2_lba   dw 1
-        mmuko_stage2_count dw 16
-        mmuko_runtime_lba  dw 17
+        ; Raw fixed-sector MMUKO boot layout. This reserved metadata is not a
+        ; BIOS Parameter Block and intentionally carries no filesystem label.
+        mmuko_layout_magic  db "MMUKORAW"
+        mmuko_stage2_lba    dw 1
+        mmuko_stage2_count  dw 16
+        mmuko_runtime_lba   dw 17
         mmuko_runtime_count dw 32
+        mmuko_reserved      times 8 db 0
 
         start:
             cli
