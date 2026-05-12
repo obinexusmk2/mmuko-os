@@ -466,6 +466,40 @@ def _parse_boot_phase_requires(text: str) -> list[tuple[str, str, list[str]]]:
     ]
 
 
+def _validate_handoff_binds(
+    phases: list[PhaseBlock],
+    handoff_fields: list[tuple[str, str, str]],
+    primary_display: str,
+) -> dict[str, str]:
+    """Ensure every ``BIND <name> INTO handoff`` has an explicit handoff field.
+
+    The boot pseudocode binds identity/time values into the handoff record.
+    Treating a phase with unrepresented BINDs as successful would silently drop
+    that semantic input, so generation fails unless each BIND target is present
+    in ``MMUKO_BOOT_HANDOFF``.
+    """
+    field_names = {fname for fname, _ftype, _default in handoff_fields}
+    bound_names = [bind for phase in phases for bind in phase.binds]
+    missing = sorted({name for name in bound_names if name not in field_names})
+    if missing:
+        details = ", ".join(f"BIND {name} INTO handoff" for name in missing)
+        raise SystemExit(
+            f"{primary_display} BIND target has no handoff representation: {details}. "
+            "Add explicit MMUKO_BOOT_HANDOFF field(s), map the BIND to documented "
+            "generated metadata, or remove/clarify the pseudocode binding."
+        )
+    return {name: name for name in bound_names}
+
+
+def _emit_bind_comments(phase: PhaseBlock, bind_map: dict[str, str]) -> str:
+    if not phase.binds:
+        return ""
+    return "\n".join(
+        f"    /* BIND {name} INTO handoff — represented by MMUKO_BOOT_HANDOFF.{bind_map[name]} */"
+        for name in phase.binds
+    )
+
+
 # ---------------------------------------------------------------------------
 # Require → C guard helper
 # ---------------------------------------------------------------------------
@@ -533,6 +567,7 @@ def generate(root: Path, spec_path: Path, primary: Path, pseudocode_dir: Path) -
     boot_phase_blocks = _parse_phase_blocks(primary_text)
     if len(boot_phase_blocks) != 6:
         raise SystemExit(f"Expected 6 boot phase blocks in {primary_display}, found {len(boot_phase_blocks)}")
+    bind_handoff_fields = _validate_handoff_binds(boot_phase_blocks, handoff_fields, primary_display)
     support_manifest = _support_manifest(psc_files, primary_file, root)
 
     source_list = ",\n".join(f'    "{entry}"' for entry in support_manifest)
@@ -567,10 +602,12 @@ def generate(root: Path, spec_path: Path, primary: Path, pseudocode_dir: Path) -
             )
             req_guards.append(guard)
         req_block = "\n".join(req_guards) if req_guards else "    /* no explicit REQUIRE for this phase */"
+        bind_block = _emit_bind_comments(phase, bind_handoff_fields)
+        semantic_lines = req_block if not bind_block else f"{req_block}\n{bind_block}"
         body = (
             f"static int mmuko_run_phase_{idx + 1}(MMUKO_BOOT_HANDOFF_t *handoff) {{\n"
             f"    /* {pname} */\n"
-            f"{req_block}\n"
+            f"{semantic_lines}\n"
             f"    handoff->completed_phases++;\n"
             f"    handoff->last_completed_phase = {idx + 1};\n"
             f"    handoff->validation_flags |= {pflag}u;\n"
