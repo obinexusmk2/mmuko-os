@@ -13,6 +13,8 @@ ENUM MMUKO_BOOT_OUTCOME:
 STRUCT MMUKO_BOOT_HANDOFF:
     magic : CHAR[5] = "MMUKO"
     revision : UINT16 = 0x0001
+    operator_identity : STRING = "UNBOUND_OPERATOR_IDENTITY"
+    temporal_frame : STRING = "UNBOUND_TEMPORAL_FRAME"
 
 FUNC helper():
     RETURN TRUE
@@ -64,7 +66,12 @@ class CodegenParserTests(unittest.TestCase):
             [
                 (
                     "MMUKO_BOOT_HANDOFF",
-                    [("magic", "CHAR[5]", '"MMUKO"'), ("revision", "UINT16", "0x0001")],
+                    [
+                        ("magic", "CHAR[5]", '"MMUKO"'),
+                        ("revision", "UINT16", "0x0001"),
+                        ("operator_identity", "STRING", '"UNBOUND_OPERATOR_IDENTITY"'),
+                        ("temporal_frame", "STRING", '"UNBOUND_TEMPORAL_FRAME"'),
+                    ],
                 )
             ],
         )
@@ -102,6 +109,66 @@ class CodegenParserTests(unittest.TestCase):
         )
         self.assertEqual(phases[2].requirements, [])
         self.assertEqual(phases[2].binds, ["operator_identity", "temporal_frame"])
+
+    def test_phase_3_binds_are_detected_and_emitted_when_represented(self):
+        phases = codegen._parse_phase_blocks(PSC_TEXT)
+        self.assertEqual(phases[2].phase_number, 3)
+        self.assertEqual(phases[2].binds, ["operator_identity", "temporal_frame"])
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "mmuko-boot" / "pseudocode").mkdir(parents=True)
+            (root / "tools" / "mmuko_codegen").mkdir(parents=True)
+            (root / "MMUKO-OS.txt").write_text("spec\n", encoding="utf-8")
+            primary = root / "mmuko-boot" / "pseudocode" / "mmuko-boot.psc"
+            primary.write_text(PSC_TEXT, encoding="utf-8")
+
+            codegen.generate(
+                root,
+                Path("MMUKO-OS.txt"),
+                Path("mmuko-boot/pseudocode/mmuko-boot.psc"),
+                Path("mmuko-boot/pseudocode"),
+            )
+
+            loader = (root / "kernel" / "mmuko_stage2_loader.c").read_text(encoding="utf-8")
+            self.assertIn(
+                "BIND operator_identity INTO handoff — represented by MMUKO_BOOT_HANDOFF.operator_identity",
+                loader,
+            )
+            self.assertIn(
+                "BIND temporal_frame INTO handoff — represented by MMUKO_BOOT_HANDOFF.temporal_frame",
+                loader,
+            )
+
+    def test_phase_3_binds_fail_when_handoff_fields_are_missing(self):
+        unrepresented_text = PSC_TEXT.replace(
+            '    operator_identity : STRING = "UNBOUND_OPERATOR_IDENTITY"\n'
+            '    temporal_frame : STRING = "UNBOUND_TEMPORAL_FRAME"\n',
+            "",
+        )
+        phases = codegen._parse_phase_blocks(unrepresented_text)
+        self.assertEqual(phases[2].binds, ["operator_identity", "temporal_frame"])
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "mmuko-boot" / "pseudocode").mkdir(parents=True)
+            (root / "tools" / "mmuko_codegen").mkdir(parents=True)
+            (root / "MMUKO-OS.txt").write_text("spec\n", encoding="utf-8")
+            primary = root / "mmuko-boot" / "pseudocode" / "mmuko-boot.psc"
+            primary.write_text(unrepresented_text, encoding="utf-8")
+
+            with self.assertRaises(SystemExit) as raised:
+                codegen.generate(
+                    root,
+                    Path("MMUKO-OS.txt"),
+                    Path("mmuko-boot/pseudocode/mmuko-boot.psc"),
+                    Path("mmuko-boot/pseudocode"),
+                )
+
+            message = str(raised.exception)
+            self.assertIn("BIND target has no handoff representation", message)
+            self.assertIn("BIND operator_identity INTO handoff", message)
+            self.assertIn("BIND temporal_frame INTO handoff", message)
 
     def test_kernel_entry_requirements_are_not_assigned_to_phase_runners(self):
         phases = codegen._parse_phase_blocks(PSC_TEXT)

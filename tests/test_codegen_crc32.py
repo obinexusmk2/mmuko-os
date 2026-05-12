@@ -27,6 +27,8 @@ def test_handoff_checksum_fields_exclude_checksum_field():
         "config_path",
         "kernel_entry_segment",
         "kernel_entry_offset",
+        "operator_identity",
+        "temporal_frame",
         "validation_flags",
     ]
     assert "handoff_checksum" not in fields

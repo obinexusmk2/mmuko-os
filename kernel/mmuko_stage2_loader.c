@@ -113,6 +113,10 @@
             crc = mmuko_crc32_update(crc, h->config_path, strlen(h->config_path) + 1u);
             crc = mmuko_crc32_update_u16le(crc, h->kernel_entry_segment);
             crc = mmuko_crc32_update_u16le(crc, h->kernel_entry_offset);
+            if (h->operator_identity == 0) { return 0; }
+            crc = mmuko_crc32_update(crc, h->operator_identity, strlen(h->operator_identity) + 1u);
+            if (h->temporal_frame == 0) { return 0; }
+            crc = mmuko_crc32_update(crc, h->temporal_frame, strlen(h->temporal_frame) + 1u);
             crc = mmuko_crc32_update_u32le(crc, (uint32_t)h->validation_flags);
             return crc;
         }
@@ -148,6 +152,11 @@ static int mmuko_run_phase_2(MMUKO_BOOT_HANDOFF_t *handoff) {
 static int mmuko_run_phase_3(MMUKO_BOOT_HANDOFF_t *handoff) {
     /* PHASE_IDENTITY_CALIBRATION */
     /* no explicit REQUIRE for this phase */
+    /* BIND operator_identity INTO handoff — represented by MMUKO_BOOT_HANDOFF.operator_identity */
+    /* BIND temporal_frame INTO handoff — represented by MMUKO_BOOT_HANDOFF.temporal_frame */
+    handoff->completed_phases++;
+    handoff->last_completed_phase = 3;
+    handoff->validation_flags |= 0x00000004u;
     complete_phase(handoff, MMUKO_BOOT_PHASE_PHASE_IDENTITY_CALIBRATION, 0x00000004u);
     return 1;
 }
@@ -220,6 +229,8 @@ static int mmuko_run_phase_6(MMUKO_BOOT_HANDOFF_t *handoff) {
             handoff->kernel_path = "/boot/mmuko.kernel";
             handoff->artifact_manifest_path = "/boot/mmuko-artifacts.json";
             handoff->config_path = "/boot/mmuko-boot.cfg";
+            handoff->operator_identity = "UNBOUND_OPERATOR_IDENTITY";
+            handoff->temporal_frame = "UNBOUND_TEMPORAL_FRAME";
 
             /* Run all 6 phases; abort on any failure */
             if (!mmuko_run_phase_1(handoff)) goto boot_failed;

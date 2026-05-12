@@ -45,6 +45,8 @@ typedef enum {
     const char * config_path;
     uint16_t kernel_entry_segment;
     uint16_t kernel_entry_offset;
+    const char * operator_identity;
+    const char * temporal_frame;
     uint32_t validation_flags;
     uint32_t handoff_checksum;
 } MMUKO_BOOT_HANDOFF_t;

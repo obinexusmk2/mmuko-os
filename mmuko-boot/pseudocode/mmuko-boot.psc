@@ -31,6 +31,8 @@ STRUCT MMUKO_BOOT_HANDOFF:
     config_path          : STRING    = "/boot/mmuko-boot.cfg"
     kernel_entry_segment : UINT16    = 0x0000
     kernel_entry_offset  : UINT16    = 0x0000
+    operator_identity    : STRING    = "UNBOUND_OPERATOR_IDENTITY"
+    temporal_frame       : STRING    = "UNBOUND_TEMPORAL_FRAME"
     validation_flags     : UINT32    = 0
     handoff_checksum     : UINT32    = 0
 
@@ -52,6 +54,8 @@ FUNC compute_handoff_checksum(handoff: MMUKO_BOOT_HANDOFF) -> UINT32:
                  handoff.config_path,
                  handoff.kernel_entry_segment,
                  handoff.kernel_entry_offset,
+                 handoff.operator_identity,
+                 handoff.temporal_frame,
                  handoff.validation_flags)
 
 FUNC mmuko_boot() -> MMUKO_BOOT_HANDOFF:
