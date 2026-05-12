@@ -35,7 +35,7 @@ FUNC mmuko_boot() -> MMUKO_BOOT_HANDOFF:
     // Phase 4 — PHASE_GOVERNANCE_CHECK
     REQUIRE execution_policy == VERIFIED
     REQUIRE provenance_chain == VERIFIED
-    REQUIRE filesystem_target == FAT12:mmuko-os.img
+    REQUIRE filesystem_target == RAW_FIXED_SECTOR:mmuko-os.img:LBA0_STAGE1:LBA1_16_STAGE2:LBA17_48_RUNTIME
     complete_phase(handoff, PHASE_GOVERNANCE_CHECK, 0x00000008)
 
     // Phase 5 — PHASE_INTERNAL_PROBE
@@ -79,7 +79,7 @@ class CodegenParserTests(unittest.TestCase):
             (
                 "PHASE_GOVERNANCE_CHECK",
                 "0x00000008",
-                ["execution_policy == VERIFIED", "provenance_chain == VERIFIED", "filesystem_target == FAT12:mmuko-os.img"],
+                ["execution_policy == VERIFIED", "provenance_chain == VERIFIED", "filesystem_target == RAW_FIXED_SECTOR:mmuko-os.img:LBA0_STAGE1:LBA1_16_STAGE2:LBA17_48_RUNTIME"],
             ),
         )
 

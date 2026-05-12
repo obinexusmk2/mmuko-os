@@ -116,7 +116,7 @@ static int mmuko_run_phase_4(MMUKO_BOOT_HANDOFF_t *handoff) {
     /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
     /* REQUIRE provenance_chain == VERIFIED — represented from PHASE_GOVERNANCE_CHECK; resolved at runtime */
     /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
-    /* REQUIRE filesystem_target uses canonical raw fixed-sector layout per MMUKO-OS.txt; PSC file/path target is ambiguous — represented from PHASE_GOVERNANCE_CHECK; resolved at runtime */
+    /* REQUIRE filesystem_target == RAW_FIXED_SECTOR:mmuko-os.img:LBA0_STAGE1:LBA1_16_STAGE2:LBA17_48_RUNTIME — represented from PHASE_GOVERNANCE_CHECK; resolved at runtime */
     /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
     handoff->completed_phases++;
     handoff->last_completed_phase = 4;

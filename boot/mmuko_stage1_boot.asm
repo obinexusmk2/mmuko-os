@@ -22,12 +22,14 @@ ORG  0x7C00
 jmp short start
 nop
 
-; Raw fixed-sector MMUKO boot layout; intentionally no FAT BPB/OEM metadata.
-mmuko_layout_magic db "MMUKORAW"
-mmuko_stage2_lba   dw 1
-mmuko_stage2_count dw 16
-mmuko_runtime_lba  dw 17
+; Raw fixed-sector MMUKO boot layout. This reserved metadata is not a
+; BIOS Parameter Block and intentionally carries no filesystem label.
+mmuko_layout_magic  db "MMUKORAW"
+mmuko_stage2_lba    dw 1
+mmuko_stage2_count  dw 16
+mmuko_runtime_lba   dw 17
 mmuko_runtime_count dw 32
+mmuko_reserved      times 8 db 0
 
 start:
     cli
