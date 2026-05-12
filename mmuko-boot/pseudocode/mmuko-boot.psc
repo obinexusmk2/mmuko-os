@@ -18,7 +18,7 @@ ENUM MMUKO_BOOT_PHASE:
     PHASE_INTEGRITY_VERIFICATION = 6
 
 STRUCT MMUKO_BOOT_HANDOFF:
-    magic                : CHAR[4]   = "MMKO"
+    magic                : CHAR[5]   = "MMUKO"
     revision             : UINT16    = 0x0001
     firmware_id          : CHAR[6]   = "NSIGII"
     outcome              : MMUKO_BOOT_OUTCOME = HOLD
@@ -99,7 +99,7 @@ ON FAILURE:
     RETURN handoff
 
 KERNEL ENTRY CONTRACT:
-    REQUIRE handoff.magic == "MMKO"
+    REQUIRE handoff.magic == "MMUKO"
     REQUIRE handoff.revision == 0x0001
     REQUIRE handoff.outcome == PASS
     REQUIRE handoff.completed_phases == 6
