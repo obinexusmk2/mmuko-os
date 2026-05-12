@@ -3,9 +3,21 @@
 from __future__ import annotations
 
 import argparse
+from dataclasses import dataclass
 import re
 from pathlib import Path
 from textwrap import dedent
+
+
+
+@dataclass(frozen=True)
+class PhaseBlock:
+    phase_number: int
+    enum_name: str
+    requirements: list[str]
+    binds: list[str]
+    completion_flag: str
+
 
 PHASES = [
     ("PHASE 0", "Vacuum Medium Initialization", "Establish the gravitational reference frame before touching mapped bytes."),
@@ -362,16 +374,26 @@ def _require_comment_text(expr: str) -> str:
     """Represent a PSC REQUIRE expression for generated comments."""
     return expr
 
-def _parse_boot_phase_requires(text: str) -> list[tuple[str, str, list[str]]]:
-    """Parse REQUIRE expressions by actual mmuko_boot phase blocks.
+def _parse_phase_blocks(text: str) -> list[PhaseBlock]:
+    """Parse structured phase blocks from ``FUNC mmuko_boot``.
 
-    A phase block starts at a ``// Phase`` comment inside ``FUNC mmuko_boot`` and
-    ends at its matching ``complete_phase(handoff, PHASE_..., flag)`` call.
+    A phase starts at a comment such as ``// Phase 1 — PHASE_NEED_STATE_INIT``
+    and ends at the matching ``complete_phase(handoff, PHASE_..., flag)`` call.
+    Requirements from ``KERNEL ENTRY CONTRACT`` intentionally remain outside the
+    returned phase data so phase runners only reflect boot-phase requirements.
     """
-    phases: list[tuple[str, str, list[str]]] = []
+    phases: list[PhaseBlock] = []
     in_boot = False
     in_phase = False
+    phase_number = 0
+    phase_enum = ""
     current_requires: list[str] = []
+    current_binds: list[str] = []
+
+    phase_comment_re = re.compile(r"^//\s*Phase\s+(\d+)\s*(?:[-—]\s*(\w+))?\s*$")
+    complete_re = re.compile(
+        r"^complete_phase\(\s*handoff\s*,\s*(\w+)\s*,\s*(0x[0-9A-Fa-f]+|\d+)\s*\)"
+    )
 
     for raw_line in text.splitlines():
         line = raw_line.strip()
@@ -382,30 +404,65 @@ def _parse_boot_phase_requires(text: str) -> list[tuple[str, str, list[str]]]:
             continue
         if line.startswith("ON FAILURE:") or line.startswith("KERNEL ENTRY CONTRACT:"):
             break
-        if re.match(r"^//\s*Phase\s+\d+\b", line):
-            if in_phase and current_requires:
+
+        phase_match = phase_comment_re.match(line)
+        if phase_match:
+            if in_phase:
                 raise ValueError("phase block ended before complete_phase call")
             in_phase = True
+            phase_number = int(phase_match.group(1))
+            phase_enum = phase_match.group(2) or ""
             current_requires = []
+            current_binds = []
             continue
+
         if not in_phase:
             continue
+
         require_match = re.match(r"^REQUIRE\s+(.+)$", line)
         if require_match:
             current_requires.append(require_match.group(1).strip())
             continue
-        complete_match = re.match(
-            r"^complete_phase\(\s*handoff\s*,\s*(\w+)\s*,\s*(0x[0-9A-Fa-f]+|\d+)\s*\)",
-            line,
-        )
+
+        bind_match = re.match(r"^BIND\s+(.+?)\s+INTO\s+handoff\s*$", line)
+        if bind_match:
+            current_binds.append(bind_match.group(1).strip())
+            continue
+
+        complete_match = complete_re.match(line)
         if complete_match:
-            phases.append((complete_match.group(1), complete_match.group(2), current_requires))
+            completed_enum = complete_match.group(1)
+            if phase_enum and completed_enum != phase_enum:
+                raise ValueError(
+                    f"phase {phase_number} comment names {phase_enum}, "
+                    f"but complete_phase uses {completed_enum}"
+                )
+            phases.append(
+                PhaseBlock(
+                    phase_number=phase_number,
+                    enum_name=completed_enum,
+                    requirements=current_requires,
+                    binds=current_binds,
+                    completion_flag=complete_match.group(2),
+                )
+            )
             in_phase = False
+            phase_number = 0
+            phase_enum = ""
             current_requires = []
+            current_binds = []
 
     if in_phase:
         raise ValueError("unterminated phase block in mmuko_boot")
     return phases
+
+
+def _parse_boot_phase_requires(text: str) -> list[tuple[str, str, list[str]]]:
+    """Compatibility wrapper returning phase enum, flag, and REQUIREs."""
+    return [
+        (phase.enum_name, phase.completion_flag, phase.requirements)
+        for phase in _parse_phase_blocks(text)
+    ]
 
 
 # ---------------------------------------------------------------------------
@@ -472,9 +529,9 @@ def generate(root: Path, spec_path: Path, primary: Path, pseudocode_dir: Path) -
     handoff_fields = _handoff_struct_fields(parsed_structs)
     handoff_crc32_body = _emit_handoff_crc32_body(checksum_fields, handoff_fields, primary_display)
     string_initializers = _emit_handoff_string_initializers(handoff_fields)
-    boot_phase_requires = _parse_boot_phase_requires(primary_text)
-    if len(boot_phase_requires) != 6:
-        raise SystemExit(f"Expected 6 boot phase blocks in {primary_display}, found {len(boot_phase_requires)}")
+    boot_phase_blocks = _parse_phase_blocks(primary_text)
+    if len(boot_phase_blocks) != 6:
+        raise SystemExit(f"Expected 6 boot phase blocks in {primary_display}, found {len(boot_phase_blocks)}")
     support_manifest = _support_manifest(psc_files, primary_file, root)
 
     source_list = ",\n".join(f'    "{entry}"' for entry in support_manifest)
@@ -497,7 +554,10 @@ def generate(root: Path, spec_path: Path, primary: Path, pseudocode_dir: Path) -
     # map naturally to phase bodies via sequential order.
     # ------------------------------------------------------------------
     phase_bodies: list[str] = []
-    for idx, (pname, pflag, phase_requires) in enumerate(boot_phase_requires):
+    for idx, phase in enumerate(boot_phase_blocks):
+        pname = phase.enum_name
+        pflag = phase.completion_flag
+        phase_requires = phase.requirements
         req_guards = []
         for req in phase_requires:
             guard = (
