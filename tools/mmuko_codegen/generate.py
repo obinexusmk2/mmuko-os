@@ -181,6 +181,151 @@ def _support_manifest(paths: list[Path], primary: Path, root: Path) -> list[str]
 
 
 
+def _parse_handoff_checksum_fields(text: str) -> list[str]:
+    """Parse the ordered handoff field list passed to CRC32(...)."""
+    match = re.search(
+        r"^FUNC\s+compute_handoff_checksum\s*\([^)]*\)\s*->\s*UINT32\s*:\s*\n\s*RETURN\s+CRC32\((.*?)\)",
+        text,
+        re.MULTILINE | re.DOTALL,
+    )
+    if not match:
+        return []
+    fields: list[str] = []
+    for raw_arg in match.group(1).split(","):
+        arg = raw_arg.strip()
+        field_match = re.fullmatch(r"handoff\.(\w+)", arg)
+        if not field_match:
+            raise SystemExit(
+                "compute_handoff_checksum CRC32 arguments must be explicit handoff fields; "
+                f"unsupported argument: {arg}"
+            )
+        fields.append(field_match.group(1))
+    return fields
+
+
+def _crc32_standard(data: bytes, seed: int = 0) -> int:
+    """Compute standard reflected CRC32 (polynomial 0xEDB88320)."""
+    crc = seed ^ 0xFFFFFFFF
+    for byte in data:
+        crc ^= byte
+        for _ in range(8):
+            mask = -(crc & 1) & 0xFFFFFFFF
+            crc = ((crc >> 1) ^ (0xEDB88320 & mask)) & 0xFFFFFFFF
+    return crc ^ 0xFFFFFFFF
+
+
+def _c_string_literal(value: str) -> str:
+    """Return a C string literal for a PSC string default."""
+    if len(value) >= 2 and value[0] == '"' and value[-1] == '"':
+        value = value[1:-1]
+    return '"' + value.replace('\\', '\\\\').replace('"', '\\"') + '"'
+
+
+def _handoff_struct_fields(structs: list[tuple[str, list[tuple[str, str, str]]]]) -> list[tuple[str, str, str]]:
+    for struct_name, fields in structs:
+        if struct_name == "MMUKO_BOOT_HANDOFF":
+            return fields
+    raise SystemExit("MMUKO_BOOT_HANDOFF struct not found in primary pseudocode")
+
+
+def _emit_handoff_string_initializers(fields: list[tuple[str, str, str]]) -> str:
+    lines = []
+    for fname, ftype, default in fields:
+        array_match = _PSC_ARRAY_RE.fullmatch(ftype)
+        if array_match and default:
+            array_size = int(array_match.group(1))
+            value = default[1:-1] if len(default) >= 2 and default[0] == '"' and default[-1] == '"' else default
+            encoded = value.encode("ascii")
+            if len(encoded) > array_size:
+                raise SystemExit(f"Default for {fname} exceeds {ftype} capacity")
+            for index in range(array_size):
+                byte = encoded[index] if index < len(encoded) else 0
+                lines.append(f"            handoff->{fname}[{index}] = (char)0x{byte:02X};")
+        elif ftype == "STRING" and default:
+            lines.append(f"            handoff->{fname} = {_c_string_literal(default)};")
+    return "\n".join(lines)
+
+
+def _emit_crc32_field_update(field_name: str, field_type: str) -> str:
+    if field_type.startswith("CHAR["):
+        return f"            crc = mmuko_crc32_update(crc, h->{field_name}, sizeof(h->{field_name}));"
+    if field_type == "STRING":
+        return (
+            f"            if (h->{field_name} == 0) {{ return 0; }}\n"
+            f"            crc = mmuko_crc32_update(crc, h->{field_name}, strlen(h->{field_name}) + 1u);"
+        )
+    if field_type == "UINT8":
+        return f"            crc = mmuko_crc32_update_u8(crc, h->{field_name});"
+    if field_type == "UINT16":
+        return f"            crc = mmuko_crc32_update_u16le(crc, h->{field_name});"
+    # PSC enums are emitted as integer-backed C fields by _psc_type_to_c.
+    return f"            crc = mmuko_crc32_update_u32le(crc, (uint32_t)h->{field_name});"
+
+
+def _emit_handoff_crc32_body(
+    checksum_fields: list[str],
+    handoff_fields: list[tuple[str, str, str]],
+    primary_display: str,
+) -> str:
+    fields_by_name = {fname: ftype for fname, ftype, _default in handoff_fields}
+    if not checksum_fields:
+        checksum_fields = [fname for fname, _ftype, _default in handoff_fields if fname != "handoff_checksum"]
+    if "handoff_checksum" in checksum_fields:
+        raise SystemExit("compute_handoff_checksum must not include handoff.handoff_checksum in its CRC32 input")
+    missing = [field for field in checksum_fields if field not in fields_by_name]
+    if missing:
+        raise SystemExit(
+            f"{primary_display} compute_handoff_checksum references unknown handoff field(s): "
+            + ", ".join(missing)
+        )
+    updates = "\n".join(_emit_crc32_field_update(field, fields_by_name[field]) for field in checksum_fields)
+    return f"""\
+        static uint32_t mmuko_crc32_update(uint32_t crc, const void *data, size_t len) {{
+            const uint8_t *bytes = (const uint8_t *)data;
+            crc ^= 0xFFFFFFFFu;
+            for (size_t i = 0; i < len; ++i) {{
+                crc ^= (uint32_t)bytes[i];
+                for (unsigned bit = 0; bit < 8; ++bit) {{
+                    uint32_t mask = 0u - (crc & 1u);
+                    crc = (crc >> 1) ^ (0xEDB88320u & mask);
+                }}
+            }}
+            return crc ^ 0xFFFFFFFFu;
+        }}
+
+        static uint32_t mmuko_crc32_update_u8(uint32_t crc, uint8_t value) {{
+            return mmuko_crc32_update(crc, &value, sizeof(value));
+        }}
+
+        static uint32_t mmuko_crc32_update_u16le(uint32_t crc, uint16_t value) {{
+            uint8_t bytes[2] = {{
+                (uint8_t)(value & 0xFFu),
+                (uint8_t)((value >> 8) & 0xFFu),
+            }};
+            return mmuko_crc32_update(crc, bytes, sizeof(bytes));
+        }}
+
+        static uint32_t mmuko_crc32_update_u32le(uint32_t crc, uint32_t value) {{
+            uint8_t bytes[4] = {{
+                (uint8_t)(value & 0xFFu),
+                (uint8_t)((value >> 8) & 0xFFu),
+                (uint8_t)((value >> 16) & 0xFFu),
+                (uint8_t)((value >> 24) & 0xFFu),
+            }};
+            return mmuko_crc32_update(crc, bytes, sizeof(bytes));
+        }}
+
+        static uint32_t compute_handoff_checksum(const MMUKO_BOOT_HANDOFF_t *h) {{
+            /* Standard CRC32 over the pseudocode-listed serialized handoff fields.
+             * handoff_checksum is intentionally excluded. STRING values are
+             * serialized as their NUL-terminated byte sequences, not pointers.
+             */
+            uint32_t crc = 0;
+{updates}
+            return crc;
+        }}
+"""
+
 def _spec_declares_raw_boot_path(spec_text: str) -> bool:
     """Return True when the canonical spec declares a raw fixed-sector BIOS path."""
     normalized = " ".join(spec_text.lower().split())
@@ -323,6 +468,10 @@ def generate(root: Path, spec_path: Path, primary: Path, pseudocode_dir: Path) -
     parsed_enums = _parse_enums(primary_text)
     parsed_structs = _parse_structs(primary_text)
     parsed_requires = _parse_requires(primary_text)
+    checksum_fields = _parse_handoff_checksum_fields(primary_text)
+    handoff_fields = _handoff_struct_fields(parsed_structs)
+    handoff_crc32_body = _emit_handoff_crc32_body(checksum_fields, handoff_fields, primary_display)
+    string_initializers = _emit_handoff_string_initializers(handoff_fields)
     boot_phase_requires = _parse_boot_phase_requires(primary_text)
     if len(boot_phase_requires) != 6:
         raise SystemExit(f"Expected 6 boot phase blocks in {primary_display}, found {len(boot_phase_requires)}")
@@ -582,19 +731,7 @@ def generate(root: Path, spec_path: Path, primary: Path, pseudocode_dir: Path) -
         /* Boot handoff — 6-phase NSIGII runner (from {primary_file.name})         */
         /* ------------------------------------------------------------------ */
 
-        static uint32_t compute_handoff_checksum(const MMUKO_BOOT_HANDOFF_t *h) {{
-            /* Simple additive checksum over fixed scalar fields */
-            uint32_t crc = 0;
-            crc += (uint32_t)(h->revision);
-            crc += (uint32_t)(h->outcome);
-            crc += (uint32_t)(h->completed_phases);
-            crc += (uint32_t)(h->last_completed_phase);
-            crc += (uint32_t)(h->kernel_entry_segment);
-            crc += (uint32_t)(h->kernel_entry_offset);
-            crc += h->validation_flags;
-            return crc ^ 0xDEADBEEFu;
-        }}
-
+{handoff_crc32_body}
         static void complete_phase(MMUKO_BOOT_HANDOFF_t *h, uint8_t phase, uint32_t flag) {{
             h->completed_phases++;
             h->last_completed_phase = phase;
@@ -611,7 +748,8 @@ def generate(root: Path, spec_path: Path, primary: Path, pseudocode_dir: Path) -
             /* Initialise handoff record */
             memset(handoff, 0, sizeof(*handoff));
             handoff->magic[0] = 'M'; handoff->magic[1] = 'M';
-            handoff->magic[2] = 'K'; handoff->magic[3] = 'O';
+            handoff->magic[2] = 'U'; handoff->magic[3] = 'K';
+            handoff->magic[4] = 'O';
             handoff->revision           = 0x0001;
             handoff->firmware_id[0]     = 'N'; handoff->firmware_id[1] = 'S';
             handoff->firmware_id[2]     = 'I'; handoff->firmware_id[3] = 'G';
@@ -621,6 +759,7 @@ def generate(root: Path, spec_path: Path, primary: Path, pseudocode_dir: Path) -
             handoff->kernel_entry_segment = 0x0000;
             handoff->kernel_entry_offset  = 0x0000;
             handoff->validation_flags     = 0;
+{string_initializers}
 
             /* Run all 6 phases; abort on any failure */
             if (!mmuko_run_phase_1(handoff)) goto boot_failed;
@@ -643,7 +782,8 @@ def generate(root: Path, spec_path: Path, primary: Path, pseudocode_dir: Path) -
         int mmuko_verify_entry_contract(const MMUKO_BOOT_HANDOFF_t *h) {{
             /* Kernel entry contract (from {primary_file.name} KERNEL ENTRY CONTRACT section) */
             if (h->magic[0] != 'M' || h->magic[1] != 'M' ||
-                h->magic[2] != 'K' || h->magic[3] != 'O') {{
+                h->magic[2] != 'U' || h->magic[3] != 'K' ||
+                h->magic[4] != 'O') {{
                 return 0;  /* magic mismatch */
             }}
             if (h->revision != 0x0001)                    return 0;

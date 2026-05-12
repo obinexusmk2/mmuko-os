@@ -56,17 +56,65 @@
         /* Boot handoff — 6-phase NSIGII runner (from mmuko-boot.psc)         */
         /* ------------------------------------------------------------------ */
 
+        static uint32_t mmuko_crc32_update(uint32_t crc, const void *data, size_t len) {
+            const uint8_t *bytes = (const uint8_t *)data;
+            crc ^= 0xFFFFFFFFu;
+            for (size_t i = 0; i < len; ++i) {
+                crc ^= (uint32_t)bytes[i];
+                for (unsigned bit = 0; bit < 8; ++bit) {
+                    uint32_t mask = 0u - (crc & 1u);
+                    crc = (crc >> 1) ^ (0xEDB88320u & mask);
+                }
+            }
+            return crc ^ 0xFFFFFFFFu;
+        }
+
+        static uint32_t mmuko_crc32_update_u8(uint32_t crc, uint8_t value) {
+            return mmuko_crc32_update(crc, &value, sizeof(value));
+        }
+
+        static uint32_t mmuko_crc32_update_u16le(uint32_t crc, uint16_t value) {
+            uint8_t bytes[2] = {
+                (uint8_t)(value & 0xFFu),
+                (uint8_t)((value >> 8) & 0xFFu),
+            };
+            return mmuko_crc32_update(crc, bytes, sizeof(bytes));
+        }
+
+        static uint32_t mmuko_crc32_update_u32le(uint32_t crc, uint32_t value) {
+            uint8_t bytes[4] = {
+                (uint8_t)(value & 0xFFu),
+                (uint8_t)((value >> 8) & 0xFFu),
+                (uint8_t)((value >> 16) & 0xFFu),
+                (uint8_t)((value >> 24) & 0xFFu),
+            };
+            return mmuko_crc32_update(crc, bytes, sizeof(bytes));
+        }
+
         static uint32_t compute_handoff_checksum(const MMUKO_BOOT_HANDOFF_t *h) {
-            /* Simple additive checksum over fixed scalar fields */
+            /* Standard CRC32 over the pseudocode-listed serialized handoff fields.
+             * handoff_checksum is intentionally excluded. STRING values are
+             * serialized as their NUL-terminated byte sequences, not pointers.
+             */
             uint32_t crc = 0;
-            crc += (uint32_t)(h->revision);
-            crc += (uint32_t)(h->outcome);
-            crc += (uint32_t)(h->completed_phases);
-            crc += (uint32_t)(h->last_completed_phase);
-            crc += (uint32_t)(h->kernel_entry_segment);
-            crc += (uint32_t)(h->kernel_entry_offset);
-            crc += h->validation_flags;
-            return crc ^ 0xDEADBEEFu;
+            crc = mmuko_crc32_update(crc, h->magic, sizeof(h->magic));
+            crc = mmuko_crc32_update_u16le(crc, h->revision);
+            crc = mmuko_crc32_update(crc, h->firmware_id, sizeof(h->firmware_id));
+            crc = mmuko_crc32_update_u32le(crc, (uint32_t)h->outcome);
+            crc = mmuko_crc32_update_u8(crc, h->completed_phases);
+            crc = mmuko_crc32_update_u32le(crc, (uint32_t)h->last_completed_phase);
+            if (h->filesystem_target == 0) { return 0; }
+            crc = mmuko_crc32_update(crc, h->filesystem_target, strlen(h->filesystem_target) + 1u);
+            if (h->kernel_path == 0) { return 0; }
+            crc = mmuko_crc32_update(crc, h->kernel_path, strlen(h->kernel_path) + 1u);
+            if (h->artifact_manifest_path == 0) { return 0; }
+            crc = mmuko_crc32_update(crc, h->artifact_manifest_path, strlen(h->artifact_manifest_path) + 1u);
+            if (h->config_path == 0) { return 0; }
+            crc = mmuko_crc32_update(crc, h->config_path, strlen(h->config_path) + 1u);
+            crc = mmuko_crc32_update_u16le(crc, h->kernel_entry_segment);
+            crc = mmuko_crc32_update_u16le(crc, h->kernel_entry_offset);
+            crc = mmuko_crc32_update_u32le(crc, (uint32_t)h->validation_flags);
+            return crc;
         }
 
         static void complete_phase(MMUKO_BOOT_HANDOFF_t *h, uint8_t phase, uint32_t flag) {
@@ -158,7 +206,8 @@ static int mmuko_run_phase_6(MMUKO_BOOT_HANDOFF_t *handoff) {
             /* Initialise handoff record */
             memset(handoff, 0, sizeof(*handoff));
             handoff->magic[0] = 'M'; handoff->magic[1] = 'M';
-            handoff->magic[2] = 'K'; handoff->magic[3] = 'O';
+            handoff->magic[2] = 'U'; handoff->magic[3] = 'K';
+            handoff->magic[4] = 'O';
             handoff->revision           = 0x0001;
             handoff->firmware_id[0]     = 'N'; handoff->firmware_id[1] = 'S';
             handoff->firmware_id[2]     = 'I'; handoff->firmware_id[3] = 'G';
@@ -168,6 +217,21 @@ static int mmuko_run_phase_6(MMUKO_BOOT_HANDOFF_t *handoff) {
             handoff->kernel_entry_segment = 0x0000;
             handoff->kernel_entry_offset  = 0x0000;
             handoff->validation_flags     = 0;
+            handoff->magic[0] = (char)0x4D;
+            handoff->magic[1] = (char)0x4D;
+            handoff->magic[2] = (char)0x55;
+            handoff->magic[3] = (char)0x4B;
+            handoff->magic[4] = (char)0x4F;
+            handoff->firmware_id[0] = (char)0x4E;
+            handoff->firmware_id[1] = (char)0x53;
+            handoff->firmware_id[2] = (char)0x49;
+            handoff->firmware_id[3] = (char)0x47;
+            handoff->firmware_id[4] = (char)0x49;
+            handoff->firmware_id[5] = (char)0x49;
+            handoff->filesystem_target = "RAW_FIXED_SECTOR:mmuko-os.img:LBA0_STAGE1:LBA1_16_STAGE2:LBA17_48_RUNTIME";
+            handoff->kernel_path = "/boot/mmuko.kernel";
+            handoff->artifact_manifest_path = "/boot/mmuko-artifacts.json";
+            handoff->config_path = "/boot/mmuko-boot.cfg";
 
             /* Run all 6 phases; abort on any failure */
             if (!mmuko_run_phase_1(handoff)) goto boot_failed;
@@ -190,7 +254,8 @@ static int mmuko_run_phase_6(MMUKO_BOOT_HANDOFF_t *handoff) {
         int mmuko_verify_entry_contract(const MMUKO_BOOT_HANDOFF_t *h) {
             /* Kernel entry contract (from mmuko-boot.psc KERNEL ENTRY CONTRACT section) */
             if (h->magic[0] != 'M' || h->magic[1] != 'M' ||
-                h->magic[2] != 'K' || h->magic[3] != 'O') {
+                h->magic[2] != 'U' || h->magic[3] != 'K' ||
+                h->magic[4] != 'O') {
                 return 0;  /* magic mismatch */
             }
             if (h->revision != 0x0001)                    return 0;
