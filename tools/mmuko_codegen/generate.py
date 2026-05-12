@@ -386,6 +386,41 @@ def _require_comment_text(expr: str) -> str:
     """Represent a PSC REQUIRE expression for generated comments."""
     return expr
 
+
+def _require_probe_name(expr: str) -> str:
+    """Map a PSC REQUIRE expression to a deterministic C probe symbol name.
+
+    Phase REQUIRE expressions name boot-time facts that are not directly stored in
+    the generated handoff structure.  Preserve those semantics by emitting a
+    platform probe per expression instead of attempting to evaluate PSC-only
+    identifiers as C.
+    """
+    normalized = expr.strip()
+    if not normalized:
+        raise SystemExit("Unsupported empty REQUIRE expression")
+    if not re.fullmatch(r'[A-Za-z0-9_./:"()=!<>\- ]+', normalized):
+        raise SystemExit(f"Unsupported REQUIRE expression for C probe generation: {expr}")
+
+    probe = normalized.lower()
+    replacements = [
+        ("!=", "_not_"),
+        (">=", "_gte_"),
+        ("<=", "_lte_"),
+        ("==", "_eq_"),
+        (">", "_gt_"),
+        ("<", "_lt_"),
+    ]
+    for needle, replacement in replacements:
+        probe = probe.replace(needle, replacement)
+    probe = probe.replace("handoff.", "handoff_")
+    probe = re.sub(r"[^a-z0-9_]+", "_", probe).strip("_")
+    probe = re.sub(r"_+", "_", probe)
+    if not probe:
+        raise SystemExit(f"Unsupported REQUIRE expression for C probe generation: {expr}")
+    if probe[0].isdigit():
+        probe = "expr_" + probe
+    return "mmuko_probe_" + probe
+
 def _parse_phase_blocks(text: str) -> list[PhaseBlock]:
     """Parse structured phase blocks from ``FUNC mmuko_boot``.
 
@@ -516,33 +551,53 @@ def _emit_bind_comments(phase: PhaseBlock, bind_map: dict[str, str]) -> str:
 # ---------------------------------------------------------------------------
 
 def _require_to_c_guard(expr: str) -> str:
-    """Convert a PSC REQUIRE expression to a C if-guard that returns ALERT."""
-    # Normalise common PSC tokens to C equivalents
-    c_expr = expr
-    c_expr = re.sub(r"\bTRUE\b", "1", c_expr)
-    c_expr = re.sub(r"\bFALSE\b", "0", c_expr)
-    c_expr = re.sub(r"\b!=\b", "!=", c_expr)
-    c_expr = re.sub(r"\b==\b", "==", c_expr)
-    # Conditions that reference runtime globals become stubs returning 1 (pass)
-    # The caller replaces these at link time with real platform checks.
-    stub_patterns = [
-        r"tier\d+_state",
-        r"nsigii_\w+",
-        r"memory_map_\w+",
-        r"runtime_interface_\w+",
-        r"execution_policy",
-        r"provenance_chain",
-        r"filesystem_target",
-        r"artifact_exists\(",
-        r"kernel_entry_is_resolved",
-        r"discriminant",
-        r"operator_identity",
-        r"temporal_frame",
+    """Convert a PSC REQUIRE expression to a generated phase-runner C guard."""
+    probe_name = _require_probe_name(expr)
+    return (
+        f"    /* REQUIRE {_require_comment_text(expr)} — represented by {probe_name} */\n"
+        f"    if (!{probe_name}(handoff)) {{ return 0; }}"
+    )
+
+
+def _emit_require_probe_stubs(phases: list[PhaseBlock]) -> str:
+    """Emit deterministic weak probe stubs for all phase REQUIRE expressions."""
+    probe_exprs: dict[str, str] = {}
+    for phase in phases:
+        for expr in phase.requirements:
+            probe_name = _require_probe_name(expr)
+            existing = probe_exprs.get(probe_name)
+            if existing is not None and existing != expr:
+                raise SystemExit(
+                    "REQUIRE expressions collide on generated probe name "
+                    f"{probe_name}: {existing!r} and {expr!r}"
+                )
+            probe_exprs[probe_name] = expr
+
+    if not probe_exprs:
+        return "/* No phase REQUIRE probes emitted. */"
+
+    lines = [
+        "#if defined(__GNUC__) || defined(__clang__)",
+        "#define MMUKO_WEAK __attribute__((weak))",
+        "#else",
+        "#define MMUKO_WEAK",
+        "#endif",
+        "",
     ]
-    is_stub = any(re.search(p, expr, re.IGNORECASE) for p in stub_patterns)
-    if is_stub:
-        return f"    /* REQUIRE {expr} — resolved at runtime */\n    if (!mmuko_probe_{{}}) {{ goto on_failure; }}"
-    return f"    if (!({c_expr})) {{ goto on_failure; }}"
+    for probe_name in sorted(probe_exprs):
+        expr = probe_exprs[probe_name]
+        lines.extend(
+            [
+                f"/* Default probe for REQUIRE {_require_comment_text(expr)}. */",
+                f"MMUKO_WEAK int {probe_name}(const MMUKO_BOOT_HANDOFF_t *handoff) {{",
+                "    (void)handoff;",
+                "    return 1;",
+                "}",
+                "",
+            ]
+        )
+    lines.append("#undef MMUKO_WEAK")
+    return "\n".join(lines)
 
 
 # ---------------------------------------------------------------------------
@@ -603,18 +658,12 @@ def generate(root: Path, spec_path: Path, primary: Path, pseudocode_dir: Path) -
     # Phase requires are grouped: lines before "complete_phase" calls
     # map naturally to phase bodies via sequential order.
     # ------------------------------------------------------------------
+    require_probe_stubs = _emit_require_probe_stubs(boot_phase_blocks)
     phase_bodies: list[str] = []
     for idx, phase in enumerate(boot_phase_blocks):
         pname = phase.enum_name
         pflag = phase.completion_flag
-        phase_requires = phase.requirements
-        req_guards = []
-        for req in phase_requires:
-            guard = (
-                f"    /* REQUIRE {_require_comment_text(req)} — represented from {pname}; resolved at runtime */\n"
-                f"    /* mmuko_probe stub: returns 1 (pass) until platform impl provided */"
-            )
-            req_guards.append(guard)
+        req_guards = [_require_to_c_guard(req) for req in phase.requirements]
         req_block = "\n".join(req_guards) if req_guards else "    /* no explicit REQUIRE for this phase */"
         bind_block = _emit_bind_comments(phase, bind_handoff_fields)
         semantic_lines = req_block if not bind_block else f"{req_block}\n{bind_block}"
@@ -622,10 +671,6 @@ def generate(root: Path, spec_path: Path, primary: Path, pseudocode_dir: Path) -
             f"static int mmuko_run_phase_{idx + 1}(MMUKO_BOOT_HANDOFF_t *handoff) {{\n"
             f"    /* {pname} */\n"
             f"{semantic_lines}\n"
-            f"    handoff->completed_phases++;\n"
-            f"    handoff->last_completed_phase = {idx + 1};\n"
-            f"    handoff->validation_flags |= {pflag}u;\n"
-            f"{req_block}\n"
             f"    complete_phase(handoff, MMUKO_BOOT_PHASE_{pname}, {pflag}u);\n"
             f"    return 1;\n"
             f"}}"
@@ -852,10 +897,13 @@ def generate(root: Path, spec_path: Path, primary: Path, pseudocode_dir: Path) -
             h->validation_flags |= flag;
         }}
 
-        /* Per-phase runners — REQUIRE stubs return 1 (pass); replace with
-         * real platform probes at link time by providing mmuko_probe_*()
-         * implementations.
+        /* Per-phase REQUIRE probes — weak defaults return 1 (pass); replace
+         * with real platform probes at link time by providing matching
+         * mmuko_probe_*() implementations.
          */
+        {require_probe_stubs}
+
+        /* Per-phase runners. */
         {all_phase_bodies}
 
         MMUKO_BOOT_OUTCOME mmuko_boot(MMUKO_BOOT_HANDOFF_t *handoff) {{

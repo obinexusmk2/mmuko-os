@@ -127,24 +127,111 @@
             h->validation_flags |= flag;
         }
 
-        /* Per-phase runners — REQUIRE stubs return 1 (pass); replace with
-         * real platform probes at link time by providing mmuko_probe_*()
-         * implementations.
+        /* Per-phase REQUIRE probes — weak defaults return 1 (pass); replace
+         * with real platform probes at link time by providing matching
+         * mmuko_probe_*() implementations.
          */
+        #if defined(__GNUC__) || defined(__clang__)
+#define MMUKO_WEAK __attribute__((weak))
+#else
+#define MMUKO_WEAK
+#endif
+
+/* Default probe for REQUIRE artifact_exists(handoff.artifact_manifest_path). */
+MMUKO_WEAK int mmuko_probe_artifact_exists_handoff_artifact_manifest_path(const MMUKO_BOOT_HANDOFF_t *handoff) {
+    (void)handoff;
+    return 1;
+}
+
+/* Default probe for REQUIRE artifact_exists(handoff.kernel_path). */
+MMUKO_WEAK int mmuko_probe_artifact_exists_handoff_kernel_path(const MMUKO_BOOT_HANDOFF_t *handoff) {
+    (void)handoff;
+    return 1;
+}
+
+/* Default probe for REQUIRE discriminant >= 0. */
+MMUKO_WEAK int mmuko_probe_discriminant_gte_0(const MMUKO_BOOT_HANDOFF_t *handoff) {
+    (void)handoff;
+    return 1;
+}
+
+/* Default probe for REQUIRE execution_policy == VERIFIED. */
+MMUKO_WEAK int mmuko_probe_execution_policy_eq_verified(const MMUKO_BOOT_HANDOFF_t *handoff) {
+    (void)handoff;
+    return 1;
+}
+
+/* Default probe for REQUIRE filesystem_target == RAW_FIXED_SECTOR:mmuko-os.img:LBA0_STAGE1:LBA1_16_STAGE2:LBA17_48_RUNTIME. */
+MMUKO_WEAK int mmuko_probe_filesystem_target_eq_raw_fixed_sector_mmuko_os_img_lba0_stage1_lba1_16_stage2_lba17_48_runtime(const MMUKO_BOOT_HANDOFF_t *handoff) {
+    (void)handoff;
+    return 1;
+}
+
+/* Default probe for REQUIRE kernel_entry_is_resolved == TRUE. */
+MMUKO_WEAK int mmuko_probe_kernel_entry_is_resolved_eq_true(const MMUKO_BOOT_HANDOFF_t *handoff) {
+    (void)handoff;
+    return 1;
+}
+
+/* Default probe for REQUIRE memory_map_integrity == TRUE. */
+MMUKO_WEAK int mmuko_probe_memory_map_integrity_eq_true(const MMUKO_BOOT_HANDOFF_t *handoff) {
+    (void)handoff;
+    return 1;
+}
+
+/* Default probe for REQUIRE nsigii_firmware_compatible == TRUE. */
+MMUKO_WEAK int mmuko_probe_nsigii_firmware_compatible_eq_true(const MMUKO_BOOT_HANDOFF_t *handoff) {
+    (void)handoff;
+    return 1;
+}
+
+/* Default probe for REQUIRE nsigii_minimum_safety_envelope == TRUE. */
+MMUKO_WEAK int mmuko_probe_nsigii_minimum_safety_envelope_eq_true(const MMUKO_BOOT_HANDOFF_t *handoff) {
+    (void)handoff;
+    return 1;
+}
+
+/* Default probe for REQUIRE provenance_chain == VERIFIED. */
+MMUKO_WEAK int mmuko_probe_provenance_chain_eq_verified(const MMUKO_BOOT_HANDOFF_t *handoff) {
+    (void)handoff;
+    return 1;
+}
+
+/* Default probe for REQUIRE runtime_interface_compatible == TRUE. */
+MMUKO_WEAK int mmuko_probe_runtime_interface_compatible_eq_true(const MMUKO_BOOT_HANDOFF_t *handoff) {
+    (void)handoff;
+    return 1;
+}
+
+/* Default probe for REQUIRE tier1_state != NO. */
+MMUKO_WEAK int mmuko_probe_tier1_state_not_no(const MMUKO_BOOT_HANDOFF_t *handoff) {
+    (void)handoff;
+    return 1;
+}
+
+/* Default probe for REQUIRE tier2_state != NO. */
+MMUKO_WEAK int mmuko_probe_tier2_state_not_no(const MMUKO_BOOT_HANDOFF_t *handoff) {
+    (void)handoff;
+    return 1;
+}
+
+#undef MMUKO_WEAK
+
+        /* Per-phase runners. */
         static int mmuko_run_phase_1(MMUKO_BOOT_HANDOFF_t *handoff) {
     /* PHASE_NEED_STATE_INIT */
-    /* REQUIRE tier1_state != NO — represented from PHASE_NEED_STATE_INIT; resolved at runtime */
-    /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
+    /* REQUIRE tier1_state != NO — represented by mmuko_probe_tier1_state_not_no */
+    if (!mmuko_probe_tier1_state_not_no(handoff)) { return 0; }
     complete_phase(handoff, MMUKO_BOOT_PHASE_PHASE_NEED_STATE_INIT, 0x00000001u);
     return 1;
 }
 
 static int mmuko_run_phase_2(MMUKO_BOOT_HANDOFF_t *handoff) {
     /* PHASE_SAFETY_SCAN */
-    /* REQUIRE tier2_state != NO — represented from PHASE_SAFETY_SCAN; resolved at runtime */
-    /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
-    /* REQUIRE nsigii_minimum_safety_envelope == TRUE — represented from PHASE_SAFETY_SCAN; resolved at runtime */
-    /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
+    /* REQUIRE tier2_state != NO — represented by mmuko_probe_tier2_state_not_no */
+    if (!mmuko_probe_tier2_state_not_no(handoff)) { return 0; }
+    /* REQUIRE nsigii_minimum_safety_envelope == TRUE — represented by mmuko_probe_nsigii_minimum_safety_envelope_eq_true */
+    if (!mmuko_probe_nsigii_minimum_safety_envelope_eq_true(handoff)) { return 0; }
     complete_phase(handoff, MMUKO_BOOT_PHASE_PHASE_SAFETY_SCAN, 0x00000002u);
     return 1;
 }
@@ -154,47 +241,44 @@ static int mmuko_run_phase_3(MMUKO_BOOT_HANDOFF_t *handoff) {
     /* no explicit REQUIRE for this phase */
     /* BIND operator_identity INTO handoff — represented by MMUKO_BOOT_HANDOFF.operator_identity */
     /* BIND temporal_frame INTO handoff — represented by MMUKO_BOOT_HANDOFF.temporal_frame */
-    handoff->completed_phases++;
-    handoff->last_completed_phase = 3;
-    handoff->validation_flags |= 0x00000004u;
     complete_phase(handoff, MMUKO_BOOT_PHASE_PHASE_IDENTITY_CALIBRATION, 0x00000004u);
     return 1;
 }
 
 static int mmuko_run_phase_4(MMUKO_BOOT_HANDOFF_t *handoff) {
     /* PHASE_GOVERNANCE_CHECK */
-    /* REQUIRE execution_policy == VERIFIED — represented from PHASE_GOVERNANCE_CHECK; resolved at runtime */
-    /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
-    /* REQUIRE provenance_chain == VERIFIED — represented from PHASE_GOVERNANCE_CHECK; resolved at runtime */
-    /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
-    /* REQUIRE filesystem_target == RAW_FIXED_SECTOR:mmuko-os.img:LBA0_STAGE1:LBA1_16_STAGE2:LBA17_48_RUNTIME — represented from PHASE_GOVERNANCE_CHECK; resolved at runtime */
-    /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
+    /* REQUIRE execution_policy == VERIFIED — represented by mmuko_probe_execution_policy_eq_verified */
+    if (!mmuko_probe_execution_policy_eq_verified(handoff)) { return 0; }
+    /* REQUIRE provenance_chain == VERIFIED — represented by mmuko_probe_provenance_chain_eq_verified */
+    if (!mmuko_probe_provenance_chain_eq_verified(handoff)) { return 0; }
+    /* REQUIRE filesystem_target == RAW_FIXED_SECTOR:mmuko-os.img:LBA0_STAGE1:LBA1_16_STAGE2:LBA17_48_RUNTIME — represented by mmuko_probe_filesystem_target_eq_raw_fixed_sector_mmuko_os_img_lba0_stage1_lba1_16_stage2_lba17_48_runtime */
+    if (!mmuko_probe_filesystem_target_eq_raw_fixed_sector_mmuko_os_img_lba0_stage1_lba1_16_stage2_lba17_48_runtime(handoff)) { return 0; }
     complete_phase(handoff, MMUKO_BOOT_PHASE_PHASE_GOVERNANCE_CHECK, 0x00000008u);
     return 1;
 }
 
 static int mmuko_run_phase_5(MMUKO_BOOT_HANDOFF_t *handoff) {
     /* PHASE_INTERNAL_PROBE */
-    /* REQUIRE nsigii_firmware_compatible == TRUE — represented from PHASE_INTERNAL_PROBE; resolved at runtime */
-    /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
-    /* REQUIRE memory_map_integrity == TRUE — represented from PHASE_INTERNAL_PROBE; resolved at runtime */
-    /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
-    /* REQUIRE runtime_interface_compatible == TRUE — represented from PHASE_INTERNAL_PROBE; resolved at runtime */
-    /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
+    /* REQUIRE nsigii_firmware_compatible == TRUE — represented by mmuko_probe_nsigii_firmware_compatible_eq_true */
+    if (!mmuko_probe_nsigii_firmware_compatible_eq_true(handoff)) { return 0; }
+    /* REQUIRE memory_map_integrity == TRUE — represented by mmuko_probe_memory_map_integrity_eq_true */
+    if (!mmuko_probe_memory_map_integrity_eq_true(handoff)) { return 0; }
+    /* REQUIRE runtime_interface_compatible == TRUE — represented by mmuko_probe_runtime_interface_compatible_eq_true */
+    if (!mmuko_probe_runtime_interface_compatible_eq_true(handoff)) { return 0; }
     complete_phase(handoff, MMUKO_BOOT_PHASE_PHASE_INTERNAL_PROBE, 0x00000010u);
     return 1;
 }
 
 static int mmuko_run_phase_6(MMUKO_BOOT_HANDOFF_t *handoff) {
     /* PHASE_INTEGRITY_VERIFICATION */
-    /* REQUIRE artifact_exists(handoff.kernel_path) — represented from PHASE_INTEGRITY_VERIFICATION; resolved at runtime */
-    /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
-    /* REQUIRE artifact_exists(handoff.artifact_manifest_path) — represented from PHASE_INTEGRITY_VERIFICATION; resolved at runtime */
-    /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
-    /* REQUIRE discriminant >= 0 — represented from PHASE_INTEGRITY_VERIFICATION; resolved at runtime */
-    /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
-    /* REQUIRE kernel_entry_is_resolved == TRUE — represented from PHASE_INTEGRITY_VERIFICATION; resolved at runtime */
-    /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
+    /* REQUIRE artifact_exists(handoff.kernel_path) — represented by mmuko_probe_artifact_exists_handoff_kernel_path */
+    if (!mmuko_probe_artifact_exists_handoff_kernel_path(handoff)) { return 0; }
+    /* REQUIRE artifact_exists(handoff.artifact_manifest_path) — represented by mmuko_probe_artifact_exists_handoff_artifact_manifest_path */
+    if (!mmuko_probe_artifact_exists_handoff_artifact_manifest_path(handoff)) { return 0; }
+    /* REQUIRE discriminant >= 0 — represented by mmuko_probe_discriminant_gte_0 */
+    if (!mmuko_probe_discriminant_gte_0(handoff)) { return 0; }
+    /* REQUIRE kernel_entry_is_resolved == TRUE — represented by mmuko_probe_kernel_entry_is_resolved_eq_true */
+    if (!mmuko_probe_kernel_entry_is_resolved_eq_true(handoff)) { return 0; }
     complete_phase(handoff, MMUKO_BOOT_PHASE_PHASE_INTEGRITY_VERIFICATION, 0x00000020u);
     return 1;
 }

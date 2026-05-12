@@ -110,6 +110,40 @@ class CodegenParserTests(unittest.TestCase):
         self.assertEqual(phases[2].requirements, [])
         self.assertEqual(phases[2].binds, ["operator_identity", "temporal_frame"])
 
+
+    def test_require_guards_use_deterministic_probe_names(self):
+        guard = codegen._require_to_c_guard("tier1_state != NO")
+
+        self.assertIn("mmuko_probe_tier1_state_not_no", guard)
+        self.assertIn("if (!mmuko_probe_tier1_state_not_no(handoff)) { return 0; }", guard)
+        self.assertNotIn("mmuko_probe_{}", guard)
+
+    def test_unsupported_require_expression_fails_clearly(self):
+        with self.assertRaisesRegex(SystemExit, "Unsupported REQUIRE expression"):
+            codegen._require_to_c_guard("tier1_state ~= NO")
+
+    def test_generated_loader_emits_probe_stubs_and_guards(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "mmuko-boot" / "pseudocode").mkdir(parents=True)
+            (root / "tools" / "mmuko_codegen").mkdir(parents=True)
+            (root / "MMUKO-OS.txt").write_text("spec\n", encoding="utf-8")
+            primary = root / "mmuko-boot" / "pseudocode" / "mmuko-boot.psc"
+            primary.write_text(PSC_TEXT, encoding="utf-8")
+
+            codegen.generate(
+                root,
+                Path("MMUKO-OS.txt"),
+                Path("mmuko-boot/pseudocode/mmuko-boot.psc"),
+                Path("mmuko-boot/pseudocode"),
+            )
+
+            loader = (root / "kernel" / "mmuko_stage2_loader.c").read_text(encoding="utf-8")
+            self.assertIn("MMUKO_WEAK int mmuko_probe_tier1_state_not_no", loader)
+            self.assertIn("if (!mmuko_probe_tier1_state_not_no(handoff)) { return 0; }", loader)
+            self.assertIn("MMUKO_WEAK int mmuko_probe_filesystem_target_eq_raw_fixed_sector_mmuko_os_img_lba0_stage1_lba1_16_stage2_lba17_48_runtime", loader)
+            self.assertNotIn("mmuko_probe_{}", loader)
+
     def test_phase_3_binds_are_detected_and_emitted_when_represented(self):
         phases = codegen._parse_phase_blocks(PSC_TEXT)
         self.assertEqual(phases[2].phase_number, 3)
