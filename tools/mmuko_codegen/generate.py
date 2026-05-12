@@ -152,17 +152,88 @@ def _emit_c_struct(name: str, fields: list[tuple[str, str, str]]) -> str:
 # Helpers
 # ---------------------------------------------------------------------------
 
-def _support_manifest(paths: list[Path], primary: Path) -> list[str]:
-    manifest: list[str] = []
-    for path in sorted(paths):
-        role = "primary boot model" if path == primary else "supporting pseudocode context"
-        manifest.append(f"{path.as_posix()} :: {role}")
-    return manifest
-
-
 def _write(path: Path, content: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content, encoding="utf-8")
+
+
+def _resolve_input(root: Path, path: Path) -> Path:
+    """Resolve CLI input paths relative to the repository root."""
+    return path if path.is_absolute() else root / path
+
+
+def _repo_relative(path: Path, root: Path) -> str:
+    """Return a deterministic POSIX repo-relative path when possible."""
+    try:
+        return path.resolve().relative_to(root.resolve()).as_posix()
+    except ValueError:
+        return path.as_posix()
+
+
+def _support_manifest(paths: list[Path], primary: Path, root: Path) -> list[str]:
+    manifest: list[str] = []
+    primary_resolved = primary.resolve()
+    for path in sorted(paths, key=lambda item: _repo_relative(item, root)):
+        role = "primary boot model" if path.resolve() == primary_resolved else "supporting pseudocode context"
+        manifest.append(f"{_repo_relative(path, root)} :: {role}")
+    return manifest
+
+
+
+
+def _require_comment_text(expr: str) -> str:
+    """Represent a PSC REQUIRE without preserving deprecated filesystem labels."""
+    if "filesystem_target" in expr and re.search(r"FAT(?:12|32|64)", expr):
+        return (
+            "filesystem_target uses canonical raw fixed-sector layout per "
+            "MMUKO-OS.txt; PSC file/path target is ambiguous"
+        )
+    return expr
+
+def _parse_boot_phase_requires(text: str) -> list[tuple[str, str, list[str]]]:
+    """Parse REQUIRE expressions by actual mmuko_boot phase blocks.
+
+    A phase block starts at a ``// Phase`` comment inside ``FUNC mmuko_boot`` and
+    ends at its matching ``complete_phase(handoff, PHASE_..., flag)`` call.
+    """
+    phases: list[tuple[str, str, list[str]]] = []
+    in_boot = False
+    in_phase = False
+    current_requires: list[str] = []
+
+    for raw_line in text.splitlines():
+        line = raw_line.strip()
+        if re.match(r"^FUNC\s+mmuko_boot\b", line):
+            in_boot = True
+            continue
+        if not in_boot:
+            continue
+        if line.startswith("ON FAILURE:") or line.startswith("KERNEL ENTRY CONTRACT:"):
+            break
+        if re.match(r"^//\s*Phase\s+\d+\b", line):
+            if in_phase and current_requires:
+                raise ValueError("phase block ended before complete_phase call")
+            in_phase = True
+            current_requires = []
+            continue
+        if not in_phase:
+            continue
+        require_match = re.match(r"^REQUIRE\s+(.+)$", line)
+        if require_match:
+            current_requires.append(require_match.group(1).strip())
+            continue
+        complete_match = re.match(
+            r"^complete_phase\(\s*handoff\s*,\s*(\w+)\s*,\s*(0x[0-9A-Fa-f]+|\d+)\s*\)",
+            line,
+        )
+        if complete_match:
+            phases.append((complete_match.group(1), complete_match.group(2), current_requires))
+            in_phase = False
+            current_requires = []
+
+    if in_phase:
+        raise ValueError("unterminated phase block in mmuko_boot")
+    return phases
 
 
 # ---------------------------------------------------------------------------
@@ -204,19 +275,30 @@ def _require_to_c_guard(expr: str) -> str:
 # ---------------------------------------------------------------------------
 
 def generate(root: Path, spec_path: Path, primary: Path, pseudocode_dir: Path) -> None:
-    psc_files = sorted(pseudocode_dir.glob("*.psc"))
-    if primary not in psc_files:
-        raise SystemExit(f"Primary pseudocode file not found in {pseudocode_dir}: {primary}")
+    root = root.resolve()
+    spec_file = _resolve_input(root, spec_path)
+    primary_file = _resolve_input(root, primary)
+    pseudocode_path = _resolve_input(root, pseudocode_dir)
 
-    primary_text = primary.read_text(encoding="utf-8")
-    spec_text = spec_path.read_text(encoding="utf-8")
+    psc_files = sorted(pseudocode_path.glob("*.psc"), key=lambda item: _repo_relative(item, root))
+    if primary_file.resolve() not in {path.resolve() for path in psc_files}:
+        raise SystemExit(f"Primary pseudocode file not found in {pseudocode_path}: {primary_file}")
+
+    primary_text = primary_file.read_text(encoding="utf-8")
+    spec_text = spec_file.read_text(encoding="utf-8")
+
+    spec_display = _repo_relative(spec_file, root)
+    primary_display = _repo_relative(primary_file, root)
 
     parsed_functions = _parse_functions(primary_text)
     parsed_constants = _parse_constants(primary_text)
     parsed_enums = _parse_enums(primary_text)
     parsed_structs = _parse_structs(primary_text)
     parsed_requires = _parse_requires(primary_text)
-    support_manifest = _support_manifest(psc_files, primary)
+    boot_phase_requires = _parse_boot_phase_requires(primary_text)
+    if len(boot_phase_requires) != 6:
+        raise SystemExit(f"Expected 6 boot phase blocks in {primary_display}, found {len(boot_phase_requires)}")
+    support_manifest = _support_manifest(psc_files, primary_file, root)
 
     source_list = ",\n".join(f'    "{entry}"' for entry in support_manifest)
     function_list = "\n".join(f" *   - {name}" for name in parsed_functions)
@@ -238,27 +320,11 @@ def generate(root: Path, spec_path: Path, primary: Path, pseudocode_dir: Path) -
     # map naturally to phase bodies via sequential order.
     # ------------------------------------------------------------------
     phase_bodies: list[str] = []
-    phase_names = [
-        "PHASE_NEED_STATE_INIT",
-        "PHASE_SAFETY_SCAN",
-        "PHASE_IDENTITY_CALIBRATION",
-        "PHASE_GOVERNANCE_CHECK",
-        "PHASE_INTERNAL_PROBE",
-        "PHASE_INTEGRITY_VERIFICATION",
-    ]
-    phase_flags = [
-        "0x00000001", "0x00000002", "0x00000004",
-        "0x00000008", "0x00000010", "0x00000020",
-    ]
-    # Assign requires round-robin across 6 phases (heuristic grouping)
-    requires_per_phase = max(1, len(parsed_requires) // 6) if parsed_requires else 1
-    for idx, (pname, pflag) in enumerate(zip(phase_names, phase_flags)):
-        phase_req_start = idx * requires_per_phase
-        phase_req_end = phase_req_start + requires_per_phase
+    for idx, (pname, pflag, phase_requires) in enumerate(boot_phase_requires):
         req_guards = []
-        for req in parsed_requires[phase_req_start:phase_req_end]:
+        for req in phase_requires:
             guard = (
-                f"    /* REQUIRE {req} — resolved at runtime */\n"
+                f"    /* REQUIRE {_require_comment_text(req)} — represented from {pname}; resolved at runtime */\n"
                 f"    /* mmuko_probe stub: returns 1 (pass) until platform impl provided */"
             )
             req_guards.append(guard)
@@ -283,12 +349,12 @@ def generate(root: Path, spec_path: Path, primary: Path, pseudocode_dir: Path) -
         f"""\
         ; -----------------------------------------------------------------------------
         ; Generated file. Do not edit by hand.
-        ; Authoritative input: {spec_path.as_posix()}
-        ; Primary pseudocode: {primary.as_posix()}
+        ; Authoritative input: {spec_display}
+        ; Primary pseudocode: {primary_display}
         ; Supporting pseudocode count: {len(psc_files)}
         ; Parsed ENUM types: {', '.join(n for n, _ in parsed_enums)}
         ; Parsed STRUCT types: {', '.join(n for n, _ in parsed_structs)}
-        ; Boot contract: MMKO magic, 6 phases, outcome PASS=0xAA
+        ; Boot contract: MMUKO magic, 6 phases, outcome PASS=0xAA
         ; -----------------------------------------------------------------------------
         ; Key generated phases:
         ;   {PHASES[0][0]} - {PHASES[0][1]}
@@ -304,25 +370,13 @@ def generate(root: Path, spec_path: Path, primary: Path, pseudocode_dir: Path) -
 
         jmp short start
         nop
-        db "MMUKOGEN"
-        dw 512
-        db 1
-        dw 1
-        db 2
-        dw 224
-        dw 2880
-        db 0xF0
-        dw 9
-        dw 18
-        dw 2
-        dd 0
-        dd 0
-        db 0
-        db 0
-        db 0x29
-        dd 0x4D4D554B
-        db "MMUKO-GEN  "
-        db "FAT12   "
+
+        ; Raw fixed-sector MMUKO boot layout; intentionally no FAT BPB/OEM metadata.
+        mmuko_layout_magic db "MMUKORAW"
+        mmuko_stage2_lba   dw 1
+        mmuko_stage2_count dw 16
+        mmuko_runtime_lba  dw 17
+        mmuko_runtime_count dw 32
 
         start:
             cli
@@ -397,8 +451,8 @@ def generate(root: Path, spec_path: Path, primary: Path, pseudocode_dir: Path) -
     header = dedent(
         f"""\
         /* Generated file. Do not edit by hand.
-         * Authoritative input: {spec_path.as_posix()}
-         * Primary pseudocode: {primary.as_posix()}
+         * Authoritative input: {spec_display}
+         * Primary pseudocode: {primary_display}
          * Parsed ENUMs: {', '.join(n for n, _ in parsed_enums)}
          * Parsed STRUCTs: {', '.join(n for n, _ in parsed_structs)}
          */
@@ -412,10 +466,10 @@ def generate(root: Path, spec_path: Path, primary: Path, pseudocode_dir: Path) -
         extern "C" {{
         #endif
 
-        /* --- Enums parsed from {primary.name} --- */
+        /* --- Enums parsed from {primary_file.name} --- */
         {enum_decls}
 
-        /* --- Structs parsed from {primary.name} --- */
+        /* --- Structs parsed from {primary_file.name} --- */
         {struct_decls}
 
         /* --- Phase descriptor API --- */
@@ -449,8 +503,8 @@ def generate(root: Path, spec_path: Path, primary: Path, pseudocode_dir: Path) -
     stage2_c = dedent(
         f"""\
         /* Generated file. Do not edit by hand.
-         * Authoritative input: {spec_path.as_posix()}
-         * Primary pseudocode: {primary.as_posix()}
+         * Authoritative input: {spec_display}
+         * Primary pseudocode: {primary_display}
          * Parsed functions from main boot pseudocode:
         {function_list}
          * Parsed constants snapshot:
@@ -495,7 +549,7 @@ def generate(root: Path, spec_path: Path, primary: Path, pseudocode_dir: Path) -
         }}
 
         /* ------------------------------------------------------------------ */
-        /* Boot handoff — 6-phase NSIGII runner (from {primary.name})         */
+        /* Boot handoff — 6-phase NSIGII runner (from {primary_file.name})         */
         /* ------------------------------------------------------------------ */
 
         static uint32_t compute_handoff_checksum(const MMUKO_BOOT_HANDOFF_t *h) {{
@@ -557,7 +611,7 @@ def generate(root: Path, spec_path: Path, primary: Path, pseudocode_dir: Path) -
         }}
 
         int mmuko_verify_entry_contract(const MMUKO_BOOT_HANDOFF_t *h) {{
-            /* Kernel entry contract (from {primary.name} KERNEL ENTRY CONTRACT section) */
+            /* Kernel entry contract (from {primary_file.name} KERNEL ENTRY CONTRACT section) */
             if (h->magic[0] != 'M' || h->magic[1] != 'M' ||
                 h->magic[2] != 'K' || h->magic[3] != 'O') {{
                 return 0;  /* magic mismatch */
@@ -578,8 +632,8 @@ def generate(root: Path, spec_path: Path, primary: Path, pseudocode_dir: Path) -
     stage2_cpp = dedent(
         f"""\
         // Generated file. Do not edit by hand.
-        // Authoritative input: {spec_path.as_posix()}
-        // Primary pseudocode: {primary.as_posix()}
+        // Authoritative input: {spec_display}
+        // Primary pseudocode: {primary_display}
         #include "mmuko_codegen.h"
 
         #include <sstream>
@@ -598,8 +652,8 @@ def generate(root: Path, spec_path: Path, primary: Path, pseudocode_dir: Path) -
 
         std::string stage2_report() {{
             std::ostringstream report;
-            report << "Authoritative input: {spec_path.as_posix()}\\n";
-            report << "Primary pseudocode: {primary.as_posix()}\\n";
+            report << "Authoritative input: {spec_display}\\n";
+            report << "Primary pseudocode: {primary_display}\\n";
             report << "Phase count: " << mmuko_stage2_phase_count() << "\\n";
 
             const auto *phases = mmuko_stage2_phases();
@@ -636,7 +690,7 @@ def generate(root: Path, spec_path: Path, primary: Path, pseudocode_dir: Path) -
     pyx = dedent(
         f"""\
         # Generated file. Do not edit by hand.
-        # Authoritative input: {spec_path.as_posix()}
+        # Authoritative input: {spec_display}
         # distutils: language = c
         from libc.string cimport strlen
         cimport mmuko_codegen
@@ -669,8 +723,8 @@ def generate(root: Path, spec_path: Path, primary: Path, pseudocode_dir: Path) -
     manifest = dedent(
         f"""\
         # MMUKO code generation manifest
-        authoritative_input={spec_path.as_posix()}
-        primary_pseudocode={primary.as_posix()}
+        authoritative_input={spec_display}
+        primary_pseudocode={primary_display}
         generated_boot=boot/mmuko_stage1_boot.asm
         generated_stage2_c=kernel/mmuko_stage2_loader.c
         generated_stage2_cpp=kernel/mmuko_stage2_bridge.cpp

@@ -1,14 +1,6 @@
         /* Generated file. Do not edit by hand.
-<<<<<<< HEAD
-<<<<<<< HEAD
          * Authoritative input: MMUKO-OS.txt
-=======
-         * Authoritative input: pseudocode/MMUKO-OS.txt
->>>>>>> 87ae7ecdbcb6bce4c98cef97219e0ed08854e7c7
-=======
-         * Authoritative input: pseudocode/MMUKO-OS.txt
->>>>>>> 87ae7ecdbcb6bce4c98cef97219e0ed08854e7c7
-         * Primary pseudocode: pseudocode/mmuko-boot.psc
+         * Primary pseudocode: mmuko-boot/pseudocode/mmuko-boot.psc
          * Parsed functions from main boot pseudocode:
          *   - complete_phase
  *   - compute_handoff_checksum
@@ -34,38 +26,7 @@
         };
 
         static const char *MMUKO_PSEUDOCODE_SOURCES[] = {
-            "pseudocode/Asymetric Symetric Drone Delivery.psc :: supporting pseudocode context",
-    "pseudocode/Bipartite Order and Chaos — Key Separation of Concern Crypto.psc :: supporting pseudocode context",
-<<<<<<< HEAD
-<<<<<<< HEAD
-    "pseudocode/CPU_Scheduling_Pseudocode.psc :: supporting pseudocode context",
-=======
->>>>>>> 87ae7ecdbcb6bce4c98cef97219e0ed08854e7c7
-=======
->>>>>>> 87ae7ecdbcb6bce4c98cef97219e0ed08854e7c7
-    "pseudocode/Electronic Magnetic RRR.psc :: supporting pseudocode context",
-    "pseudocode/Electronic Magnetic State Machine Duailty Modelling.psc :: supporting pseudocode context",
-    "pseudocode/Filter-Flash CISCO Interdepency _22March26.psc :: supporting pseudocode context",
-    "pseudocode/Filter-Flash Eplison Matrix Conjugate.psc :: supporting pseudocode context",
-    "pseudocode/HERE AND NOW COMMAND AND CONTROL.psc :: supporting pseudocode context",
-    "pseudocode/LIBPolycall Financial Cobol Bridge.psc :: supporting pseudocode context",
-    "pseudocode/MMUKO NSIGII How to Login into the MetaPhysical.psc :: supporting pseudocode context",
-    "pseudocode/NSIGII - Loopback Addressing.psc :: supporting pseudocode context",
-    "pseudocode/NSIGII LoopBack LR Polar On the Fly Proccesing LoopBack Addressing.psc :: supporting pseudocode context",
-    "pseudocode/NSIGII Protocol - How I Fought For My Human Rights.psc :: supporting pseudocode context",
-    "pseudocode/NSIGII Trident Command & Control Human Rights.psc :: supporting pseudocode context",
-    "pseudocode/NSIGII — ENCODING SUFFERING INTO SILICON.psc :: supporting pseudocode context",
-    "pseudocode/OHA IWU and Iji intergale lapis calculus.psc :: supporting pseudocode context",
-    "pseudocode/ON-THE-FLY COMMAND AND CONTROL VIA READ WRITE EXECUTE.psc :: supporting pseudocode context",
-    "pseudocode/RectorialResaonignRationale.psc :: supporting pseudocode context",
-    "pseudocode/SPRING PHYSICS ECHO VERIFIER.psc :: supporting pseudocode context",
-    "pseudocode/Spring Chalk Board Verification.psc :: supporting pseudocode context",
-    "pseudocode/Symbolic Interpretation — AI Clipper Debuggable Cognitio.psc :: supporting pseudocode context",
-    "pseudocode/Three Player Chess  Dimensional Game Theory & XO C and C.psc :: supporting pseudocode context",
-    "pseudocode/Trident Heterogeneous Homogeneous Canonical Interpreter.psc :: supporting pseudocode context",
-    "pseudocode/Wheel RRF -Invariant Process Bidirectional Clause.psc :: supporting pseudocode context",
-    "pseudocode/mmuko-boot.psc :: primary boot model",
-    "pseudocode/mmuko.psc :: supporting pseudocode context"
+            "mmuko-boot/pseudocode/mmuko-boot.psc :: primary boot model"
         };
 
         size_t mmuko_stage2_phase_count(void) {
@@ -77,15 +38,7 @@
         }
 
         const char *mmuko_stage2_boot_summary(void) {
-<<<<<<< HEAD
-<<<<<<< HEAD
             return " This text companion mirrors the build-spec section in README.md so that the artifact contract is available in a plain-text form for packers, boot tooling, and release notes.  Build-spec";
-=======
-            return "// ============================================================ // NSIGII BIPOLAR SEQUENCE // Bipartite Order and Chaos — Key Separation of Concern Crypto // OBINexus / MMUKO-OS Extension — Phase 15 // Derived from: \"NSIGII BiPolar Sequence via Bipartite Order //               and Chaos\" — 30 January 2026, 05:38 AM";
->>>>>>> 87ae7ecdbcb6bce4c98cef97219e0ed08854e7c7
-=======
-            return "// ============================================================ // NSIGII BIPOLAR SEQUENCE // Bipartite Order and Chaos — Key Separation of Concern Crypto // OBINexus / MMUKO-OS Extension — Phase 15 // Derived from: \"NSIGII BiPolar Sequence via Bipartite Order //               and Chaos\" — 30 January 2026, 05:38 AM";
->>>>>>> 87ae7ecdbcb6bce4c98cef97219e0ed08854e7c7
         }
 
         size_t mmuko_pseudocode_source_count(void) {
@@ -128,11 +81,7 @@
          */
         static int mmuko_run_phase_1(MMUKO_BOOT_HANDOFF_t *handoff) {
     /* PHASE_NEED_STATE_INIT */
-    /* REQUIRE tier1_state != NO — resolved at runtime */
-    /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
-    /* REQUIRE tier2_state != NO — resolved at runtime */
-    /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
-    /* REQUIRE nsigii_minimum_safety_envelope == TRUE — resolved at runtime */
+    /* REQUIRE tier1_state != NO — represented from PHASE_NEED_STATE_INIT; resolved at runtime */
     /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
     handoff->completed_phases++;
     handoff->last_completed_phase = 1;
@@ -142,11 +91,9 @@
 
 static int mmuko_run_phase_2(MMUKO_BOOT_HANDOFF_t *handoff) {
     /* PHASE_SAFETY_SCAN */
-    /* REQUIRE execution_policy == VERIFIED — resolved at runtime */
+    /* REQUIRE tier2_state != NO — represented from PHASE_SAFETY_SCAN; resolved at runtime */
     /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
-    /* REQUIRE provenance_chain == VERIFIED — resolved at runtime */
-    /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
-    /* REQUIRE filesystem_target == FAT12:mmuko-os.img — resolved at runtime */
+    /* REQUIRE nsigii_minimum_safety_envelope == TRUE — represented from PHASE_SAFETY_SCAN; resolved at runtime */
     /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
     handoff->completed_phases++;
     handoff->last_completed_phase = 2;
@@ -156,12 +103,7 @@ static int mmuko_run_phase_2(MMUKO_BOOT_HANDOFF_t *handoff) {
 
 static int mmuko_run_phase_3(MMUKO_BOOT_HANDOFF_t *handoff) {
     /* PHASE_IDENTITY_CALIBRATION */
-    /* REQUIRE nsigii_firmware_compatible == TRUE — resolved at runtime */
-    /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
-    /* REQUIRE memory_map_integrity == TRUE — resolved at runtime */
-    /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
-    /* REQUIRE runtime_interface_compatible == TRUE — resolved at runtime */
-    /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
+    /* no explicit REQUIRE for this phase */
     handoff->completed_phases++;
     handoff->last_completed_phase = 3;
     handoff->validation_flags |= 0x00000004u;
@@ -170,11 +112,11 @@ static int mmuko_run_phase_3(MMUKO_BOOT_HANDOFF_t *handoff) {
 
 static int mmuko_run_phase_4(MMUKO_BOOT_HANDOFF_t *handoff) {
     /* PHASE_GOVERNANCE_CHECK */
-    /* REQUIRE artifact_exists(handoff.kernel_path) — resolved at runtime */
+    /* REQUIRE execution_policy == VERIFIED — represented from PHASE_GOVERNANCE_CHECK; resolved at runtime */
     /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
-    /* REQUIRE artifact_exists(handoff.artifact_manifest_path) — resolved at runtime */
+    /* REQUIRE provenance_chain == VERIFIED — represented from PHASE_GOVERNANCE_CHECK; resolved at runtime */
     /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
-    /* REQUIRE discriminant >= 0 — resolved at runtime */
+    /* REQUIRE filesystem_target uses canonical raw fixed-sector layout per MMUKO-OS.txt; PSC file/path target is ambiguous — represented from PHASE_GOVERNANCE_CHECK; resolved at runtime */
     /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
     handoff->completed_phases++;
     handoff->last_completed_phase = 4;
@@ -184,11 +126,11 @@ static int mmuko_run_phase_4(MMUKO_BOOT_HANDOFF_t *handoff) {
 
 static int mmuko_run_phase_5(MMUKO_BOOT_HANDOFF_t *handoff) {
     /* PHASE_INTERNAL_PROBE */
-    /* REQUIRE kernel_entry_is_resolved == TRUE — resolved at runtime */
+    /* REQUIRE nsigii_firmware_compatible == TRUE — represented from PHASE_INTERNAL_PROBE; resolved at runtime */
     /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
-    /* REQUIRE handoff.magic == "MMKO" — resolved at runtime */
+    /* REQUIRE memory_map_integrity == TRUE — represented from PHASE_INTERNAL_PROBE; resolved at runtime */
     /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
-    /* REQUIRE handoff.revision == 0x0001 — resolved at runtime */
+    /* REQUIRE runtime_interface_compatible == TRUE — represented from PHASE_INTERNAL_PROBE; resolved at runtime */
     /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
     handoff->completed_phases++;
     handoff->last_completed_phase = 5;
@@ -198,11 +140,13 @@ static int mmuko_run_phase_5(MMUKO_BOOT_HANDOFF_t *handoff) {
 
 static int mmuko_run_phase_6(MMUKO_BOOT_HANDOFF_t *handoff) {
     /* PHASE_INTEGRITY_VERIFICATION */
-    /* REQUIRE handoff.outcome == PASS — resolved at runtime */
+    /* REQUIRE artifact_exists(handoff.kernel_path) — represented from PHASE_INTEGRITY_VERIFICATION; resolved at runtime */
     /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
-    /* REQUIRE handoff.completed_phases == 6 — resolved at runtime */
+    /* REQUIRE artifact_exists(handoff.artifact_manifest_path) — represented from PHASE_INTEGRITY_VERIFICATION; resolved at runtime */
     /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
-    /* REQUIRE VERIFY_CRC32(handoff) == TRUE — resolved at runtime */
+    /* REQUIRE discriminant >= 0 — represented from PHASE_INTEGRITY_VERIFICATION; resolved at runtime */
+    /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
+    /* REQUIRE kernel_entry_is_resolved == TRUE — represented from PHASE_INTEGRITY_VERIFICATION; resolved at runtime */
     /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
     handoff->completed_phases++;
     handoff->last_completed_phase = 6;

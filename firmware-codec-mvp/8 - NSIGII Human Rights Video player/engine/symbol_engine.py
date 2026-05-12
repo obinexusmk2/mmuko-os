@@ -1,6 +1,6 @@
 """
 OBINexus RIFT Symbol Analytic Engine
-=====================================
+-------------------------------------
 Tripartite Tristate Execution: YES(1) / NO(0) / MAYBE(-∞→1)
 Filter-Flash Functor: F³(A, B) → (A', A'')
 Discriminant Gate: Δ = b² - 4ac → ORDER / CONSENSUS / CHAOS
