@@ -22,6 +22,7 @@
 } MMUKO_BOOT_OUTCOME;
 
 typedef enum {
+    MMUKO_BOOT_PHASE_PHASE_NONE = 0,
     MMUKO_BOOT_PHASE_PHASE_NEED_STATE_INIT = 1,
     MMUKO_BOOT_PHASE_PHASE_SAFETY_SCAN = 2,
     MMUKO_BOOT_PHASE_PHASE_IDENTITY_CALIBRATION = 3,
@@ -35,9 +36,9 @@ typedef enum {
     char magic[5];
     uint16_t revision;
     char firmware_id[6];
-    uint32_t outcome;
+    MMUKO_BOOT_OUTCOME outcome;
     uint8_t completed_phases;
-    uint32_t last_completed_phase;
+    MMUKO_BOOT_PHASE last_completed_phase;
     const char * filesystem_target;
     const char * kernel_path;
     const char * artifact_manifest_path;

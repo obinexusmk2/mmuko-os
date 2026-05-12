@@ -122,13 +122,20 @@ _PSC_TYPE_MAP: dict[str, str] = {
 _PSC_ARRAY_RE = re.compile(r"CHAR\[(\d+)\]")
 
 
-def _psc_type_to_c(psc_type: str, field_name: str) -> str:
+def _psc_type_to_c(
+    psc_type: str,
+    field_name: str,
+    enum_type_names: set[str] | None = None,
+) -> str:
     """Convert a PSC type string to a C field declaration."""
-    m = _PSC_ARRAY_RE.match(psc_type)
+    m = _PSC_ARRAY_RE.fullmatch(psc_type)
     if m:
         return f"char {field_name}[{m.group(1)}]"
-    c_type = _PSC_TYPE_MAP.get(psc_type, "uint32_t")
-    return f"{c_type} {field_name}"
+    if enum_type_names and psc_type in enum_type_names:
+        return f"{psc_type} {field_name}"
+    if psc_type in _PSC_TYPE_MAP:
+        return f"{_PSC_TYPE_MAP[psc_type]} {field_name}"
+    raise SystemExit(f"Unsupported PSC type for {field_name}: {psc_type}")
 
 
 # ---------------------------------------------------------------------------
@@ -152,10 +159,14 @@ def _emit_c_enum(name: str, members: list[tuple[str, str]]) -> str:
     return "\n".join(lines)
 
 
-def _emit_c_struct(name: str, fields: list[tuple[str, str, str]]) -> str:
+def _emit_c_struct(
+    name: str,
+    fields: list[tuple[str, str, str]],
+    enum_type_names: set[str] | None = None,
+) -> str:
     lines = [f"typedef struct {{"]
     for fname, ftype, _default in fields:
-        lines.append(f"    {_psc_type_to_c(ftype, fname)};")
+        lines.append(f"    {_psc_type_to_c(ftype, fname, enum_type_names)};")
     lines.append(f"}} {name}_t;")
     return "\n".join(lines)
 
@@ -581,8 +592,11 @@ def generate(root: Path, spec_path: Path, primary: Path, pseudocode_dir: Path) -
     # ------------------------------------------------------------------
     # Emit C enums and structs from PSC
     # ------------------------------------------------------------------
+    enum_type_names = {name for name, _members in parsed_enums}
     enum_decls = "\n\n".join(_emit_c_enum(name, members) for name, members in parsed_enums)
-    struct_decls = "\n\n".join(_emit_c_struct(name, fields) for name, fields in parsed_structs)
+    struct_decls = "\n\n".join(
+        _emit_c_struct(name, fields, enum_type_names) for name, fields in parsed_structs
+    )
 
     # ------------------------------------------------------------------
     # Boot phase validation function bodies
@@ -611,6 +625,8 @@ def generate(root: Path, spec_path: Path, primary: Path, pseudocode_dir: Path) -
             f"    handoff->completed_phases++;\n"
             f"    handoff->last_completed_phase = {idx + 1};\n"
             f"    handoff->validation_flags |= {pflag}u;\n"
+            f"{req_block}\n"
+            f"    complete_phase(handoff, MMUKO_BOOT_PHASE_{pname}, {pflag}u);\n"
             f"    return 1;\n"
             f"}}"
         )
@@ -830,7 +846,7 @@ def generate(root: Path, spec_path: Path, primary: Path, pseudocode_dir: Path) -
         /* ------------------------------------------------------------------ */
 
 {handoff_crc32_body}
-        static void complete_phase(MMUKO_BOOT_HANDOFF_t *h, uint8_t phase, uint32_t flag) {{
+        static void complete_phase(MMUKO_BOOT_HANDOFF_t *h, MMUKO_BOOT_PHASE phase, uint32_t flag) {{
             h->completed_phases++;
             h->last_completed_phase = phase;
             h->validation_flags |= flag;

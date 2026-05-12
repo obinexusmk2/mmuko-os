@@ -10,6 +10,7 @@ ENUM MMUKO_BOOT_OUTCOME:
     ALERT = 0xCC
 
 ENUM MMUKO_BOOT_PHASE:
+    PHASE_NONE                 = 0
     PHASE_NEED_STATE_INIT      = 1
     PHASE_SAFETY_SCAN          = 2
     PHASE_IDENTITY_CALIBRATION = 3
@@ -23,7 +24,7 @@ STRUCT MMUKO_BOOT_HANDOFF:
     firmware_id          : CHAR[6]   = "NSIGII"
     outcome              : MMUKO_BOOT_OUTCOME = HOLD
     completed_phases     : UINT8     = 0
-    last_completed_phase : MMUKO_BOOT_PHASE = 0
+    last_completed_phase : MMUKO_BOOT_PHASE = PHASE_NONE
     filesystem_target    : STRING    = "RAW_FIXED_SECTOR:mmuko-os.img:LBA0_STAGE1:LBA1_16_STAGE2:LBA17_48_RUNTIME"
     kernel_path          : STRING    = "/boot/mmuko.kernel"
     artifact_manifest_path : STRING  = "/boot/mmuko-artifacts.json"

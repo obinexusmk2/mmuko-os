@@ -121,7 +121,7 @@
             return crc;
         }
 
-        static void complete_phase(MMUKO_BOOT_HANDOFF_t *h, uint8_t phase, uint32_t flag) {
+        static void complete_phase(MMUKO_BOOT_HANDOFF_t *h, MMUKO_BOOT_PHASE phase, uint32_t flag) {
             h->completed_phases++;
             h->last_completed_phase = phase;
             h->validation_flags |= flag;
@@ -135,9 +135,7 @@
     /* PHASE_NEED_STATE_INIT */
     /* REQUIRE tier1_state != NO — represented from PHASE_NEED_STATE_INIT; resolved at runtime */
     /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
-    handoff->completed_phases++;
-    handoff->last_completed_phase = 1;
-    handoff->validation_flags |= 0x00000001u;
+    complete_phase(handoff, MMUKO_BOOT_PHASE_PHASE_NEED_STATE_INIT, 0x00000001u);
     return 1;
 }
 
@@ -147,9 +145,7 @@ static int mmuko_run_phase_2(MMUKO_BOOT_HANDOFF_t *handoff) {
     /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
     /* REQUIRE nsigii_minimum_safety_envelope == TRUE — represented from PHASE_SAFETY_SCAN; resolved at runtime */
     /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
-    handoff->completed_phases++;
-    handoff->last_completed_phase = 2;
-    handoff->validation_flags |= 0x00000002u;
+    complete_phase(handoff, MMUKO_BOOT_PHASE_PHASE_SAFETY_SCAN, 0x00000002u);
     return 1;
 }
 
@@ -161,6 +157,7 @@ static int mmuko_run_phase_3(MMUKO_BOOT_HANDOFF_t *handoff) {
     handoff->completed_phases++;
     handoff->last_completed_phase = 3;
     handoff->validation_flags |= 0x00000004u;
+    complete_phase(handoff, MMUKO_BOOT_PHASE_PHASE_IDENTITY_CALIBRATION, 0x00000004u);
     return 1;
 }
 
@@ -172,9 +169,7 @@ static int mmuko_run_phase_4(MMUKO_BOOT_HANDOFF_t *handoff) {
     /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
     /* REQUIRE filesystem_target == RAW_FIXED_SECTOR:mmuko-os.img:LBA0_STAGE1:LBA1_16_STAGE2:LBA17_48_RUNTIME — represented from PHASE_GOVERNANCE_CHECK; resolved at runtime */
     /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
-    handoff->completed_phases++;
-    handoff->last_completed_phase = 4;
-    handoff->validation_flags |= 0x00000008u;
+    complete_phase(handoff, MMUKO_BOOT_PHASE_PHASE_GOVERNANCE_CHECK, 0x00000008u);
     return 1;
 }
 
@@ -186,9 +181,7 @@ static int mmuko_run_phase_5(MMUKO_BOOT_HANDOFF_t *handoff) {
     /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
     /* REQUIRE runtime_interface_compatible == TRUE — represented from PHASE_INTERNAL_PROBE; resolved at runtime */
     /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
-    handoff->completed_phases++;
-    handoff->last_completed_phase = 5;
-    handoff->validation_flags |= 0x00000010u;
+    complete_phase(handoff, MMUKO_BOOT_PHASE_PHASE_INTERNAL_PROBE, 0x00000010u);
     return 1;
 }
 
@@ -202,9 +195,7 @@ static int mmuko_run_phase_6(MMUKO_BOOT_HANDOFF_t *handoff) {
     /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
     /* REQUIRE kernel_entry_is_resolved == TRUE — represented from PHASE_INTEGRITY_VERIFICATION; resolved at runtime */
     /* mmuko_probe stub: returns 1 (pass) until platform impl provided */
-    handoff->completed_phases++;
-    handoff->last_completed_phase = 6;
-    handoff->validation_flags |= 0x00000020u;
+    complete_phase(handoff, MMUKO_BOOT_PHASE_PHASE_INTEGRITY_VERIFICATION, 0x00000020u);
     return 1;
 }
 
