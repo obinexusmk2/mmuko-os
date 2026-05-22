@@ -1,0 +1,67 @@
+CC = gcc
+CFLAGS = -Wall -Wextra -std=c11 -O2
+CPPFLAGS = -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L
+LDLIBS = -lm
+
+ifeq ($(OS),Windows_NT)
+    EXEEXT = .exe
+    CLEAN_CMD = del /Q
+    CLEAN_REDIRECT = 2>NUL
+else
+    EXEEXT =
+    CLEAN_CMD = rm -f
+    CLEAN_REDIRECT =
+    UNAME_S := $(shell uname -s)
+    ifeq ($(UNAME_S),Linux)
+        LDLIBS += -lrt
+    endif
+endif
+
+TARGET = scheduler$(EXEEXT)
+HELLO_TARGET = hello$(EXEEXT)
+OBJS = scheduler.o
+HELLO_OBJS = hello.o
+
+.PHONY: all clean test help scheduler hello run-hello
+
+all: $(TARGET) $(HELLO_TARGET)
+
+scheduler: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LDLIBS)
+
+hello: $(HELLO_TARGET)
+
+$(HELLO_TARGET): $(HELLO_OBJS)
+	$(CC) $(CFLAGS) -o $@ $(HELLO_OBJS)
+
+scheduler.o: scheduler.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+
+hello.o: hello.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	-$(CLEAN_CMD) $(OBJS) $(HELLO_OBJS) $(TARGET) $(HELLO_TARGET) $(CLEAN_REDIRECT)
+
+test:
+	@echo Testing scheduler...
+	@echo Usage: scheduler --program ^<exe^> --interval ^<time^> --repeat ^<count^>
+
+run-hello: $(TARGET) $(HELLO_TARGET)
+ifeq ($(OS),Windows_NT)
+	.\$(TARGET) --program $(HELLO_TARGET) --interval 5s --repeat 2
+else
+	./$(TARGET) --program ./$(HELLO_TARGET) --interval 5s --repeat 2
+endif
+
+help:
+	@echo Targets:
+	@echo   make              - Build scheduler and hello executables
+	@echo   make scheduler    - Build scheduler executable
+	@echo   make hello        - Build hello executable
+	@echo   make run-hello    - Run hello through the scheduler
+	@echo   make clean        - Remove build artifacts
+	@echo   make test         - Show scheduler usage
+	@echo   make help         - Show this help
