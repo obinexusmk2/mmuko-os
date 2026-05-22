@@ -1,0 +1,402 @@
+// ============================================================
+// MMUKO-SCHEDULER.PSE — Canonical MMUKO-OS Scheduler Pseudocode
+// Project:   github.com/obinexus/mmuko-os
+// Framework: OBINexus Constitutional Computing / Dimensional Game Theory
+// Author:    Nnamdi Michael Okpala
+// Date:      2026-05-22
+// Version:   0.2-polar-scheduler
+//
+// Source of truth: mmuko.h + mmuko_scheduler.c
+// Purpose: Define the 7 separated scheduler modules and their contracts.
+//          Each MODULE maps 1-to-1 to a C source file under src/.
+// ============================================================
+
+// ============================================================
+// ENUMS & CONSTANTS
+// ============================================================
+
+ENUM MMUKO_RIGHTS:
+    NONE       = 0x00
+    CIVIL      = 0x01   // dimension a = 1
+    HUMAN      = 0x02   // dimension b = 2
+    DISABILITY = 0x04   // dimension d = 4
+    STABILITY  = 0x08   // dimension e = 8
+    ALL        = 0x0F
+
+ENUM MMUKO_PROC_STATE:
+    NEW        = 0
+    READY      = 1
+    RUNNING    = 2
+    BLOCKED    = 3
+    ZOMBIE     = 4
+    TERMINATED = 5
+
+ENUM MMUKO_SEGMENT:
+    TEXT  = 0   // Read-only code
+    DATA  = 1   // Global variables (CPU/running domain)
+    STACK = 2   // FILO — ready queue domain
+    HEAP  = 3   // Dynamic — staging domain
+
+ENUM MMUKO_SCHED_MODE:
+    PREEMPTIVE      // High-priority interrupts running process
+    NON_PREEMPTIVE  // Runs to completion or I/O block
+    INEMPTIVE       // Memory-preemptive, time-nonpreemptive
+
+ENUM MMUKO_CHANNEL:
+    CH_0_OBSERVE   // YES  — immediate execution
+    CH_1_DEFER     // MAYBE — conditional with retry
+    CH_2_COLLAPSE  // NO   — forced abort / measurement
+
+// ============================================================
+// MODULE 1: TOWER_LIFECYCLE  →  src/mmuko_tower.c
+// Tower of Hanoi memory domain management.
+// Each tower is a memory domain; each process is a disk.
+// Constraint: larger disk cannot be placed on smaller disk.
+// ============================================================
+
+STRUCT MMUKO_Token:
+    token_type   : UINT8    // segment_id or quantum mode
+    token_value  : UINT64   // priority weight / deferred binding
+    token_memory : UINT64   // bytes allocated (disk size in Hanoi)
+
+STRUCT MMUKO_Tower:
+    disks       : ARRAY[MMUKO_PCB]  // process stack (LIFO)
+    count       : UINT32            // current tower height
+    capacity    : UINT32            // max height
+    domain_size : UINT64            // total bytes in domain
+    used        : UINT64            // allocated bytes
+    segment     : MMUKO_SEGMENT
+    name        : STRING[16]
+
+FUNC mmuko_tower_create(seg, capacity, domain_size, name) -> MMUKO_Tower:
+    ALLOCATE tower
+    tower.disks    = ALLOCATE ARRAY[capacity]
+    tower.capacity = capacity
+    tower.domain_size = domain_size
+    tower.segment  = seg
+    tower.name     = name
+    RETURN tower
+
+FUNC mmuko_tower_destroy(tower):
+    FREE tower.disks
+    FREE tower
+
+FUNC mmuko_can_stack(tower, proc) -> BOOL:
+    IF tower.count == 0: RETURN TRUE
+    IF tower.count >= tower.capacity: RETURN FALSE
+    top = tower.disks[tower.count - 1]
+    RETURN proc.token.token_memory <= top.token.token_memory
+
+FUNC mmuko_migrate(src, dst, proc) -> INT:
+    IF NOT mmuko_can_stack(dst, proc): RETURN VIOLATION (-1)
+    REMOVE proc FROM src
+    PUSH proc TO dst
+    dst.used += proc.token.token_memory
+    RETURN SUCCESS (1)
+
+// ============================================================
+// MODULE 2: PROCESS_LIFECYCLE  →  src/mmuko_process.c
+// PCB creation, allocation, and destruction.
+// ============================================================
+
+STRUCT MMUKO_PCB:
+    pid              : UINT32
+    token            : MMUKO_Token
+    rights           : MMUKO_RIGHTS
+    state            : MMUKO_PROC_STATE
+    arrival_time     : UINT64
+    burst_time       : UINT64
+    remaining_time   : UINT64
+    completion_time  : UINT64
+    waiting_time     : UINT64
+    turnaround_time  : UINT64
+    dimension_count  : UINT32   // N = a × b
+    strategic_value  : UINT64   // polar priority
+    bayesian_conf    : FLOAT64  // P(A|B) confidence
+    calibrated       : BOOL
+    next, prev       : MMUKO_PCB*
+
+FUNC mmuko_proc_create(pid, rights, burst_time, memory_need) -> MMUKO_PCB:
+    ALLOCATE proc
+    proc.pid             = pid OR next_pid++
+    proc.rights          = rights
+    proc.burst_time      = burst_time
+    proc.remaining_time  = burst_time
+    proc.arrival_time    = NOW_MS()
+    proc.state           = NEW
+    proc.token.token_memory = memory_need
+    proc.strategic_value = mmuko_polar_priority(proc)
+    proc.bayesian_conf   = 0.5   // uniform prior
+    RETURN proc
+
+FUNC mmuko_proc_destroy(proc):
+    FREE proc
+
+FUNC mmuko_proc_allocate(proc, tower) -> INT:
+    REQUIRE mmuko_can_stack(tower, proc)
+    PUSH proc TO tower
+    proc.state = READY
+    RETURN SUCCESS
+
+// ============================================================
+// MODULE 3: POLAR_PRIORITY_HEAP  →  src/mmuko_priority.c
+// Core scheduling algorithm: rights-weighted dimensional priority.
+//
+// Formulas:
+//   D = a + b + d + e          (dimensional rights sum)
+//   N = a × b                  (node complexity)
+//   H = p^n                    (heap height, exponential scaling)
+//   priority = D × n × need_kb (strategic value)
+//   P(A|B) = likelihood × prior / marginal  (Bayesian resolver)
+// ============================================================
+
+FUNC mmuko_polar_priority(proc) -> UINT64:
+    D       = DIM_D(proc)           // rights dimension sum
+    need_kb = proc.token.token_memory / 1KB
+    n       = LOG2(need_kb) + 1     // exponential scale factor
+    priority = D × n × need_kb
+    proc.strategic_value = priority
+    RETURN priority
+
+FUNC mmuko_bayesian_priority(candidate, tower) -> FLOAT64:
+    prior      = candidate.token.token_memory / tower.domain_size
+    likelihood = (tower.domain_size - tower.used) / tower.domain_size
+    marginal   = 0.5
+    posterior  = (likelihood × prior) / marginal
+    CLAMP posterior TO [0.0, 1.0]
+    RETURN mmuko_polar_priority(candidate) × posterior
+
+FUNC mmuko_compare_priority(a, b) -> INT:
+    pa = mmuko_polar_priority(a)
+    pb = mmuko_polar_priority(b)
+    IF pa > pb: RETURN 1
+    IF pa < pb: RETURN -1
+    // Tie-break: higher D wins, then lower PID (FIFO)
+    COMPARE DIM_D(a) vs DIM_D(b)
+    COMPARE a.pid vs b.pid
+
+// ============================================================
+// MODULE 4: GOVERNANCE_CHANNELS  →  src/mmuko_governance.c
+// CH_0 / CH_1 / CH_2 from RiftLang gating philosophy.
+// YES = observe, MAYBE = defer with retry, NO = collapse.
+// ============================================================
+
+FUNC mmuko_governance_check(proc, target_tower) -> MMUKO_CHANNEL:
+    available = target_tower.domain_size - target_tower.used
+
+    IF available >= proc.token.token_memory AND mmuko_can_stack(target_tower, proc):
+        RETURN CH_0_OBSERVE     // YES: immediate
+
+    capacity_ratio = target_tower.used / target_tower.domain_size
+    IF capacity_ratio < 0.9 AND proc.dimension_count > 0:
+        RETURN CH_1_DEFER       // MAYBE: conditional retry
+
+    RETURN CH_2_COLLAPSE        // NO: abort
+
+FUNC mmuko_governance_enforce(proc, channel) -> INT:
+    MATCH channel:
+        CH_0_OBSERVE:
+            proc.state = RUNNING
+            RETURN 0
+        CH_1_DEFER:
+            proc.state = BLOCKED
+            // set 60s retry timer in real kernel
+            RETURN 1
+        CH_2_COLLAPSE:
+            proc.state = ZOMBIE
+            RETURN -1
+
+// ============================================================
+// MODULE 5: SCHEDULING_MODES  →  src/mmuko_sched_modes.c
+// Three scheduling modes + inemptive buffer resolution.
+// ============================================================
+
+FUNC mmuko_schedule_preemptive(ready, running, incoming) -> INT:
+    ch = mmuko_governance_check(incoming, running)
+    IF ch == CH_2_COLLAPSE: RETURN -1
+
+    IF running.count > 0:
+        current = running.top
+        IF mmuko_compare_priority(incoming, current) > 0:
+            // PREEMPT: demote current to ready, promote incoming
+            mmuko_migrate(running, ready, current)
+            current.state = READY
+            mmuko_migrate(ready, running, incoming)
+            incoming.state = RUNNING
+            RETURN PREEMPTION_OCCURRED (1)
+
+    // No preemption — queue incoming in ready
+    mmuko_proc_allocate(incoming, ready)
+    incoming.state = READY
+    RETURN 0
+
+FUNC mmuko_schedule_non_preemptive(ready, running, incoming) -> INT:
+    ch = mmuko_governance_check(incoming, running)
+    IF ch == CH_2_COLLAPSE: RETURN -1
+
+    IF running.count == 0:
+        // CPU idle — schedule immediately
+        mmuko_proc_allocate(incoming, running)
+        incoming.state = RUNNING
+        RETURN SCHEDULED (1)
+    ELSE:
+        // CPU busy — queue in ready
+        mmuko_proc_allocate(incoming, ready)
+        incoming.state = READY
+        RETURN 0
+
+STRUCT MMUKO_InemptiveBuffer:
+    buffer_pid     : UINT32
+    overlap_size   : UINT64
+    target_proc    : MMUKO_PCB*
+    staging_tower  : MMUKO_Tower*
+    resolved       : BOOL
+
+FUNC mmuko_schedule_inemptive(ready, running, buffer, incoming) -> INT:
+    // Memory-preemptive: allocate memory without interrupting time slice
+    available = running.domain_size - running.used
+
+    IF incoming.token.token_memory <= available AND mmuko_can_stack(running, incoming):
+        // Direct allocation — no staging needed
+        mmuko_proc_allocate(incoming, running)
+        incoming.state = RUNNING
+        RETURN 1
+
+    // Staged allocation via buffer process
+    buffer.target_proc  = incoming
+    buffer.overlap_size = incoming.token.token_memory
+    buffer.buffer_pid   = next_pid++
+    buffer.resolved     = FALSE
+
+    IF mmuko_can_stack(ready, incoming):
+        mmuko_proc_allocate(incoming, ready)   // stage in heap/ready
+        incoming.state        = BLOCKED
+        buffer.staging_tower  = ready
+        RETURN 0    // buffered — await resolution
+
+    mmuko_governance_enforce(incoming, CH_2_COLLAPSE)
+    RETURN -1
+
+FUNC mmuko_inemptive_resolve(buffer, running) -> INT:
+    proc      = buffer.target_proc
+    available = running.domain_size - running.used
+
+    IF available >= buffer.overlap_size AND mmuko_can_stack(running, proc):
+        mmuko_migrate(buffer.staging_tower, running, proc)
+        proc.state      = RUNNING
+        buffer.resolved = TRUE
+        RETURN 1
+
+    RETURN 0    // not yet resolvable
+
+// ============================================================
+// MODULE 6: DIMENSIONAL_REBALANCER  →  src/mmuko_rebalancer.c
+// Detect strategic imbalance via minimax, restore Nash equilibrium.
+//
+// From PDF: "Perfect games result in deterministic outcomes;
+// deviations indicate strategic imbalances that can be
+// algorithmically detected."
+// ============================================================
+
+FUNC mmuko_detect_strategic_imbalance(towers[], num_towers) -> INT:
+    mean_priority = MEAN(mmuko_polar_priority(p) FOR ALL p IN ALL towers)
+    imbalance_count = 0
+
+    FOR EACH tower IN towers:
+        tower_mean = MEAN(mmuko_polar_priority(p) FOR p IN tower)
+        deviation  = ABS(tower_mean - mean_priority) / mean_priority
+        IF deviation > 0.30:
+            imbalance_count++
+
+    RETURN imbalance_count
+
+FUNC mmuko_rebalance_dimensions(towers[], num_towers) -> INT:
+    imbalances = mmuko_detect_strategic_imbalance(towers, num_towers)
+    IF imbalances == 0:
+        // System at Nash equilibrium
+        RETURN 0
+
+    // Find overloaded (max) and underloaded (min) towers
+    max_tower = tower WITH highest mean priority
+    min_tower = tower WITH lowest mean priority
+
+    IF max_tower != min_tower AND max_tower.count > 0:
+        proc = max_tower.top
+        mmuko_migrate(max_tower, min_tower, proc)   // respects Hanoi constraint
+
+    RETURN imbalances
+
+// ============================================================
+// MODULE 7: SCHEDULER_LOOP  →  mmuko_scheduler.c (orchestrator)
+// Init, tick, and full run — orchestrates all modules above.
+// ============================================================
+
+FUNC mmuko_scheduler_init(sys, mode) -> INT:
+    sys.sched_mode = mode
+    RETURN 0
+
+FUNC mmuko_scheduler_tick(sys) -> INT:
+    REQUIRE sys.boot_complete
+
+    ready   = sys.towers[STACK]   // ready queue
+    running = sys.towers[DATA]    // CPU domain
+
+    // Decrement running process time
+    IF running.count > 0:
+        current = running.top
+        current.remaining_time--
+        IF current.remaining_time == 0:
+            current.state           = TERMINATED
+            current.completion_time = NOW_MS()
+            current.turnaround_time = completion - arrival
+            REMOVE current FROM running
+
+    // Schedule next from ready if CPU idle
+    IF running.count == 0 AND ready.count > 0:
+        next = HIGHEST_PRIORITY(ready)
+        REMOVE next FROM ready
+        PUSH next TO running
+        next.state = RUNNING
+
+    RETURN 0
+
+FUNC mmuko_scheduler_run(sys, max_ticks) -> INT:
+    tick   = 0
+    active = TRUE
+
+    WHILE active AND tick < max_ticks:
+        mmuko_scheduler_tick(sys)
+
+        // Dimensional rebalancing every 10 ticks
+        IF tick MOD 10 == 0 AND tick > 0:
+            mmuko_rebalance_dimensions(sys.towers, 3)
+
+        // Check if all processes terminated
+        active = ANY(p.state NOT IN {TERMINATED, ZOMBIE} FOR p IN sys.proc_table)
+        tick++
+
+    RETURN 0
+
+// ============================================================
+// SCHEDULER HANDOFF CONTRACT
+// ============================================================
+
+SCHEDULER ENTRY CONTRACT:
+    REQUIRE sys.boot_complete == TRUE
+    REQUIRE sys.towers[STACK] != NULL
+    REQUIRE sys.towers[DATA]  != NULL
+    REQUIRE sys.towers[HEAP]  != NULL
+    REQUIRE sys.sched_mode IN {PREEMPTIVE, NON_PREEMPTIVE, INEMPTIVE}
+
+MODULE DEPENDENCY ORDER:
+    mmuko_tower     (no internal deps)
+    mmuko_process   (depends on: mmuko_tower)
+    mmuko_priority  (depends on: mmuko_process)
+    mmuko_governance (depends on: mmuko_tower, mmuko_process)
+    mmuko_sched_modes (depends on: all above)
+    mmuko_rebalancer  (depends on: mmuko_tower, mmuko_priority)
+    mmuko_scheduler   (depends on: all modules)
+
+// ============================================================
+// END OF MMUKO-SCHEDULER.PSE
+// ============================================================
