@@ -24,7 +24,7 @@
 //
 // ============================================================
 
-#include "mmuko_boot_contract.h"
+#include "boot_contract.h"
 
 // Phase headers
 #include "phases/phase1_cubit_init.h"
